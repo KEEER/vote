@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import Vue from 'vue'
+  // import Vue from 'vue'
   import Question from './Question'
 
   export default Vue.extend({

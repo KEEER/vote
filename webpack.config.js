@@ -1,10 +1,9 @@
 const webpack = require('webpack')
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const config = {
-  mode: 'development',
+  mode: 'production',
   entry: './src/themes/basic/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -63,13 +62,6 @@ const config = {
   plugins: [
      new VueLoaderPlugin(),
   ],
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        sourceMap: true,
-      }),
-    ],
-  },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,

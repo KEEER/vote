@@ -6,6 +6,9 @@
 
 <script>
 import Radio from './types/Radio'
+import Checkbox from './types/Checkbox'
+import Textinput from './types/Textinput'
+
 export default {
   name: 'Question',
   data() {
@@ -13,13 +16,14 @@ export default {
   },
   components: {
     Radio,
-    // Checkbox,
+    Checkbox,
+    Textinput,
   },
   props: {
     type: {
       type: String,
       validator(val) {
-        return ['Radio', 'Checkbox'].indexOf(val) > -1
+        return ['Radio', 'Checkbox', 'Textinput', 'Textarea'].indexOf(val) > -1
       },
     },
     data: Object,

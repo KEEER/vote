@@ -1,4 +1,4 @@
-import Vue from 'vue';
+// import Vue from 'vue';
 import App, {router} from './App';
 
 new Vue({
