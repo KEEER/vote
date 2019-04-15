@@ -5,25 +5,19 @@
 </template>
 
 <script>
-import Radio from './types/Radio'
-import Checkbox from './types/Checkbox'
-import Textinput from './types/Textinput'
+import * as Types from './types.js'
 
 export default {
   name: 'Question',
   data() {
     return {}
   },
-  components: {
-    Radio,
-    Checkbox,
-    Textinput,
-  },
+  components: Types,
   props: {
     type: {
       type: String,
       validator(val) {
-        return ['Radio', 'Checkbox', 'Textinput', 'Textarea'].indexOf(val) > -1
+        return val in Types
       },
     },
     data: Object,

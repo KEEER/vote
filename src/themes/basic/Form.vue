@@ -7,6 +7,9 @@
 <script>
   // import Vue from 'vue'
   import Question from './Question'
+  import Page from './Page'
+
+  // TODO: Pagination
 
   export default Vue.extend({
     data: function() {
@@ -14,7 +17,8 @@
     },
     methods: {},
     components: {
-      Question
+      Question,
+      Page,
     },
   })
   export {Question}
