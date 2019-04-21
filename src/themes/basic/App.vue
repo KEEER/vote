@@ -1,19 +1,24 @@
 <template>
   <Form>
-    <Question type="Radio" :data="{title: 'a', value: '2', options:[{value:'1',label:'a'},{value:'2',label:'b'}]}"></Question>
-    <Question type="Checkbox" :data="{title: 'b', value: {1: true, 2: false}, options:[{value:'1',label:'a'},{value:'2',label:'b'}]}"></Question>
-    <Question type="Textinput" :data="{title: 'c', value: 'b'}"></Question>
-    <Question type="MultilineText" :data="{title: 'd', value: 'b'}"></Question>
+    <Page>
+      <Question type="VRadio" value="1" :data="{title: 'a', options:[{value:'1',label:'a'},{value:'2',label:'b'}]}"></Question>
+    </Page>
+    <Page></Page>
   </Form>
 </template>
 
 <script>
   // import Vue from 'vue'
-  import Form, {Question} from './Form'
+  import Form, {Question, Page} from './Form'
+  import hooks from './hooks'
+
+  hooks.on('form-update', form => form.pages[0].questions[0].value = '2')
+
   export default {
     components: {
       Form,
       Question,
+      Page,
     }
   }
 </script>

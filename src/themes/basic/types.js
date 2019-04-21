@@ -1,11 +1,11 @@
-import Radio from './types/Radio'
-import Checkbox from './types/Checkbox'
-import Textinput from './types/Textinput'
-import MultilineText from './types/MultilineText'
+import VRadio from './types/VRadio'
+import VCheckbox from './types/VCheckbox'
+import VText from './types/VText'
+import VTextarea from './types/VTextarea'
 
 export {
-    Radio,
-    Checkbox,
-    Textinput,
-    MultilineText,
+    VRadio,
+    VCheckbox,
+    VText,
+    VTextarea,
 }

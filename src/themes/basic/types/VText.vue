@@ -1,22 +1,27 @@
 <template>
   <div>
     <h3>{{data.title}}</h3>
-    <textarea v-model="value" />
+    <input v-model="value_" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'MultilineText',
+  name: 'VText',
   data() {
-    return {value: this.data.value}
+    return {value_: this.$attrs.value}
+  },
+  watch: {
+    value(val) {
+      this.value_ = val
+    },
   },
   props: {
     data: {
       type: Object,
       validator(val) {
         return val.title
-      }
+      },
     },
   },
 }

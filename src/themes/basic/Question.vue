@@ -1,5 +1,5 @@
 <template>
-  <component :is="type" :data="data">
+  <component :is="type" :data="data" :value="value">
     <slot />
   </component>
 </template>
@@ -7,12 +7,20 @@
 <script>
 import * as Types from './types.js'
 
+//Fix Vue warning of Types being a Module
+const types = {}
+for(let i in Types) {
+  types[i] = Types[i]
+}
+
 export default {
   name: 'Question',
   data() {
-    return {}
+    return {
+      value: this.$attrs.value
+    }
   },
-  components: Types,
+  components: types,
   props: {
     type: {
       type: String,
@@ -22,11 +30,7 @@ export default {
     },
     data: Object,
   },
-  computed: {
-    value() {
-      return this.$children[0].$data.value
-    },
-  },
+  computed: {},
   provide() {
     return {Question: this}
   }

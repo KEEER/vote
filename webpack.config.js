@@ -1,6 +1,15 @@
-const webpack = require('webpack')
+// const webpack = require('webpack')
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+const extractCss = {
+  loader: MiniCssExtractPlugin.loader,
+  options: {
+    hmr: process.env.NODE_ENV === 'development',
+    reloadAll: true,
+  },
+}
 
 const config = {
   mode: 'production',
@@ -26,7 +35,8 @@ const config = {
       {
         test: /\.less$/,
         use: [
-          'vue-style-loader',
+          extractCss,
+          // 'vue-style-loader',
           'css-loader',
           'less-loader',
         ],
@@ -34,7 +44,8 @@ const config = {
       {
         test: /\.scss$/,
         use: [
-          'style-loader',
+          extractCss,
+          // 'style-loader',
           'css-loader',
           {
             loader: 'sass-loader',
@@ -47,7 +58,8 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          'vue-style-loader',
+          extractCss,
+          // 'vue-style-loader',
           'css-loader',
         ],
       },
@@ -60,7 +72,12 @@ const config = {
     ]
   },
   plugins: [
-     new VueLoaderPlugin(),
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({
+      path: path.resolve(__dirname, 'dist'),
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
   ],
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
