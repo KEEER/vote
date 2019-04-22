@@ -9,18 +9,10 @@
 </template>
 
 <script>
+import mixin from './mixin'
 export default {
   name: 'VRadio',
-  data() {
-    return {
-      value_: this.$attrs.value,
-    }
-  },
-  watch: {
-    value_(val) {
-      this.$attrs.value = val
-    },
-  },
+  mixins: [mixin],
   props: {
     data: {
       type: Object,
@@ -28,6 +20,7 @@ export default {
         return val.title && val.options && val.options.every(op => op.label && op.value)
       },
     },
+    value: String,
   },
 }
 </script>

@@ -6,16 +6,10 @@
 </template>
 
 <script>
+import mixin from './mixin'
 export default {
   name: 'VText',
-  data() {
-    return {value_: this.$attrs.value}
-  },
-  watch: {
-    value(val) {
-      this.value_ = val
-    },
-  },
+  mixins: [mixin],
   props: {
     data: {
       type: Object,
@@ -23,6 +17,7 @@ export default {
         return val.title
       },
     },
+    value: String,
   },
 }
 </script>

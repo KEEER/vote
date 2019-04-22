@@ -9,16 +9,10 @@
 </template>
 
 <script>
+import mixin from './mixin'
 export default {
   name: 'VCheckbox',
-  data() {
-    return {value_: this.$attrs.value || {}}
-  },
-  watch: {
-    value(val) {
-      this.value_ = val
-    },
-  },
+  mixins: [mixin],
   props: {
     data: {
       type: Object,
@@ -26,6 +20,7 @@ export default {
         return val.title && val.options && val.options.every(op => op.label && op.value)
       },
     },
+    value: Object,
   },
 }
 </script>

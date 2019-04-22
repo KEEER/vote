@@ -1,11 +1,14 @@
 <template>
   <main>
-    <slot />
-    <span class="form-controls">
+    <h1>{{this.title}}</h1>
+    <slot v-if="!submitting" />
+    <span v-if="!submitting" class="form-controls">
       <button class="form-prev" :hidden="!prevVisible" @click="prev">←Prev page</button>
       <button class="form-next" :hidden="!nextVisible" @click="next">Next page→</button>
       <button class="form-submit" :hidden="nextVisible" @click="submit">Submit</button>
     </span>
+    <h1 v-if="submitting && !submitted">Submitting...</h1>
+    <h1 v-if="submitted">The form has been submitted. Thank you.</h1>
   </main>
 </template>
 
@@ -15,15 +18,20 @@
   import Page from './Page'
   import hooks from './hooks'
 
-  // TODO: Pagination
-
   export default Vue.extend({
     data: function() {
       return {
         current: 0,
         prevVisible: false,
         nextVisible: false,
+        submitting: false,
+        submitted: false,
       }
+    },
+    props: {
+      title: String,
+      action: String,
+      method: String,
     },
     methods: {
       prev() {
@@ -42,7 +50,7 @@
       },
       update() {
         this.updateVisibility()
-        hooks.emit('form-update', this)
+        hooks.emit('form:update', this)
       },
       updateVisibility() {
         if(this.current === 0) this.prevVisible = false
@@ -51,7 +59,28 @@
         else this.nextVisible = true
       },
       submit() {
-        // TODO: submit
+        hooks.emit('form:submit', this)
+        const data = []
+        this.pages.map(page => page.questions).flat().forEach(q => {
+          data[q.id] = q.value
+        })
+        const payload = JSON.stringify(data)
+        if(this.method !== 'POST') throw new Error('Only POST is supported by now')
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', this.action)
+        const ctx = this
+        xhr.onreadystatechange = function() {
+          if(this.readyState !== 4) return
+          ctx.submitted = true
+          hooks.emit('form:submitted', ctx)
+        }
+        try {
+          xhr.send(payload)
+          this.submitting = true
+        } catch(e) {
+          console.error(e)
+          hooks.emit('form:error', e)
+        }
       },
     },
     components: {
@@ -61,7 +90,7 @@
     mounted() {
       this.$children[this.current].current = true
       this.updateVisibility()
-      hooks.emit('form-mounted', this)
+      hooks.emit('form:mounted', this)
     },
     computed: {
       pages() {

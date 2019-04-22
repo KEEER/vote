@@ -1,5 +1,5 @@
 <template>
-  <component :is="type" :data="data" :value="value">
+  <component :is="type" :data="data" :value.sync="value">
     <slot />
   </component>
 </template>
@@ -29,6 +29,7 @@ export default {
       },
     },
     data: Object,
+    id: Number,
   },
   computed: {},
   provide() {

@@ -2,6 +2,9 @@
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin')
 
 const extractCss = {
   loader: MiniCssExtractPlugin.loader,
@@ -13,10 +16,13 @@ const extractCss = {
 
 const config = {
   mode: 'production',
-  entry: './src/themes/basic/index.js',
+  entry: {
+    'theme-basic': './src/themes/basic/index.js',
+    vote: './src/frontend/index.js'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'vote.js',
+    filename: 'js/[name]-[contenthash:6].js',
   },
   module: {
     rules: [
@@ -74,9 +80,36 @@ const config = {
   plugins: [
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      path: path.resolve(__dirname, 'dist'),
-      filename: '[name].css',
-      chunkFilename: '[id].css',
+      filename: 'css/[name]-[contenthash:6].css',
+    }),
+    new OptimizeCssAssetsPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'KEEER Vote',
+      filename: 'index.html',
+      chunks: ['vote'],
+      xhtml: true,
+      meta: {
+        viewport: 'width=device-width, initial-scale=1.0',
+      },
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Theme Basic',
+      filename: 'theme-basic.html',
+      chunks: ['theme-basic'],
+      xhtml: true,
+      meta: {
+        viewport: 'width=device-width, initial-scale=1.0',
+      },
+    }),
+    new HtmlWebpackTagsPlugin({
+      links: [
+        'https://fonts.loli.net/icon?family=Material+Icons',
+      ],
+      scripts: [
+        'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js',
+        'vote-config.js',
+      ],
+      append: false,
     }),
   ],
   devServer: {
@@ -88,7 +121,7 @@ const config = {
     },
     historyApiFallback: true,
   },
-  watch: true,
+  devtool: 'source-map',
 }
 
 module.exports = config
