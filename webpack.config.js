@@ -103,10 +103,10 @@ const config = {
     }),
     new HtmlWebpackTagsPlugin({
       links: [
-        'https://fonts.loli.net/icon?family=Material+Icons',
+        {path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false},
       ],
       scripts: [
-        'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js',
+        {path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false},
         'vote-config.js',
       ],
       append: false,
