@@ -1,6 +1,6 @@
 <template>
   <div class="vote-main">
-    <h1 v-if="nodata">No form data supplied. This is usually an error in the URL.</h1>
+    <h1 v-if="nodata">{{nodataTip}}</h1>
     <Form v-else :title="data.title" :action="data.action" :method="data.method">
       <Page v-for="(page, i) in data.data" :key="i">
         <Question
@@ -30,6 +30,13 @@
       return {
         nodata: !('KVoteFormData' in window),
         data: window.KVoteFormData,
+      }
+    },
+    computed: {
+      nodataTip() {
+        let tip = 'No form data supplied. This is usually an error in the URL.'
+        hooks.emit('app:nodata', this, t => tip = t)
+        return tip
       }
     },
   }

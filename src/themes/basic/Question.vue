@@ -1,11 +1,16 @@
 <template>
-  <component :is="type" :data="data" :value.sync="value">
+  <component
+    :is="type"
+    :data="data"
+    :value.sync="value"
+    ref="realQuestion">
     <slot />
   </component>
 </template>
 
 <script>
 import * as Types from './types.js'
+import hooks from './hooks'
 
 //Fix Vue warning of Types being a Module
 const types = {}
@@ -34,6 +39,6 @@ export default {
   computed: {},
   provide() {
     return {Question: this}
-  }
+  },
 }
 </script>

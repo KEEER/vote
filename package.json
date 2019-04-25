@@ -1,11 +1,12 @@
 {
   "name": "vote",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "run": "node src/index"
+    "run": "node src/index",
+    "clean": "rm -r dist/js&&rm -r dist/css&&rm dist/*.html"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
+    "array-flat-polyfill": "^1.0.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.1",
     "file-loader": "^3.0.1",

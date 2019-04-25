@@ -3,12 +3,13 @@
     <h1>{{this.title}}</h1>
     <slot v-if="!submitting" />
     <span v-if="!submitting" class="form-controls">
-      <button class="form-prev" :hidden="!prevVisible" @click="prev">←Prev page</button>
-      <button class="form-next" :hidden="!nextVisible" @click="next">Next page→</button>
-      <button class="form-submit" :hidden="nextVisible" @click="submit">Submit</button>
+      {{texts.pageno}}
+      <button class="form-prev" :hidden="!prevVisible" @click="prev">{{texts.prevPage}}</button>
+      <button class="form-next" :hidden="!nextVisible" @click="next">{{texts.nextPage}}</button>
+      <button class="form-submit" :hidden="nextVisible" @click="submit">{{texts.submit}}</button>
     </span>
-    <h1 v-if="submitting && !submitted">Submitting...</h1>
-    <h1 v-if="submitted">The form has been submitted. Thank you.</h1>
+    <h1 v-if="submitting && !submitted">{{texts.submitting}}</h1>
+    <h1 v-if="submitted">{{texts.submitted}}</h1>
   </main>
 </template>
 
@@ -17,6 +18,7 @@
   import Question from './Question'
   import Page from './Page'
   import hooks from './hooks'
+  import 'array-flat-polyfill' // MicroMsg doesn't support that
 
   export default Vue.extend({
     data: function() {
@@ -61,7 +63,7 @@
       submit() {
         hooks.emit('form:submit', this)
         const data = []
-        this.pages.map(page => page.questions).flat().forEach(q => {
+        this.pages.flatMap(page => page.questions).forEach(q => {
           data[q.id] = q.value
         })
         const payload = JSON.stringify(data)
@@ -95,7 +97,19 @@
     computed: {
       pages() {
         return this.$children
-      }
+      },
+      texts() {
+        let texts = {
+          prevPage: '←Prev page',
+          nextPage: 'Next page→',
+          submit: 'Submit',
+          pageno: `Page ${this.current + 1}`,
+          submitting: 'Submitting...',
+          submitted: 'The form has been submitted. Thank you.',
+        }
+        hooks.emit('form:texts', this, t => texts = Object.assign(texts, t))
+        return texts
+      },
     },
   })
   export {

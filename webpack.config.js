@@ -18,7 +18,7 @@ const config = {
   mode: 'production',
   entry: {
     'theme-basic': './src/themes/basic/index.js',
-    vote: './src/frontend/index.js'
+    // vote: './src/frontend/index.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

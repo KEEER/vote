@@ -1,0 +1,22 @@
+{
+  "name": "Basic",
+  "version": "0.0.1",
+  "supports": {
+    "types": [
+      "VCheckbox",
+      "VRadio",
+      "VText",
+      "VTextarea"
+    ],
+    "hooks": [
+      "form:update",
+      "form:submit",
+      "form:submitted",
+      "form:error",
+      "form:mounted",
+      "form:texts",
+      "app:nodata",
+      "question:update"
+    ]
+  }
+}

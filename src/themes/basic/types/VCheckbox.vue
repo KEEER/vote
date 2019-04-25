@@ -1,18 +1,28 @@
 <template>
   <div>
     <h3>{{data.title}}</h3>
-    <span v-for="option in data.options" :key="option.value">
-      <input type="checkbox" v-model="value_[option.value]" :id="option.value" :value="option.value" />
-      <label :for="option.value">{{option.label}}</label>
-    </span>
+    <VCheckboxInput
+      v-for="option in data.options"
+      :key="option.value"
+      :option="option"
+      :value.sync="value_[option.value]">
+    </VCheckboxInput>
   </div>
 </template>
 
 <script>
-import mixin from './mixin'
+import VCheckboxInput from './VCheckboxInput'
+
 export default {
   name: 'VCheckbox',
-  mixins: [mixin],
+  data() {
+    return {
+      value_: this.value,
+    }
+  },
+  components: {
+    VCheckboxInput,
+  },
   props: {
     data: {
       type: Object,
