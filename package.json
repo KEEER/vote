@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -26,9 +26,11 @@
   "homepage": "https://github.com/KEEER/vote#readme",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "dotenv": "^7.0.0",
     "esm": "^3.2.22",
     "koa": "^2.7.0",
-    "vue": "^2.6.10"
+    "pg": "^7.10.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -44,13 +46,14 @@
     "less-loader": "^4.1.0",
     "material-components-web": "^1.0.1",
     "mini-css-extract-plugin": "^0.6.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "sass": "^1.17.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "uglify-js": "^3.5.2",
     "uglifyjs-webpack-plugin": "^2.1.2",
+    "vue": "^2.6.10",
     "vue-loader": "^15.7.0",
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.6.10",
