@@ -1,7 +1,7 @@
 <template>
   <span>
-    <input type="checkbox" v-model="value_" :id="option.value" :value="option.value" />
-    <label :for="option.value">{{option.label}}</label>
+    <input type="checkbox" v-model="value_" :id="uid" :value="option.value" />
+    <label :for="uid">{{option.label}}</label>
   </span>
 </template>
 

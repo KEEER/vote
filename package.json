@@ -1,12 +1,13 @@
 {
   "name": "vote",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "npm run clean && webpack",
+    "dev": "webpack-dev-server",
     "run": "node src/index",
-    "clean": "rm -r dist/js&&rm -r dist/css&&rm dist/*.html"
+    "clean": "rm -r dist/js && rm -r dist/css && rm dist/*.html"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
     "vue-loader": "^15.7.0",
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.6.10",
+    "vue-unique-id": "^1.0.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1"

@@ -73,8 +73,10 @@ window.addEventListener('vote:ready', function() {
   }).on('form:texts', function(form, set) {
     set({
       submit: '提交!',
-      pageno: '页码' + (form.current - 1)
+      pageno: '页码' + (form.currentPage + 1) + (form.current % 2 == 0 ? '，奇数页' : '，偶数页')
     })
+  }).on('form:pageno', function(form, set) {
+    set(form.current + 0.1415926)
   }).on('form:submitted', function() {
     alert('submitted')
   }).on('form:submitting', function() {
@@ -87,8 +89,13 @@ window.addEventListener('vote:ready', function() {
       }
       if(count > 2) {
         q.$nextTick(function() {
-          q.value = o
+          q.value_ = o
+          q.$nextTick(function() {
+            q.question.data.title = '2. Do not select more than 2!'
+          })
         })
+      } else {
+        q.question.data.title = '2. Select at most 2'
       }
     }
   })

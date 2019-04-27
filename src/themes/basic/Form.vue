@@ -110,6 +110,11 @@
         hooks.emit('form:texts', this, t => texts = Object.assign(texts, t))
         return texts
       },
+      currentPage() {
+        let page = this.current + 1
+        hooks.emit('form:pageno', this, p => page = p)
+        return page
+      },
     },
   })
   export {
