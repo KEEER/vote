@@ -1,8 +1,8 @@
 <template>
   <main>
     <h1>{{this.title}}</h1>
-    <slot v-if="!submitting" />
-    <span v-if="!submitting" class="form-controls">
+    <slot v-if="!submitting && !submitted" />
+    <span v-if="!submitting && !submitted" class="form-controls">
       {{texts.pageno}}
       <button class="form-prev" :hidden="!prevVisible" @click="prev">{{texts.prevPage}}</button>
       <button class="form-next" :hidden="!nextVisible" @click="next">{{texts.nextPage}}</button>
@@ -26,8 +26,7 @@
         current: 0,
         prevVisible: false,
         nextVisible: false,
-        submitting: false,
-        submitted: false,
+        status: 'filling',
       }
     },
     props: {
@@ -61,27 +60,10 @@
         else this.nextVisible = true
       },
       submit() {
-        hooks.emit('form:submit', this)
-        const data = []
-        this.pages.flatMap(page => page.questions).forEach(q => {
-          data[q.id] = q.value
-        })
-        const payload = JSON.stringify(data)
-        if(this.method !== 'POST') throw new Error('Only POST is supported by now')
-        const xhr = new XMLHttpRequest()
-        xhr.open('POST', this.action)
-        const ctx = this
-        xhr.onreadystatechange = function() {
-          if(this.readyState !== 4) return
-          ctx.submitted = true
-          hooks.emit('form:submitted', ctx)
-        }
-        try {
-          xhr.send(payload)
-          this.submitting = true
-        } catch(e) {
-          console.error(e)
-          hooks.emit('form:error', e)
+        let cancel = false
+        hooks.emit('form:beforesubmit', this, () => cancel = true)
+        if(!cancel) {
+          hooks.emit('form:submit', this)
         }
       },
     },
@@ -114,6 +96,19 @@
         let page = this.current + 1
         hooks.emit('form:pageno', this, p => page = p)
         return page
+      },
+      submitted() {
+        return this.status === 'submitted'
+      },
+      submitting() {
+        return this.status === 'submitting'
+      },
+      formdata() {
+        const data = []
+        this.pages.flatMap(page => page.questions).forEach(q => {
+          data[q.id] = q.value
+        })
+        return data
       },
     },
   })

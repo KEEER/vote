@@ -65,7 +65,8 @@ window.KVoteFormData = {
 }
 
 window.addEventListener('vote:ready', function() {
-  voteHooks.on('form:texts', function(form, set) {
+  var hooks = window.voteHooks
+  hooks.on('form:texts', function(form, set) {
     set({
       prevPage: '上一页',
       submit: '提交',
@@ -97,6 +98,28 @@ window.addEventListener('vote:ready', function() {
       } else {
         q.question.data.title = '2. Select at most 2'
       }
+    }
+  }).on('form:beforesubmit', function(form, cancel) {
+    if(form.pages[1].questions[0].value === '2') {
+      form.pages[1].questions[0].data.title = '3. Please type something other than 2.'
+      cancel()
+    }
+  }).on('form:submit', function(form) {
+    const payload = JSON.stringify(form.formdata)
+    if(form.method !== 'POST') throw new Error('Only POST is supported by now')
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', form.action)
+    xhr.onreadystatechange = function() {
+      if(this.readyState !== 4) return
+      form.status = 'submitted'
+      hooks.emit('form:submitted', form)
+    }
+    try {
+      xhr.send(payload)
+      form.status = 'submitting'
+    } catch(e) {
+      console.error(e)
+      hooks.emit('form:error', e)
     }
   })
   console.log('vote:ready')

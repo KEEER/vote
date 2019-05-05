@@ -10,8 +10,8 @@
     },
     "hooks": [
       "form:update",
+      "form:beforesubmit",
       "form:submit",
-      "form:submitted",
       "form:error",
       "form:mounted",
       "form:texts",
