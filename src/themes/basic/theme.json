@@ -1,6 +1,7 @@
 {
   "name": "Basic",
   "version": "0.0.1",
+  "entryName": "theme-basic",
   "supports": {
     "types": {
       "VCheckbox": "0.0.1",
