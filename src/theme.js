@@ -1,17 +1,12 @@
+/** @module theme */
 import fs from 'fs'
 import path from 'path'
 
-/// <reference path="question.js" />
-/// <reference path="plugin.js" />
-
-/** 
- * Class representing a theme.
- * @typedef Theme
- */
+/** Class representing a theme. */
 class Theme {
   /**
-   * Create a theme object.
-   * @param {object} config The configuration JSON object
+   * Creates a theme object.
+   * @param {Object} config The configuration JSON object
    */
   constructor(config) {
     this.config = config
@@ -19,7 +14,8 @@ class Theme {
 
   /**
    * Check if the question/plugin could be used in the theme.
-   * @param {Question|Plugin} obj The Question/Plugin object
+   * @param {module:question~Question|module:plugin~Plugin} obj The Question/Plugin object
+   * @returns {boolean}
    */
   applicable(obj) {
     // TODO: form
@@ -43,7 +39,7 @@ try {
   throw new Error(`Error parsing themes: ${e}`)
 }
 
-/** Themes are exported. */
+/** Themes read. */
 export default themes
 export {
   themeDirs,

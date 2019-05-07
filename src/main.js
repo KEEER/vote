@@ -1,3 +1,5 @@
+/** @module main */
+
 import Koa from 'koa'
 import dotenv from 'dotenv'
 import * as db from './db'
