@@ -6,7 +6,7 @@ const logger = createLogger({
     format.timestamp(),
     format.errors({ stack: true }),
     format.splat(),
-    format.simple(),
+    format.json(),
   ),
   transports: [
     new transports.File({ filename: 'error.log', level: 'error' }),
