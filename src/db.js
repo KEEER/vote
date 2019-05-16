@@ -23,5 +23,7 @@ export async function useClient(cb) {
  * A wrapper for pool.query(). See pg.Pool
  */
 export function query() {
-  return pool.query.apply(pool, arguments)
+  const args = arguments
+  args[0] = args[0].replace(/PRE_/g, process.env.TABLEPREFIX)
+  return pool.query.apply(pool, args)
 }

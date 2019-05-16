@@ -1,12 +1,12 @@
 {
   "name": "vote",
-  "version": "0.0.15",
+  "version": "0.0.19",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run clean && webpack",
     "dev": "webpack-dev-server",
-    "run": "node src/index",
+    "start": "node src/index",
     "clean": "rm -r dist/js && rm -r dist/css && rm dist/*.html"
   },
   "repository": {
@@ -30,7 +30,8 @@
     "esm": "^3.2.22",
     "koa": "^2.7.0",
     "pg": "^7.10.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "array-flat-polyfill": "^1.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
