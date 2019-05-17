@@ -5,7 +5,6 @@ import Theme from './theme'
 import {useClient, query} from './db'
 import * as log from './log'
 
-// TODO
 /** Class representing a page. */
 export class Page {
   /**
@@ -56,16 +55,20 @@ export class Form {
    * @param {string} options.title The title of the form
    * @param {string|number} options.id Form ID
    * @param {Page[]} options.pages Pages in the form
+   * @param {string} options.userid KEEER ID of the owner
+   * @param {string} options.theme Form theme
+   * @param {string[]} [options.plugins] Plugins used in the form
+   * @param {object} [options.data] Form data
    */
   constructor(options) {
     this.options = options
   }
 
   get id() {
-    return this.options.id
+    return this.newid || this.options.id
   }
   set id(id) {
-    this.options.id = id
+    this.newid = id
   }
 
   get pages() {
@@ -90,18 +93,22 @@ export class Form {
       log.error('form.fromId: duplicate IDs')
       throw new Error('form.fromId: duplicate IDs')
     }
+    if(res.rows.length === 0) {
+      return null
+    }
     const data = res.rows[0]
     data.questions = data.questions.map(q => new Question(q))
     data.pages = Page.fromObject(data.pages, data.questions)
-    return new Form(data)
+    const form = new Form(data)
+    form.saved = true
+    return form
   }
 
-  /**
-   * Saves a form into database.
-   */
-  async save() {
-    const params = [
+  /** Gets parameters for saving into database. */
+  get params() {
+    return [
       this.id,
+      this.options.userid,
       this.options.title,
       this.pages.map(p => p.toObject()),
       this.questions.map(q => q.toObject()),
@@ -109,8 +116,36 @@ export class Form {
       this.options.plugins,
       this.options.data,
     ]
-    // TODO: check if not saved
-    const stmt = 'UPDATE PRE_forms SET title = $2, pages = $3, questions = $4, theme = $5, plugins = $6, data = $7 WHERE id = $1;'
-    await query(stmt, params)
+  }
+
+  /**
+   * Updates a form in database.
+   */
+  async update() {
+    if(!this.saved) {
+      await this.save()
+      return
+    }
+    if(this.newid) {
+      const newid = this.newid
+      delete this.newid
+      const stmt = 'UPDATE PRE_forms SET id = $2 WHERE id = $1;'
+      await query(stmt, [
+        this.id,
+        newid,
+      ])
+      this.options.id = newid
+    }
+    const stmt = 'UPDATE PRE_forms SET userid = $2, title = $3, pages = $4, questions = $5, theme = $6, plugins = $7, data = $8 WHERE id = $1;'      
+    await query(stmt, this.params)
+  }
+
+  async save() {
+    if(this.saved) {
+      await this.update()
+      return
+    }
+    const stmt = 'INSERT INTO PRE_forms (id, userid, title, pages, questions, theme, plugins, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);'
+    await query(stmt, this.params)
   }
 }

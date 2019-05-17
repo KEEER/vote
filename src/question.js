@@ -8,14 +8,16 @@ class Question {
    * Creates a question object.
    * @param {Object} options Options, see below.
    * @param {string} options.type The type of the question
+   * @param {string} options.title Question title
    * @param {string|number} [options.id=itoa] Question ID
-   * @param {*} options.value Default value of the question
+   * @param {*} [options.value] Default value of the question
    */
   constructor(options) {
     this.is = 'Question'
     const {
       id,
       type = 'VText',
+      title,
       value,
     } = options
     this.data = options
@@ -33,6 +35,7 @@ class Question {
       type: this.type,
       id: this.id,
       value: this.value,
+      title: this.title,
     })
   }
 }
