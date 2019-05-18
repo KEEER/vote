@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -26,12 +26,13 @@
   "homepage": "https://github.com/KEEER/vote#readme",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "array-flat-polyfill": "^1.0.1",
     "dotenv": "^7.0.0",
     "esm": "^3.2.22",
+    "fs-extra": "^8.0.1",
     "koa": "^2.7.0",
     "pg": "^7.10.0",
-    "winston": "^3.2.1",
-    "array-flat-polyfill": "^1.0.1"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

@@ -4,6 +4,7 @@ import Plugin from './plugin'
 import Theme from './theme'
 import {useClient, query} from './db'
 import * as log from './log'
+import fs from 'fs-extra'
 
 /** Class representing a page. */
 export class Page {
