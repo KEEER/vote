@@ -6,7 +6,7 @@ import * as db from './db'
 import {Form, Page} from './form'
 import log from './log'
 import 'array-flat-polyfill'
-import Question from './question';
+import Question from './question'
 
 // Load env config
 dotenv.config()

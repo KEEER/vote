@@ -3,8 +3,17 @@ import Question from './question'
 import Plugin from './plugin'
 import Theme from './theme'
 import {useClient, query} from './db'
-import * as log from './log'
+import log from './log'
 import fs from 'fs-extra'
+import {readFileSync} from 'fs'
+import path from 'path'
+
+const templateCache = {}
+Theme.forEach(theme => {
+  const filename = path.resolve(__dirname, '..', 'dist', `${theme.config.entryName}.html`)
+  templateCache[theme.config.entryName] = readFileSync(filename).toString()
+})
+log.info(templateCache)
 
 /** Class representing a page. */
 export class Page {
@@ -149,4 +158,14 @@ export class Form {
     const stmt = 'INSERT INTO PRE_forms (id, userid, title, pages, questions, theme, plugins, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);'
     await query(stmt, this.params)
   }
+
+  async getHtml() {
+    return templateCache[this.options.theme].replace(/vote-config.js/g, `/_fe/bundle?id=${encodeURIComponent(this.id)}`)
+  }
+}
+
+// TODO
+/** Converts a form into a bundled JavaScript. */
+export async function bundle(form) {
+  return ''
 }
