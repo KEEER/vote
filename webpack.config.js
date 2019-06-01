@@ -18,7 +18,8 @@ const config = {
   mode: 'production',
   entry: {
     'theme-basic': './src/themes/basic/index.js',
-    // vote: './src/frontend/index.js'
+    'plugin-sample': './src/plugins/sample/index.js',
+    // vote: './src/frontend/index.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -95,7 +96,7 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'Theme Basic',
       filename: 'theme-basic.html',
-      chunks: ['theme-basic'],
+      chunks: ['plugin-sample', 'theme-basic'],
       xhtml: true,
       meta: {
         viewport: 'width=device-width, initial-scale=1.0',

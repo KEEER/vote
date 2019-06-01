@@ -51,7 +51,7 @@ window.KVoteFormData = {
       {
         id: 3,
         type: 'VText',
-        title: '3. Input',
+        title: '3. Input (Try typing in \'hello world\' in any format)',
         value: '2',
       },
       {
