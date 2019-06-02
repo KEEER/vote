@@ -13,12 +13,12 @@ class Theme {
   }
 
   /**
-   * Check if the question/plugin could be used in the theme.
+   * Check if the question/plugin could be used with the theme.
    * @param {module:question~Question|module:plugin~Plugin} obj The Question/Plugin object
    * @returns {boolean}
    */
   applicable(obj) {
-    // TODO: form
+    // TODO
   }
 }
 
@@ -39,9 +39,8 @@ try {
   throw new Error(`Error parsing themes: ${e}`)
 }
 
-/** Themes read. */
 export default themes
 export {
   themeDirs,
-  themes
+  themes,
 }

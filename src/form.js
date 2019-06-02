@@ -1,19 +1,29 @@
 /** @module form */
 import Question from './question'
-import Plugin from './plugin'
-import Theme from './theme'
+import plugins from './plugin'
+import themes from './theme'
 import {useClient, query} from './db'
 import log from './log'
 import fs from 'fs-extra'
 import {readFileSync} from 'fs'
 import path from 'path'
 
-const templateCache = {}
-Theme.forEach(theme => {
+const templateCache = {}, jsCache = {}
+themes.forEach(theme => {
   const filename = path.resolve(__dirname, '..', 'dist', `${theme.config.entryName}.html`)
   templateCache[theme.config.entryName] = readFileSync(filename).toString()
 })
-log.info(templateCache)
+
+try {
+  fs.readdirSync(path.resolve(__dirname, '../dist/js'))
+    .forEach(filename => {
+      if(!filename.endsWith('.js')) return // do not cache .js.map files
+      const realFilename = path.resolve(__dirname, '../dist/js', filename)
+      jsCache[filename] = readFileSync(realFilename).toString()
+    })
+} catch(e) {
+  throw new Error(`Error reading JS build directory: ${e}`)
+}
 
 /** Class representing a page. */
 export class Page {
