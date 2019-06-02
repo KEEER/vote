@@ -29,14 +29,14 @@ const config = {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
       },
       {
         test: /\.js$/,
         use: 'babel-loader',
         exclude: /node_modules/,
         include: [
-          path.resolve(__dirname, 'node_modules/@material')
+          path.resolve(__dirname, 'node_modules/@material'),
         ],
       },
       {
@@ -75,8 +75,8 @@ const config = {
   resolve: {
     extensions: [
       '.js',
-      '.vue'
-    ]
+      '.vue',
+    ],
   },
   plugins: [
     new VueLoaderPlugin(),

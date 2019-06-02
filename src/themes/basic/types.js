@@ -4,8 +4,8 @@ import VText from './types/VText'
 import VTextarea from './types/VTextarea'
 
 export {
-    VRadio,
-    VCheckbox,
-    VText,
-    VTextarea,
+  VRadio,
+  VCheckbox,
+  VText,
+  VTextarea,
 }

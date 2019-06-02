@@ -16,7 +16,7 @@ dotenv.config()
     type: 'VText',
     id: 1,
     value: 'i',
-    title: 'titl'
+    title: 'titl',
   })
   const p = new Page({
     title: 'page',
@@ -28,7 +28,7 @@ dotenv.config()
     id: '233',
     pages: [p],
     userid: 'Alan-Liang',
-    theme: 'theme'
+    theme: 'theme',
   })
   await form.save()
   log.info('saved')

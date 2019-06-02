@@ -18,7 +18,7 @@ export default {
   name: 'Page',
   data() {
     return {
-      current: false
+      current: false,
     }
   },
   computed: {

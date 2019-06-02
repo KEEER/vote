@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {MDCDrawer} from "@material/drawer";
+import {MDCDrawer} from '@material/drawer'
 
 export default {
   name: 'drawer',
@@ -38,46 +38,46 @@ export default {
     },
   },
   mounted() {
-    const element = this.$el;
-    const mobileClass = "mdc-drawer--modal";
-    const desktopClass = "mdc-drawer--dismissible";
+    const element = this.$el
+    const mobileClass = 'mdc-drawer--modal'
+    const desktopClass = 'mdc-drawer--dismissible'
 
-    let drawer;
+    let drawer
 
     // Criterium for switching to mobile
-    const isMobile = window.matchMedia(`(max-width: 720px)`);
+    const isMobile = window.matchMedia('(max-width: 720px)')
 
     // Prepare scrim/overlay element
-    const mobileOverlay = document.createElement("div");
-    mobileOverlay.classList.add("mdc-drawer-scrim");
+    const mobileOverlay = document.createElement('div')
+    mobileOverlay.classList.add('mdc-drawer-scrim')
 
     // Switch between mobile and desktop
     function toggleMobile(event) {
-      const isMobile = event.matches;
+      const isMobile = event.matches
 
       if (isMobile) {
-        element.classList.add(mobileClass);
-        element.classList.remove(desktopClass);
+        element.classList.add(mobileClass)
+        element.classList.remove(desktopClass)
 
         // Insert scrim/overlay element right after drawer
-        element.insertAdjacentElement("afterend", mobileOverlay);
+        element.insertAdjacentElement('afterend', mobileOverlay)
       } else {
-        element.classList.add(desktopClass);
-        element.classList.remove(mobileClass);
+        element.classList.add(desktopClass)
+        element.classList.remove(mobileClass)
 
         // Remove scrim/overlay element
-        mobileOverlay.remove();
+        mobileOverlay.remove()
       }
 
-      drawer = MDCDrawer.attachTo(element);
-      drawer.open = !isMobile;
+      drawer = MDCDrawer.attachTo(element)
+      drawer.open = !isMobile
     }
 
     // Toggle when media query matches / stops matching
-    isMobile.addListener(toggleMobile);
+    isMobile.addListener(toggleMobile)
 
     // Toggle initially
-    toggleMobile(isMobile);
+    toggleMobile(isMobile)
 
     this.$root.$on('nav', () => this.toggle())
   },

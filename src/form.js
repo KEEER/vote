@@ -54,7 +54,7 @@ export class Page {
     return {
       title: this.title,
       id: this.id,
-      questions: this.questions.map(q => q.id)
+      questions: this.questions.map(q => q.id),
     }
   }
 

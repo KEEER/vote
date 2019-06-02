@@ -22,7 +22,7 @@ export default {
   name: 'Question',
   data() {
     return {
-      value: this.$attrs.value
+      value: this.$attrs.value,
     }
   },
   components: types,

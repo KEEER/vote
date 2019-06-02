@@ -16,28 +16,28 @@
 </template>
 
 <script>
-  // import Vue from 'vue'
-  import Form, {Question, Page} from './Form'
-  import hooks from './hooks'
+// import Vue from 'vue'
+import Form, {Question, Page} from './Form'
+import hooks from './hooks'
 
-  export default {
-    components: {
-      Form,
-      Question,
-      Page,
+export default {
+  components: {
+    Form,
+    Question,
+    Page,
+  },
+  data() {
+    return {
+      nodata: !('KVoteFormData' in window),
+      data: window.KVoteFormData,
+    }
+  },
+  computed: {
+    nodataTip() {
+      let tip = 'No form data supplied. This is usually an error in the URL.'
+      hooks.emit('app:nodata', this, t => tip = t)
+      return tip
     },
-    data() {
-      return {
-        nodata: !('KVoteFormData' in window),
-        data: window.KVoteFormData,
-      }
-    },
-    computed: {
-      nodataTip() {
-        let tip = 'No form data supplied. This is usually an error in the URL.'
-        hooks.emit('app:nodata', this, t => tip = t)
-        return tip
-      }
-    },
-  }
+  },
+}
 </script>

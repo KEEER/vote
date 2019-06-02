@@ -2,7 +2,7 @@ window.addEventListener('vote:ready', () => {
   const hooks = window.voteHooks
   hooks.on('form:texts', (form, set) => {
     set({
-      'submit': 'Go!'
+      'submit': 'Go!',
     })
   })
   hooks.on('question:update', (q, n, o) => {

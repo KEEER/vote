@@ -74,7 +74,7 @@ window.addEventListener('vote:ready', function() {
   }).on('form:texts', function(form, set) {
     set({
       submit: '提交!',
-      pageno: '页码' + (form.currentPage + 1) + (form.current % 2 == 0 ? '，奇数页' : '，偶数页')
+      pageno: '页码' + (form.currentPage + 1) + (form.current % 2 == 0 ? '，奇数页' : '，偶数页'),
     })
   }).on('form:pageno', function(form, set) {
     set(form.current + 0.1415926)

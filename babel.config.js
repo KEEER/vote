@@ -1,9 +1,9 @@
 const presets = [
   [
-    "@babel/env",
+    '@babel/env',
     {
-      targets: ">0.25%",
-      useBuiltIns: "usage",
+      targets: '>0.25%',
+      useBuiltIns: 'usage',
     },
   ],
 ]

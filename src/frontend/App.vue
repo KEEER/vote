@@ -31,38 +31,37 @@ main {
 </style>
 
 <script>
-  // import Vue from 'vue'
-  import VueRouter from 'vue-router'
+// import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-  import Drawer from './Drawer'
-  import TopAppBar from './TopAppBar'
+import Drawer from './Drawer'
+import TopAppBar from './TopAppBar'
 
-  import Home from './Home'
+import Home from './Home'
 
-  Vue.use(VueRouter)
+Vue.use(VueRouter)
 
-  const routes = [
-    {path: '/', component: Home},
-    {path: '/3', component: {render: ce => ce('div')}},
-    {path: '/2', component: {render: ce => ce('div')}},
-    {path: '/1', component: {render: ce => ce('div')}},
-  ]
-  const router = new VueRouter({
-    mode: 'history',
-    routes,
-  })
-  export {router}
+const routes = [
+  {path: '/', component: Home},
+  {path: '/3', component: {render: ce => ce('div')}},
+  {path: '/2', component: {render: ce => ce('div')}},
+  {path: '/1', component: {render: ce => ce('div')}},
+]
+const router = new VueRouter({
+  mode: 'history',
+  routes,
+})
+export {router}
 
-  export default Vue.extend({
-    data: function() {
-      return {}
-    },
-    methods: {},
-    components: {
-      Drawer,
-      TopAppBar,
-      Home,
-    },
-  })
-  console.log('Loaded')
+export default Vue.extend({
+  data: function() {
+    return {}
+  },
+  methods: {},
+  components: {
+    Drawer,
+    TopAppBar,
+  },
+})
+console.log('Loaded')
 </script>

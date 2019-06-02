@@ -22,7 +22,7 @@ export default {
   methods: {
     nav() {
       this.$root.$emit('nav')
-    }
+    },
   },
 }
 
