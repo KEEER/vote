@@ -17,7 +17,6 @@ class Question {
     const {
       id,
       type = 'VText',
-      title,
       value,
     } = options
     this.data = options

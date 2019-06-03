@@ -10,9 +10,8 @@
 
 <script>
 import * as Types from './types.js'
-import hooks from './hooks'
 
-//Fix Vue warning of Types being a Module
+// Fix Vue warning of Types being a Module
 const types = {}
 for(let i in Types) {
   types[i] = Types[i]
