@@ -7,6 +7,7 @@ import {Form, Page} from './form'
 import log from './log'
 import 'array-flat-polyfill'
 import Question from './question'
+import bundle from './bundler'
 
 // Load env config
 dotenv.config()
@@ -30,6 +31,7 @@ dotenv.config()
     userid: 'Alan-Liang',
     theme: 'theme',
   })
-  await form.save()
-  log.info('saved')
+  console.log(bundle(form))
+  // await form.save()
+  // log.info('saved')
 })()

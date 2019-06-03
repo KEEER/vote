@@ -17,11 +17,13 @@ class Question {
     const {
       id,
       type = 'VText',
+      title,
       value,
     } = options
     this.data = options
     this.id = id || getid()
     this.type = type
+    this.title = title
     this.value = value
   }
 

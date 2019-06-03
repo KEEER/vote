@@ -25,6 +25,8 @@ try {
   throw new Error(`Error reading JS build directory: ${e}`)
 }
 
+export {templateCache, jsCache}
+
 /** Class representing a page. */
 export class Page {
   /**
