@@ -174,6 +174,24 @@ export class Form {
   async getHtml() {
     return templateCache[this.options.theme].replace(/vote-config.js/g, `/_fe/bundle?id=${encodeURIComponent(this.id)}`)
   }
+
+  /**
+   * Bundles a form to a JS script.
+   * @param {string} action The action of the form
+   * @param {string} method Must be 'POST', reserved for future use
+   * @returns {string} Bundled form
+   */
+  bundle(action, method) {
+    const data = {
+      title: this.options.title,
+      action,
+      method,
+      data: this.pages.map(page => page.questions.map(q => q.toObject())),
+    }
+    return '(function(){ window.KVoteFormData = ' + JSON.stringify(data) + '})()'
+    // TODO: plugins
+  }
+
 }
 
 // TODO
