@@ -1,7 +1,6 @@
 {
   "name": "Sample",
   "version": "0.0.1",
-  "entryName": "plugin-sample",
   "uses": {
     "types": [
       "VText"
@@ -9,6 +8,11 @@
     "hooks": [
       "question:update",
       "form:texts"
-    ]
+    ],
+    "inject": {
+      "js": "plugin-sample",
+      "css": "plugin-sample",
+      "server": "server.js"
+    }
   }
 }

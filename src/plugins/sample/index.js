@@ -1,3 +1,5 @@
+import './styles.css'
+
 window.addEventListener('vote:ready', () => {
   const hooks = window.voteHooks
   hooks.on('form:texts', (form, set) => {
