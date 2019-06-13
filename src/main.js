@@ -1,12 +1,13 @@
 /** @module main */
 
-import Koa from 'koa'
 import dotenv from 'dotenv'
 import * as db from './db'
 import {Form, Page} from './form'
 import log from './log'
+import plugins from './plugin'
 import 'array-flat-polyfill'
 import Question from './question'
+import themes from './theme'
 
 // Load env config
 dotenv.config()
@@ -28,9 +29,10 @@ dotenv.config()
     id: '233',
     pages: [p],
     userid: 'Alan-Liang',
-    theme: 'theme',
+    theme: 'basic',
+    plugins: [plugins.find(p => p.config.code === 'sample')],
   })
-  console.log(form.bundle('/', 'POST'))
-  // await form.save()
-  // log.info('saved')
+  log.debug(await form.getPage('whatever'))
+  log.debug(await form.getPage('fill'))
+  log.debug(await form.bundle())
 })()

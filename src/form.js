@@ -7,12 +7,14 @@ import log from './log'
 import fs from 'fs-extra'
 import {readFileSync} from 'fs'
 import path from 'path'
+import EventEmitter from 'emittery'
 
 const templateCache = {}, jsCache = {}
 themes.forEach(theme => {
   const filename = path.resolve(__dirname, '..', 'dist', `${theme.config.entryName}.html`)
-  templateCache[theme.config.entryName] = readFileSync(filename).toString()
+  templateCache[theme.config.code] = readFileSync(filename).toString()
 })
+const loadPluginScript = fs.readFileSync(path.resolve(__dirname, 'loadPlugins.js')).toString()
 
 try {
   fs.readdirSync(path.resolve(__dirname, '../dist/js'))
@@ -70,7 +72,7 @@ export class Page {
 }
 
 /** Class representing a form. */
-export class Form {
+export class Form extends EventEmitter {
   /**
    * Creates a form object.
    * @param {object} options Options, see below.
@@ -83,7 +85,13 @@ export class Form {
    * @param {object} [options.data] Form data
    */
   constructor(options) {
+    super()
     this.options = options
+    if(this.options.plugins) {
+      this.options.plugins.forEach(plugin => {
+        plugin.attachTo(this)
+      })
+    }
   }
 
   get id() {
@@ -121,6 +129,9 @@ export class Form {
     const data = res.rows[0]
     data.questions = data.questions.map(q => new Question(q))
     data.pages = Page.fromObject(data.pages, data.questions)
+    data.plugins = data.plugins.map(
+      p => plugins.find(plugin => plugin.config.code === p)
+    ).filter(p => !!p)
     const form = new Form(data)
     form.saved = true
     return form
@@ -140,9 +151,7 @@ export class Form {
     ]
   }
 
-  /**
-   * Updates a form in database.
-   */
+  /** Updates a form in database. */
   async update() {
     if(!this.saved) {
       await this.save()
@@ -162,6 +171,7 @@ export class Form {
     await query(stmt, this.params)
   }
 
+  /** Saves a form into the database. */
   async save() {
     if(this.saved) {
       await this.update()
@@ -171,8 +181,16 @@ export class Form {
     await query(stmt, this.params)
   }
 
+  /** 
+   * Get the HTML markup corresponding to the form.
+   * @returns {string} HTML
+   */
   async getHtml() {
-    return templateCache[this.options.theme].replace(/vote-config.js/g, `/_fe/bundle?id=${encodeURIComponent(this.id)}`)
+    return (templateCache[this.options.theme]
+      .replace(
+        /vote-config.js/g,
+        `/${this.id}/_bundle}`
+      ))
   }
 
   /**
@@ -181,21 +199,43 @@ export class Form {
    * @param {string} method Must be 'POST', reserved for future use
    * @returns {string} Bundled form
    */
-  bundle(action, method) {
+  async bundle(action, method) {
     const data = {
       title: this.options.title,
       action,
       method,
       data: this.pages.map(page => page.questions.map(q => q.toObject())),
+      pluginJs: [],
+      pluginCss: [],
     }
-    return '(function(){ window.KVoteFormData = ' + JSON.stringify(data) + '})()'
-    // TODO: plugins
+    if(this.options.plugins) {
+      this.options.plugins.forEach(plugin => {
+        if(plugin.config.jsPath) data.pluginJs.push('/dist/js/' + plugin.config.jsPath)
+        if(plugin.config.cssPath) data.pluginCss.push('/dist/css/' + plugin.config.cssPath)
+      })
+    }
+    await this.emit('bundle', [data])
+    return '(function(){ window.KVoteFormData = ' +
+      JSON.stringify(data) + ';' +
+      loadPluginScript + '})()'
   }
 
-}
+  async getPage(path) {
+    let html = null
+    await this.emit('getPage', [path, h => html = h])
+    if(html !== null) return html
 
-// TODO
-/** Converts a form into a bundled JavaScript. */
-export async function bundle(form) {
-  return ''
+    switch(path) {
+    case '':
+    case 'fill':
+      return await this.getHtml()
+
+    case '_bundle':
+      return await this.bundle()
+
+    default:
+      return 404
+    }
+  }
+
 }

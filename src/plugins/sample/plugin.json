@@ -1,5 +1,6 @@
 {
   "name": "Sample",
+  "code": "sample",
   "version": "0.0.1",
   "uses": {
     "types": [

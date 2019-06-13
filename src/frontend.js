@@ -1,2 +1,2 @@
-/** @module fromtend */
+/** @module frontend */
 // TODO

@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -30,6 +30,7 @@
     "@babel/polyfill": "^7.2.5",
     "array-flat-polyfill": "^1.0.1",
     "dotenv": "^7.0.0",
+    "emittery": "^0.4.1",
     "esm": "^3.2.22",
     "fs-extra": "^8.0.1",
     "koa": "^2.7.0",

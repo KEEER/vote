@@ -1,1 +1,1 @@
-require('esm')(module)('./main')
+require('esm')(module, {cjs: {dedefault: true}})('./main')

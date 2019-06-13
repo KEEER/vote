@@ -1,5 +1,6 @@
 {
   "name": "Basic",
+  "code": "basic",
   "version": "0.0.1",
   "entryName": "theme-basic",
   "supports": {

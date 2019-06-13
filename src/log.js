@@ -10,7 +10,7 @@ const logger = createLogger({
   ),
   transports: [
     new transports.File({ filename: 'error.log', level: 'error' }),
-    new transports.File({ filename: 'all.log' }),
+    new transports.File({ filename: 'all.log', level: 'verbose' }),
   ],
 })
 
@@ -20,6 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
       format.colorize(),
       format.simple(),
     ),
+    level: 'silly',
   }))
 }
 
