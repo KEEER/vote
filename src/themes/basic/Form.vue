@@ -1,8 +1,8 @@
 <template>
   <main>
     <h1>{{this.title}}</h1>
-    <slot v-if="!submitting && !submitted" />
-    <span v-if="!submitting && !submitted" class="form-controls">
+    <slot v-if="!submitting && !submitted && !submiterror" />
+    <span v-if="!submitting && !submitted && !submiterror" class="form-controls">
       {{texts.pageno}}
       <button class="form-prev" :hidden="!prevVisible" @click="prev">{{texts.prevPage}}</button>
       <button class="form-next" :hidden="!nextVisible" @click="next">{{texts.nextPage}}</button>
@@ -10,6 +10,7 @@
     </span>
     <h1 v-if="submitting && !submitted">{{texts.submitting}}</h1>
     <h1 v-if="submitted">{{texts.submitted}}</h1>
+    <h1 v-if="submiterror">{{texts.submiterror}}</h1>
   </main>
 </template>
 
@@ -51,7 +52,7 @@ export default Vue.extend({
     },
     update() {
       this.updateVisibility()
-      hooks.emit('form:update', this)
+      hooks.emit('form:update', [this])
     },
     updateVisibility() {
       if(this.current === 0) this.prevVisible = false
@@ -61,9 +62,9 @@ export default Vue.extend({
     },
     submit() {
       let cancel = false
-      hooks.emit('form:beforesubmit', this, () => cancel = true)
+      hooks.emit('form:beforesubmit', [this, () => cancel = true])
       if(!cancel) {
-        hooks.emit('form:submit', this)
+        hooks.emit('form:submit', [this])
       }
     },
   },
@@ -71,7 +72,7 @@ export default Vue.extend({
   mounted() {
     this.$children[this.current].current = true
     this.updateVisibility()
-    hooks.emit('form:mounted', this)
+    hooks.emit('form:mounted', [this])
   },
   computed: {
     pages() {
@@ -85,13 +86,14 @@ export default Vue.extend({
         pageno: `Page ${this.current + 1}`,
         submitting: 'Submitting...',
         submitted: 'The form has been submitted. Thank you.',
+        submiterror: 'There is an error submitting the form.',
       }
-      hooks.emit('form:texts', this, t => texts = Object.assign(texts, t))
+      hooks.emit('form:texts', [this, t => texts = Object.assign(texts, t)])
       return texts
     },
     currentPage() {
       let page = this.current + 1
-      hooks.emit('form:pageno', this, p => page = p)
+      hooks.emit('form:pageno', [this, p => page = p])
       return page
     },
     submitted() {
@@ -99,6 +101,9 @@ export default Vue.extend({
     },
     submitting() {
       return this.status === 'submitting'
+    },
+    submiterror() {
+      return this.status === 'submiterror'
     },
     formdata() {
       const data = []

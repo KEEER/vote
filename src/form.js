@@ -210,8 +210,8 @@ export class Form extends EventEmitter {
     }
     if(this.options.plugins) {
       this.options.plugins.forEach(plugin => {
-        if(plugin.config.jsPath) data.pluginJs.push('/dist/js/' + plugin.config.jsPath)
-        if(plugin.config.cssPath) data.pluginCss.push('/dist/css/' + plugin.config.cssPath)
+        if(plugin.config.jsPath) data.pluginJs.push('/js/' + plugin.config.jsPath)
+        if(plugin.config.cssPath) data.pluginCss.push('/css/' + plugin.config.cssPath)
       })
     }
     await this.emit('bundle', [data])
@@ -231,7 +231,7 @@ export class Form extends EventEmitter {
       return await this.getHtml()
 
     case '_bundle':
-      return await this.bundle()
+      return await this.bundle(`/${this.id}/_submit`, 'POST')
 
     default:
       return 404

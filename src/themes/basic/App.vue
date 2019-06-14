@@ -35,7 +35,7 @@ export default {
   computed: {
     nodataTip() {
       let tip = 'No form data supplied. This is usually an error in the URL.'
-      hooks.emit('app:nodata', this, t => tip = t)
+      hooks.emit('app:nodata', [this, t => tip = t])
       return tip
     },
   },

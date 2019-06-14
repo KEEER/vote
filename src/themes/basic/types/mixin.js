@@ -15,7 +15,7 @@ export default {
   watch: {
     value_(val) {
       this.$emit('update:value', val)
-      hooks.emit('question:update', this, val, this.old)
+      hooks.emit('question:update', [this, val, this.old])
       this.syncOld()
     },
     value(val) {
