@@ -59,3 +59,19 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
+
+-- Table: public.session
+
+-- DROP TABLE public.session;
+
+CREATE TABLE public.session
+(
+    id text COLLATE pg_catalog."default" NOT NULL,
+    expiry timestamp without time zone NOT NULL,
+    data jsonb,
+    CONSTRAINT session_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;

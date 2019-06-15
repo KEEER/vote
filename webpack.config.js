@@ -25,6 +25,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name]-[contenthash:6].js',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -102,7 +103,7 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'Theme Basic',
       filename: 'theme-basic.html',
-      chunks: ['plugin-sample', 'theme-basic'],
+      chunks: ['theme-basic'],
       xhtml: true,
       meta: {
         viewport: 'width=device-width, initial-scale=1.0',
@@ -110,7 +111,7 @@ const config = {
     }),
     new HtmlWebpackTagsPlugin({
       links: [
-        {path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false},
+        // {path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false},
       ],
       scripts: [
         {path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false},

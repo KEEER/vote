@@ -146,7 +146,7 @@ export class Form extends EventEmitter {
       this.pages.map(p => p.toObject()),
       this.questions.map(q => q.toObject()),
       this.options.theme,
-      this.options.plugins,
+      this.options.plugins.map(p => p.config.code),
       this.options.data,
     ]
   }
@@ -188,8 +188,8 @@ export class Form extends EventEmitter {
   async getHtml() {
     return (templateCache[this.options.theme]
       .replace(
-        /vote-config.js/g,
-        `/${this.id}/_bundle}`
+        /\/vote-config.js/g,
+        `/${this.id}/_bundle`
       ))
   }
 
@@ -220,7 +220,14 @@ export class Form extends EventEmitter {
       loadPluginScript + '})()'
   }
 
-  async getPage(path) {
+  /**
+   * Get a page corresponding to the relative URL.
+   * @param {string} path The requested path
+   * @param {Koa.context} ctx The Koa context
+   * @returns {string|number} The response to be sent or the error to be thrown
+   * @example form.getPage('fill', ctx)
+   */
+  async getPage(path, ctx) {
     let html = null
     await this.emit('getPage', [path, h => html = h])
     if(html !== null) return html
