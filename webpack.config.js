@@ -11,6 +11,7 @@ const extractCss = {
   options: {
     hmr: process.env.NODE_ENV === 'development',
     reloadAll: true,
+    sourceMap: true,
   },
 }
 
@@ -44,8 +45,8 @@ const config = {
         use: [
           extractCss,
           // 'vue-style-loader',
-          'css-loader',
-          'less-loader',
+          'css-loader?sourceMap',
+          'less-loader?sourceMap',
         ],
       },
       {
@@ -53,11 +54,12 @@ const config = {
         use: [
           extractCss,
           // 'style-loader',
-          'css-loader',
+          'css-loader?sourceMap',
           {
             loader: 'sass-loader',
             options: {
               includePaths: [path.resolve(__dirname, 'node_modules')],
+              sourceMap: true,
             },
           },
         ],
@@ -67,7 +69,7 @@ const config = {
         use: [
           extractCss,
           // 'vue-style-loader',
-          'css-loader',
+          'css-loader?sourceMap',
         ],
       },
     ],
@@ -83,7 +85,11 @@ const config = {
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[contenthash:6].css',
     }),
-    new OptimizeCssAssetsPlugin(),
+    new OptimizeCssAssetsPlugin({
+      cssProcessorOptions: {
+        map: {inline: false},
+      },
+    }),
     new HtmlWebpackPlugin({
       title: 'KEEER Vote',
       filename: 'index.html',
