@@ -16,12 +16,11 @@ const maxAge = parseInt(process.env.SESSION_MAXAGE)
 const store = {
   async get(key) {
     const res = await query('SELECT data FROM PRE_session WHERE id = $1;', [key])
-    if(res.length === 0) return false
-    else return res[0].data
+    if(res.rows.length === 0) return false
+    else return res.rows[0].data
   },
   async set(key, data, maxAge1) {
-    if(!maxAge1) maxAge1 = maxAge
-    const expiry = (Date.now() + maxAge1) / 1000
+    const expiry = (Date.now() + maxAge1 || maxAge) / 1000
     // TODO: atomicity
     if(await this.get(key)) {
       await query('UPDATE PRE_session SET data = $3, expiry = to_timestamp($2) WHERE id = $1;', [key, expiry, data])
@@ -79,6 +78,8 @@ app.use(BodyParser())
 app.use(Session({
   key: process.env.SESSION_KEY,
   maxAge,
+  store,
+  signed: false,
 }, app))
 app.use(router.routes()).use(router.allowedMethods())
 
