@@ -6,7 +6,7 @@ so everything except issues and PRs are going to be in English.
 
 ## Notices
 
-- Keep the project structure in English.
+- Keep the project structure in dictionary order.
 - Follow Git commit message guidlines.
 
 ## Project structure
@@ -24,8 +24,6 @@ so everything except issues and PRs are going to be in English.
     - `main.js` Koa application
     - `plugin.js` Plugin utils
     - `question.js` Question utils
-    - `sandbox.js` Plugin sandbox, to be removed
-    - `submission.js` Submission utils, to be merged into `form.js`
     - `theme.js` Theme utils
 - `static/` Static files (e.g. ToC)
 
