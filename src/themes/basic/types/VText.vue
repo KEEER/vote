@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{data.title}}</h3>
+    <QTitle :title="data.title" :required="data.required" />
     <input v-model="value_" />
   </div>
 </template>

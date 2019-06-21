@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{data.title}}</h3>
+    <QTitle :title="data.title" :required="data.required" />
     <VCheckboxInput
       v-for="option in data.options"
       :key="option.value"
@@ -12,6 +12,7 @@
 
 <script>
 import VCheckboxInput from './VCheckboxInput'
+import QTitle from '../Title'
 
 export default {
   name: 'VCheckbox',
@@ -22,6 +23,7 @@ export default {
   },
   components: {
     VCheckboxInput,
+    QTitle,
   },
   props: {
     data: {

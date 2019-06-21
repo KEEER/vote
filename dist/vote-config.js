@@ -9,6 +9,7 @@ window.KVoteFormData = {
         type: 'VRadio',
         title: '1. Select one',
         value: '2',
+        required: true,
         options: [
           {
             label: 'One',

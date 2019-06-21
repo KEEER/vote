@@ -1,4 +1,5 @@
 import hooks from '../hooks'
+import QTitle from '../Title'
 
 export default {
   data() {
@@ -35,5 +36,8 @@ export default {
     realQuestion() {
       return this.question.$children[0]
     },
+  },
+  components: {
+    QTitle,
   },
 }
