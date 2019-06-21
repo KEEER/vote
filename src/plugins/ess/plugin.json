@@ -2,6 +2,8 @@
   "name": "Essentials",
   "code": "ess",
   "version": "0.0.1",
+  "required": true,
+  "pro": false,
   "uses": {
     "inject": {
       "js": "plugin-ess-form",

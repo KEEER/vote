@@ -2,7 +2,7 @@
 import Question from './question'
 import plugins from './plugin'
 import themes from './theme'
-import {useClient, query} from './db'
+import {query} from './db'
 import log from './log'
 import fs from 'fs-extra'
 import {readFileSync} from 'fs'

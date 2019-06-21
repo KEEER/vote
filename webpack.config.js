@@ -46,7 +46,6 @@ const config = {
         test: /\.less$/,
         use: [
           extractCss,
-          // 'vue-style-loader',
           'css-loader?sourceMap',
           'less-loader?sourceMap',
         ],
@@ -55,7 +54,6 @@ const config = {
         test: /\.scss$/,
         use: [
           extractCss,
-          // 'style-loader',
           'css-loader?sourceMap',
           {
             loader: 'sass-loader',
@@ -70,7 +68,6 @@ const config = {
         test: /\.css$/,
         use: [
           extractCss,
-          // 'vue-style-loader',
           'css-loader?sourceMap',
         ],
       },
@@ -89,7 +86,7 @@ const config = {
     }),
     new OptimizeCssAssetsPlugin({
       cssProcessorOptions: {
-        map: {inline: false},
+        map: {inline: false, annotation: true},
       },
     }),
     new HtmlWebpackPlugin({

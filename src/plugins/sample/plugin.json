@@ -2,6 +2,8 @@
   "name": "Sample",
   "code": "sample",
   "version": "0.0.1",
+  "required": false,
+  "pro": false,
   "uses": {
     "types": [
       "VText"

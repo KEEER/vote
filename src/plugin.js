@@ -2,8 +2,6 @@
 import fs from 'fs'
 import path from 'path'
 
-// TODO: import plugin files for backend
-
 /** Class representing a plugin. */
 class Plugin {
   /**
