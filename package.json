@@ -1,13 +1,13 @@
 {
   "name": "vote",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run clean && webpack",
     "dev": "webpack-dev-server",
     "start": "node src/index",
-    "clean": "rm -r dist/js && rm -r dist/css && rm dist/*.html",
+    "clean": "rm -rf dist/js && rm -rf dist/css && rm -f dist/*.html",
     "lint": "eslint --ext .js,.vue .",
     "fix": "eslint --ext .js,.vue . --fix"
   },
@@ -55,6 +55,7 @@
     "html-webpack-tags-plugin": "^2.0.3",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "material-components-vue": "^1.0.2",
     "material-components-web": "^1.0.1",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",

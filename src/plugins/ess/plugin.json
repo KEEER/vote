@@ -1,0 +1,12 @@
+{
+  "name": "Essentials",
+  "code": "ess",
+  "version": "0.0.1",
+  "uses": {
+    "inject": {
+      "js": "plugin-ess-form",
+      "css": "plugin-ess-form",
+      "server": "server/index.js"
+    }
+  }
+}

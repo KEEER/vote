@@ -20,7 +20,8 @@ const config = {
   entry: {
     'theme-basic': './src/themes/basic/index.js',
     'plugin-sample': './src/plugins/sample/index.js',
-    // vote: './src/frontend/index.js',
+    'plugin-ess-form': './src/plugins/ess/form/index.js',
+    'plugin-ess-editor': './src/plugins/ess/editor/index.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -94,7 +95,7 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'KEEER Vote',
       filename: 'index.html',
-      chunks: ['vote'],
+      chunks: ['plugin-ess-editor'],
       xhtml: true,
       meta: {
         viewport: 'width=device-width, initial-scale=1.0',
@@ -111,7 +112,7 @@ const config = {
     }),
     new HtmlWebpackTagsPlugin({
       links: [
-        // {path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false},
+        {path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false},
       ],
       scripts: [
         {path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false},

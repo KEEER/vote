@@ -1,11 +1,13 @@
 <template>
   <div>
-    <Drawer />
+    <m-drawer></m-drawer>
     <div id="content">
-      <TopAppBar />
-      <main class="mdc-top-app-bar--fixed-adjust">
+      <m-top-app-bar title="Vote Editor">
+        <m-icon icon="menu" slot="navigation" />
+      </m-top-app-bar>
+      <m-top-app-bar-fixed-adjust>
         <router-view />
-      </main>
+      </m-top-app-bar-fixed-adjust>
     </div>
   </div>
 </template>
@@ -15,7 +17,9 @@ $mdc-theme-primary: #005c5c;
 $mdc-theme-accent: #002d4d;
 $mdc-theme-background: #fff;
 
-@import 'material-components-web/material-components-web';
+@import 'material-components-vue/dist/top-app-bar/styles';
+@import 'material-components-vue/dist/drawer/styles';
+@import 'material-components-vue/dist/typography/styles';
 </style>
 
 <style>
@@ -31,18 +35,17 @@ main {
 </style>
 
 <script>
-// import Vue from 'vue'
 import VueRouter from 'vue-router'
-
-import Drawer from './Drawer'
-import TopAppBar from './TopAppBar'
-
-import Home from './Home'
+import TopAppBar from 'material-components-vue/dist/top-app-bar'
+import Drawer from 'material-components-vue/dist/drawer'
+import Icon from 'material-components-vue/dist/icon'
 
 Vue.use(VueRouter)
+Vue.use(TopAppBar)
+Vue.use(Icon)
+Vue.use(Drawer)
 
 const routes = [
-  {path: '/', component: Home},
   {path: '/3', component: {render: ce => ce('div')}},
   {path: '/2', component: {render: ce => ce('div')}},
   {path: '/1', component: {render: ce => ce('div')}},
@@ -58,10 +61,7 @@ export default Vue.extend({
     return {}
   },
   methods: {},
-  components: {
-    Drawer,
-    TopAppBar,
-  },
+  components: {},
 })
 console.log('Loaded')
 </script>
