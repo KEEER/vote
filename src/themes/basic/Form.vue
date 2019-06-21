@@ -59,6 +59,7 @@ export default Vue.extend({
       else this.prevVisible = true
       if(this.current === this.pages.length - 1) this.nextVisible = false
       else this.nextVisible = true
+      hooks.emit('form:updatevisibility', [this])
     },
     submit() {
       let cancel = false
@@ -73,6 +74,7 @@ export default Vue.extend({
     this.$children[this.current].current = true
     this.updateVisibility()
     hooks.emit('form:mounted', [this])
+    hooks.emit('form:updatevisibility', [this])
   },
   computed: {
     pages() {

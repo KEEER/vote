@@ -240,6 +240,9 @@ export class Form extends EventEmitter {
     case '_bundle':
       return await this.bundle(`/${this.id}/_submit`, 'POST')
 
+    case '_submit':
+      return ''
+
     default:
       return 404
     }

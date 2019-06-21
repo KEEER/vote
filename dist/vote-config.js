@@ -104,28 +104,6 @@ window.addEventListener('vote:ready', function() {
       form.pages[1].questions[0].data.title = '3. Please type something other than 2.'
       cancel()
     }
-  }).on('form:submit', function([form]) {
-    const payload = JSON.stringify(form.formdata)
-    if(form.method !== 'POST') throw new Error('Only POST is supported by now')
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', form.action)
-    xhr.onreadystatechange = function() {
-      if(this.readyState !== 4) return
-      if(this.status !== 200) {
-        form.status = 'submiterror'
-        hooks.emit('form:submiterror', [form, this])
-      } else {
-        form.status = 'submitted'
-        hooks.emit('form:submitted', [form])
-      }
-    }
-    try {
-      xhr.send(payload)
-      form.status = 'submitting'
-    } catch(e) {
-      console.error(e)
-      hooks.emit('form:error', [e])
-    }
   })
   console.log('vote:ready')
 })

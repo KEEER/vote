@@ -5,10 +5,20 @@
   "required": true,
   "pro": false,
   "uses": {
+    "hooks": [
+      "form:submit"
+    ],
     "inject": {
       "js": "plugin-ess-form",
       "css": "plugin-ess-form",
       "server": "server/index.js"
     }
+  },
+  "provides": {
+    "hooks": [
+      "form:submiterror",
+      "form:submitted",
+      "form:error"
+    ]
   }
 }
