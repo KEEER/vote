@@ -12,11 +12,18 @@
           :data="question" />
       </Page>
     </Form>
+    <footer class="vote-footer"><a href="/?utm_source=form&utm_medium=footer">Powered by KEEER Vote</a></footer>
   </div>
 </template>
 
+<style>
+.vote-footer {
+  padding: 8px 0;
+}
+</style>
+
+
 <script>
-// import Vue from 'vue'
 import Form, {Question, Page} from './Form'
 import hooks from './hooks'
 

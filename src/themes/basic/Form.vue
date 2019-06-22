@@ -71,6 +71,7 @@ export default Vue.extend({
   },
   components: {},
   mounted() {
+    document.title = this.title
     this.$children[this.current].current = true
     this.updateVisibility()
     hooks.emit('form:mounted', [this])

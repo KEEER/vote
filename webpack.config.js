@@ -99,7 +99,7 @@ const config = {
       },
     }),
     new HtmlWebpackPlugin({
-      title: 'Theme Basic',
+      title: 'KEEER Vote',
       filename: 'theme-basic.html',
       chunks: ['theme-basic'],
       xhtml: true,
