@@ -252,7 +252,7 @@ html, body {
 
 @media (max-width: 425px) {
   #send:after {
-    margin-top: 24px;
+    margin-top: -3px;
     height: 32px;
     padding: 0 16px;
     font-size: 14px;
