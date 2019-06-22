@@ -17,182 +17,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/form-field@2.3.0/dist/mdc.form-field.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/button@2.3.0/dist/mdc.button.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/typography@2.3.0/dist/mdc.typography.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/ripple@2.3.0/dist/mdc.ripple.min.css" />
   <link rel="stylesheet" href="https://fonts.loli.net/icon?family=Material+Icons" />
-  <style>
-    html, body {
-      --mdc-theme-primary: #005c5c;
-      margin: 0;
-      background: #005c5c;
-      height: 100%;
-      width: 100%;
-    }
-
-    #wrapper {
-      width: 100%;
-      display: table;
-    }
-
-    #slogan,
-    #regbox-out {
-      display: table-cell;
-    }
-
-    #slogan {
-      position: relative;
-      color: #f5fafd;
-    }
-
-    #subtitle {
-      position: relative;
-    }
-
-    #subtitle:before {
-      position: absolute;
-      top: auto;
-      bottom: -5px;
-      left: -3000px;
-      right: -588px;
-      content: ' ';
-      background-color: #f5fafd;
-      height: 1px;
-      z-index: 5;
-    }
-
-    #regbox-out,
-    #slogan {
-      padding: 64px;
-    }
-
-    #regbox {
-      padding: 30px;
-      width: 300px;
-      position: relative;
-      z-index: 10;
-    }
-
-    #regbox-out {
-      color: #005c5c;
-      width: 300px;
-      padding-top: 94px;
-      padding-right: 100px;
-    }
-
-    #register-button {
-      margin-top: 2px;
-    }
-
-    .checkbox-label {
-      line-height: 1.25em;
-      margin-top: 8px;
-      margin-left: -8px;
-      display: inline-block;
-    }
-
-    #bottom {
-      position: fixed;
-      bottom: 4px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      width: calc(100% - 20px);
-      padding-left: 10px;
-      padding-right: 10px;
-      font-size: 13px;
-      line-height: 16px;
-      color: #f5fafd;
-    }
-
-    .logo {
-      height: 16px;
-      position: relative;
-      bottom: -3px;
-    }
-
-    .link:link,
-    .link:visited,
-    .link:hover {
-      opacity: 0.6;
-      transition: opacity 0.2s ease;
-      color: inherit;
-      text-decoration: none;
-      position: relative;
-      bottom: 3px;
-    }
-
-    .link:hover {
-      opacity: 1;
-    }
-
-    @media(min-width: 800px) {
-      #slogan {
-        padding-left: 128px;
-      }
-
-      #regbox,
-      #regbox-out {
-        width: 360px;
-      }
-    }
-
-    @media(min-width: 1100px) {
-      #regbox-out {
-        padding-right: 256px;
-      }
-
-      #slogan {
-        padding-left: 164px;
-      }
-
-      #subtitle::before {
-        right: -256px;
-      }
-    }
-
-    @media(max-width: 768px) {
-
-      #wrapper,
-      #slogan,
-      #regbox-out {
-        display: block;
-        padding: 15px;
-        text-align: center;
-        width: calc(100% - 15px);
-      }
-
-      #regbox {
-        display: inline-block;
-        text-align: left;
-      }
-
-      #regbox-out::before,
-      #regbox-out::after {
-        content: ' ';
-        width: auto;
-        display: inline-block;
-      }
-
-      #slogan {
-        top: 0;
-      }
-
-      #wrapper {
-        padding: 0;
-      }
-
-      #subtitle::before {
-        left: -15px;
-        right: -15px;
-      }
-
-      #bottom {
-        position: inherit;
-      }
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
@@ -207,7 +34,6 @@
     </div>
     <div id="regbox-out">
       <div id="regbox" class="mdc-card">
-        <!-- TODO:  -->
         <div class="mdc-tab-bar" role="tablist" data-mdc-auto-init="MDCTabBar">
           <div class="mdc-tab-scroller">
             <div class="mdc-tab-scroller__scroll-area">
@@ -234,8 +60,9 @@
             </div>
           </div>
         </div>
+        <div class="separator"></div>
+        <!-- TODO: Real login -->
         <div id="register">
-          <!-- TODO:  -->
           <form>
             <div class="mdc-text-field mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
               <i class="material-icons mdc-text-field__icon" tabindex="2" role="button">account_circle</i>
@@ -244,19 +71,34 @@
               <label class="mdc-floating-label" for="username">用户名</label>
               <div class="mdc-line-ripple"></div>
             </div>
+            <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent"
+              data-mdc-auto-init="MDCTextFieldHelperText">小写英文字母、数字、_、-，3-15位</div>
+            <div class="separator"></div>
             <div class="mdc-text-field mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
-              <i class="material-icons mdc-text-field__icon" tabindex="3" role="button">email</i>
-              <input id="email" class="mdc-text-field__input" type="email" required autocomplete="email" />
-              <label class="mdc-floating-label" for="email">电子邮件地址</label>
+              <i class="material-icons mdc-text-field__icon" tabindex="3" role="button">phone_android</i>
+              <input id="tel" class="mdc-text-field__input" type="tel" required autocomplete="tel" />
+              <label class="mdc-floating-label" for="tel">手机号码</label>
               <div class="mdc-line-ripple"></div>
             </div>
+            <div class="separator"></div>
+            <div class="mdc-text-field mdc-text-field--with-leading-icon mdc-text-field--with-trailing-icon" data-mdc-auto-init="MDCTextField">
+              <i class="material-icons mdc-text-field__icon" tabindex="4" role="button">sms</i>
+              <input id="sms" class="mdc-text-field__input" type="number" required />
+              <label class="mdc-floating-label" for="tel">短信验证码</label>
+              <div class="mdc-line-ripple"></div>
+              <i class="material-icons mdc-text-field__icon" id="send" tabindex="5" role="button">send</i>
+            </div>
+            <div class="separator"></div>
             <div class="mdc-text-field mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
-              <i class="material-icons mdc-text-field__icon" tabindex="4" role="button">lock</i>
+              <i class="material-icons mdc-text-field__icon" tabindex="6" role="button">lock</i>
               <input class="mdc-text-field__input" id="password" minlength="6" type="password" required
                 autocomplete="new-password" />
               <label class="mdc-floating-label" for="password">密码</label>
               <div class="mdc-line-ripple"></div>
             </div>
+            <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent"
+              data-mdc-auto-init="MDCTextFieldHelperText">6位以上，请挑选一个强壮的密码。</div>
+            <div class="separator"></div>
             <div class="mdc-form-field" data-mdc-auto-init="MDCFormField">
               <div class="mdc-checkbox" data-mdc-auto-init="MDCCheckbox">
                 <input type="checkbox" class="mdc-checkbox__native-control" id="agree" required />
@@ -270,12 +112,11 @@
               <label for="agree">我已阅读并同意<a href="/tac.html" target="_blank">用户协议</a>和<a href="/privacy-policy.html" target="_blank">隐私政策</a></label>
             </div>
             <center>
-              <button class="mdc-button mdc-button--raised" id="register-button">注册</button>
+              <button class="mdc-button mdc-button--unelevated" id="register-button" data-mdc-auto-init="MDCRipple">注册</button>
             </center>
           </form>
         </div>
         <div id="login" class="hidden">
-          <!-- TODO:  -->
           <form>
             <div class="mdc-text-field mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
               <i class="material-icons mdc-text-field__icon" tabindex="2" role="button">account_circle</i>
@@ -283,9 +124,10 @@
               <label class="mdc-floating-label" for="login-username">用户名或电子邮箱</label>
               <div class="mdc-line-ripple"></div>
             </div>
+            <div class="separator"></div>
             <div class="mdc-text-field mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
               <i class="material-icons mdc-text-field__icon" tabindex="2" role="button">lock</i>
-              <input class="mdc-text-field__input" id="login-password" minlength="6" type="password" required
+              <input class="mdc-text-field__input" id="login-password" type="password" required
                 autocomplete="current-password" />
               <label class="mdc-floating-label" for="login-password">密码</label>
               <div class="mdc-line-ripple"></div>
@@ -303,7 +145,7 @@
               <label for="remember">记住我</label>
             </div>
             <center>
-              <button class="mdc-button mdc-button--raised" id="login-button">登录</button>
+              <button class="mdc-button mdc-button--unelevated" id="login-button" data-mdc-auto-init="MDCRipple">登录</button>
             </center>
           </form>
         </div>
@@ -311,7 +153,7 @@
     </div>
   </div>
   <div id="bottom">
-    <a href="/" class="link"><img class="logo" src="https://keeer.net/img/logo/light-large.svg" /></a>
+    <a href="https://keeer.net/" class="link"><img class="logo" src="https://keeer.net/img/logo/light-large.svg" /></a>
     <a href="/" class="link">关于</a>
     <a href="/" class="link">demo</a>
     <a href="/tac.html" class="link">用户协议</a>
@@ -326,12 +168,14 @@
   <script src="https://cdn.jsdelivr.net/npm/@material/textfield@2.3.1/dist/mdc.textfield.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@material/checkbox@2.3.0/dist/mdc.checkbox.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@material/form-field@2.3.0/dist/mdc.formField.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@material/ripple@2.3.0/dist/mdc.ripple.min.js"></script>
   <script>
     mdc.autoInit.mdcAutoInit.register('MDCTabBar', mdc.tabBar.MDCTabBar)
     mdc.autoInit.mdcAutoInit.register('MDCTextField', mdc.textfield.MDCTextField)
     mdc.autoInit.mdcAutoInit.register('MDCTextFieldHelperText', mdc.textfield.MDCTextFieldHelperText)
     mdc.autoInit.mdcAutoInit.register('MDCFormField', mdc.formField.MDCFormField)
     mdc.autoInit.mdcAutoInit.register('MDCCheckbox', mdc.checkbox.MDCCheckbox)
+    mdc.autoInit.mdcAutoInit.register('MDCRipple', mdc.ripple.MDCRipple)
     mdc.autoInit.mdcAutoInit()
 
     var $ = function(sel) { return document.querySelector(sel) }
