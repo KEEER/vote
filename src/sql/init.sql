@@ -46,11 +46,11 @@ TABLESPACE pg_default;
 
 CREATE TABLE public.submissions
 (
-    id integer NOT NULL,
-    formid character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    id bigint NOT NULL DEFAULT nextval('submissions_id_seq'::regclass) ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    formid character varying(32) COLLATE pg_catalog."default",
     data jsonb,
     CONSTRAINT submissions_pkey PRIMARY KEY (id),
-    CONSTRAINT formid FOREIGN KEY (formid)
+    CONSTRAINT submissions_formid_fkey FOREIGN KEY (formid)
         REFERENCES public.forms (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE

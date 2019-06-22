@@ -4,6 +4,7 @@ export default hooks => {
     const payload = JSON.stringify(form.formdata)
     const xhr = new XMLHttpRequest()
     xhr.open('POST', form.action)
+    xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.onreadystatechange = () => {
       if (xhr.readyState !== 4) return
       if (xhr.status !== 200) {

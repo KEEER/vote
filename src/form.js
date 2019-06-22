@@ -8,6 +8,7 @@ import fs from 'fs-extra'
 import {readFileSync} from 'fs'
 import path from 'path'
 import EventEmitter from 'emittery'
+import uuid from 'uuid/v4'
 
 const templateCache = {}, jsCache = {}
 themes.forEach(theme => {
@@ -241,11 +242,36 @@ export class Form extends EventEmitter {
       return await this.bundle(`/${this.id}/_submit`, 'POST')
 
     case '_submit':
-      return ''
+      return await this.handleSubmission(ctx)
 
     default:
       return 404
     }
   }
 
+  /**
+   * Handles a submission entry.
+   * @param {Koa.Context} ctx Koa context
+   */
+  async handleSubmission(ctx) {
+    let res
+    this.emit('handleSubmission', [ctx, r => res = r])
+    if(res) return res
+
+    if(ctx.method !== 'POST') {
+      return 405 // Method Not Allowed
+    }
+    if(!ctx.request.body) {
+      return 400
+    }
+
+    let data = ctx.request.body
+    if(Array.isArray(data)) {
+      data = {}
+      ctx.request.body.forEach((v, i) => data[i] = v)
+    }
+
+    await query('INSERT INTO submissions (formid, data) VALUES ($1, $2);', [this.id, data])
+    return 200
+  }
 }
