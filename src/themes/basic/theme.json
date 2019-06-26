@@ -20,7 +20,8 @@
       "form:pageno",
       "form:updatevisibility",
       "app:nodata",
-      "question:update"
+      "question:update",
+      "question:validate"
     ]
   }
 }

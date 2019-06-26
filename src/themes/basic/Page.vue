@@ -25,6 +25,9 @@ export default {
     questions() {
       return this.$children
     },
+    valid() {
+      return this.questions.every(q => q.valid)
+    },
   },
 }
 </script>

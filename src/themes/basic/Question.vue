@@ -10,6 +10,7 @@
 
 <script>
 import * as Types from './types.js'
+import hooks from './hooks'
 
 // Fix Vue warning of Types being a Module
 const types = {}
@@ -35,7 +36,13 @@ export default {
     data: Object,
     id: Number,
   },
-  computed: {},
+  computed: {
+    valid() {
+      let valid = !this.data.required || !!this.value
+      hooks.emit('question:validate', [this, v => valid = v])
+      return valid
+    },
+  },
   provide() {
     return {Question: this}
   },
