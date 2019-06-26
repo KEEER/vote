@@ -245,7 +245,7 @@ export class Form extends EventEmitter {
       title: this.options.title,
       action,
       method,
-      data: this.pages.map(page => page.questions.map(q => q.toObject())),
+      data: this.pages.map(page => page.options.questions.map(q => q.toObject())),
       pluginJs: [],
       pluginCss: [],
     }
