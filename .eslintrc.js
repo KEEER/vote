@@ -20,22 +20,11 @@ module.exports = {
     'vue',
   ],
   'rules': {
-    'indent': [
-      'error',
-      2,
-    ],
-    'linebreak-style': [
-      'error',
-      'unix',
-    ],
-    'quotes': [
-      'error',
-      'single',
-    ],
-    'semi': [
-      'error',
-      'never',
-    ],
+    'indent': ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    'quotes': ['error', 'single'],
+    'semi': ['error', 'never', {'beforeStatementContinuationChars': 'always'}],
+    'no-extra-semi': 'off',
     'no-console': 'off',
     'no-undef': 'off',
     'no-unused-vars': 'warn',

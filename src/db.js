@@ -27,3 +27,22 @@ export function query() {
   args[0] = args[0].replace(/PRE_/g, process.env.TABLEPREFIX)
   return pool.query.apply(pool, args)
 }
+
+/**
+ * Update some values in a table.
+ * @param {string} table The table name to be updated
+ * @param {object} args A mapping from keys to update to values to update
+ * @param {string} key The pkey name
+ * @param {*} cond pkey value
+ * @example await update('PRE_forms', {id: 'newid', title: 'newtitle'}, 'id', 'oldid')
+ */
+export async function update(table, args, key, cond) {
+  let argarr = [], count = 0, values = []
+  for(let i in args) {
+    argarr.push(`${i} = $${++count}`)
+    values.push(args[i])
+  }
+  values.push(cond)
+  const stmt = `UPDATE ${table} SET ${argarr.join(', ')} WHERE ${key} = $${++count};`
+  return await query(stmt, values)
+}

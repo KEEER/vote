@@ -2,13 +2,12 @@
 import Question from './question'
 import plugins from './plugin'
 import themes from './theme'
-import {query} from './db'
+import {query, update} from './db'
 import log from './log'
 import fs from 'fs-extra'
 import {readFileSync} from 'fs'
 import path from 'path'
 import EventEmitter from 'emittery'
-import uuid from 'uuid/v4'
 
 const templateCache = {}, jsCache = {}
 themes.forEach(theme => {
@@ -36,19 +35,18 @@ export class Page {
    * Creates a page object.
    * @param {Object} options Options, see below.
    * @param {string} options.title The title of the page
-   * @param {string|number} options.id Page ID
+   * @param {string} options.id Page ID
    * @param {module:question~Question[]} options.questions Questions in the page
    */
   constructor(options) {
     this.is = 'Page'
-    const {
-      title,
-      id,
-      questions,
-    } = options
-    this.title = title
-    this.id = id
-    this.questions = questions
+    this.options = new Proxy(options, {
+      set: (obj, prop, val) => {
+        obj[prop] = val
+        this.updated = true
+        return true
+      },
+    })
   }
 
   /**
@@ -57,9 +55,9 @@ export class Page {
    */
   toObject() {
     return {
-      title: this.title,
-      id: this.id,
-      questions: this.questions.map(q => q.id),
+      title: this.options.title,
+      id: this.options.id,
+      questions: this.options.questions.map(q => q.id),
     }
   }
 
@@ -87,31 +85,69 @@ export class Form extends EventEmitter {
    */
   constructor(options) {
     super()
-    this.options = options
+    this.updated = []
+    this.options = new Proxy(options, {
+      set: (obj, prop, val) => {
+        if(prop === 'id') {
+          this.oldid = this.oldid || this.id
+        }
+        if(this.updated.indexOf(prop) < 0) this.updated.push(prop)
+        obj[prop] = val
+        return true
+      },
+    })
+    const pages = this.options.pages
+    this.options.pages = new Proxy(pages, {
+      set: (obj, prop, val) => {
+        obj[prop] = val
+        if(this.updated.indexOf('pages') < 0) this.updated.push('pages')
+        return true
+      },
+    })
+    const questions = this.options.questions
+    this.options.questions = new Proxy(questions, {
+      set: (obj, prop, val) => {
+        obj[prop] = val
+        if(this.updated.indexOf('questions') < 0) this.updated.push('questions')
+        return true
+      },
+    })
     if(this.options.plugins) {
       this.options.plugins.forEach(plugin => {
         plugin.attachTo(this)
+      })
+      const plugins = this.options.plugins
+      this.options.plugins = new Proxy(plugins, {
+        set: (obj, prop, val) => {
+          obj[prop] = val
+          if(this.updated.indexOf('plugins') < 0) this.updated.push('plugins')
+          return true
+        },
       })
     }
   }
 
   get id() {
-    return this.newid || this.options.id
+    return this.options.id
   }
   set id(id) {
-    this.newid = id
+    this.options.id = id
   }
 
+  /**
+   * Gets the pages in the form.
+   * @returns {Page} Pages
+   */
   get pages() {
     return this.options.pages
   }
 
   /**
    * Gets the questions in the form.
-   * @returns {module:question~Question[]} Questions.
+   * @returns {module:question~Question[]} Questions
    */
   get questions() {
-    return this.pages.flatMap(p => p.questions)
+    return this.pages.flatMap(p => p.options.questions)
   }
 
   /**
@@ -158,18 +194,22 @@ export class Form extends EventEmitter {
       await this.save()
       return
     }
-    if(this.newid) {
-      const newid = this.newid
-      delete this.newid
-      const stmt = 'UPDATE PRE_forms SET id = $2 WHERE id = $1;'
-      await query(stmt, [
-        this.id,
-        newid,
-      ])
-      this.options.id = newid
+    const args = {}
+    if(this.questions.some(q => q.updated) || this.updated.indexOf('plugins') > -1) {
+      args.questions = this.questions.map(q => q.toObject())
     }
-    const stmt = 'UPDATE PRE_forms SET userid = $2, title = $3, pages = $4, questions = $5, theme = $6, plugins = $7, data = $8 WHERE id = $1;'      
-    await query(stmt, this.params)
+    if(this.pages.some(p => p.updated) || this.updated.indexOf('pages') > -1) {
+      args.pages = this.pages.map(p => p.toObject())
+    }
+    if(this.updated.indexOf('plugins') > -1) {
+      args.plugins = this.options.plugins.map(p => p.config.code)
+    }
+    this.updated.filter(prop => ['pages', 'plugins', 'questions'].indexOf(prop) < 0)
+      .forEach(prop => args[prop] = this.options[prop])
+    this.updated.length = 0
+    await update('PRE_forms', args, 'id', this.oldid || this.id)
+    this.questions.forEach(q => q.updated = false)
+    this.pages.forEach(p => p.updated = false)
   }
 
   /** Saves a form into the database. */

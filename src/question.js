@@ -1,6 +1,4 @@
 /** @module question */
-let lastid = 0
-const getid = () => lastid++
 
 /** Class representing a question. */
 class Question {
@@ -9,22 +7,25 @@ class Question {
    * @param {Object} options Options, see below.
    * @param {string} options.type The type of the question
    * @param {string} options.title Question title
-   * @param {string|number} [options.id=itoa] Question ID
+   * @param {string} options.id Question ID
    * @param {*} [options.value] Default value of the question
    */
   constructor(options) {
     this.is = 'Question'
-    const {
-      id,
-      type = 'VText',
-      title,
-      value,
-    } = options
-    this.data = options
-    this.id = id || getid()
-    this.type = type
-    this.title = title
-    this.value = value
+    this.options = new Proxy(options, {
+      set: (obj, prop, value) => {
+        obj[prop] = value
+        this.updated = true
+        return true
+      },
+    })
+  }
+
+  get id() {
+    return this.options.id
+  }
+  set id(id) {
+    this.options.id = id
   }
 
   /**
@@ -33,10 +34,10 @@ class Question {
    */
   toObject() {
     return Object.assign({}, this.options, {
-      type: this.type,
-      id: this.id,
-      value: this.value,
-      title: this.title,
+      type: this.options.type,
+      id: this.options.id,
+      value: this.options.value,
+      title: this.options.title,
     })
   }
 }
