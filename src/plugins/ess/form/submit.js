@@ -22,5 +22,10 @@ export default hooks => {
       console.error(e)
       hooks.emit('form:error', [e])
     }
+  }).on('form:beforesubmit', ([form, cancel]) => {
+    if(!form.valid) {
+      // TODO: Jump to the first invalid question
+      cancel()
+    }
   })
 }

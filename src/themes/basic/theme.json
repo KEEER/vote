@@ -19,9 +19,11 @@
       "form:texts",
       "form:pageno",
       "form:updatevisibility",
+      "form:validate",
       "app:nodata",
       "question:update",
-      "question:validate"
+      "question:validate",
+      "page:validate"
     ]
   }
 }

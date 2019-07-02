@@ -14,6 +14,7 @@
 </style>
 
 <script>
+import hooks from './hooks';
 export default {
   name: 'Page',
   data() {
@@ -26,7 +27,9 @@ export default {
       return this.$children
     },
     valid() {
-      return this.questions.every(q => q.valid)
+      let validity = this.questions.every(q => q.valid)
+      hooks.emit('page:validate', [this, v => validity = v])
+      return validity
     },
   },
 }
