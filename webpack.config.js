@@ -1,4 +1,3 @@
-// const webpack = require('webpack')
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -12,6 +11,13 @@ const extractCss = {
     hmr: process.env.NODE_ENV === 'development',
     reloadAll: true,
     sourceMap: true,
+  },
+}
+
+const cache = {
+  loader: 'cache-loader',
+  options: {
+    cacheDirectory: '.webpack-cache',
   },
 }
 
@@ -32,11 +38,17 @@ const config = {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        use: [
+          cache,
+          'vue-loader',
+        ],
       },
       {
         test: /\.js$/,
-        use: 'babel-loader',
+        use: [
+          cache,
+          'babel-loader',
+        ],
         exclude: /node_modules/,
         include: [
           path.resolve(__dirname, 'node_modules/@material'),
@@ -46,6 +58,7 @@ const config = {
         test: /\.less$/,
         use: [
           extractCss,
+          cache,
           'css-loader?sourceMap',
           'less-loader?sourceMap',
         ],
@@ -54,6 +67,7 @@ const config = {
         test: /\.scss$/,
         use: [
           extractCss,
+          cache,
           'css-loader?sourceMap',
           {
             loader: 'sass-loader',
@@ -68,6 +82,7 @@ const config = {
         test: /\.css$/,
         use: [
           extractCss,
+          cache,
           'css-loader?sourceMap',
         ],
       },

@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -8,6 +8,7 @@
     "dev": "webpack-dev-server",
     "start": "node src/index",
     "clean": "rm -rf dist/js && rm -rf dist/css && rm -f dist/*.html",
+    "clean:cache": "rm -rf .webpack-cache",
     "lint": "eslint --ext .js,.vue .",
     "fix": "eslint --ext .js,.vue . --fix"
   },
@@ -47,6 +48,7 @@
     "@babel/preset-env": "^7.4.2",
     "array-flat-polyfill": "^1.0.1",
     "babel-loader": "^8.0.5",
+    "cache-loader": "^4.0.1",
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
