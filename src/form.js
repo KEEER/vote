@@ -266,7 +266,7 @@ export class Form extends EventEmitter {
    * @param {string} path The requested path
    * @param {Koa.context} ctx The Koa context
    * @returns {string|number} The response to be sent or the error to be thrown
-   * @example form.getPage('fill', ctx)
+   * @example await form.getPage('fill', ctx)
    */
   async getPage(path, ctx) {
     let html = null
