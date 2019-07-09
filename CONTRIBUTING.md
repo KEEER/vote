@@ -27,6 +27,16 @@ so everything except issues and PRs are going to be in English.
     - `theme.js` Theme utils
 - `static/` Static files (e.g. ToC)
 
+## First run
+
+```
+# Run `src/sql/init.sql` first.
+cp sample.env .env # Edit `.env` to make your database settings
+npm i -D
+npm run build
+npm start
+```
+
 ## Building
 
 `npm run build`
