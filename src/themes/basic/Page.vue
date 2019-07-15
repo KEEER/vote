@@ -14,7 +14,7 @@
 </style>
 
 <script>
-import hooks from './hooks';
+import hooks from './hooks'
 export default {
   name: 'Page',
   data() {

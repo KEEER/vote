@@ -73,18 +73,23 @@ window.addEventListener('vote:ready', function() {
       prevPage: '上一页',
       submit: '提交',
     })
-  }).on('form:texts', function([form, set]) {
+  })
+  hooks.on('form:texts', function([form, set]) {
     set({
       submit: '提交!',
       pageno: '页码' + (form.currentPage + 1) + (form.current % 2 == 0 ? '，奇数页' : '，偶数页'),
     })
-  }).on('form:pageno', function([form, set]) {
+  })
+  hooks.on('form:pageno', function([form, set]) {
     set(form.current + 0.1415926)
-  }).on('form:submitted', function() {
+  })
+  hooks.on('form:submitted', function() {
     alert('submitted')
-  }).on('form:submitting', function() {
+  })
+  hooks.on('form:submitting', function() {
     console.log('submitting')
-  }).on('question:update', function([q, _, o]) {
+  })
+  hooks.on('question:update', function([q, _, o]) {
     if(q.question.type === 'VCheckbox') {
       var count = 0
       for(var i in q.question.value) {
@@ -101,7 +106,8 @@ window.addEventListener('vote:ready', function() {
         q.question.data.title = '2. Select at most 2'
       }
     }
-  }).on('form:beforesubmit', function([form, cancel]) {
+  })
+  hooks.on('form:beforesubmit', function([form, cancel]) {
     if(form.pages[1].questions[0].value === '2') {
       form.pages[1].questions[0].data.title = '3. Please type something other than 2.'
       cancel()

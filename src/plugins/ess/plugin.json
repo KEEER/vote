@@ -18,7 +18,8 @@
     "hooks": [
       "form:submiterror",
       "form:submitted",
-      "form:error"
+      "form:error",
+      "editor:texts"
     ]
   }
 }

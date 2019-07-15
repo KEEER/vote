@@ -6,6 +6,7 @@ This directory contains the source code of Plugin Essentials. This plugin provid
 ## Notices
 
 - Only keep necessary functionalities here. Split optional things to other plugins.
+- Use unelevated buttons.
 
 ## Structure
 
