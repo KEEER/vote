@@ -270,7 +270,7 @@ export class Form extends EventEmitter {
    */
   async getPage(path, ctx) {
     let html = null
-    await this.emit('getPage', [path, h => html = h])
+    await this.emit('getPage', [path, ctx, h => html = h])
     if(html !== null) return html
 
     switch(path) {

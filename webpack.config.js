@@ -106,7 +106,7 @@ const config = {
     }),
     new HtmlWebpackPlugin({
       title: 'KEEER Vote',
-      filename: 'index.html',
+      filename: 'plugin-ess-editor.html',
       chunks: ['plugin-ess-editor'],
       xhtml: true,
       meta: {

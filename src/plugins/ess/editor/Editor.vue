@@ -1,6 +1,6 @@
 <template>
   <main id="editor">
-    <m-button id="new-question" ref="new" unelevated>{{texts.new}}</m-button>
+    <m-button id="new-question" @click="newQuestion" unelevated>{{texts.new}}</m-button>
   </main>
 </template>
 
@@ -33,6 +33,12 @@ export default {
       }
       hooks.emit('editor:texts', [this, t => texts = Object.assign(texts, t)])
       return texts
+    },
+  },
+  methods: {
+    newQuestion() {
+      // TODO
+      alert('TODO')
     },
   },
 }
