@@ -1,0 +1,7 @@
+type Query {
+  hello: HelloResult!,
+}
+
+type HelloResult {
+  thing: String!,
+}
