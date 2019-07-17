@@ -1,11 +1,22 @@
 <template>
   <div>
     <m-drawer ref="drawer" :modal="modal" :dismissible="dismissible" :open="drawerOpen">
-      <m-drawer-header slot="header" :title="formId" />
-      <m-drawer-content></m-drawer-content>
+      <m-drawer-header slot="header" :title="texts.drawerTitle" />
+      <m-drawer-content>
+        <m-drawer-list>
+          <span v-for="route in routes" :key="route.name">
+            <router-link class="navlink" :to="{name: route.name}">
+              <m-list-item :activated="$route.name === route.name">
+                <m-icon :icon="route.icon" slot="graphic"/>
+                {{route.title}}
+              </m-list-item>
+            </router-link>
+          </span>
+        </m-drawer-list>
+      </m-drawer-content>
     </m-drawer>
     <div id="content">
-      <m-top-app-bar ref="appbar" title="Vote Editor">
+      <m-top-app-bar ref="appbar" :title="texts.appBarTitle">
         <m-icon icon="menu" slot="navigation" />
       </m-top-app-bar>
       <m-top-app-bar-fixed-adjust>
@@ -20,6 +31,11 @@
 @import 'material-components-vue/dist/top-app-bar/styles';
 @import 'material-components-vue/dist/drawer/styles';
 @import 'material-components-vue/dist/typography/styles';
+@import 'material-components-vue/dist/list/styles';
+
+a.navlink {
+  text-decoration: none;
+}
 </style>
 
 <style>
@@ -35,17 +51,34 @@ body {
 import VueRouter from 'vue-router'
 import MTopAppBar from 'material-components-vue/dist/top-app-bar'
 import MDrawer from 'material-components-vue/dist/drawer'
+import MList from 'material-components-vue/dist/list'
 import MIcon from 'material-components-vue/dist/icon'
 import Editor from './Editor.vue'
+import Settings from './Settings.vue'
+import hooks from './hooks'
 
 ;[
   MTopAppBar,
   MDrawer,
   MIcon,
+  MList,
 ].forEach(component => Vue.use(component))
 
 const routes = [
-  {path: '/:uid/:id/edit', component: Editor},
+  {
+    path: '/:uid/:id/edit',
+    name: 'edit',
+    component: Editor,
+    icon: 'edit',
+    title: 'Editor',
+  },
+  {
+    path: '/:uid/:id/settings',
+    name: 'settings',
+    component: Settings,
+    icon: 'settings',
+    title: 'Settings',
+  },
 ]
 const router = new VueRouter({
   mode: 'history',
@@ -70,10 +103,21 @@ export default Vue.extend({
     formId() {
       return `${this.$route.params.uid} / ${this.$route.params.id}`
     },
+    texts() {
+      let texts = {
+        drawerTitle: this.formId,
+        appBarTitle: 'Vote Editor',
+      }
+      hooks.emit('editor:texts', [this, t => texts = Object.assign(texts, t)])
+      return texts
+    },
+    routes() {
+      hooks.emit('editor:routes', [this, routes])
+      return routes
+    },
   },
   components: {},
   mounted() {
-    const drawer = this.$refs.drawer
     const media = window.matchMedia('(max-width: 720px)')
 
     const toggleMobile = () => {

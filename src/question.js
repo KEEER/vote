@@ -17,7 +17,7 @@ class Question {
     assert(typeof options === 'object')
     assert(typeof options.type === 'string')
     assert(typeof options.title === 'string')
-    assert(typeof options.id === 'string')
+    // assert(typeof options.id === 'string')
     this.options = new Proxy(options, {
       set: (obj, prop, value) => {
         obj[prop] = value

@@ -19,7 +19,8 @@
       "form:submiterror",
       "form:submitted",
       "form:error",
-      "editor:texts"
+      "editor:texts",
+      "editor:routes"
     ]
   }
 }
