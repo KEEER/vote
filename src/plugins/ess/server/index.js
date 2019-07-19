@@ -2,6 +2,7 @@ import {readFileSync} from 'fs'
 import path from 'path'
 import {schema} from '../common/graphql'
 import {graphql} from 'graphql'
+import query from './query'
 
 const editorHtml = readFileSync(
   path.resolve(__dirname, '../../../../dist/plugin-ess-editor.html')
@@ -17,13 +18,13 @@ export default function attachTo(form) {
     if(path === '_query' && ctx.method === 'POST') {
       // TODO: authenticate
       set(JSON.stringify(
-        await graphql(schema, ctx.request.body.query, {
-          async hello() {
-            return {
-              thing: 'World',
-            }
-          },
-        }, ctx, ctx.request.body.variables)
+        await graphql(
+          schema,
+          ctx.request.body.query,
+          query,
+          ctx,
+          ctx.request.body.variables
+        )
       ))
     }
   })

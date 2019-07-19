@@ -51,6 +51,7 @@ router.all('/:uid/:id/:pid?', async ctx => {
     ctx.status = 404
     return
   }
+  ctx.state.form = form
   ctx.status = 200
   const resp = await form.getPage(ctx.params.pid || '', ctx)
   if(resp === null) {

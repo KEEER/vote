@@ -1,4 +1,4 @@
-import {buildSchema} from 'graphql'
+import {buildSchema, parse, validate} from 'graphql'
 import assert from 'assert'
 import schemaText from './schemaText'
 
@@ -9,6 +9,7 @@ export function query(query, variables) {
   assert(typeof window !== 'undefined', 'graphql.query() shouldn\'t be called out of browser')
   assert(typeof query === 'string')
   assert(typeof variables === 'object')
+  assert(validate(schema, parse(query)), 'Invalid graphql query')
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     // TODO: figure out path more accurately

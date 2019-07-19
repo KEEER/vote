@@ -35,7 +35,7 @@ export class Page {
    * Creates a page object.
    * @param {Object} options Options, see below.
    * @param {string} options.title The title of the page
-   * @param {string} options.id Page ID
+   * @param {number} options.id Page ID
    * @param {module:question~Question[]} options.questions Questions in the page
    */
   constructor(options) {
@@ -76,7 +76,7 @@ export class Form extends EventEmitter {
    * Creates a form object.
    * @param {object} options Options, see below.
    * @param {string} options.title The title of the form
-   * @param {string|number} options.id Form ID
+   * @param {string} options.id Form ID
    * @param {Page[]} options.pages Pages in the form
    * @param {string} options.userid KEEER ID of the owner
    * @param {string} options.theme Form theme

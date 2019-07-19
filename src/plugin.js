@@ -64,7 +64,7 @@ try {
     return new Plugin(plugin, attachTo)
   })
 } catch(e) {
-  throw new Error(`Error parsing plugins: ${e}`)
+  throw new Error(`Error parsing plugins: ${e.stack}`)
 }
 
 export default plugins
