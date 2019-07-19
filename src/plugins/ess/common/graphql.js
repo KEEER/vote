@@ -1,19 +1,14 @@
 import {buildSchema} from 'graphql'
-import {readFileSync} from 'fs'
-import {resolve} from 'path'
 import assert from 'assert'
+import schemaText from './schemaText'
 
-const schema = buildSchema(
-  readFileSync(
-    resolve(__dirname, 'schema.graphql')
-  ).toString()
-)
+const schema = buildSchema(schemaText)
 export {schema}
 
 export function query(query, variables) {
-  assert(typeof window === 'undefined', 'graphql.query() shouldn\'t be called out of browser')
+  assert(typeof window !== 'undefined', 'graphql.query() shouldn\'t be called out of browser')
   assert(typeof query === 'string')
-  assert(typeof args === 'object')
+  assert(typeof variables === 'object')
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     // TODO: figure out path more accurately
@@ -29,7 +24,7 @@ export function query(query, variables) {
         reject(new Error(`Status code is ${xhr.status} instead of 200`))
       }
       try {
-        return JSON.parse(xhr.response)
+        resolve(JSON.parse(xhr.response))
       } catch(e) {
         reject(new Error('Invalid response'))
       }

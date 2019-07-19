@@ -1,6 +1,6 @@
 import {readFileSync} from 'fs'
 import path from 'path'
-import {schema} from '../graphql'
+import {schema} from '../common/graphql'
 import {graphql} from 'graphql'
 
 const editorHtml = readFileSync(

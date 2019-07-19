@@ -55,6 +55,11 @@ const config = {
         ],
       },
       {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },      
+      {
         test: /\.less$/,
         use: [
           extractCss,
@@ -90,6 +95,7 @@ const config = {
   },
   resolve: {
     extensions: [
+      '.mjs',
       '.js',
       '.vue',
     ],
@@ -142,6 +148,10 @@ const config = {
       append: false,
     }),
   ],
+  node: {
+    fs: 'empty',
+    path: 'empty',
+  },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
