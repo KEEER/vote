@@ -17,6 +17,6 @@ This directory contains the source code of Plugin Essentials. This plugin provid
     - `styles.css` Styles used by the plugin
 - `server/` Script to be injected to backend
     - `index.js` Entry point
-    - `query.js` Query intepreter
+    - `query.js` GraphQL Query intepreter
 - `common/` Common files
 - `plugin.json` Plugin meta file

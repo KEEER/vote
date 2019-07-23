@@ -1,31 +1,41 @@
-# TODO: make Object available
-#interface Object {}
-
 type Query {
   form: Form!
 }
 
+type Mutation {
+  newQuestion(pageId: Int!, options: QuestionInput!): Boolean!
+}
+
 type Form {
-  title: String!,
-  id: String!,
-  pages: [Page!]!,
-  userid: String!,
-  theme: String!,
-  plugins: [String!],
-  #data: Object
+  title: String!
+  id: String!
+  pages: [Page!]!
+  userid: String!
+  theme: String!
+  plugins: [String!]
+  data: String # Actually Object
 }
 
 type Page {
-  title: String!,
-  id: Int!,
+  title: String!
+  id: Int!
   questions: [Question!]!
 }
 
 type Question {
-  type: String!,
-  title: String!,
-  id: String!,
-  value: String,
-  required: Boolean,
-  #options: Object
+  type: String!
+  title: String!
+  id: String!
+  value: String
+  required: Boolean
+  options: String # Actually Object
+}
+
+input QuestionInput {
+  type: String!
+  title: String!
+  id: String!
+  value: String
+  required: Boolean
+  options: String # Actually Object
 }

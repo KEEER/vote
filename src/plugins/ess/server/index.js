@@ -17,15 +17,20 @@ export default function attachTo(form) {
     }
     if(path === '_query' && ctx.method === 'POST') {
       // TODO: authenticate
-      set(JSON.stringify(
-        await graphql(
+      let data
+      try {
+        data = await graphql(
           schema,
           ctx.request.body.query,
           query,
           ctx,
           ctx.request.body.variables
         )
-      ))
+      } catch(e) {
+        data = {errors: [e]}
+      }
+      set(JSON.stringify(data))
+      console.log(data)
     }
   })
 }
