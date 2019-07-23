@@ -7,7 +7,8 @@ so everything except issues and PRs are going to be in English.
 ## Notices
 
 - Keep the project structure in dictionary order.
-- Follow Git commit message guidlines.
+- Follow Git commit message guidelines.
+- Make sure ESLint could be passed before committing.
 
 ## Project structure
 
