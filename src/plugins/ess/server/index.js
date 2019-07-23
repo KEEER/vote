@@ -24,13 +24,12 @@ export default function attachTo(form) {
           ctx.request.body.query,
           query,
           ctx,
-          ctx.request.body.variables
+          ctx.request.body.variables,
         )
       } catch(e) {
         data = {errors: [e]}
       }
       set(JSON.stringify(data))
-      console.log(data)
     }
   })
 }

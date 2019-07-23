@@ -28,6 +28,15 @@ export default Vue.extend({
       prevVisible: false,
       nextVisible: false,
       status: 'filling',
+      texts: {
+        prevPage: '←Prev page',
+        nextPage: 'Next page→',
+        submit: 'Submit',
+        pageno: null,
+        submitting: 'Submitting...',
+        submitted: 'The form has been submitted. Thank you.',
+        submiterror: 'There is an error submitting the form.',
+      },
     }
   },
   props: {
@@ -74,25 +83,13 @@ export default Vue.extend({
     document.title = this.title
     this.$children[this.current].current = true
     this.updateVisibility()
+    this.texts.pageno = `Page ${this.current + 1}`
     hooks.emit('form:mounted', [this])
     hooks.emit('form:updatevisibility', [this])
   },
   computed: {
     pages() {
       return this.$children
-    },
-    texts() {
-      let texts = {
-        prevPage: '←Prev page',
-        nextPage: 'Next page→',
-        submit: 'Submit',
-        pageno: `Page ${this.current + 1}`,
-        submitting: 'Submitting...',
-        submitted: 'The form has been submitted. Thank you.',
-        submiterror: 'There is an error submitting the form.',
-      }
-      hooks.emit('form:texts', [this, t => texts = Object.assign(texts, t)])
-      return texts
     },
     currentPage() {
       let page = this.current + 1

@@ -56,6 +56,7 @@ import MIcon from 'material-components-vue/dist/icon'
 import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import hooks from './hooks'
+import {query} from '../common/graphql'
 
 ;[
   MTopAppBar,
@@ -92,6 +93,11 @@ export default Vue.extend({
       modal: false,
       dismissible: true,
       drawerOpen: false,
+      texts: {
+        drawerTitle: null,
+        appBarTitle: 'Vote Editor',
+      },
+      routes,
     }
   },
   methods: {
@@ -102,18 +108,6 @@ export default Vue.extend({
   computed: {
     formId() {
       return `${this.$route.params.uid} / ${this.$route.params.id}`
-    },
-    texts() {
-      let texts = {
-        drawerTitle: this.formId,
-        appBarTitle: 'Vote Editor',
-      }
-      hooks.emit('editor:texts', [this, t => texts = Object.assign(texts, t)])
-      return texts
-    },
-    routes() {
-      hooks.emit('editor:routes', [this, routes])
-      return routes
     },
   },
   components: {},
@@ -136,6 +130,14 @@ export default Vue.extend({
     toggleMobile()
 
     this.$refs.appbar.$on('nav', () => this.toggleDrawer())
+    this.texts.drawerTitle = this.formId
+    
+    ;(async () => {
+      const title = (await query('{ form { title } }', {})).data.form.title
+      this.texts.appBarTitle = `${title} - Vote Editor`
+      document.title = `${title} - ${document.title}`
+    })()
+    hooks.emit('editor:appMounted', [this])
   },
 })
 </script>

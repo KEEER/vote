@@ -20,26 +20,50 @@ main {
 <script>
 import MButton from 'material-components-vue/dist/button'
 import hooks from './hooks'
+import {query} from '../common/graphql'
 
 Vue.use(MButton)
 
 export default {
   name: 'Editor',
-  components: {},
-  computed: {
-    texts() {
-      let texts = {
+  data() {
+    return {
+      texts: {
         new: 'Add question',
-      }
-      hooks.emit('editor:texts', [this, t => texts = Object.assign(texts, t)])
-      return texts
-    },
+      },
+      pageId: 0,
+    }
   },
   methods: {
-    newQuestion() {
-      // TODO
-      alert('TODO')
+    async newQuestion() {
+      try {
+        // TODO: ask user for these params
+        const res = await query(`
+          mutation NewQuestion($pageId: Int!, $options: QuestionInput!) {
+            newQuestion(pageId: $pageId, options: $options)
+          }`, {
+          pageId: this.pageId,
+          options: {
+            type: 'VText',
+            title: 'Title',
+            id: 1,
+          },
+        })
+        if(res.errors || !res.data.addQuestion) {
+          alert('我们遇到了一个错误……')
+          console.error(res)
+        } else {
+          // TODO: apply new question
+          alert('added')
+        }
+      } catch(e) {
+        alert('我们遇到了一个错误……')
+        console.error(e)
+      }
     },
+  },
+  mounted() {
+    hooks.emit('editor:editorMounted', [this])
   },
 }
 </script>

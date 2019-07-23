@@ -111,17 +111,8 @@ const config = {
       },
     }),
     new HtmlWebpackPlugin({
-      title: 'KEEER Vote',
+      title: 'Vote Editor | KEEER Vote',
       filename: 'plugin-ess-editor.html',
-      chunks: ['plugin-ess-editor'],
-      xhtml: true,
-      meta: {
-        viewport: 'width=device-width, initial-scale=1.0',
-      },
-    }),
-    new HtmlWebpackPlugin({
-      title: 'KEEER Vote',
-      filename: 'index.html',
       chunks: ['plugin-ess-editor'],
       xhtml: true,
       meta: {

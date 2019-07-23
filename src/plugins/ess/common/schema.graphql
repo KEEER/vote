@@ -25,7 +25,7 @@ type Page {
 type Question {
   type: String!
   title: String!
-  id: String!
+  id: Int!
   value: String
   required: Boolean
   options: String # Actually Object
@@ -34,7 +34,7 @@ type Question {
 input QuestionInput {
   type: String!
   title: String!
-  id: String!
+  id: Int!
   value: String
   required: Boolean
   options: String # Actually Object

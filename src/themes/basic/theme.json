@@ -16,7 +16,6 @@
       "form:submit",
       "form:error",
       "form:mounted",
-      "form:texts",
       "form:pageno",
       "form:updatevisibility",
       "form:validate",
