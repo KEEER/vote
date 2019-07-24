@@ -1,12 +1,14 @@
 {
   "name": "vote",
-  "version": "0.0.69",
+  "version": "0.0.71",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run clean && webpack",
+    "build:dev": "supervisor -w src -e js,css,vue -x npx -- webpack -w",
     "dev": "webpack-dev-server",
     "start": "node src/index",
+    "start:dev": "supervisor -w dist,src src/index",
     "clean": "rm -rf dist/js && rm -rf dist/css && rm -f dist/*.html",
     "clean:cache": "rm -rf .webpack-cache",
     "lint": "eslint --ext .js,.vue .",

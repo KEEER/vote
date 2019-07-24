@@ -84,4 +84,9 @@ app.use(Session({
 }, app))
 app.use(router.routes()).use(router.allowedMethods())
 
-app.listen(parseInt(process.env.PORT), process.env.HOST)
+try {
+  app.listen(parseInt(process.env.PORT), process.env.HOST)
+} catch(e) {
+  log.error(e.stack)
+  process.exit(1)
+}
