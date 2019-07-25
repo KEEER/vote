@@ -34,7 +34,6 @@ type Question {
 input QuestionInput {
   type: String!
   title: String!
-  id: Int!
   value: String
   required: Boolean
   options: String # Actually Object

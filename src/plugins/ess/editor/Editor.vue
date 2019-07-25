@@ -15,6 +15,10 @@
         <m-text-field id="new-question-title" class="new-question-dialog-option" outlined required>
           <m-floating-label for="new-question-title">{{texts.newQuestionTitle}}</m-floating-label>
         </m-text-field>
+        <m-form-field class="new-question-dialog-option">
+          <m-checkbox id="new-question-required" v-model="newQuestionRequired" />
+          <label for="new-question-required">Required</label>
+        </m-form-field>
       </m-typo-body>
       <m-button
         class="mdc-dialog__button"
@@ -40,6 +44,7 @@
 @import 'material-components-vue/dist/typography/styles';
 @import 'material-components-vue/dist/select/styles';
 @import 'material-components-vue/dist/text-field/styles';
+@import 'material-components-vue/dist/checkbox/styles';
 @import 'material-components-vue/dist/floating-label/styles';
 @import 'material-components-vue/dist/list/styles';
 </style>
@@ -65,6 +70,7 @@ import MDialog from 'material-components-vue/dist/dialog'
 import MTypo from 'material-components-vue/dist/typography'
 import MSelect from 'material-components-vue/dist/select'
 import MTextField from 'material-components-vue/dist/text-field'
+import MCheckbox from 'material-components-vue/dist/checkbox'
 import MFloatingLabel from 'material-components-vue/dist/floating-label'
 import MList from 'material-components-vue/dist/list'
 import hooks from './hooks'
@@ -94,28 +100,30 @@ export default {
       },
       newQuestionDialogOpen: false,
       newQuestionType: null,
-      pageId: 0,
+      newQuestionRequired: false,
+      currentPageId: 1,
       questionTypes,
     }
   },
   methods: {
     async newQuestion() {
       try {
+        const a = await query('{ form { pa } }', {})
         // TODO: ask user for these params
         const res = await query(`
           mutation NewQuestion($pageId: Int!, $options: QuestionInput!) {
             newQuestion(pageId: $pageId, options: $options)
           }`, {
-          pageId: this.pageId,
+          pageId: this.currentPageId,
           options: {
-            type: 'VText',
-            title: 'Title',
-            id: 1,
+            type: this.newQuestionType,
+            title: this.newQuestionTitle,
+            required: this.newQuestionRequired,
+            // TODO: figure out options for VCheckbox and VRadio
           },
         })
         if(res.errors || !res.data.addQuestion) {
-          alert('我们遇到了一个错误……')
-          console.error(res)
+          throw res
         } else {
           // TODO: apply new question
           alert('added')

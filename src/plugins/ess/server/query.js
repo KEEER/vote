@@ -12,6 +12,7 @@ export default {
   },
   async newQuestion({pageId, options}, ctx) {
     try {
+      options.id = Math.max(...ctx.state.form.questions.map(q => q.options.id))
       ctx.state.form.pages[pageId].questions.push(new Question(options))
       await ctx.state.form.save()
       return true
