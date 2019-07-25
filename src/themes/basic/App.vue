@@ -16,12 +16,11 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .vote-footer {
   padding: 8px 0;
 }
 </style>
-
 
 <script>
 import Form, {Question, Page} from './Form'

@@ -2,7 +2,7 @@
   <h3>{{title}}<sup v-if="required" class="title-required">*</sup></h3>
 </template>
 
-<style>
+<style scoped>
 .title-required {
   color: red;
   user-select: none;

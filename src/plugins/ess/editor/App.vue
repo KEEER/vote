@@ -32,18 +32,21 @@
 @import 'material-components-vue/dist/drawer/styles';
 @import 'material-components-vue/dist/typography/styles';
 @import 'material-components-vue/dist/list/styles';
-
-a.navlink {
-  text-decoration: none;
-}
 </style>
 
 <style>
 body {
   margin: 0;
 }
+</style>
+
+<style scoped>
 .mdc-drawer--dismissible.mdc-drawer--open ~ #content{
   margin-left: 255px;
+}
+
+a.navlink {
+  text-decoration: none;
 }
 </style>
 
