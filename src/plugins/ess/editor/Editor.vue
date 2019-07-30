@@ -12,7 +12,7 @@
             {{texts.newQuestionType}}
           </m-floating-label>
         </m-select>
-        <m-text-field id="new-question-title" class="new-question-dialog-option" outlined required>
+        <m-text-field id="new-question-title" class="new-question-dialog-option" outlined required v-model="newQuestionTitle">
           <m-floating-label for="new-question-title">{{texts.newQuestionTitle}}</m-floating-label>
         </m-text-field>
         <m-form-field class="new-question-dialog-option">
@@ -61,6 +61,7 @@ main {
 .new-question-dialog-option {
   display: flex;
   margin-top: 10px;
+  align-items: center;
 }
 </style>
 
@@ -72,6 +73,7 @@ import MSelect from 'material-components-vue/dist/select'
 import MTextField from 'material-components-vue/dist/text-field'
 import MCheckbox from 'material-components-vue/dist/checkbox'
 import MFloatingLabel from 'material-components-vue/dist/floating-label'
+import MFormField from 'material-components-vue/dist/form-field'
 import MList from 'material-components-vue/dist/list'
 import hooks from './hooks'
 import {types as questionTypes} from '../../../question'
@@ -83,6 +85,7 @@ import {query} from '../common/graphql'
   MTypo,
   MSelect,
   MFloatingLabel,
+  MFormField,
   MList,
   MTextField,
 ].forEach(component => Vue.use(component))
@@ -100,15 +103,15 @@ export default {
       },
       newQuestionDialogOpen: false,
       newQuestionType: null,
+      newQuestionTitle: null,
       newQuestionRequired: false,
-      currentPageId: 1,
+      currentPageId: 0,
       questionTypes,
     }
   },
   methods: {
     async newQuestion() {
       try {
-        const a = await query('{ form { pa } }', {})
         // TODO: ask user for these params
         const res = await query(`
           mutation NewQuestion($pageId: Int!, $options: QuestionInput!) {
@@ -122,7 +125,7 @@ export default {
             // TODO: figure out options for VCheckbox and VRadio
           },
         })
-        if(res.errors || !res.data.addQuestion) {
+        if(res.errors || !res.data.newQuestion) {
           throw res
         } else {
           // TODO: apply new question

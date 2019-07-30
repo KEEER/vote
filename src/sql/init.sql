@@ -46,7 +46,7 @@ TABLESPACE pg_default;
 
 CREATE TABLE public.submissions
 (
-    id bigint NOT NULL DEFAULT nextval('submissions_id_seq'::regclass) ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    id bigserial NOT NULL,
     formid character varying(32) COLLATE pg_catalog."default",
     data jsonb,
     CONSTRAINT submissions_pkey PRIMARY KEY (id),

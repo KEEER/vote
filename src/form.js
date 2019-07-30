@@ -80,8 +80,9 @@ export class Form extends EventEmitter {
    * @param {Page[]} options.pages Pages in the form
    * @param {string} options.userid KEEER ID of the owner
    * @param {string} options.theme Form theme
-   * @param {string[]} [options.plugins] Plugins used in the form
+   * @param {Plugin[]} [options.plugins] Plugins used in the form
    * @param {object} [options.data] Form data
+   * @example const f = new Form({title: 'title', id: 'Alan-Liang/test', userid: 'Alan-Liang', theme: 'basic', plugins: [plugins.find(v => v.config.code === 'ess')], pages: [new Page({title: 'title', id: 0, questions: [new Question({type: 'VText', title: '2', id: 1, value: '2'})]})]})
    */
   constructor(options) {
     super()
@@ -105,7 +106,7 @@ export class Form extends EventEmitter {
       },
     })
     const questions = this.options.questions
-    this.options.questions = new Proxy(questions, {
+    if(questions) this.options.questions = new Proxy(questions, {
       set: (obj, prop, val) => {
         obj[prop] = val
         if(this.updated.indexOf('questions') < 0) this.updated.push('questions')

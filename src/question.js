@@ -18,7 +18,7 @@ class Question {
    * @param {Object} options Options, see below.
    * @param {string} options.type The type of the question
    * @param {string} options.title Question title
-   * @param {string} options.id Question ID
+   * @param {number} options.id Question ID
    * @param {*} [options.value] Default value of the question
    */
   constructor(options) {
@@ -26,7 +26,7 @@ class Question {
     assert(typeof options === 'object')
     assert(typeof options.type === 'string')
     assert(typeof options.title === 'string')
-    // assert(typeof options.id === 'string')
+    assert(typeof options.id === 'number')
     this.options = new Proxy(options, {
       set: (obj, prop, value) => {
         obj[prop] = value
