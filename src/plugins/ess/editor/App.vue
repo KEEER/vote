@@ -52,10 +52,10 @@ a.navlink {
 
 <script>
 import VueRouter from 'vue-router'
-import MTopAppBar from 'material-components-vue/dist/top-app-bar'
-import MDrawer from 'material-components-vue/dist/drawer'
-import MList from 'material-components-vue/dist/list'
-import MIcon from 'material-components-vue/dist/icon'
+import MTopAppBar from 'material-components-vue/dist/top-app-bar/top-app-bar.min.js'
+import MDrawer from 'material-components-vue/dist/drawer/drawer.min.js'
+import MList from 'material-components-vue/dist/list/list.min.js'
+import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import hooks from './hooks'
