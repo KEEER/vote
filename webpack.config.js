@@ -22,7 +22,7 @@ const cache = {
 }
 
 const config = {
-  mode: 'production',
+  mode: process.env.NODE_ENV || 'production',
   entry: {
     'theme-basic': './src/themes/basic/index.js',
     'plugin-sample': './src/plugins/sample/index.js',
@@ -152,7 +152,7 @@ const config = {
     },
     historyApiFallback: true,
   },
-  devtool: 'source-map',
+  devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'source-map',
 }
 
 module.exports = config
