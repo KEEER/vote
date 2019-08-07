@@ -152,7 +152,7 @@ const config = {
     },
     historyApiFallback: true,
   },
-  devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'source-map',
+  devtool: process.env.NODE_ENV === 'development' ? 'eval' : 'source-map',
 }
 
 module.exports = config

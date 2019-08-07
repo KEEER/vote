@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-drawer ref="drawer" :modal="modal" :dismissible="dismissible" :open="drawerOpen">
+    <m-drawer ref="drawer" :modal="modal" :dismissible="dismissible" :open="drawerOpen" :key="modal">
       <m-drawer-header slot="header" :title="texts.drawerTitle" />
       <m-drawer-content>
         <m-drawer-list>
@@ -15,6 +15,7 @@
         </m-drawer-list>
       </m-drawer-content>
     </m-drawer>
+    <m-drawer-scrim v-if="modal" />
     <div id="content">
       <m-top-app-bar ref="appbar" :title="texts.appBarTitle">
         <m-icon icon="menu" slot="navigation" />
