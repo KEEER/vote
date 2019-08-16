@@ -6,6 +6,7 @@ const schema = buildSchema(schemaText)
 export {schema}
 
 export function query(query, variables) {
+  variables = variables || {}
   assert(typeof window !== 'undefined', 'graphql.query() shouldn\'t be called out of browser')
   assert(typeof query === 'string')
   assert(typeof variables === 'object')

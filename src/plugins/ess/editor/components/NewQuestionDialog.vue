@@ -20,7 +20,7 @@
           for="new-question-type"
           id="new-question-type-label"
           slot="label"
-        >{{texts.newQuestionType}}</m-floating-label>
+        >{{texts.newQuestion.type}}</m-floating-label>
       </m-select>
       <m-text-field
         id="new-question-title"
@@ -29,11 +29,11 @@
         required
         v-model="data.title"
       >
-        <m-floating-label for="new-question-title">{{texts.newQuestionTitle}}</m-floating-label>
+        <m-floating-label for="new-question-title">{{texts.newQuestion.title}}</m-floating-label>
       </m-text-field>
       <m-form-field class="new-question-dialog-option">
         <m-checkbox id="new-question-required" v-model="data.required" />
-        <label for="new-question-required">{{texts.newQuestionRequired}}</label>
+        <label for="new-question-required">{{texts.newQuestion.required}}</label>
       </m-form-field>
     </m-typo-body>
     <m-button
