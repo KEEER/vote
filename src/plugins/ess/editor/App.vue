@@ -1,6 +1,13 @@
 <template>
   <div>
-    <m-drawer ref="drawer" :modal="modal" :dismissible="dismissible" :open="drawerOpen" :key="modal">
+    <m-drawer
+      ref="drawer"
+      :class="{'drawer-dismissible': dismissible}"
+      :modal="modal"
+      :dismissible="dismissible"
+      :open="drawerOpen"
+      :key="modal"
+    >
       <m-drawer-header slot="header" :title="texts.drawerTitle" />
       <m-drawer-content>
         <m-drawer-list>
@@ -48,6 +55,12 @@ body {
 
 a.navlink {
   text-decoration: none;
+}
+
+.drawer-dismissible {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 </style>
 

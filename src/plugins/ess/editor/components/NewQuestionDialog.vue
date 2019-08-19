@@ -2,26 +2,7 @@
   <m-dialog class="new-question-dialog" v-model="open_" scrollable>
     <m-typo-headline :level="5" slot="header">{{texts.new}}</m-typo-headline>
     <m-typo-body :level="1" slot="body">
-      <m-select
-        id="new-question-type"
-        class="new-question-dialog-option"
-        required
-        outlined
-        enhanced
-        v-model="data.type"
-      >
-        <m-list-item
-          v-for="(name, value) in questionTypes"
-          :key="value"
-          :data-value="value"
-          aria-selected="false"
-        >{{name}}</m-list-item>
-        <m-floating-label
-          for="new-question-type"
-          id="new-question-type-label"
-          slot="label"
-        >{{texts.newQuestion.type}}</m-floating-label>
-      </m-select>
+      <TypeSelector v-model="data.type" :texts="texts" />
       <m-text-field
         id="new-question-title"
         class="new-question-dialog-option"
@@ -74,22 +55,18 @@
 import MButton from 'material-components-vue/dist/button/button.min.js'
 import MDialog from 'material-components-vue/dist/dialog/dialog.min.js'
 import MTypo from 'material-components-vue/dist/typography/typography.min.js'
-import MSelect from 'material-components-vue/dist/select/select.min.js'
 import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
 import MCheckbox from 'material-components-vue/dist/checkbox/checkbox.min.js'
 import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
 import MFormField from 'material-components-vue/dist/form-field/form-field.min.js'
-import MList from 'material-components-vue/dist/list/list.min.js'
-import {types as questionTypes} from '../../../../question'
+import TypeSelector from './TypeSelector.vue'
 
 ;[
   MButton,
   MDialog,
   MTypo,
-  MSelect,
   MFloatingLabel,
   MFormField,
-  MList,
   MTextField,
 ].forEach(component => Vue.use(component))
 
@@ -104,8 +81,10 @@ export default {
       // TODO: figure out `options` for VCheckbox and VRadio
       },
       open_: false,
-      questionTypes,
     }
+  },
+  components: {
+    TypeSelector,
   },
   props: {
     open: Boolean,

@@ -47,12 +47,15 @@ export default {
         cancel: 'Cancel',
         ok: 'OK',
         newQuestion: {
-          type: 'Question Type',
           title: 'Question Title',
           required: 'Required',
         },
         questionLoadError: 'Load Error',
         questionLoading: 'Loading Questions...',
+        question: {
+          type: 'Question Type',
+          valuePlaceholder: 'Default Value',
+        },
       },
       newQuestionDialogOpen: false,
       currentPageId: 0,
@@ -81,7 +84,7 @@ export default {
         const res = await query(`
           mutation NewQuestion($pageId: Int!, $options: QuestionInput!) {
             newQuestion(pageId: $pageId, options: $options)
-          }`, {
+          }`.trim(), {
           pageId: this.currentPageId,
           options: dialog,
         })

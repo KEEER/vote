@@ -1,0 +1,51 @@
+<template>
+  <m-select
+    :id="uid"
+    required
+    outlined
+    enhanced
+    v-model="value_"
+  >
+    <m-list-item
+      v-for="(name, value) in questionTypes"
+      :key="value"
+      :data-value="value"
+      aria-selected="false"
+    >{{name}}</m-list-item>
+    <m-floating-label
+      :for="uid"
+      slot="label"
+    >{{texts.question.type}}</m-floating-label>
+  </m-select>
+</template>
+
+<script>
+import MSelect from 'material-components-vue/dist/select/select.min.js'
+import MList from 'material-components-vue/dist/list/list.min.js'
+import {types as questionTypes} from '../../../../question'
+
+Vue.use(MSelect)
+Vue.use(MList)
+
+export default {
+  name: 'TypeSelector',
+  data() {
+    return {
+      value_: this.value,
+      questionTypes,
+    }
+  },
+  props: {
+    value: String,
+    texts: Object,
+  },
+  watch: {
+    value(val) {
+      this.value_ = val
+    },
+    value_(val) {
+      this.$emit('input', val)
+    }
+  }
+}
+</script>
