@@ -19,6 +19,13 @@
   </m-select>
 </template>
 
+<style lang="scss">
+
+@import '../styles.scss';
+@import 'material-components-vue/dist/select/styles';
+@import 'material-components-vue/dist/list/styles';
+</style>
+
 <script>
 import MSelect from 'material-components-vue/dist/select/select.min.js'
 import MList from 'material-components-vue/dist/list/list.min.js'

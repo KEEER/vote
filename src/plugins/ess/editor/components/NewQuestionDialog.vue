@@ -10,11 +10,11 @@
         required
         v-model="data.title"
       >
-        <m-floating-label for="new-question-title">{{texts.newQuestion.title}}</m-floating-label>
+        <m-floating-label for="new-question-title">{{texts.question.title}}</m-floating-label>
       </m-text-field>
       <m-form-field class="new-question-dialog-option">
         <m-checkbox id="new-question-required" v-model="data.required" />
-        <label for="new-question-required">{{texts.newQuestion.required}}</label>
+        <label for="new-question-required">{{texts.question.required}}</label>
       </m-form-field>
     </m-typo-body>
     <m-button
@@ -35,8 +35,8 @@
 <style lang="scss">
 @import '../styles.scss';
 @import 'material-components-vue/dist/dialog/styles';
+@import 'material-components-vue/dist/button/styles';
 @import 'material-components-vue/dist/typography/styles';
-@import 'material-components-vue/dist/select/styles';
 @import 'material-components-vue/dist/text-field/styles';
 @import 'material-components-vue/dist/checkbox/styles';
 @import 'material-components-vue/dist/floating-label/styles';

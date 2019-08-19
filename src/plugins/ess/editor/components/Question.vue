@@ -1,13 +1,20 @@
 <template>
   <m-card class="question">
     <div class="title-type">
-      <m-text-field v-model="title_" :id="`${uid}-title`" class="question-title">
+      <m-text-field
+        outlined
+        required
+        v-model="title_"
+        :id="`${uid}-title`"
+        class="question-title"
+      >
+        <m-floating-label :for="`${uid}-title`">{{texts.question.title}}</m-floating-label>
         <m-line-ripple slot="bottomLine" />
       </m-text-field>
       <TypeSelector v-model="type_" :texts="texts" />
     </div>
     <component
-      :is="data.type"
+      :is="data.type || 'VNull'"
       v-model="value_"
       :options.sync="options_"
       :texts="texts"
@@ -18,6 +25,9 @@
 <style lang="scss">
 @import '../styles.scss';
 @import 'material-components-vue/dist/card/styles';
+@import 'material-components-vue/dist/text-field/styles';
+@import 'material-components-vue/dist/floating-label/styles';
+@import 'material-components-vue/dist/line-ripple/styles';
 </style>
 
 <style scoped>
@@ -46,18 +56,16 @@
 
 <script>
 import MCard from 'material-components-vue/dist/card/card.min.js'
-import MTypography from 'material-components-vue/dist/typography/typography.min.js'
 import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
+import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
 import MLineRipple from 'material-components-vue/dist/line-ripple/line-ripple.min.js'
-import MSelect from 'material-components-vue/dist/select/select.min.js'
 import questionTypes from './types'
 import TypeSelector from './TypeSelector.vue'
 
 ;[MCard,
-  MTypography,
   MTextField,
+  MFloatingLabel,
   MLineRipple,
-  MSelect,
 ].forEach(component => Vue.use(component))
 
 export default {

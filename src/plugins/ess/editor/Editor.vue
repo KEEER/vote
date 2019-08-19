@@ -46,15 +46,14 @@ export default {
         new: 'Add question',
         cancel: 'Cancel',
         ok: 'OK',
-        newQuestion: {
-          title: 'Question Title',
-          required: 'Required',
-        },
         questionLoadError: 'Load Error',
         questionLoading: 'Loading Questions...',
         question: {
+          title: 'Question Title',
+          required: 'Required',
           type: 'Question Type',
           valuePlaceholder: 'Default Value',
+          nulltype: 'Please specify a question type.',
         },
       },
       newQuestionDialogOpen: false,
