@@ -21,4 +21,15 @@ export default {
       return false
     }
   },
+  async updateQuestion({options}, ctx) {
+    try {
+      const q = ctx.state.form.questions.find(q => q.options.id === options.id)
+      Object.assign(q.options, options)
+      await ctx.state.form.save()
+      return true
+    } catch(e) {
+      console.log(e)
+      return false
+    }
+  },
 }

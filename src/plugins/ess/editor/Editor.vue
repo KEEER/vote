@@ -55,6 +55,7 @@ export default {
           valuePlaceholder: 'Default Value',
           nulltype: 'Please specify a question type.',
         },
+        updateError: 'Error occurred while updating the question.',
       },
       newQuestionDialogOpen: false,
       currentPageId: 0,
@@ -79,7 +80,6 @@ export default {
     async newQuestion() {
       try {
         const dialog = this.$refs.newQuestionDialog.$data.data
-        // TODO: ask user for these params
         const res = await query(`
           mutation NewQuestion($pageId: Int!, $options: QuestionInput!) {
             newQuestion(pageId: $pageId, options: $options)
