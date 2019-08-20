@@ -1,24 +1,31 @@
 <template>
-  <m-card class="question">
-    <div class="title-type">
-      <m-text-field
-        outlined
-        required
-        v-model="title_"
-        :id="`${uid}-title`"
-        class="question-title"
-      >
-        <m-floating-label :for="`${uid}-title`">{{texts.question.title}}</m-floating-label>
-        <m-line-ripple slot="bottomLine" />
-      </m-text-field>
-      <TypeSelector v-model="type_" :texts="texts" />
+  <m-card class="question-card">
+    <div class="question">
+      <div class="title-type">
+        <m-text-field
+          outlined
+          required
+          v-model="title_"
+          :id="`${uid}-title`"
+          class="question-title"
+        >
+          <m-floating-label :for="`${uid}-title`">{{texts.question.title}}</m-floating-label>
+          <m-line-ripple slot="bottomLine" />
+        </m-text-field>
+        <TypeSelector v-model="type_" :texts="texts" />
+      </div>
+      <component
+        :is="data.type || 'VNull'"
+        v-model="value_"
+        :options.sync="options_"
+        :texts="texts"
+      />
     </div>
-    <component
-      :is="data.type || 'VNull'"
-      v-model="value_"
-      :options.sync="options_"
-      :texts="texts"
-    />
+    <span slot="actionIcons">
+      <m-icon-button><m-icon icon="keyboard_arrow_up" /></m-icon-button>
+      <m-icon-button><m-icon icon="keyboard_arrow_down" /></m-icon-button>
+      <m-icon-button><m-icon icon="delete" /></m-icon-button>
+    </span>
   </m-card>
 </template>
 
@@ -28,11 +35,17 @@
 @import 'material-components-vue/dist/text-field/styles';
 @import 'material-components-vue/dist/floating-label/styles';
 @import 'material-components-vue/dist/line-ripple/styles';
+@import 'material-components-vue/dist/icon-button/styles';
 </style>
 
 <style scoped>
 .question {
-  padding: 16px;
+  padding: 16px 16px 0 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-card {
   margin: 16px;
 }
 
@@ -40,11 +53,19 @@
   flex: auto;
 }
 
-/* TODO: mobile display */
 .title-type {
   display: flex;
   flex-direction: row;
   margin-bottom: 16px;
+}
+
+@media(max-width: 720px) {
+  .title-type {
+    flex-direction: column;
+  }
+  .question-title {
+    margin-bottom: 16px;
+  }
 }
 </style>
 
@@ -62,13 +83,18 @@ import MFloatingLabel from 'material-components-vue/dist/floating-label/floating
 import MLineRipple from 'material-components-vue/dist/line-ripple/line-ripple.min.js'
 import questionTypes from './types'
 import TypeSelector from './TypeSelector.vue'
+import MIcon from 'material-components-vue/dist/icon/icon.min.js'
+import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
 import {query} from '../../common/graphql'
 
 ;import { setInterval } from 'timers';
-[MCard,
+[
+  MCard,
   MTextField,
   MFloatingLabel,
   MLineRipple,
+  MIcon,
+  MIconButton,
 ].forEach(component => Vue.use(component))
 
 export default {
@@ -108,8 +134,10 @@ export default {
       this.type_ = this.data.type
     },
     title_(val) {
-      this.change.title = val
-      this.resetChangeTime()
+      if(val) {
+        this.change.title = val
+        this.resetChangeTime()
+      }
       this.$emit('update:title', val)
     },
     value_(val) {
@@ -123,8 +151,11 @@ export default {
       this.$emit('update:options', val)
     },
     type_(val) {
-      this.data.type = this.change.type = val
-      this.resetChangeTime()
+      this.data.type = val
+      if(val) {
+        this.change.type = val
+        this.resetChangeTime()
+      }
       this.$emit('update:type', val)
     },
   },
