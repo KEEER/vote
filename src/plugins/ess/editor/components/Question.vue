@@ -31,6 +31,9 @@
       <m-icon-button @click="remove">
         <m-icon icon="delete" />
       </m-icon-button>
+      <span class="devider" />
+      {{texts.question.required}}
+      <m-switch v-model="required_" class="required-switch" />
     </span>
   </m-card>
 </template>
@@ -42,6 +45,7 @@
 @import 'material-components-vue/dist/floating-label/styles';
 @import 'material-components-vue/dist/line-ripple/styles';
 @import 'material-components-vue/dist/icon-button/styles';
+@import 'material-components-vue/dist/switch/styles';
 </style>
 
 <style scoped>
@@ -69,9 +73,20 @@
   .title-type {
     flex-direction: column;
   }
+
   .question-title {
     margin-bottom: 16px;
   }
+}
+
+.devider {
+  border-left: 1px solid #e0e0e0;
+  height: 32px;
+  margin: 0 16px;
+}
+
+.required-switch {
+  margin-left: 8px;
 }
 </style>
 
@@ -91,6 +106,7 @@ import questionTypes from './types'
 import TypeSelector from './TypeSelector.vue'
 import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
+import MSwitch from 'material-components-vue/dist/switch/switch.min.js'
 import {query} from '../../common/graphql'
 
 ;import { setInterval, clearInterval } from 'timers';
@@ -111,6 +127,7 @@ export default {
       value_: this.data.value,
       options_: this.data.options,
       type_: this.data.type,
+      required_: this.data.required,
       change: {},
       changed: false,
       lastChanged: +Date.now(),
@@ -158,6 +175,11 @@ export default {
       this.change.option = val
       this.logChange()
       this.$emit('update:options', val)
+    },
+    required_(val) {
+      this.change.required = val
+      this.logChange()
+      this.$emit('update:required', val)
     },
     type_(val) {
       this.data.type = val
