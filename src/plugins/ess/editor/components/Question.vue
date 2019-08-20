@@ -22,9 +22,15 @@
       />
     </div>
     <span slot="actionIcons">
-      <m-icon-button><m-icon icon="keyboard_arrow_up" /></m-icon-button>
-      <m-icon-button><m-icon icon="keyboard_arrow_down" /></m-icon-button>
-      <m-icon-button><m-icon icon="delete" /></m-icon-button>
+      <m-icon-button @click="up" :disabled="isFirst">
+        <m-icon icon="keyboard_arrow_up" />
+      </m-icon-button>
+      <m-icon-button @click="down" :disabled="isLast">
+        <m-icon icon="keyboard_arrow_down" />
+      </m-icon-button>
+      <m-icon-button @click="remove">
+        <m-icon icon="delete" />
+      </m-icon-button>
     </span>
   </m-card>
 </template>
@@ -87,7 +93,7 @@ import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
 import {query} from '../../common/graphql'
 
-;import { setInterval } from 'timers';
+;import { setInterval, clearInterval } from 'timers';
 [
   MCard,
   MTextField,
@@ -115,6 +121,7 @@ export default {
         // After data.UPDATE_THRESHOLD.NOT_UPDATED ms without update, update
         NOT_UPDATED: 10 * 1000, // 10 secs
       },
+      intervalId: -1,
     }
   },
   components: {
@@ -125,6 +132,8 @@ export default {
     // TODO: check props
     data: Object,
     texts: Object,
+    isFirst: Boolean,
+    isLast: Boolean,
   },
   watch: {
     data() {
@@ -136,31 +145,31 @@ export default {
     title_(val) {
       if(val) {
         this.change.title = val
-        this.resetChangeTime()
+        this.logChange()
       }
       this.$emit('update:title', val)
     },
     value_(val) {
       this.change.value = val
-      this.resetChangeTime()
+      this.logChange()
       this.$emit('update:value', val)
     },
     options_(val) {
       this.change.option = val
-      this.resetChangeTime()
+      this.logChange()
       this.$emit('update:options', val)
     },
     type_(val) {
       this.data.type = val
       if(val) {
         this.change.type = val
-        this.resetChangeTime()
+        this.logChange()
       }
       this.$emit('update:type', val)
     },
   },
   methods: {
-    resetChangeTime() {
+    logChange() {
       this.changed = true
       this.lastChanged = +Date.now()
     },
@@ -194,10 +203,44 @@ export default {
       }
       this.lastUpdated = +Date.now()
       this.changed = false
+      this.change = {}
+    },
+    async remove() {
+      try {
+        // TODO: prompt before removal
+        const res = await query(`
+          mutation RemoveQuestion($id: Int!) {
+            removeQuestion(id: $id)
+          }
+        `.trim(), {
+          id: this.data.id,
+        })
+        if(res.errors || !res.data.removeQuestion) throw res
+      } catch(e) {
+        alert(this.texts.removeError)
+        console.log('remove error', e.stack)
+        return
+      }
+      this.$emit('remove')
+    },
+    up() {
+      this.change.reorder = this.change.reorder || 0
+      this.change.reorder--
+      this.logChange()
+      this.$emit('up')
+    },
+    down() {
+      this.change.reorder = this.change.reorder || 0
+      this.change.reorder++
+      this.logChange()
+      this.$emit('down')
     },
   },
   mounted() {
-    setInterval(() => this.checkUpdate(), 500)
+    this.intervalId = setInterval(() => this.checkUpdate(), 500)
   },
+  beforeDestroy() {
+    clearInterval(this.intervalId)
+  }
 }
 </script>

@@ -4,9 +4,15 @@
     <NewQuestionDialog ref="newQuestionDialog" :open.sync="newQuestionDialogOpen" :texts="texts" @newQuestion="newQuestion" />
     <div id="questions" v-if="questionLoaded">
       <Question v-for="(question, i) in questions"
-        :key="i"
+        :key="question.id"
         :data="question"
-        :texts="texts" />
+        :texts="texts"
+        :isFirst="i === 0"
+        :isLast="i === questions.length - 1"
+        @remove="remove(i)"
+        @up="up(i)"
+        @down="down(i)"
+      />
     </div>
     <div v-else-if="questionLoadError">{{texts.questionLoadError}}</div>
     <div v-else>{{texts.questionLoading}}</div>
@@ -56,12 +62,14 @@ export default {
           nulltype: 'Please specify a question type.',
         },
         updateError: 'Error occurred while updating the question.',
+        removeError: 'Error occurred while removing the question.',
       },
       newQuestionDialogOpen: false,
       currentPageId: 0,
       questionTypes,
       questionLoaded: false,
       questionLoadError: false,
+      pages: [],
       questions: [],
     }
   },
@@ -70,6 +78,7 @@ export default {
       try {
         const res = await query('{ form { pages { questions { type, title, id, value, required, options } } } }')
         if(res.errors) throw res
+        this.pages = res.data.form.pages
         this.questions = res.data.form.pages[this.currentPageId].questions
         this.questionLoaded = true
       } catch(e) {
@@ -98,6 +107,20 @@ export default {
         alert('我们遇到了一个错误……')
         console.error(e)
       }
+    },
+    remove(i) {
+      this.questions.splice(i, 1)
+    },
+    up(i) {
+      const q = this.questions
+      ;[q[i - 1], q[i]] = [q[i], q[i - 1]]
+      // The following line is intended to fix Vue reactivity caveats
+      this.questions = [...q]
+    },
+    down(i) {
+      const q = this.questions
+      ;[q[i + 1], q[i]] = [q[i], q[i + 1]]
+      this.questions = [...q]
     },
   },
   mounted() {

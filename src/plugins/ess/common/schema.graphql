@@ -5,6 +5,7 @@ type Query {
 type Mutation {
   newQuestion(pageId: Int!, options: QuestionInput!): Boolean!
   updateQuestion(options: QuestionUpdateInput!): Boolean!
+  removeQuestion(id: Int!): Boolean!
 }
 
 type Form {
@@ -47,4 +48,5 @@ input QuestionUpdateInput {
   value: String
   required: Boolean
   options: String # Actually Object
+  reorder: Int
 }
