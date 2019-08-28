@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.84",
+  "version": "0.0.85",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -75,6 +75,7 @@
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.6.10",
     "vue-unique-id": "^1.0.0",
+    "vuedraggable": "^2.23.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1"

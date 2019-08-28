@@ -1,5 +1,6 @@
 import Question from '../../../question'
 import log from '../../../log'
+import assert from 'assert'
 
 export default {
   async form(args, ctx) {
@@ -28,13 +29,15 @@ export default {
       if(options.reorder) {
         const {reorder} = options
         delete options.reorder
+        assert(typeof reorder, 'number')
         const page = ctx.state.form.pages.find(p => p.options.questions.includes(q))
         const questions = page.options.questions
         const i = questions.indexOf(q)
+        assert(!!questions[i + reorder])
         ;[questions[i + reorder], questions[i]] = [questions[i], questions[i + reorder]]
       }
       Object.assign(q.options, options)
-      await ctx.state.form.save()
+      await ctx.state.form.update()
       return true
     } catch(e) {
       log.error(e)

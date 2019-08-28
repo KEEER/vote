@@ -21,13 +21,10 @@
         :texts="texts"
       />
     </div>
+    <span slot="actionButtons">
+      <m-icon class="handle" icon="menu" />
+    </span>
     <span slot="actionIcons">
-      <m-icon-button @click="up" :disabled="isFirst">
-        <m-icon icon="keyboard_arrow_up" />
-      </m-icon-button>
-      <m-icon-button @click="down" :disabled="isLast">
-        <m-icon icon="keyboard_arrow_down" />
-      </m-icon-button>
       <m-icon-button @click="remove">
         <m-icon icon="delete" />
       </m-icon-button>
@@ -109,7 +106,6 @@ import MIconButton from 'material-components-vue/dist/icon-button/icon-button.mi
 import MSwitch from 'material-components-vue/dist/switch/switch.min.js'
 import {query} from '../../common/graphql'
 
-;import { setInterval, clearInterval } from 'timers';
 [
   MCard,
   MTextField,
@@ -245,21 +241,22 @@ export default {
       }
       this.$emit('remove')
     },
-    up() {
-      this.change.reorder = this.change.reorder || 0
-      this.change.reorder--
-      this.logChange()
-      this.$emit('up')
-    },
-    down() {
-      this.change.reorder = this.change.reorder || 0
-      this.change.reorder++
-      this.logChange()
-      this.$emit('down')
-    },
+    reorder() {
+      if(reorder !== 0) {
+        this.change.reorder = reorder
+        this.logChange()
+      } else {
+        // remove log of reordering
+        delete this.change.reorder
+        if([...Object.keys(this.change)].length === 0) {
+          this.changed = false
+        }
+      }
+    }
   },
   mounted() {
     this.intervalId = setInterval(() => this.checkUpdate(), 500)
+    this.$on('reorder', reorder => this.reorder(reorder))
   },
   beforeDestroy() {
     clearInterval(this.intervalId)

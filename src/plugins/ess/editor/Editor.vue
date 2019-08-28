@@ -3,16 +3,24 @@
     <m-button id="new-question" @click="newQuestionDialogOpen = true" unelevated>{{texts.new}}</m-button>
     <NewQuestionDialog ref="newQuestionDialog" :open.sync="newQuestionDialogOpen" :texts="texts" @newQuestion="newQuestion" />
     <div id="questions" v-if="questionLoaded">
-      <Question v-for="(question, i) in questions"
-        :key="question.id"
-        :data="question"
-        :texts="texts"
-        :isFirst="i === 0"
-        :isLast="i === questions.length - 1"
-        @remove="remove(i)"
-        @up="up(i)"
-        @down="down(i)"
-      />
+      <draggable
+        v-model="questions"
+        @start="dragging = true"
+        @end="move"
+        :animation="200"
+        handle=".handle"
+        ghost-class="ghost"
+      >
+        <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
+          <Question v-for="(question, i) in questions"
+            :key="question.id"
+            :data="question"
+            :texts="texts"
+            @remove="remove(i)"
+            :ref="`question-${i}`"
+          />
+        </transition-group>
+      </draggable>
     </div>
     <div v-else-if="questionLoadError">{{texts.questionLoadError}}</div>
     <div v-else>{{texts.questionLoading}}</div>
@@ -28,6 +36,10 @@
 main {
   padding: 10px;
 }
+
+.ghost {
+  opacity: 0.7;
+}
 </style>
 
 <script>
@@ -37,6 +49,7 @@ import Question from './components/Question'
 import hooks from './hooks'
 import {types as questionTypes} from '../../../question'
 import {query} from '../common/graphql'
+import draggable from 'vuedraggable'
 
 Vue.use(MButton)
 
@@ -45,6 +58,7 @@ export default {
   components: {
     NewQuestionDialog,
     Question,
+    draggable,
   },
   data() {
     return {
@@ -71,6 +85,7 @@ export default {
       questionLoadError: false,
       pages: [],
       questions: [],
+      dragging: false,
     }
   },
   methods: {
@@ -115,12 +130,17 @@ export default {
       const q = this.questions
       ;[q[i - 1], q[i]] = [q[i], q[i - 1]]
       // The following line is intended to fix Vue reactivity caveats
-      this.questions = [...q]
+      // this.questions = [...q]
     },
     down(i) {
       const q = this.questions
       ;[q[i + 1], q[i]] = [q[i], q[i + 1]]
-      this.questions = [...q]
+      // this.questions = [...q]
+    },
+    move(item) {
+      this.dragging = false
+      const q = this.$refs[`question-${item.newIndex}`][0]
+      q.$emit('reorder', item.newIndex - item.oldIndex)
     },
   },
   mounted() {
