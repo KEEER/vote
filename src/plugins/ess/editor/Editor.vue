@@ -38,7 +38,7 @@ main {
 }
 
 .ghost {
-  opacity: 0.7;
+  opacity: 0.5;
 }
 </style>
 
@@ -73,6 +73,7 @@ export default {
           required: 'Required',
           type: 'Question Type',
           valuePlaceholder: 'Default Value',
+          labelPlaceholder: 'Label',
           nulltype: 'Please specify a question type.',
         },
         updateError: 'Error occurred while updating the question.',
@@ -80,6 +81,7 @@ export default {
       },
       newQuestionDialogOpen: false,
       currentPageId: 0,
+      pageCount: 0,
       questionTypes,
       questionLoaded: false,
       questionLoadError: false,
@@ -91,10 +93,25 @@ export default {
   methods: {
     async loadQuestions() {
       try {
-        const res = await query('{ form { pages { questions { type, title, id, value, required, options } } } }')
+        const res = await query(`
+          query($id: Int!) {
+            form {
+              page(id: $id) {
+                questions { type, title, id, value, required, options }
+              }
+              pageCount
+            }
+          }`.trim(), {
+          id: this.currentPageId
+        })
         if(res.errors) throw res
-        this.pages = res.data.form.pages
-        this.questions = res.data.form.pages[this.currentPageId].questions
+        this.questions = res.data.form.page.questions
+        for(let i of ['value', 'options']) {
+          for(let question of this.questions) {
+            question[i] = JSON.parse(question[i])
+          }
+        }
+        this.pageCount = res.data.form.pageCount
         this.questionLoaded = true
       } catch(e) {
         console.error(e)
@@ -125,17 +142,6 @@ export default {
     },
     remove(i) {
       this.questions.splice(i, 1)
-    },
-    up(i) {
-      const q = this.questions
-      ;[q[i - 1], q[i]] = [q[i], q[i - 1]]
-      // The following line is intended to fix Vue reactivity caveats
-      // this.questions = [...q]
-    },
-    down(i) {
-      const q = this.questions
-      ;[q[i + 1], q[i]] = [q[i], q[i + 1]]
-      // this.questions = [...q]
     },
     move(item) {
       this.dragging = false

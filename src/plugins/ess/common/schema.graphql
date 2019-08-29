@@ -12,6 +12,8 @@ type Form {
   title: String!
   id: String!
   pages: [Page!]!
+  page(id: Int!): Page!
+  pageCount: Int!
   userid: String!
   theme: String!
   plugins: [String!]

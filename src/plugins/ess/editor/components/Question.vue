@@ -168,7 +168,7 @@ export default {
       this.$emit('update:value', val)
     },
     options_(val) {
-      this.change.option = val
+      this.change.options = val
       this.logChange()
       this.$emit('update:options', val)
     },
@@ -203,6 +203,9 @@ export default {
     async update() {
       // TODO: show update status to user
       try {
+        for(let i of ['value', 'options']) {
+          this.change[i] = JSON.stringify(this.change[i])
+        }
         const res = await query(`
           mutation UpdateQuestion($options: QuestionUpdateInput!) {
             updateQuestion(options: $options)
@@ -241,9 +244,10 @@ export default {
       }
       this.$emit('remove')
     },
-    reorder() {
-      if(reorder !== 0) {
-        this.change.reorder = reorder
+    reorder(reorder) {
+      this.change.reorder = this.change.reorder || 0
+      this.change.reorder += reorder
+      if(this.change.reorder !== 0) {
         this.logChange()
       } else {
         // remove log of reordering
