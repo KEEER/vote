@@ -1,7 +1,5 @@
 <template>
   <main id="editor">
-    <m-button id="new-question" @click="newQuestionDialogOpen = true" unelevated>{{texts.new}}</m-button>
-    <NewQuestionDialog ref="newQuestionDialog" :open.sync="newQuestionDialogOpen" :texts="texts" @newQuestion="newQuestion" />
     <div id="questions" v-if="questionLoaded">
       <draggable
         v-model="questions"
@@ -18,9 +16,16 @@
             :texts="texts"
             @remove="remove(i)"
             :ref="`question-${i}`"
+            @update:saveState="updateSaveState"
           />
         </transition-group>
       </draggable>
+      <div class="bottom-new">
+        <m-button @click="newQuestion" unelevated>
+          <m-icon slot="icon" icon="add" />
+          {{texts.new}}
+        </m-button>
+      </div>
     </div>
     <div v-else-if="questionLoadError">{{texts.questionLoadError}}</div>
     <div v-else>{{texts.questionLoading}}</div>
@@ -40,11 +45,16 @@ main {
 .ghost {
   opacity: 0.5;
 }
+
+.bottom-new {
+  text-align: center;
+  width: 100%;
+}
 </style>
 
 <script>
 import MButton from 'material-components-vue/dist/button/button.min.js'
-import NewQuestionDialog from './components/NewQuestionDialog'
+import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import Question from './components/Question'
 import hooks from './hooks'
 import {types as questionTypes} from '../../../question'
@@ -52,11 +62,11 @@ import {query} from '../common/graphql'
 import draggable from 'vuedraggable'
 
 Vue.use(MButton)
+Vue.use(MIcon)
 
 export default {
   name: 'Editor',
   components: {
-    NewQuestionDialog,
     Question,
     draggable,
   },
@@ -75,6 +85,10 @@ export default {
           valuePlaceholder: 'Default Value',
           labelPlaceholder: 'Label',
           nulltype: 'Please specify a question type.',
+          default: {
+            type: 'VText',
+            title: 'New Question',
+          },
         },
         updateError: 'Error occurred while updating the question.',
         removeError: 'Error occurred while removing the question.',
@@ -88,6 +102,7 @@ export default {
       pages: [],
       questions: [],
       dragging: false,
+      saveState: 'notChanged',
     }
   },
   methods: {
@@ -120,19 +135,18 @@ export default {
     },
     async newQuestion() {
       try {
-        const dialog = this.$refs.newQuestionDialog.$data.data
         const res = await query(`
           mutation NewQuestion($pageId: Int!, $options: QuestionInput!) {
             newQuestion(pageId: $pageId, options: $options)
           }`.trim(), {
           pageId: this.currentPageId,
-          options: dialog,
+          options: this.texts.question.default,
         })
-        if(res.errors || !res.data.newQuestion) {
+        if(res.errors) {
           throw res
         } else {
-          // TODO: apply new question
-          alert('added')
+          this.questions.push(Object.assign({id: res.data.newQuestion}, this.texts.question.default))
+          this.$nextTick(() => window.scrollTo(0, 1048576))
         }
       } catch(e) {
         // TODO: replace this hint
@@ -147,6 +161,25 @@ export default {
       this.dragging = false
       const q = this.$refs[`question-${item.newIndex}`][0]
       q.$emit('reorder', item.newIndex - item.oldIndex)
+    },
+    updateSaveState(state) {
+      switch(this.saveState) {
+        case 'notChanged':
+        case 'saved':
+          this.saveState = state
+          break
+
+        case 'saving':
+          if(state === 'awaitInputStop') this.saveState = state
+          break
+
+        case 'awaitInputStop':
+          if(state === 'saving') this.saveState = state
+          break
+
+        default:
+          break
+      }
     },
   },
   mounted() {

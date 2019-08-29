@@ -90,3 +90,5 @@ try {
   log.error(e.stack)
   process.exit(1)
 }
+
+log.info('Server Restart')

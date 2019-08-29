@@ -27,10 +27,10 @@ export default {
       options.id = ctx.state.form.questions.map(q => q.options.id).reduce((m, n) => Math.max(m, n), -1) + 1
       ctx.state.form.pages[pageId].options.questions.push(new Question(options))
       await ctx.state.form.update()
-      return true
+      return options.id
     } catch(e) {
       log.error(e)
-      return false
+      throw new Error('Failed to create question')
     }
   },
   async updateQuestion({options}, ctx) {

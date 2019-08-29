@@ -22,7 +22,7 @@
       />
     </div>
     <span slot="actionButtons">
-      <m-icon class="handle" icon="menu" />
+      <m-icon class="handle" icon="drag_handle" />
     </span>
     <span slot="actionIcons">
       <m-icon-button @click="remove">
@@ -135,6 +135,7 @@ export default {
         NOT_UPDATED: 10 * 1000, // 10 secs
       },
       intervalId: -1,
+      saveState: 'notChanged',
     }
   },
   components: {
@@ -185,11 +186,15 @@ export default {
       }
       this.$emit('update:type', val)
     },
+    saveState(val) {
+      this.$emit('update:saveState', val)
+    },
   },
   methods: {
     logChange() {
       this.changed = true
       this.lastChanged = +Date.now()
+      this.saveState = 'awaitInputStop'
     },
     checkUpdate() {
       if(!this.changed) return
@@ -202,9 +207,13 @@ export default {
     },
     async update() {
       // TODO: show update status to user
+      this.changed = false
+      const change = this.change
+      this.change = {}
+      this.saveState = 'saving'
       try {
         for(let i of ['value', 'options']) {
-          this.change[i] = JSON.stringify(this.change[i])
+          change[i] = JSON.stringify(change[i])
         }
         const res = await query(`
           mutation UpdateQuestion($options: QuestionUpdateInput!) {
@@ -212,19 +221,19 @@ export default {
           }
         `.trim(), {
           options: {
-            ...this.change,
+            ...change,
             id: this.data.id,
           },
         })
         if(res.errors || !res.data.updateQuestion) throw res
       } catch(e) {
+        this.saveState = 'error'
         alert(this.texts.updateError)
         console.log('update error', e.stack)
         return
       }
+      if(!this.changed) this.saveState = 'saved'
       this.lastUpdated = +Date.now()
-      this.changed = false
-      this.change = {}
     },
     async remove() {
       try {

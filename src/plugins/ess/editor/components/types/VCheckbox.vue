@@ -13,11 +13,11 @@
     >
       <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
         <VCheckboxInput
-          v-for="option in options_"
+          v-for="(option, i) in options_"
           :key="option.value"
           :label.sync="option.label"
           @update:label="syncOptions"
-          @remove="remove"
+          @remove="remove(i)"
           :cbvalue="option.value"
           :value.sync="value_[option.value]"
           @update:value="syncValue"

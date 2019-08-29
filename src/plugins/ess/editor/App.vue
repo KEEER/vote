@@ -72,6 +72,7 @@ import MList from 'material-components-vue/dist/list/list.min.js'
 import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import Editor from './Editor.vue'
 import Settings from './Settings.vue'
+import Fill from './Fill.vue'
 import hooks from './hooks'
 import {query} from '../common/graphql'
 
@@ -83,6 +84,13 @@ import {query} from '../common/graphql'
 ].forEach(component => Vue.use(component))
 
 const routes = [
+  {
+    path: '/:uid/:id/fill',
+    name: 'fill',
+    component: Fill,
+    icon: 'open_in_new',
+    title: 'Fill',
+  },
   {
     path: '/:uid/:id/edit',
     name: 'edit',

@@ -7,7 +7,7 @@
     <m-text-field outlined :id="uid" v-model="label_" class="label">
       <m-floating-label :for="uid">{{texts.question.labelPlaceholder}}</m-floating-label>
     </m-text-field>
-    <m-icon icon="menu" class="handle" />
+    <m-icon icon="drag_handle" class="handle" />
   </li>
 </template>
 
