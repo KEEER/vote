@@ -14,9 +14,9 @@ export default {
   },
   async newQuestion({pageId, options}, ctx) {
     try {
-      options.id = Math.max(...ctx.state.form.questions.map(q => q.options.id)) + 1
+      options.id = ctx.state.form.questions.map(q => q.options.id).reduce((m, n) => m > n ? m : n, 0)
       ctx.state.form.pages[pageId].options.questions.push(new Question(options))
-      await ctx.state.form.save()
+      await ctx.state.form.update()
       return true
     } catch(e) {
       log.error(e)
@@ -49,7 +49,7 @@ export default {
       const q = ctx.state.form.questions.find(q => q.options.id === id)
       const p = ctx.state.form.pages.find(p => p.options.questions.includes(q))
       p.options.questions.splice(p.options.questions.indexOf(q), 1)
-      await ctx.state.form.save()
+      await ctx.state.form.update()
       return true
     } catch(e) {
       log.error(e)
