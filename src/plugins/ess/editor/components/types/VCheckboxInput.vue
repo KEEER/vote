@@ -76,7 +76,7 @@ export default {
       this.$emit('update:label', val)
     },
     label(val) {
-      this.label_ = this.label
+      this.label_ = val
     },
   },
 }

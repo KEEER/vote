@@ -92,6 +92,12 @@ export default {
         },
         updateError: 'Error occurred while updating the question.',
         removeError: 'Error occurred while removing the question.',
+        saveHint: {
+          notChanged: 'Autosave Enabled',
+          awaitInputStop: 'Waiting you to stop input...',
+          saving: 'Saving...',
+          saved: 'Saved to cloud',
+        },
       },
       newQuestionDialogOpen: false,
       currentPageId: 0,
@@ -102,7 +108,7 @@ export default {
       pages: [],
       questions: [],
       dragging: false,
-      saveState: 'notChanged',
+      saveState: null,
     }
   },
   methods: {
@@ -117,7 +123,7 @@ export default {
               pageCount
             }
           }`.trim(), {
-          id: this.currentPageId
+          id: this.currentPageId,
         })
         if(res.errors) throw res
         this.questions = res.data.form.page.questions
@@ -164,27 +170,47 @@ export default {
     },
     updateSaveState(state) {
       switch(this.saveState) {
-        case 'notChanged':
-        case 'saved':
-          this.saveState = state
-          break
+      case 'notChanged':
+      case 'saved':
+        this.saveState = state
+        break
 
-        case 'saving':
-          if(state === 'awaitInputStop') this.saveState = state
-          break
+      case 'saving':
+        if(state === 'awaitInputStop' || state === 'saved') this.saveState = state
+        break
 
-        case 'awaitInputStop':
-          if(state === 'saving') this.saveState = state
-          break
+      case 'awaitInputStop':
+        if(state === 'saving') this.saveState = state
+        break
 
-        default:
-          break
+      default:
+        break
       }
     },
   },
   mounted() {
     hooks.emit('editor:editorMounted', [this])
     this.loadQuestions()
+    this.saveState = 'notChanged'
+  },
+  watch: {
+    saveState(val) {
+      this.$root.$children[0].texts.appBarSubtitle = this.texts.saveHint[val]
+      switch(val) {
+      case 'saved':
+        window.onbeforeunload = null
+        break
+
+      case 'saving':
+      case 'awaitInputStop':
+        window.onbeforeunload = e => {
+          e.preventDefault()
+          e.returnValue = true
+          return true
+        }
+        break
+      }
+    },
   },
 }
 </script>

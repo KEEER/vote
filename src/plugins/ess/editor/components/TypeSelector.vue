@@ -52,7 +52,7 @@ export default {
     },
     value_(val) {
       this.$emit('input', val)
-    }
-  }
+    },
+  },
 }
 </script>

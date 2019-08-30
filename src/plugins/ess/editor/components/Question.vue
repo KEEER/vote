@@ -106,13 +106,14 @@ import MIconButton from 'material-components-vue/dist/icon-button/icon-button.mi
 import MSwitch from 'material-components-vue/dist/switch/switch.min.js'
 import {query} from '../../common/graphql'
 
-[
+;[
   MCard,
   MTextField,
   MFloatingLabel,
   MLineRipple,
   MIcon,
   MIconButton,
+  MSwitch,
 ].forEach(component => Vue.use(component))
 
 export default {
@@ -130,12 +131,13 @@ export default {
       lastUpdated: +Date.now(),
       UPDATE_THRESHOLD: {
         // After data.UPDATE_THRESHOLD.NOT_CHANGED ms without change, update
-        NOT_CHANGED: 4 * 1000, // 4 secs
+        NOT_CHANGED: 2 * 1000, // 3 secs
         // After data.UPDATE_THRESHOLD.NOT_UPDATED ms without update, update
         NOT_UPDATED: 10 * 1000, // 10 secs
       },
       intervalId: -1,
       saveState: 'notChanged',
+      removed: false,
     }
   },
   components: {
@@ -252,6 +254,7 @@ export default {
         return
       }
       this.$emit('remove')
+      this.removed = true
     },
     reorder(reorder) {
       this.change.reorder = this.change.reorder || 0
@@ -265,7 +268,7 @@ export default {
           this.changed = false
         }
       }
-    }
+    },
   },
   mounted() {
     this.intervalId = setInterval(() => this.checkUpdate(), 500)
@@ -273,6 +276,7 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.intervalId)
-  }
+    if(this.changed) this.update()
+  },
 }
 </script>

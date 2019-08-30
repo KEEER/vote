@@ -24,8 +24,16 @@
     </m-drawer>
     <m-drawer-scrim v-if="modal" />
     <div id="content">
-      <m-top-app-bar ref="appbar" :title="texts.appBarTitle">
-        <m-icon icon="menu" slot="navigation" />
+      <m-top-app-bar ref="appbar">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <m-icon icon="menu" class="mdc-top-app-bar__navigation-icon" />
+          <span class="hgroup mdc-top-app-bar__title">
+            <div>{{texts.appBarTitle}}</div>
+            <div class="mdc-top-app-bar__subtitle" v-if="texts.appBarSubtitle">
+              {{texts.appBarSubtitle}}
+            </div>
+          </span>
+        </section>
       </m-top-app-bar>
       <m-top-app-bar-fixed-adjust>
         <router-view />
@@ -61,6 +69,19 @@ a.navlink {
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.hgroup {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  line-height: 1.5rem;
+}
+
+.mdc-top-app-bar__subtitle {
+  font-size: 0.9rem;
+  line-height: 0.9rem;
+  color: #b0bec5;
 }
 </style>
 
@@ -121,6 +142,7 @@ export default Vue.extend({
       texts: {
         drawerTitle: null,
         appBarTitle: 'Vote Editor',
+        appBarSubtitle: null,
       },
       routes,
     }

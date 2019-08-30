@@ -68,7 +68,7 @@ window.KVoteFormData = {
 
 window.addEventListener('vote:ready', function() {
   var hooks = window.voteHooks
-  hooks.on('form:texts', function([_, set]) {
+  hooks.on('form:texts', function([, set]) {
     set({
       prevPage: '上一页',
       submit: '提交',
@@ -89,7 +89,7 @@ window.addEventListener('vote:ready', function() {
   hooks.on('form:submitting', function() {
     console.log('submitting')
   })
-  hooks.on('question:update', function([q, _, o]) {
+  hooks.on('question:update', function([q, , o]) {
     if(q.question.type === 'VCheckbox') {
       var count = 0
       for(var i in q.question.value) {
