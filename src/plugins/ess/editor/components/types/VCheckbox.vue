@@ -91,7 +91,7 @@ export default {
       this.$emit('update:options', [...this.options_])
     },
     syncValue() {
-      this.$emit('input', Object.assign({}, this.value_))
+      this.$emit('input', {...this.value_})
     },
   },
   watch: {

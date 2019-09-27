@@ -28,7 +28,7 @@
       <m-icon-button @click="remove">
         <m-icon icon="delete" />
       </m-icon-button>
-      <span class="devider" />
+      <span class="divider" />
       {{texts.question.required}}
       <m-switch v-model="required_" class="required-switch" />
     </span>
@@ -76,7 +76,7 @@
   }
 }
 
-.devider {
+.divider {
   border-left: 1px solid #e0e0e0;
   height: 32px;
   margin: 0 16px;
