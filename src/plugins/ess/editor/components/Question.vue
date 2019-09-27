@@ -1,6 +1,6 @@
 <template>
   <m-card class="question-card">
-    <div class="question">
+    <div class="question" v-if="!folded">
       <div class="title-type">
         <m-text-field
           outlined
@@ -21,17 +21,28 @@
         :texts="texts"
       />
     </div>
-    <span slot="actionButtons">
+    <span slot="actionButtons" v-if="!folded">
       <m-icon class="handle" icon="drag_handle" />
     </span>
-    <span slot="actionIcons">
+    <span slot="actionIcons" v-if="!folded">
       <m-icon-button @click="remove">
         <m-icon icon="delete" />
       </m-icon-button>
       <span class="divider" />
       {{texts.question.required}}
       <m-switch v-model="required_" class="required-switch" />
+      <span class="divider" />
+      <m-icon-button @click="folded = true">
+        <m-icon icon="keyboard_arrow_up" />
+      </m-icon-button>
     </span>
+    <div class="folded" v-if="folded">
+      <m-icon class="handle handle--folded" icon="drag_handle" />
+      <span class="question-title--display">{{title_}}</span>
+      <m-icon-button class="fold-button" @click="folded = false" v-if="folded">
+        <m-icon icon="keyboard_arrow_down" />
+      </m-icon-button>
+    </div>
   </m-card>
 </template>
 
@@ -84,6 +95,24 @@
 
 .required-switch {
   margin-left: 8px;
+}
+
+.question-title--display {
+  font-size: 1.45rem;
+  font-weight: 300;
+  flex: auto;
+}
+
+.folded {
+  display: flex;
+  flex-direction: row;
+  padding: 16px;
+  align-items: center;
+}
+
+.handle--folded {
+  padding: 0 8px 0 0;
+  cursor: pointer;
 }
 </style>
 
@@ -138,6 +167,7 @@ export default {
       intervalId: -1,
       saveState: 'notChanged',
       removed: false,
+      folded: false,
     }
   },
   components: {
