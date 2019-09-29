@@ -144,6 +144,7 @@ export default Vue.extend({
         appBarTitle: 'Vote Editor',
         appBarSubtitle: null,
       },
+      title: '',
       routes,
     }
   },
@@ -181,6 +182,7 @@ export default Vue.extend({
     
     ;(async () => {
       const title = (await query('{ form { title } }', {})).data.form.title
+      this.title = title
       this.texts.appBarTitle = `${title} - Vote Editor`
       document.title = `${title} - ${document.title}`
     })()

@@ -20,6 +20,7 @@
       "form:submitted",
       "form:error",
       "editor:appMounted",
+      "editor:settingsMounted",
       "editor:editorMounted"
     ]
   }
