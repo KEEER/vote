@@ -94,7 +94,7 @@ export default {
         removeError: 'Error occurred while removing the question.',
         saveHint: {
           notChanged: 'Autosave Enabled',
-          awaitInputStop: 'Waiting you to stop input...',
+          awaitInputStop: 'Waiting for you to stop input...',
           saving: 'Saving...',
           saved: 'Saved to cloud',
         },

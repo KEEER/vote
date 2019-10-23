@@ -1,14 +1,6 @@
 <template>
   <div>
-    <m-text-field
-      outlined
-      required
-      v-model="title_"
-      :id="`${uid}-title`"
-      class="form-title"
-    >
-      <m-floating-label :for="`${uid}-title`">{{texts.titlePlaceholder}}</m-floating-label>
-    </m-text-field>
+    <SettingsEntry name="basic.title" preset="textField" :placeholder="texts.titlePlaceholder" required></SettingsEntry>
   </div>
 </template>
 
@@ -18,7 +10,7 @@
 @import 'material-components-vue/dist/floating-label/styles';
 </style>
 
-<style scoped>
+<style>
 .form-title {
   width: 100%;
 }
@@ -28,32 +20,21 @@
 import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
 import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
 
+import SettingsEntry from './SettingsEntry.vue'
+
 Vue.use(MTextField)
 Vue.use(MFloatingLabel)
 
 export default {
   name: 'BasicSettings',
   data() {
-    return {
-      title_: '',
-    }
+    return {}
+  },
+  components: {
+    SettingsEntry,
   },
   props: {
     texts: Object,
-  },
-  watch: {
-    title_(val) {
-      // TODO: save update
-      console.log(val)
-    },
-    title(val) {
-      this.title_ = val
-    },
-  },
-  computed: {
-    title() {
-      return this.$root.$children[0].title
-    },
   },
 }
 </script>

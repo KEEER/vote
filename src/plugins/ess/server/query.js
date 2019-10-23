@@ -71,4 +71,17 @@ export default {
       return false
     }
   },
+  async updateSettings({name, value}, ctx) {
+    try {
+      const form = ctx.state.form
+      let retval = null
+      await form.emit('updateSettings', [form, name, value, ret => retval = ret])
+      if(typeof retval === 'boolean') return retval
+      const data = form.options.data || {}
+      data.settings = data.settings || {}
+    } catch(e) {
+      log.error(e)
+      return false
+    }
+  }
 }

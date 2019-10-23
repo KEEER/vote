@@ -19,6 +19,7 @@
       "form:submiterror",
       "form:submitted",
       "form:error",
+      "form__updateSettings",
       "editor:appMounted",
       "editor:settingsMounted",
       "editor:editorMounted"

@@ -6,6 +6,7 @@ type Mutation {
   newQuestion(pageId: Int!, options: QuestionInput!): Int!
   updateQuestion(options: QuestionUpdateInput!): Boolean!
   removeQuestion(id: Int!): Boolean!
+  updateSettings(name: String!, value: String): Boolean! # value is actually object
 }
 
 type Form {
