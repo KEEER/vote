@@ -1,6 +1,8 @@
 <template>
   <main id="editor">
-    <div id="questions" v-if="questionLoaded">
+    <div v-if="exitSaveError">{{texts.exitSaveError}}</div>
+    <div v-else-if="exiting">{{texts.exiting}}</div>
+    <div id="questions" v-else-if="questionLoaded">
       <draggable
         v-model="questions"
         @start="dragging = true"
@@ -28,6 +30,7 @@
       </div>
     </div>
     <div v-else-if="questionLoadError">{{texts.questionLoadError}}</div>
+    <div v-else-if="exiting">{{texts.exiting}}</div>
     <div v-else>{{texts.questionLoading}}</div>
   </main>
 </template>
@@ -78,6 +81,8 @@ export default {
         ok: 'OK',
         questionLoadError: 'Load Error',
         questionLoading: 'Loading Questions...',
+        exiting: 'Saving questions, please wait...',
+        exitSaveError: 'Error saving question, data may be not saved. Please refresh to continue.',
         question: {
           title: 'Question Title',
           required: 'Required',
@@ -105,6 +110,8 @@ export default {
       questionTypes,
       questionLoaded: false,
       questionLoadError: false,
+      exiting: false,
+      exitSaveError: false,
       pages: [],
       questions: [],
       dragging: false,
@@ -192,6 +199,24 @@ export default {
     hooks.emit('editor:editorMounted', [this])
     this.loadQuestions()
     this.saveState = 'notChanged'
+  },
+  async beforeRouteLeave(to, from, next) {
+    if(this.saveState === 'saving' || this.saveState === 'awaitInputStop') {
+      this.exiting = true
+      try {
+        await Promise.all(this.questions.map((_, i) => this.$refs[`question-${i}`][0].update()))
+      } catch(e) {
+        console.error('error saving before leave', e)
+        next(false)
+        this.exitSaveError = true
+        return
+      }
+    }
+    next()
+  },
+  destroyed() {
+    this.$root.$children[0].texts.appBarSubtitle = ''
+    window.onbeforeunload = null
   },
   watch: {
     saveState(val) {

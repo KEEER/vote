@@ -239,6 +239,7 @@ export default {
     },
     async update() {
       // TODO: show update status to user
+      if(!this.changed) return
       this.changed = false
       const change = this.change
       this.change = {}

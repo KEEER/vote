@@ -79,9 +79,10 @@ export default {
       if(typeof retval === 'boolean') return retval
       const data = form.options.data || {}
       data.settings = data.settings || {}
+      return true
     } catch(e) {
       log.error(e)
       return false
     }
-  }
+  },
 }

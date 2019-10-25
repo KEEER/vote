@@ -19,6 +19,8 @@
 </style>
 
 <script>
+import {query} from '../../common/graphql'
+
 export default {
   name: 'SettingsEntry',
   data() {
@@ -42,6 +44,7 @@ export default {
           slotText: this.$attrs.placeholder,
         },
       },
+      loaded: false,
     }
   },
   props: {
@@ -55,19 +58,35 @@ export default {
       this.value_ = val
     },
     value_(val, old) {
+      if(!this.loaded) return
       let cancel = false
       this.$emit('check', [val, () => cancel = true])
       if(cancel) {
         this.value_ = old
       }
       this.$emit('update:value', val)
+      // TODO: update occasion
       this.update()
     },
   },
   methods: {
-    update() {
+    async update() {
       // TODO
-      console.log(this.value_)
+      try {
+        const res = await query(`
+          mutation UpdateSettings($name: String!, $value: String) {
+            updateSettings(name: $name, value: $value)
+          }`.trim(), {
+            name: this.name,
+            value: this.value_,
+          })
+        if(res.errors || !res.data.updateSettings) throw res
+      } catch(e) {
+        // TODO
+        alert('Error updating settings')
+        console.log('update error', e)
+        return
+      }
     },
   },
   mounted() {
@@ -75,6 +94,7 @@ export default {
       // TODO: fetch value
       console.log(this.name)
       this.value_ = 'Something'
+      this.$nextTick(() => this.loaded = true)
     }
   },
   computed: {
