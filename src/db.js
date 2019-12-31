@@ -1,16 +1,16 @@
 /** @module db */
-import {Pool} from 'pg'
+import { Pool } from 'pg'
 
 // connection pool
 const pool = new Pool()
 /** The connection pool. */
-export {pool}
+export { pool }
 
 /**
  * A wrapper for the database client object.
  * @param {function} cb Callback. The function should be asynchronous, receiving one param which is the client.
  */
-export async function useClient(cb) {
+export async function useClient (cb) {
   const client = await pool.connect()
   try {
     await cb(client)
@@ -22,7 +22,7 @@ export async function useClient(cb) {
 /**
  * A wrapper for pool.query(). See pg.Pool
  */
-export function query() {
+export function query () {
   const args = arguments
   args[0] = args[0].replace(/PRE_/g, process.env.TABLEPREFIX)
   return pool.query.apply(pool, args)
@@ -36,9 +36,9 @@ export function query() {
  * @param {*} cond pkey value
  * @example await update('PRE_forms', {id: 'newid', title: 'newtitle'}, 'id', 'oldid')
  */
-export async function update(table, args, key, cond) {
+export async function update (table, args, key, cond) {
   let argarr = [], count = 0, values = []
-  for(let i in args) {
+  for (let i in args) {
     argarr.push(`${i} = $${++count}`)
     values.push(args[i])
   }

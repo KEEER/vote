@@ -17,18 +17,18 @@
 import hooks from './hooks'
 export default {
   name: 'Page',
-  data() {
+  data () {
     return {
       current: false,
     }
   },
   computed: {
-    questions() {
+    questions () {
       return this.$children
     },
-    valid() {
+    valid () {
       let validity = this.questions.every(q => q.valid)
-      hooks.emit('page:validate', [this, v => validity = v])
+      hooks.emit('page:validate', [ this, v => validity = v ])
       return validity
     },
   },

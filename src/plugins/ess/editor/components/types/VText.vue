@@ -20,7 +20,7 @@ Vue.use(MLineRipple)
 
 export default {
   name: 'VText',
-  mixins: [mixin],
+  mixins: [ mixin ],
   props: {
     value: String,
   },

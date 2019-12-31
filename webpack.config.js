@@ -58,7 +58,7 @@ const config = {
         test: /\.mjs$/,
         include: /node_modules/,
         type: 'javascript/auto',
-      },      
+      },
       {
         test: /\.less$/,
         use: [
@@ -77,7 +77,7 @@ const config = {
           {
             loader: 'sass-loader',
             options: {
-              includePaths: [path.resolve(__dirname, 'node_modules')],
+              includePaths: [ path.resolve(__dirname, 'node_modules') ],
               sourceMap: true,
             },
           },
@@ -107,13 +107,13 @@ const config = {
     }),
     new OptimizeCssAssetsPlugin({
       cssProcessorOptions: {
-        map: {inline: false, annotation: true},
+        map: { inline: false, annotation: true },
       },
     }),
     new HtmlWebpackPlugin({
       title: 'Vote Editor | KEEER Vote',
       filename: 'plugin-ess-editor.html',
-      chunks: ['plugin-ess-editor'],
+      chunks: [ 'plugin-ess-editor' ],
       xhtml: true,
       meta: {
         viewport: 'width=device-width, initial-scale=1.0',
@@ -122,7 +122,7 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'KEEER Vote',
       filename: 'theme-basic.html',
-      chunks: ['theme-basic'],
+      chunks: [ 'theme-basic' ],
       xhtml: true,
       meta: {
         viewport: 'width=device-width, initial-scale=1.0',
@@ -130,10 +130,10 @@ const config = {
     }),
     new HtmlWebpackTagsPlugin({
       links: [
-        {path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false},
+        { path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false },
       ],
       scripts: [
-        {path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false},
+        { path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false },
         'vote-config.js',
       ],
       append: false,

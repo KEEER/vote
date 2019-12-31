@@ -29,14 +29,14 @@
 <script>
 import MSelect from 'material-components-vue/dist/select/select.min.js'
 import MList from 'material-components-vue/dist/list/list.min.js'
-import {types as questionTypes} from '../../../../question'
+import { types as questionTypes } from '../../../../question'
 
 Vue.use(MSelect)
 Vue.use(MList)
 
 export default {
   name: 'TypeSelector',
-  data() {
+  data () {
     return {
       value_: this.value,
       questionTypes,
@@ -47,10 +47,10 @@ export default {
     texts: Object,
   },
   watch: {
-    value(val) {
+    value (val) {
       this.value_ = val
     },
-    value_(val) {
+    value_ (val) {
       this.$emit('input', val)
     },
   },

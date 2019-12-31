@@ -60,8 +60,8 @@ import MButton from 'material-components-vue/dist/button/button.min.js'
 import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import Question from './components/Question'
 import hooks from './hooks'
-import {types as questionTypes} from '../../../question'
-import {query} from '../common/graphql'
+import { types as questionTypes } from '../../../question'
+import { query } from '../common/graphql'
 import draggable from 'vuedraggable'
 
 Vue.use(MButton)
@@ -73,7 +73,7 @@ export default {
     Question,
     draggable,
   },
-  data() {
+  data () {
     return {
       texts: {
         new: 'Add question',
@@ -119,7 +119,7 @@ export default {
     }
   },
   methods: {
-    async loadQuestions() {
+    async loadQuestions () {
       try {
         const res = await query(`
           query($id: Int!) {
@@ -132,21 +132,21 @@ export default {
           }`.trim(), {
           id: this.currentPageId,
         })
-        if(res.errors) throw res
+        if (res.errors) throw res
         this.questions = res.data.form.page.questions
-        for(let i of ['value', 'options']) {
-          for(let question of this.questions) {
+        for (let i of [ 'value', 'options' ]) {
+          for (let question of this.questions) {
             question[i] = JSON.parse(question[i])
           }
         }
         this.pageCount = res.data.form.pageCount
         this.questionLoaded = true
-      } catch(e) {
+      } catch (e) {
         console.error(e)
         this.questionLoadError = true
       }
     },
-    async newQuestion() {
+    async newQuestion () {
       try {
         const res = await query(`
           mutation NewQuestion($pageId: Int!, $options: QuestionInput!) {
@@ -155,39 +155,39 @@ export default {
           pageId: this.currentPageId,
           options: this.texts.question.default,
         })
-        if(res.errors) {
+        if (res.errors) {
           throw res
         } else {
-          this.questions.push(Object.assign({id: res.data.newQuestion}, this.texts.question.default))
+          this.questions.push(Object.assign({ id: res.data.newQuestion }, this.texts.question.default))
           this.$nextTick(() => window.scrollTo(0, 1048576))
         }
-      } catch(e) {
+      } catch (e) {
         // TODO: replace this hint
         alert('我们遇到了一个错误……')
         console.error(e)
       }
     },
-    remove(i) {
+    remove (i) {
       this.questions.splice(i, 1)
     },
-    move(item) {
+    move (item) {
       this.dragging = false
       const q = this.$refs[`question-${item.newIndex}`][0]
       q.$emit('reorder', item.newIndex - item.oldIndex)
     },
-    updateSaveState(state) {
-      switch(this.saveState) {
+    updateSaveState (state) {
+      switch (this.saveState) {
       case 'notChanged':
       case 'saved':
         this.saveState = state
         break
 
       case 'saving':
-        if(state === 'awaitInputStop' || state === 'saved') this.saveState = state
+        if (state === 'awaitInputStop' || state === 'saved') this.saveState = state
         break
 
       case 'awaitInputStop':
-        if(state === 'saving') this.saveState = state
+        if (state === 'saving') this.saveState = state
         break
 
       default:
@@ -195,17 +195,17 @@ export default {
       }
     },
   },
-  mounted() {
-    hooks.emit('editor:editorMounted', [this])
+  mounted () {
+    hooks.emit('editor:editorMounted', [ this ])
     this.loadQuestions()
     this.saveState = 'notChanged'
   },
-  async beforeRouteLeave(to, from, next) {
-    if(this.saveState === 'saving' || this.saveState === 'awaitInputStop') {
+  async beforeRouteLeave (to, from, next) {
+    if (this.saveState === 'saving' || this.saveState === 'awaitInputStop') {
       this.exiting = true
       try {
         await Promise.all(this.questions.map((_, i) => this.$refs[`question-${i}`][0].update()))
-      } catch(e) {
+      } catch (e) {
         console.error('error saving before leave', e)
         next(false)
         this.exitSaveError = true
@@ -214,14 +214,14 @@ export default {
     }
     next()
   },
-  destroyed() {
+  destroyed () {
     this.$root.$children[0].texts.appBarSubtitle = ''
     window.onbeforeunload = null
   },
   watch: {
-    saveState(val) {
+    saveState (val) {
       this.$root.$children[0].texts.appBarSubtitle = this.texts.saveHint[val]
-      switch(val) {
+      switch (val) {
       case 'saved':
         window.onbeforeunload = null
         break

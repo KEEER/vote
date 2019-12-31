@@ -1,4 +1,4 @@
-if(typeof window === 'undefined') {
+if (typeof window === 'undefined') {
   // node
   module.exports = require('fs')
     .readFileSync(

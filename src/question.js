@@ -9,7 +9,7 @@ const types = {
   VRadio: 'Radio buttons',
 }
 /** Question types. */
-export {types}
+export { types }
 
 /** Class representing a question. */
 class Question {
@@ -21,7 +21,7 @@ class Question {
    * @param {number} options.id Question ID
    * @param {*} [options.value] Default value of the question
    */
-  constructor(options) {
+  constructor (options) {
     this.is = 'Question'
     assert(typeof options === 'object')
     assert(typeof options.type === 'string')
@@ -36,10 +36,10 @@ class Question {
     })
   }
 
-  get id() {
+  get id () {
     return this.options.id
   }
-  set id(id) {
+  set id (id) {
     this.options.id = id
   }
 
@@ -47,7 +47,7 @@ class Question {
    * Get a object to be stored.
    * @returns {object} Object representing the question
    */
-  toObject() {
+  toObject () {
     return Object.assign({}, this.options, {
       type: this.options.type,
       id: this.options.id,

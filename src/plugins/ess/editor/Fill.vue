@@ -5,7 +5,7 @@
 <script>
 export default {
   name: 'Fill',
-  mounted() {
+  mounted () {
     history.back()
     location = 'fill'
   },

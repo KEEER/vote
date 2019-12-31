@@ -12,7 +12,7 @@ Vue.use(UniqueId)
 window.onload = () => {
   window.voteHooks = hooks
   window.dispatchEvent(new Event('vote:ready'))
-  
+
   window.vm = new Vue({
     el: '#app',
     render: h => h(App),

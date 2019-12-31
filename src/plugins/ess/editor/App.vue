@@ -95,7 +95,7 @@ import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'
 import hooks from './hooks'
-import {query} from '../common/graphql'
+import { query } from '../common/graphql'
 
 ;[
   MTopAppBar,
@@ -131,10 +131,10 @@ const router = new VueRouter({
   mode: 'history',
   routes,
 })
-export {router}
+export { router }
 
 export default Vue.extend({
-  data: function() {
+  data: function () {
     return {
       modal: false,
       dismissible: true,
@@ -149,17 +149,17 @@ export default Vue.extend({
     }
   },
   methods: {
-    toggleDrawer() {
+    toggleDrawer () {
       this.drawerOpen = !this.drawerOpen
     },
   },
   computed: {
-    formId() {
+    formId () {
       return `${this.$route.params.uid} / ${this.$route.params.id}`
     },
   },
   components: {},
-  mounted() {
+  mounted () {
     const media = window.matchMedia('(max-width: 720px)')
 
     const toggleMobile = () => {
@@ -179,14 +179,14 @@ export default Vue.extend({
 
     this.$refs.appbar.$on('nav', () => this.toggleDrawer())
     this.texts.drawerTitle = this.formId
-    
+
     ;(async () => {
       const title = (await query('{ form { title } }', {})).data.form.title
       this.title = title
       this.texts.appBarTitle = `${title} - Vote Editor`
       document.title = `${title} - ${document.title}`
     })()
-    hooks.emit('editor:appMounted', [this])
+    hooks.emit('editor:appMounted', [ this ])
   },
 })
 </script>

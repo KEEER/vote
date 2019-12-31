@@ -1,5 +1,5 @@
 export default {
-  data() {
+  data () {
     return {
       value_: this.value,
     }
@@ -9,10 +9,10 @@ export default {
     texts: Object,
   },
   watch: {
-    value_(val) {
+    value_ (val) {
       this.$emit('input', val)
     },
-    value(val) {
+    value (val) {
       this.value_ = val
     },
   },

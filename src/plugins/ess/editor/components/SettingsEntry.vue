@@ -19,11 +19,11 @@
 </style>
 
 <script>
-import {query} from '../../common/graphql'
+import { query } from '../../common/graphql'
 
 export default {
   name: 'SettingsEntry',
-  data() {
+  data () {
     return {
       value_: this.value,
       class: {},
@@ -54,14 +54,14 @@ export default {
     preset: {},
   },
   watch: {
-    value(val) {
+    value (val) {
       this.value_ = val
     },
-    value_(val, old) {
-      if(!this.loaded) return
+    value_ (val, old) {
+      if (!this.loaded) return
       let cancel = false
-      this.$emit('check', [val, () => cancel = true])
-      if(cancel) {
+      this.$emit('check', [ val, () => cancel = true ])
+      if (cancel) {
         this.value_ = old
       }
       this.$emit('update:value', val)
@@ -70,18 +70,18 @@ export default {
     },
   },
   methods: {
-    async update() {
+    async update () {
       // TODO
       try {
         const res = await query(`
           mutation UpdateSettings($name: String!, $value: String) {
             updateSettings(name: $name, value: $value)
           }`.trim(), {
-            name: this.name,
-            value: this.value_,
-          })
-        if(res.errors || !res.data.updateSettings) throw res
-      } catch(e) {
+          name: this.name,
+          value: this.value_,
+        })
+        if (res.errors || !res.data.updateSettings) throw res
+      } catch (e) {
         // TODO
         alert('Error updating settings')
         console.log('update error', e)
@@ -89,8 +89,8 @@ export default {
       }
     },
   },
-  mounted() {
-    if(!this.value) {
+  mounted () {
+    if (!this.value) {
       // TODO: fetch value
       console.log(this.name)
       this.value_ = 'Something'
@@ -98,25 +98,25 @@ export default {
     }
   },
   computed: {
-    bindings() {
-      const d = {...this.$attrs}
+    bindings () {
+      const d = { ...this.$attrs }
       d.id = d.id_
       d.class = d.class_
       return d
     },
-    presetComponent() {
+    presetComponent () {
       return this.presets[this.preset].component
     },
-    presetBindings() {
+    presetBindings () {
       return this.presets[this.preset].bindings
     },
-    presetSlotComponent() {
+    presetSlotComponent () {
       return this.presets[this.preset].slotComponent
     },
-    presetSlotBindings() {
+    presetSlotBindings () {
       return this.presets[this.preset].slotBindings
     },
-    presetSlotText() {
+    presetSlotText () {
       return this.presets[this.preset].slotText
     },
   },

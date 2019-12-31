@@ -10,8 +10,8 @@ import mixin from './mixin'
 
 export default {
   name: 'VCheckboxInput',
-  mixins: [mixin],
-  data() {
+  mixins: [ mixin ],
+  data () {
     return {
       question_: this.$parent.$parent,
     }

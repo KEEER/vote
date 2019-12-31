@@ -62,7 +62,7 @@ const entries = [
 
 export default {
   name: 'Settings',
-  data() {
+  data () {
     return {
       entries,
       texts: {
@@ -70,8 +70,8 @@ export default {
       },
     }
   },
-  mounted() {
-    hooks.emit('editor:settingsMounted', [this])
+  mounted () {
+    hooks.emit('editor:settingsMounted', [ this ])
   },
 }
 </script>

@@ -104,7 +104,7 @@ export default {
   components: {
     draggable,
   },
-  data() {
+  data () {
     return {
       value_: this.value || null,
       options_: this.options,
@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    add() {
+    add () {
       this.options_ = this.options_ || []
       const value = this.options_.map(o => o.value).reduce((a, b) => Math.max(a, b), -1) + 1
       this.options_.push({
@@ -121,22 +121,22 @@ export default {
       })
       this.syncOptions()
     },
-    remove(index) {
+    remove (index) {
       this.options_.splice(index, 1)
       this.syncOptions()
     },
-    syncOptions() {
-      this.$emit('update:options', [...this.options_])
+    syncOptions () {
+      this.$emit('update:options', [ ...this.options_ ])
     },
   },
   watch: {
-    value_(val) {
+    value_ (val) {
       this.$emit('input', val)
     },
-    value(val) {
+    value (val) {
       this.value_ = val
     },
-    options(val) {
+    options (val) {
       this.options_ = val
     },
   },

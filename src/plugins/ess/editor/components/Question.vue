@@ -133,7 +133,7 @@ import TypeSelector from './TypeSelector.vue'
 import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
 import MSwitch from 'material-components-vue/dist/switch/switch.min.js'
-import {query} from '../../common/graphql'
+import { query } from '../../common/graphql'
 
 ;[
   MCard,
@@ -147,7 +147,7 @@ import {query} from '../../common/graphql'
 
 export default {
   name: 'Question',
-  data() {
+  data () {
     return {
       title_: this.data.title,
       value_: this.data.value,
@@ -182,70 +182,70 @@ export default {
     isLast: Boolean,
   },
   watch: {
-    data() {
+    data () {
       this.title_ = this.data.title
       this.value_ = this.data.value
       this.options_ = this.data.options
       this.type_ = this.data.type
     },
-    title_(val) {
-      if(val) {
+    title_ (val) {
+      if (val) {
         this.change.title = val
         this.logChange()
       }
       this.$emit('update:title', val)
     },
-    value_(val) {
+    value_ (val) {
       this.change.value = val
       this.logChange()
       this.$emit('update:value', val)
     },
-    options_(val) {
+    options_ (val) {
       this.change.options = val
       this.logChange()
       this.$emit('update:options', val)
     },
-    required_(val) {
+    required_ (val) {
       this.change.required = val
       this.logChange()
       this.$emit('update:required', val)
     },
-    type_(val) {
+    type_ (val) {
       this.data.type = val
-      if(val) {
+      if (val) {
         this.change.type = val
         this.logChange()
       }
       this.$emit('update:type', val)
     },
-    saveState(val) {
+    saveState (val) {
       this.$emit('update:saveState', val)
     },
   },
   methods: {
-    logChange() {
+    logChange () {
       this.changed = true
       this.lastChanged = +Date.now()
       this.saveState = 'awaitInputStop'
     },
-    checkUpdate() {
-      if(!this.changed) return
-      if(this.lastChanged + this.UPDATE_THRESHOLD.NOT_CHANGED < +Date.now()) {
+    checkUpdate () {
+      if (!this.changed) return
+      if (this.lastChanged + this.UPDATE_THRESHOLD.NOT_CHANGED < +Date.now()) {
         return this.update()
       }
-      if(this.lastUpdated + this.UPDATE_THRESHOLD.NOT_UPDATED < +Date.now()) {
+      if (this.lastUpdated + this.UPDATE_THRESHOLD.NOT_UPDATED < +Date.now()) {
         return this.update()
       }
     },
-    async update() {
+    async update () {
       // TODO: show update status to user
-      if(!this.changed) return
+      if (!this.changed) return
       this.changed = false
       const change = this.change
       this.change = {}
       this.saveState = 'saving'
       try {
-        for(let i of ['value', 'options']) {
+        for (let i of [ 'value', 'options' ]) {
           change[i] = JSON.stringify(change[i])
         }
         const res = await query(`
@@ -258,17 +258,17 @@ export default {
             id: this.data.id,
           },
         })
-        if(res.errors || !res.data.updateQuestion) throw res
-      } catch(e) {
+        if (res.errors || !res.data.updateQuestion) throw res
+      } catch (e) {
         this.saveState = 'error'
         alert(this.texts.updateError)
         console.log('update error', e.stack)
         return
       }
-      if(!this.changed) this.saveState = 'saved'
+      if (!this.changed) this.saveState = 'saved'
       this.lastUpdated = +Date.now()
     },
-    async remove() {
+    async remove () {
       try {
         // TODO: prompt before removal
         const res = await query(`
@@ -278,8 +278,8 @@ export default {
         `.trim(), {
           id: this.data.id,
         })
-        if(res.errors || !res.data.removeQuestion) throw res
-      } catch(e) {
+        if (res.errors || !res.data.removeQuestion) throw res
+      } catch (e) {
         alert(this.texts.removeError)
         console.log('remove error', e.stack)
         return
@@ -287,27 +287,27 @@ export default {
       this.$emit('remove')
       this.removed = true
     },
-    reorder(reorder) {
+    reorder (reorder) {
       this.change.reorder = this.change.reorder || 0
       this.change.reorder += reorder
-      if(this.change.reorder !== 0) {
+      if (this.change.reorder !== 0) {
         this.logChange()
       } else {
         // remove log of reordering
         delete this.change.reorder
-        if([...Object.keys(this.change)].length === 0) {
+        if ([ ...Object.keys(this.change) ].length === 0) {
           this.changed = false
         }
       }
     },
   },
-  mounted() {
+  mounted () {
     this.intervalId = setInterval(() => this.checkUpdate(), 500)
     this.$on('reorder', reorder => this.reorder(reorder))
   },
-  beforeDestroy() {
+  beforeDestroy () {
     clearInterval(this.intervalId)
-    if(this.changed) this.update()
+    if (this.changed) this.update()
   },
 }
 </script>

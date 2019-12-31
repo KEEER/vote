@@ -1,11 +1,11 @@
-import {buildSchema, parse, validate} from 'graphql'
+import { buildSchema, parse, validate } from 'graphql'
 import assert from 'assert'
 import schemaText from './schemaText'
 
 const schema = buildSchema(schemaText)
-export {schema}
+export { schema }
 
-export function query(query, variables) {
+export function query (query, variables) {
   variables = variables || {}
   assert(typeof window !== 'undefined', 'graphql.query() shouldn\'t be called out of browser')
   assert(typeof query === 'string')
@@ -21,13 +21,13 @@ export function query(query, variables) {
       variables,
     }))
     xhr.onreadystatechange = () => {
-      if(xhr.readyState !== 4) return
-      if(xhr.status !== 200) {
+      if (xhr.readyState !== 4) return
+      if (xhr.status !== 200) {
         reject(new Error(`Status code is ${xhr.status} instead of 200`))
       }
       try {
         resolve(JSON.parse(xhr.response))
-      } catch(e) {
+      } catch (e) {
         reject(new Error('Invalid response'))
       }
     }

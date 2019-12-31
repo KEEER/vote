@@ -23,7 +23,7 @@
 </style>
 
 <script>
-import Form, {Question, Page} from './Form'
+import Form, { Question, Page } from './Form'
 import hooks from './hooks'
 
 export default {
@@ -32,16 +32,16 @@ export default {
     Question,
     Page,
   },
-  data() {
+  data () {
     return {
       nodata: !('KVoteFormData' in window),
       data: window.KVoteFormData,
     }
   },
   computed: {
-    nodataTip() {
+    nodataTip () {
       let tip = 'No form data supplied. This is usually an error in the URL.'
-      hooks.emit('app:nodata', [this, t => tip = t])
+      hooks.emit('app:nodata', [ this, t => tip = t ])
       return tip
     },
   },

@@ -27,7 +27,7 @@ Vue.use(MFloatingLabel)
 
 export default {
   name: 'BasicSettings',
-  data() {
+  data () {
     return {}
   },
   components: {

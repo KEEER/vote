@@ -48,7 +48,7 @@ Vue.use(MFloatingLabel)
 
 export default {
   name: 'VCheckboxInput',
-  data() {
+  data () {
     return {
       value_: this.value,
       label_: this.label,
@@ -61,21 +61,21 @@ export default {
     cbvalue: {},
   },
   methods: {
-    remove() {
+    remove () {
       this.$emit('remove')
     },
   },
   watch: {
-    value_(val) {
+    value_ (val) {
       this.$emit('update:value', val)
     },
-    value(val) {
+    value (val) {
       this.value_ = val
     },
-    label_(val) {
+    label_ (val) {
       this.$emit('update:label', val)
     },
-    label(val) {
+    label (val) {
       this.label_ = val
     },
   },

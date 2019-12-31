@@ -2,38 +2,38 @@ import hooks from '../hooks'
 import QTitle from '../Title'
 
 export default {
-  data() {
+  data () {
     return {
       value_: this.value,
       old: null,
     }
   },
   methods: {
-    syncOld() {
+    syncOld () {
       this.old = this.value_
     },
   },
   watch: {
-    value_(val) {
+    value_ (val) {
       this.$emit('update:value', val)
-      hooks.emit('question:update', [this, val, this.old])
+      hooks.emit('question:update', [ this, val, this.old ])
       this.syncOld()
     },
-    value(val) {
+    value (val) {
       this.value_ = val
     },
   },
-  mounted() {
+  mounted () {
     this.syncOld()
   },
   computed: {
-    overridesParent() {
+    overridesParent () {
       return !!this.question_
     },
-    question() {
+    question () {
       return this.question_ || this.$parent
     },
-    realQuestion() {
+    realQuestion () {
       return this.question.$children[0]
     },
   },

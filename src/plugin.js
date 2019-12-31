@@ -8,7 +8,7 @@ class Plugin {
    * Creates a plugin object.
    * @param {Object} config The configuration JSON object
    */
-  constructor(config, attachTo) {
+  constructor (config, attachTo) {
     this.config = config
     this.attachTo = attachTo || (() => {})
   }
@@ -18,7 +18,7 @@ class Plugin {
    * @param {module:question~Question|module:theme~Theme} obj The Question/Theme object
    * @returns {boolean}
    */
-  applicable(obj) {
+  applicable (obj) {
     // TODO
   }
 }
@@ -26,17 +26,17 @@ class Plugin {
 let pluginDirs, plugins, js, css
 try {
   pluginDirs = fs.readdirSync(path.resolve(__dirname, 'plugins'))
-} catch(e) {
+} catch (e) {
   throw new Error(`Error reading plugin directories: ${e}`)
 }
 try {
   js = fs.readdirSync(path.resolve(__dirname, '../dist/js'))
-} catch(e) {
+} catch (e) {
   throw new Error(`Error reading JS build directory: ${e}`)
 }
 try {
   css = fs.readdirSync(path.resolve(__dirname, '../dist/css'))
-} catch(e) {
+} catch (e) {
   throw new Error(`Error reading CSS build directory: ${e}`)
 }
 
@@ -45,13 +45,13 @@ try {
     const pluginJson = fs.readFileSync(path.resolve(__dirname, 'plugins', dir, 'plugin.json'))
     const plugin = JSON.parse(pluginJson.toString())
     let attachTo
-    if(plugin.uses.inject.js) {
+    if (plugin.uses.inject.js) {
       plugin.jsPath = js.find(f => f.startsWith(plugin.uses.inject.js) && f.endsWith('.js'))
     }
-    if(plugin.uses.inject.css) {
+    if (plugin.uses.inject.css) {
       plugin.cssPath = css.find(f => f.startsWith(plugin.uses.inject.css) && f.endsWith('.css'))
     }
-    if(plugin.uses.inject.server) {
+    if (plugin.uses.inject.server) {
       attachTo = require(
         path.resolve(
           __dirname,
@@ -63,7 +63,7 @@ try {
     }
     return new Plugin(plugin, attachTo)
   })
-} catch(e) {
+} catch (e) {
   throw new Error(`Error parsing plugins: ${e.stack}`)
 }
 

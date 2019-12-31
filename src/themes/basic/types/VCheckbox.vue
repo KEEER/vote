@@ -16,7 +16,7 @@ import QTitle from '../Title'
 
 export default {
   name: 'VCheckbox',
-  data() {
+  data () {
     return {
       value_: this.value,
     }
@@ -28,7 +28,7 @@ export default {
   props: {
     data: {
       type: Object,
-      validator(val) {
+      validator (val) {
         return val.title && val.options && val.options.every(op => op.label && op.value)
       },
     },

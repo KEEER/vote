@@ -8,7 +8,7 @@ class Theme {
    * Creates a theme object.
    * @param {Object} config The configuration JSON object
    */
-  constructor(config) {
+  constructor (config) {
     this.config = config
   }
 
@@ -17,7 +17,7 @@ class Theme {
    * @param {module:question~Question|module:plugin~Plugin} obj The Question/Plugin object
    * @returns {boolean}
    */
-  applicable(obj) {
+  applicable (obj) {
     // TODO
   }
 }
@@ -25,7 +25,7 @@ class Theme {
 let themeDirs, themes
 try {
   themeDirs = fs.readdirSync(path.resolve(__dirname, 'themes'))
-} catch(e) {
+} catch (e) {
   throw new Error(`Error reading theme directories: ${e}`)
 }
 
@@ -35,7 +35,7 @@ try {
     const theme = JSON.parse(themeJson.toString())
     return new Theme(theme)
   })
-} catch(e) {
+} catch (e) {
   throw new Error(`Error parsing themes: ${e}`)
 }
 

@@ -26,7 +26,7 @@ Vue.use(MFloatingLabel)
 
 export default {
   name: 'VTextarea',
-  mixins: [mixin],
+  mixins: [ mixin ],
   props: {
     value: String,
   },

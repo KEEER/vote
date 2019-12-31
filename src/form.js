@@ -2,10 +2,10 @@
 import Question from './question'
 import plugins from './plugin'
 import themes from './theme'
-import {query, update} from './db'
+import { query, update } from './db'
 import log from './log'
 import fs from 'fs-extra'
-import {readFileSync} from 'fs'
+import { readFileSync } from 'fs'
 import path from 'path'
 import EventEmitter from 'emittery'
 
@@ -19,15 +19,15 @@ const loadPluginScript = fs.readFileSync(path.resolve(__dirname, 'loadPlugins.js
 try {
   fs.readdirSync(path.resolve(__dirname, '../dist/js'))
     .forEach(filename => {
-      if(!filename.endsWith('.js')) return // do not cache .js.map files
+      if (!filename.endsWith('.js')) return // do not cache .js.map files
       const realFilename = path.resolve(__dirname, '../dist/js', filename)
       jsCache[filename] = readFileSync(realFilename).toString()
     })
-} catch(e) {
+} catch (e) {
   throw new Error(`Error reading JS build directory: ${e}`)
 }
 
-export {templateCache, jsCache}
+export { templateCache, jsCache }
 
 /** Class representing a page. */
 export class Page {
@@ -38,7 +38,7 @@ export class Page {
    * @param {number} options.id Page ID
    * @param {module:question~Question[]} options.questions Questions in the page
    */
-  constructor(options) {
+  constructor (options) {
     this.is = 'Page'
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
@@ -53,7 +53,7 @@ export class Page {
    * Get a object to be stored.
    * @returns {object} Object representing the page
    */
-  toObject() {
+  toObject () {
     return {
       title: this.options.title,
       id: this.options.id,
@@ -61,7 +61,7 @@ export class Page {
     }
   }
 
-  static fromObject(pages, questions) {
+  static fromObject (pages, questions) {
     return pages.map(p => {
       const data = Object.assign({}, p)
       data.questions = data.questions.map(q => questions.find(q_ => q_.id === q))
@@ -84,15 +84,15 @@ export class Form extends EventEmitter {
    * @param {object} [options.data] Form data
    * @example const f = new Form({title: 'title', id: 'Alan-Liang/test', userid: 'Alan-Liang', theme: 'basic', plugins: [plugins.find(v => v.config.code === 'ess')], pages: [new Page({title: 'title', id: 0, questions: [new Question({type: 'VText', title: '2', id: 1, value: '2'})]})]})
    */
-  constructor(options) {
+  constructor (options) {
     super()
     this.updated = []
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
-        if(prop === 'id') {
+        if (prop === 'id') {
           this.oldid = this.oldid || this.id
         }
-        if(this.updated.indexOf(prop) < 0) this.updated.push(prop)
+        if (this.updated.indexOf(prop) < 0) this.updated.push(prop)
         obj[prop] = val
         return true
       },
@@ -101,19 +101,19 @@ export class Form extends EventEmitter {
     this.options.pages = new Proxy(pages, {
       set: (obj, prop, val) => {
         obj[prop] = val
-        if(this.updated.indexOf('pages') < 0) this.updated.push('pages')
+        if (this.updated.indexOf('pages') < 0) this.updated.push('pages')
         return true
       },
     })
     const questions = this.options.questions
-    if(questions) this.options.questions = new Proxy(questions, {
+    if (questions) this.options.questions = new Proxy(questions, {
       set: (obj, prop, val) => {
         obj[prop] = val
-        if(this.updated.indexOf('questions') < 0) this.updated.push('questions')
+        if (this.updated.indexOf('questions') < 0) this.updated.push('questions')
         return true
       },
     })
-    if(this.options.plugins) {
+    if (this.options.plugins) {
       this.options.plugins.forEach(plugin => {
         plugin.attachTo(this)
       })
@@ -121,17 +121,17 @@ export class Form extends EventEmitter {
       this.options.plugins = new Proxy(plugins, {
         set: (obj, prop, val) => {
           obj[prop] = val
-          if(this.updated.indexOf('plugins') < 0) this.updated.push('plugins')
+          if (this.updated.indexOf('plugins') < 0) this.updated.push('plugins')
           return true
         },
       })
     }
   }
 
-  get id() {
+  get id () {
     return this.options.id
   }
-  set id(id) {
+  set id (id) {
     this.options.id = id
   }
 
@@ -139,7 +139,7 @@ export class Form extends EventEmitter {
    * Gets the pages in the form.
    * @returns {Page} Pages
    */
-  get pages() {
+  get pages () {
     return this.options.pages
   }
 
@@ -147,7 +147,7 @@ export class Form extends EventEmitter {
    * Gets the questions in the form.
    * @returns {module:question~Question[]} Questions
    */
-  get questions() {
+  get questions () {
     return this.pages.flatMap(p => p.options.questions)
   }
 
@@ -155,13 +155,13 @@ export class Form extends EventEmitter {
    * Gets a form by a certain id.
    * @param {string|number} id Form ID
    */
-  static async fromId(id) {
-    const res = await query('SELECT * FROM PRE_forms WHERE id = $1;', [id.toString()])
-    if(res.rows.length > 1) {
+  static async fromId (id) {
+    const res = await query('SELECT * FROM PRE_forms WHERE id = $1;', [ id.toString() ])
+    if (res.rows.length > 1) {
       log.error('form.fromId: duplicate IDs')
       throw new Error('form.fromId: duplicate IDs')
     }
-    if(res.rows.length === 0) {
+    if (res.rows.length === 0) {
       return null
     }
     const data = res.rows[0]
@@ -176,7 +176,7 @@ export class Form extends EventEmitter {
   }
 
   /** Gets parameters for saving into database. */
-  get params() {
+  get params () {
     return [
       this.id,
       this.options.userid,
@@ -190,22 +190,22 @@ export class Form extends EventEmitter {
   }
 
   /** Updates a form in database. */
-  async update() {
-    if(!this.saved) {
+  async update () {
+    if (!this.saved) {
       await this.save()
       return
     }
     const args = {}
-    if(this.questions.some(q => q.updated) || this.updated.indexOf('plugins') > -1) {
+    if (this.questions.some(q => q.updated) || this.updated.indexOf('plugins') > -1) {
       args.questions = this.questions.map(q => q.toObject())
     }
-    if(this.pages.some(p => p.updated) || this.updated.indexOf('pages') > -1) {
+    if (this.pages.some(p => p.updated) || this.updated.indexOf('pages') > -1) {
       args.pages = this.pages.map(p => p.toObject())
     }
-    if(this.updated.indexOf('plugins') > -1) {
+    if (this.updated.indexOf('plugins') > -1) {
       args.plugins = this.options.plugins.map(p => p.config.code)
     }
-    this.updated.filter(prop => ['pages', 'plugins', 'questions'].indexOf(prop) < 0)
+    this.updated.filter(prop => [ 'pages', 'plugins', 'questions' ].indexOf(prop) < 0)
       .forEach(prop => args[prop] = this.options[prop])
     this.updated.length = 0
     await update('PRE_forms', args, 'id', this.oldid || this.id)
@@ -214,8 +214,8 @@ export class Form extends EventEmitter {
   }
 
   /** Saves a form into the database. */
-  async save() {
-    if(this.saved) {
+  async save () {
+    if (this.saved) {
       await this.update()
       return
     }
@@ -223,11 +223,11 @@ export class Form extends EventEmitter {
     await query(stmt, this.params)
   }
 
-  /** 
+  /**
    * Get the HTML markup corresponding to the form.
    * @returns {string} HTML
    */
-  async getHtml() {
+  async getHtml () {
     return (templateCache[this.options.theme]
       .replace(
         /\/vote-config.js/g,
@@ -241,7 +241,7 @@ export class Form extends EventEmitter {
    * @param {string} method Must be 'POST', reserved for future use
    * @returns {string} Bundled form
    */
-  async bundle(action, method) {
+  async bundle (action, method) {
     const data = {
       title: this.options.title,
       action,
@@ -250,13 +250,13 @@ export class Form extends EventEmitter {
       pluginJs: [],
       pluginCss: [],
     }
-    if(this.options.plugins) {
+    if (this.options.plugins) {
       this.options.plugins.forEach(plugin => {
-        if(plugin.config.jsPath) data.pluginJs.push('/js/' + plugin.config.jsPath)
-        if(plugin.config.cssPath) data.pluginCss.push('/css/' + plugin.config.cssPath)
+        if (plugin.config.jsPath) data.pluginJs.push('/js/' + plugin.config.jsPath)
+        if (plugin.config.cssPath) data.pluginCss.push('/css/' + plugin.config.cssPath)
       })
     }
-    await this.emit('bundle', [data])
+    await this.emit('bundle', [ data ])
     return '(function(){ window.KVoteFormData = ' +
       JSON.stringify(data) + ';' +
       loadPluginScript + '})()'
@@ -269,12 +269,12 @@ export class Form extends EventEmitter {
    * @returns {string|number} The response to be sent or the error to be thrown
    * @example await form.getPage('fill', ctx)
    */
-  async getPage(path, ctx) {
+  async getPage (path, ctx) {
     let html = null
-    await this.emit('getPage', [path, ctx, h => html = h])
-    if(html !== null) return html
+    await this.emit('getPage', [ path, ctx, h => html = h ])
+    if (html !== null) return html
 
-    switch(path) {
+    switch (path) {
     case '':
     case 'fill':
       return await this.getHtml()
@@ -294,25 +294,25 @@ export class Form extends EventEmitter {
    * Handles a submission entry.
    * @param {Koa.Context} ctx Koa context
    */
-  async handleSubmission(ctx) {
+  async handleSubmission (ctx) {
     let res
-    this.emit('handleSubmission', [ctx, r => res = r])
-    if(res) return res
+    this.emit('handleSubmission', [ ctx, r => res = r ])
+    if (res) return res
 
-    if(ctx.method !== 'POST') {
+    if (ctx.method !== 'POST') {
       return 405 // Method Not Allowed
     }
-    if(!ctx.request.body) {
+    if (!ctx.request.body) {
       return 400
     }
 
     let data = ctx.request.body
-    if(Array.isArray(data)) {
+    if (Array.isArray(data)) {
       data = {}
       ctx.request.body.forEach((v, i) => data[i] = v)
     }
 
-    await query('INSERT INTO submissions (formid, data) VALUES ($1, $2);', [this.id, data])
+    await query('INSERT INTO PRE_submissions (formid, data) VALUES ($1, $2);', [ this.id, data ])
     return 200
   }
 }

@@ -14,13 +14,13 @@ import hooks from './hooks'
 
 // Fix Vue warning of Types being a Module
 const types = {}
-for(let i in Types) {
+for (let i in Types) {
   types[i] = Types[i]
 }
 
 export default {
   name: 'Question',
-  data() {
+  data () {
     return {
       value: this.$attrs.value,
     }
@@ -29,7 +29,7 @@ export default {
   props: {
     type: {
       type: String,
-      validator(val) {
+      validator (val) {
         return val in Types
       },
     },
@@ -37,14 +37,14 @@ export default {
     id: Number,
   },
   computed: {
-    valid() {
+    valid () {
       let valid = !this.data.required || !!this.value
-      hooks.emit('question:validate', [this, v => valid = v])
+      hooks.emit('question:validate', [ this, v => valid = v ])
       return valid
     },
   },
-  provide() {
-    return {Question: this}
+  provide () {
+    return { Question: this }
   },
 }
 </script>

@@ -22,7 +22,7 @@ import hooks from './hooks'
 import 'array-flat-polyfill' // MicroMsg doesn't support that
 
 export default Vue.extend({
-  data: function() {
+  data: function () {
     return {
       current: 0,
       prevVisible: false,
@@ -45,76 +45,76 @@ export default Vue.extend({
     method: String,
   },
   methods: {
-    prev() {
-      if(this.current === 0) return
+    prev () {
+      if (this.current === 0) return
       this.$children[this.current].current = false
       this.current--
       this.$children[this.current].current = true
       this.update()
     },
-    next() {
-      if(this.current === this.pages.length - 1) return
+    next () {
+      if (this.current === this.pages.length - 1) return
       this.$children[this.current].current = false
       this.current++
       this.$children[this.current].current = true
       this.update()
     },
-    update() {
+    update () {
       this.updateVisibility()
-      hooks.emit('form:update', [this])
+      hooks.emit('form:update', [ this ])
     },
-    updateVisibility() {
-      if(this.current === 0) this.prevVisible = false
+    updateVisibility () {
+      if (this.current === 0) this.prevVisible = false
       else this.prevVisible = true
-      if(this.current === this.pages.length - 1) this.nextVisible = false
+      if (this.current === this.pages.length - 1) this.nextVisible = false
       else this.nextVisible = true
-      hooks.emit('form:updatevisibility', [this])
+      hooks.emit('form:updatevisibility', [ this ])
     },
-    submit() {
+    submit () {
       let cancel = false
-      hooks.emit('form:beforesubmit', [this, () => cancel = true])
-      if(!cancel) {
-        hooks.emit('form:submit', [this])
+      hooks.emit('form:beforesubmit', [ this, () => cancel = true ])
+      if (!cancel) {
+        hooks.emit('form:submit', [ this ])
       }
     },
   },
   components: {},
-  mounted() {
+  mounted () {
     document.title = this.title
     this.$children[this.current].current = true
     this.updateVisibility()
     this.texts.pageno = `Page ${this.current + 1}`
-    hooks.emit('form:mounted', [this])
-    hooks.emit('form:updatevisibility', [this])
+    hooks.emit('form:mounted', [ this ])
+    hooks.emit('form:updatevisibility', [ this ])
   },
   computed: {
-    pages() {
+    pages () {
       return this.$children
     },
-    currentPage() {
+    currentPage () {
       let page = this.current + 1
-      hooks.emit('form:pageno', [this, p => page = p])
+      hooks.emit('form:pageno', [ this, p => page = p ])
       return page
     },
-    submitted() {
+    submitted () {
       return this.status === 'submitted'
     },
-    submitting() {
+    submitting () {
       return this.status === 'submitting'
     },
-    submiterror() {
+    submiterror () {
       return this.status === 'submiterror'
     },
-    formdata() {
+    formdata () {
       const data = []
       this.pages.flatMap(page => page.questions).forEach(q => {
         data[q.id] = q.value
       })
       return data
     },
-    valid() {
+    valid () {
       let validity = this.pages.every(p => p.valid)
-      hooks.emit('form:validate', [this, v => validity = v])
+      hooks.emit('form:validate', [ this, v => validity = v ])
       return validity
     },
   },

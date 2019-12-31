@@ -9,11 +9,11 @@
 import mixin from './mixin'
 export default {
   name: 'VText',
-  mixins: [mixin],
+  mixins: [ mixin ],
   props: {
     data: {
       type: Object,
-      validator(val) {
+      validator (val) {
         return val.title
       },
     },
