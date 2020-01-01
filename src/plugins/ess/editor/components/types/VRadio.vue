@@ -42,10 +42,10 @@
 
 <style lang="scss">
 @import '../../styles.scss';
-@import 'material-components-vue/dist/icon-button/styles';
-@import 'material-components-vue/dist/text-field/styles';
-@import 'material-components-vue/dist/radio/styles';
-@import 'material-components-vue/dist/floating-label/styles';
+@import 'material-components-vue/components/icon-button/styles';
+@import 'material-components-vue/components/text-field/styles';
+@import 'material-components-vue/components/radio/styles';
+@import 'material-components-vue/components/floating-label/styles';
 </style>
 
 <style scoped>
@@ -77,12 +77,12 @@
 </style>
 
 <script>
-import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
-import MIcon from 'material-components-vue/dist/icon/icon.min.js'
-import MRadio from 'material-components-vue/dist/radio/radio.min.js'
-import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
-import MFormField from 'material-components-vue/dist/form-field/form-field.min.js'
-import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
+import MIconButton from 'material-components-vue/components/icon-button/'
+import MIcon from 'material-components-vue/components/icon/'
+import MRadio from 'material-components-vue/components/radio/'
+import MTextField from 'material-components-vue/components/text-field/'
+import MFormField from 'material-components-vue/components/form-field/'
+import MFloatingLabel from 'material-components-vue/components/floating-label/'
 import draggable from 'vuedraggable'
 
 ;[

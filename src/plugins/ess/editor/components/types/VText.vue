@@ -6,13 +6,13 @@
 
 <style lang="scss">
 @import '../../styles.scss';
-@import 'material-components-vue/dist/text-field/styles';
-@import 'material-components-vue/dist/line-ripple/styles';
+@import 'material-components-vue/components/text-field/styles';
+@import 'material-components-vue/components/line-ripple/styles';
 </style>
 
 <script>
-import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
-import MLineRipple from 'material-components-vue/dist/line-ripple/line-ripple.min.js'
+import MTextField from 'material-components-vue/components/text-field/'
+import MLineRipple from 'material-components-vue/components/line-ripple/'
 import mixin from './mixin'
 
 Vue.use(MTextField)

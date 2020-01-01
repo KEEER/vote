@@ -27,8 +27,8 @@
 
 <style lang="scss">
 @import './styles';
-@import 'material-components-vue/dist/card/styles';
-@import 'material-components-vue/dist/typography/styles';
+@import 'material-components-vue/components/card/styles';
+@import 'material-components-vue/components/typography/styles';
 </style>
 
 <style scoped>
@@ -49,8 +49,8 @@
 </style>
 
 <script>
-import MCard from 'material-components-vue/dist/card/card.min.js'
-import MTypo from 'material-components-vue/dist/typography/typography.min.js'
+import MCard from 'material-components-vue/components/card/'
+import MTypo from 'material-components-vue/components/typography/'
 
 import BasicSettings from './components/BasicSettings.vue'
 import PluginSettings from './components/PluginSettings.vue'

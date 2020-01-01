@@ -44,10 +44,10 @@
 
 <style lang="scss">
 @import './styles.scss';
-@import 'material-components-vue/dist/top-app-bar/styles';
-@import 'material-components-vue/dist/drawer/styles';
-@import 'material-components-vue/dist/typography/styles';
-@import 'material-components-vue/dist/list/styles';
+@import 'material-components-vue/components/top-app-bar/styles';
+@import 'material-components-vue/components/drawer/styles';
+@import 'material-components-vue/components/typography/styles';
+@import 'material-components-vue/components/list/styles';
 </style>
 
 <style>
@@ -87,10 +87,10 @@ a.navlink {
 
 <script>
 import VueRouter from 'vue-router'
-import MTopAppBar from 'material-components-vue/dist/top-app-bar/top-app-bar.min.js'
-import MDrawer from 'material-components-vue/dist/drawer/drawer.min.js'
-import MList from 'material-components-vue/dist/list/list.min.js'
-import MIcon from 'material-components-vue/dist/icon/icon.min.js'
+import MTopAppBar from 'material-components-vue/components/top-app-bar/'
+import MDrawer from 'material-components-vue/components/drawer/'
+import MList from 'material-components-vue/components/list/'
+import MIcon from 'material-components-vue/components/icon/'
 import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'

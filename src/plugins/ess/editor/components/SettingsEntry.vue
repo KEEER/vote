@@ -20,8 +20,8 @@
 
 <script>
 import { query } from '../../common/graphql'
-import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
-import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
+import MTextField from 'material-components-vue/components/text-field/'
+import MFloatingLabel from 'material-components-vue/components/floating-label/'
 import updateObservable from './updateObservable'
 
 Vue.use(MTextField)

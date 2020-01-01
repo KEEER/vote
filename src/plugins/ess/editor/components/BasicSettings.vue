@@ -16,8 +16,8 @@
 
 <style lang="scss">
 @import '../styles.scss';
-@import 'material-components-vue/dist/text-field/styles';
-@import 'material-components-vue/dist/floating-label/styles';
+@import 'material-components-vue/components/text-field/styles';
+@import 'material-components-vue/components/floating-label/styles';
 </style>
 
 <style>

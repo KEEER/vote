@@ -30,7 +30,7 @@
 
 <style lang="scss">
 @import '../../styles.scss';
-@import 'material-components-vue/dist/icon-button/styles';
+@import 'material-components-vue/components/icon-button/styles';
 </style>
 
 <style scoped>
@@ -47,8 +47,8 @@
 </style>
 
 <script>
-import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
-import MIcon from 'material-components-vue/dist/icon/icon.min.js'
+import MIconButton from 'material-components-vue/components/icon-button/'
+import MIcon from 'material-components-vue/components/icon/'
 import VCheckboxInput from './VCheckboxInput'
 import draggable from 'vuedraggable'
 

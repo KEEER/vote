@@ -22,13 +22,13 @@
 <style lang="scss">
 
 @import '../styles.scss';
-@import 'material-components-vue/dist/select/styles';
-@import 'material-components-vue/dist/list/styles';
+@import 'material-components-vue/components/select/styles';
+@import 'material-components-vue/components/list/styles';
 </style>
 
 <script>
-import MSelect from 'material-components-vue/dist/select/select.min.js'
-import MList from 'material-components-vue/dist/list/list.min.js'
+import MSelect from 'material-components-vue/components/select/'
+import MList from 'material-components-vue/components/list/'
 import { types as questionTypes } from '../../../../question'
 
 Vue.use(MSelect)

@@ -36,7 +36,7 @@
 
 <style lang="scss">
 @import './styles.scss';
-@import 'material-components-vue/dist/button/styles';
+@import 'material-components-vue/components/button/styles';
 </style>
 
 <style scoped>
@@ -55,8 +55,8 @@ main {
 </style>
 
 <script>
-import MButton from 'material-components-vue/dist/button/button.min.js'
-import MIcon from 'material-components-vue/dist/icon/icon.min.js'
+import MButton from 'material-components-vue/components/button/'
+import MIcon from 'material-components-vue/components/icon/'
 import Question from './components/Question'
 import hooks from './hooks'
 import { types as questionTypes } from '../../../question'

@@ -13,9 +13,9 @@
 
 <style lang="scss">
 @import '../../styles.scss';
-@import 'material-components-vue/dist/text-field/styles';
-@import 'material-components-vue/dist/checkbox/styles';
-@import 'material-components-vue/dist/floating-label/styles';
+@import 'material-components-vue/components/text-field/styles';
+@import 'material-components-vue/components/checkbox/styles';
+@import 'material-components-vue/components/floating-label/styles';
 </style>
 
 <style scoped>
@@ -36,10 +36,10 @@
 </style>
 
 <script>
-import MCheckbox from 'material-components-vue/dist/checkbox/checkbox.min.js'
-import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
-import MFormField from 'material-components-vue/dist/form-field/form-field.min.js'
-import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
+import MCheckbox from 'material-components-vue/components/checkbox/'
+import MTextField from 'material-components-vue/components/text-field/'
+import MFormField from 'material-components-vue/components/form-field/'
+import MFloatingLabel from 'material-components-vue/components/floating-label/'
 
 Vue.use(MCheckbox)
 Vue.use(MTextField)

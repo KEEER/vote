@@ -59,7 +59,7 @@
     "html-webpack-tags-plugin": "^2.0.3",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
-    "material-components-vue": "^1.0.2",
+    "material-components-vue": "git+https://github.com/Alan-Liang/material-components-vue.git",
     "material-components-web": "^1.0.1",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",

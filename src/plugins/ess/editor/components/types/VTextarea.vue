@@ -6,8 +6,8 @@
 
 <style lang="scss">
 @import '../../styles.scss';
-@import 'material-components-vue/dist/text-field/styles';
-@import 'material-components-vue/dist/floating-label/styles';
+@import 'material-components-vue/components/text-field/styles';
+@import 'material-components-vue/components/floating-label/styles';
 </style>
 
 <style>
@@ -17,8 +17,8 @@
 </style>
 
 <script>
-import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
-import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
+import MTextField from 'material-components-vue/components/text-field/'
+import MFloatingLabel from 'material-components-vue/components/floating-label/'
 import mixin from './mixin'
 
 Vue.use(MTextField)

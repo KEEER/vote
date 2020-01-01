@@ -48,12 +48,12 @@
 
 <style lang="scss">
 @import '../styles.scss';
-@import 'material-components-vue/dist/card/styles';
-@import 'material-components-vue/dist/text-field/styles';
-@import 'material-components-vue/dist/floating-label/styles';
-@import 'material-components-vue/dist/line-ripple/styles';
-@import 'material-components-vue/dist/icon-button/styles';
-@import 'material-components-vue/dist/switch/styles';
+@import 'material-components-vue/components/card/styles';
+@import 'material-components-vue/components/text-field/styles';
+@import 'material-components-vue/components/floating-label/styles';
+@import 'material-components-vue/components/line-ripple/styles';
+@import 'material-components-vue/components/icon-button/styles';
+@import 'material-components-vue/components/switch/styles';
 </style>
 
 <style scoped>
@@ -124,15 +124,15 @@
 </style>
 
 <script>
-import MCard from 'material-components-vue/dist/card/card.min.js'
-import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
-import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
-import MLineRipple from 'material-components-vue/dist/line-ripple/line-ripple.min.js'
+import MCard from 'material-components-vue/components/card/'
+import MTextField from 'material-components-vue/components/text-field/'
+import MFloatingLabel from 'material-components-vue/components/floating-label/'
+import MLineRipple from 'material-components-vue/components/line-ripple/'
 import questionTypes from './types'
 import TypeSelector from './TypeSelector.vue'
-import MIcon from 'material-components-vue/dist/icon/icon.min.js'
-import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
-import MSwitch from 'material-components-vue/dist/switch/switch.min.js'
+import MIcon from 'material-components-vue/components/icon/'
+import MIconButton from 'material-components-vue/components/icon-button/'
+import MSwitch from 'material-components-vue/components/switch/'
 import { query } from '../../common/graphql'
 import updateObservable from './updateObservable'
 
