@@ -20,12 +20,19 @@
 
 <script>
 import { query } from '../../common/graphql'
+import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
+import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
+import updateObservable from './updateObservable'
+
+Vue.use(MTextField)
+Vue.use(MFloatingLabel)
 
 export default {
   name: 'SettingsEntry',
+  mixins: [ updateObservable ],
   data () {
     return {
-      value_: this.value,
+      value_: typeof this.value === 'undefined' ? this.data[this.name] : this.value,
       class: {},
       id: null,
       presets: {
@@ -44,7 +51,6 @@ export default {
           slotText: this.$attrs.placeholder,
         },
       },
-      loaded: false,
     }
   },
   props: {
@@ -52,26 +58,28 @@ export default {
     value: {},
     component: {},
     preset: {},
+    data: {},
   },
   watch: {
     value (val) {
       this.value_ = val
     },
     value_ (val, old) {
-      if (!this.loaded) return
       let cancel = false
       this.$emit('check', [ val, () => cancel = true ])
       if (cancel) {
         this.value_ = old
       }
       this.$emit('update:value', val)
-      // TODO: update occasion
-      this.update()
+      this.logChange()
     },
   },
   methods: {
     async update () {
-      // TODO
+      if (!this.changed) return
+      this.changed = false
+      this.saveState = 'saving'
+      this.lastUpdated = Date.now()
       try {
         const res = await query(`
           mutation UpdateSettings($name: String!, $value: String) {
@@ -87,15 +95,8 @@ export default {
         console.log('update error', e)
         return
       }
+      if (!this.changed) this.saveState = 'saved'
     },
-  },
-  mounted () {
-    if (!this.value) {
-      // TODO: fetch value
-      console.log(this.name)
-      this.value_ = 'Something'
-      this.$nextTick(() => this.loaded = true)
-    }
   },
   computed: {
     bindings () {

@@ -20,6 +20,7 @@
       "form:submitted",
       "form:error",
       "form__updateSettings",
+      "form__preprocessSettings",
       "editor:appMounted",
       "editor:settingsMounted",
       "editor:editorMounted"

@@ -3,6 +3,7 @@ import path from 'path'
 import { schema } from '../common/graphql'
 import { graphql } from 'graphql'
 import query from './query'
+import { handleUpdateBasicSettings, handlePreprocessBasicSettings } from './basic-settings'
 
 const editorHtml = readFileSync(
   path.resolve(__dirname, '../../../../dist/plugin-ess-editor.html')
@@ -32,4 +33,6 @@ export default function attachTo (form) {
       set(JSON.stringify(data))
     }
   })
+  form.on('updateSettings', handleUpdateBasicSettings)
+  form.on('preprocessData', handlePreprocessBasicSettings)
 }

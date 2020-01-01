@@ -30,7 +30,6 @@
       </div>
     </div>
     <div v-else-if="questionLoadError">{{texts.questionLoadError}}</div>
-    <div v-else-if="exiting">{{texts.exiting}}</div>
     <div v-else>{{texts.questionLoading}}</div>
   </main>
 </template>
@@ -63,12 +62,15 @@ import hooks from './hooks'
 import { types as questionTypes } from '../../../question'
 import { query } from '../common/graphql'
 import draggable from 'vuedraggable'
+import saveStateRelay from './components/saveStateRelay'
+import saveStateDisplay from './components/saveStateDisplay'
 
 Vue.use(MButton)
 Vue.use(MIcon)
 
 export default {
   name: 'Editor',
+  mixins: [ saveStateRelay, saveStateDisplay ],
   components: {
     Question,
     draggable,
@@ -97,12 +99,6 @@ export default {
         },
         updateError: 'Error occurred while updating the question.',
         removeError: 'Error occurred while removing the question.',
-        saveHint: {
-          notChanged: 'Autosave Enabled',
-          awaitInputStop: 'Waiting for you to stop input...',
-          saving: 'Saving...',
-          saved: 'Saved to cloud',
-        },
       },
       newQuestionDialogOpen: false,
       currentPageId: 0,
@@ -110,12 +106,9 @@ export default {
       questionTypes,
       questionLoaded: false,
       questionLoadError: false,
-      exiting: false,
-      exitSaveError: false,
       pages: [],
       questions: [],
       dragging: false,
-      saveState: null,
     }
   },
   methods: {
@@ -167,6 +160,9 @@ export default {
         console.error(e)
       }
     },
+    async update () {
+      return await Promise.all(this.questions.map((_, i) => this.$refs[`question-${i}`][0].update()))
+    },
     remove (i) {
       this.questions.splice(i, 1)
     },
@@ -175,67 +171,10 @@ export default {
       const q = this.$refs[`question-${item.newIndex}`][0]
       q.$emit('reorder', item.newIndex - item.oldIndex)
     },
-    updateSaveState (state) {
-      switch (this.saveState) {
-      case 'notChanged':
-      case 'saved':
-        this.saveState = state
-        break
-
-      case 'saving':
-        if (state === 'awaitInputStop' || state === 'saved') this.saveState = state
-        break
-
-      case 'awaitInputStop':
-        if (state === 'saving') this.saveState = state
-        break
-
-      default:
-        break
-      }
-    },
   },
   mounted () {
     hooks.emit('editor:editorMounted', [ this ])
     this.loadQuestions()
-    this.saveState = 'notChanged'
-  },
-  async beforeRouteLeave (to, from, next) {
-    if (this.saveState === 'saving' || this.saveState === 'awaitInputStop') {
-      this.exiting = true
-      try {
-        await Promise.all(this.questions.map((_, i) => this.$refs[`question-${i}`][0].update()))
-      } catch (e) {
-        console.error('error saving before leave', e)
-        next(false)
-        this.exitSaveError = true
-        return
-      }
-    }
-    next()
-  },
-  destroyed () {
-    this.$root.$children[0].texts.appBarSubtitle = ''
-    window.onbeforeunload = null
-  },
-  watch: {
-    saveState (val) {
-      this.$root.$children[0].texts.appBarSubtitle = this.texts.saveHint[val]
-      switch (val) {
-      case 'saved':
-        window.onbeforeunload = null
-        break
-
-      case 'saving':
-      case 'awaitInputStop':
-        window.onbeforeunload = e => {
-          e.preventDefault()
-          e.returnValue = true
-          return true
-        }
-        break
-      }
-    },
   },
 }
 </script>

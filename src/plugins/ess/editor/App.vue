@@ -145,12 +145,18 @@ export default Vue.extend({
         appBarSubtitle: null,
       },
       title: '',
+      documentTitle: document.title,
       routes,
     }
   },
   methods: {
     toggleDrawer () {
       this.drawerOpen = !this.drawerOpen
+    },
+    updateTitle () {
+      this.texts.appBarTitle = `${this.title} - Vote Editor`
+      document.title = `${this.title} - ${this.documentTitle}`
+      this.$emit('update:title', this.title)
     },
   },
   computed: {
@@ -183,8 +189,7 @@ export default Vue.extend({
     ;(async () => {
       const title = (await query('{ form { title } }', {})).data.form.title
       this.title = title
-      this.texts.appBarTitle = `${title} - Vote Editor`
-      document.title = `${title} - ${document.title}`
+      this.updateTitle()
     })()
     hooks.emit('editor:appMounted', [ this ])
   },

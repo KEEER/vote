@@ -20,6 +20,9 @@ export default {
       return form.pages[id]
     }
     form.pageCount = form.pages.length
+    let formData = form.data
+    await ctx.state.form.emit('preprocessData', [ ctx.state.form, formData, d => formData = d ])
+    form.data = JSON.stringify(formData)
     return form
   },
   async newQuestion ({ pageId, options }, ctx) {
@@ -74,11 +77,16 @@ export default {
   async updateSettings ({ name, value }, ctx) {
     try {
       const form = ctx.state.form
-      let retval = null
+      let retval
       await form.emit('updateSettings', [ form, name, value, ret => retval = ret ])
       if (typeof retval === 'boolean') return retval
+      if (retval !== undefined) value = retval
       const data = form.options.data || {}
       data.settings = data.settings || {}
+      data.settings[name] = value
+      // save form
+      form.options.data = data
+      await form.update()
       return true
     } catch (e) {
       log.error(e)

@@ -1,6 +1,16 @@
 <template>
   <div>
-    <SettingsEntry name="basic.title" preset="textField" :placeholder="texts.titlePlaceholder" required></SettingsEntry>
+    <SettingsEntry
+      name="basic.title"
+      preset="textField"
+      :placeholder="texts.titlePlaceholder"
+      required
+      @update:saveState="updateSaveState"
+      :data="data"
+      @update:value="updateTitle"
+      @check="([ title, cancel ]) => !title ? cancel() : null"
+      ref="title"
+    />
   </div>
 </template>
 
@@ -17,24 +27,31 @@
 </style>
 
 <script>
-import MTextField from 'material-components-vue/dist/text-field/text-field.min.js'
-import MFloatingLabel from 'material-components-vue/dist/floating-label/floating-label.min.js'
-
 import SettingsEntry from './SettingsEntry.vue'
-
-Vue.use(MTextField)
-Vue.use(MFloatingLabel)
+import saveStateRelay from './saveStateRelay'
 
 export default {
   name: 'BasicSettings',
+  mixins: [ saveStateRelay ],
   data () {
     return {}
   },
   components: {
     SettingsEntry,
   },
+  methods: {
+    updateTitle (title) {
+      const app = this.$root.$children[0]
+      app.title = title
+      app.updateTitle()
+    },
+    async update () {
+      return await this.$refs.title.update()
+    },
+  },
   props: {
     texts: Object,
+    data: Object,
   },
 }
 </script>

@@ -134,6 +134,7 @@ import MIcon from 'material-components-vue/dist/icon/icon.min.js'
 import MIconButton from 'material-components-vue/dist/icon-button/icon-button.min.js'
 import MSwitch from 'material-components-vue/dist/switch/switch.min.js'
 import { query } from '../../common/graphql'
+import updateObservable from './updateObservable'
 
 ;[
   MCard,
@@ -147,6 +148,7 @@ import { query } from '../../common/graphql'
 
 export default {
   name: 'Question',
+  mixins: [ updateObservable ],
   data () {
     return {
       title_: this.data.title,
@@ -154,18 +156,6 @@ export default {
       options_: this.data.options,
       type_: this.data.type,
       required_: this.data.required,
-      change: {},
-      changed: false,
-      lastChanged: +Date.now(),
-      lastUpdated: +Date.now(),
-      UPDATE_THRESHOLD: {
-        // After data.UPDATE_THRESHOLD.NOT_CHANGED ms without change, update
-        NOT_CHANGED: 2 * 1000, // 3 secs
-        // After data.UPDATE_THRESHOLD.NOT_UPDATED ms without update, update
-        NOT_UPDATED: 10 * 1000, // 10 secs
-      },
-      intervalId: -1,
-      saveState: 'notChanged',
       removed: false,
       folded: false,
     }
@@ -218,27 +208,9 @@ export default {
       }
       this.$emit('update:type', val)
     },
-    saveState (val) {
-      this.$emit('update:saveState', val)
-    },
   },
   methods: {
-    logChange () {
-      this.changed = true
-      this.lastChanged = +Date.now()
-      this.saveState = 'awaitInputStop'
-    },
-    checkUpdate () {
-      if (!this.changed) return
-      if (this.lastChanged + this.UPDATE_THRESHOLD.NOT_CHANGED < +Date.now()) {
-        return this.update()
-      }
-      if (this.lastUpdated + this.UPDATE_THRESHOLD.NOT_UPDATED < +Date.now()) {
-        return this.update()
-      }
-    },
     async update () {
-      // TODO: show update status to user
       if (!this.changed) return
       this.changed = false
       const change = this.change
@@ -266,7 +238,7 @@ export default {
         return
       }
       if (!this.changed) this.saveState = 'saved'
-      this.lastUpdated = +Date.now()
+      this.lastUpdated = Date.now()
     },
     async remove () {
       try {
@@ -302,7 +274,6 @@ export default {
     },
   },
   mounted () {
-    this.intervalId = setInterval(() => this.checkUpdate(), 500)
     this.$on('reorder', reorder => this.reorder(reorder))
   },
   beforeDestroy () {
