@@ -153,11 +153,6 @@ const config = {
     historyApiFallback: true,
   },
   devtool: process.env.NODE_ENV === 'development' ? 'eval' : 'source-map',
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
 }
 
 module.exports = config
