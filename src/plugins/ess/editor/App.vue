@@ -26,7 +26,7 @@
     <div id="content">
       <m-top-app-bar ref="appbar">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-          <m-icon icon="menu" class="mdc-top-app-bar__navigation-icon" />
+          <m-icon-button icon="menu" class="mdc-top-app-bar__navigation-icon" />
           <span class="hgroup mdc-top-app-bar__title">
             <div>{{texts.appBarTitle}}</div>
             <div class="mdc-top-app-bar__subtitle" v-if="texts.appBarSubtitle">
@@ -47,6 +47,7 @@
 @import 'material-components-vue/components/top-app-bar/styles';
 @import 'material-components-vue/components/drawer/styles';
 @import 'material-components-vue/components/typography/styles';
+@import 'material-components-vue/components/icon-button/styles';
 @import 'material-components-vue/components/list/styles';
 </style>
 
@@ -91,6 +92,7 @@ import MTopAppBar from 'material-components-vue/components/top-app-bar/'
 import MDrawer from 'material-components-vue/components/drawer/'
 import MList from 'material-components-vue/components/list/'
 import MIcon from 'material-components-vue/components/icon/'
+import MIconButton from 'material-components-vue/components/icon-button/'
 import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'
@@ -101,6 +103,7 @@ import { query } from '../common/graphql'
   MTopAppBar,
   MDrawer,
   MIcon,
+  MIconButton,
   MList,
 ].forEach(component => Vue.use(component))
 

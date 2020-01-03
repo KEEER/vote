@@ -1,7 +1,6 @@
 <template>
   <m-select
     :id="uid"
-    required
     outlined
     enhanced
     v-model="value_"

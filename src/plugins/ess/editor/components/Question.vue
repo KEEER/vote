@@ -10,7 +10,6 @@
           class="question-title"
         >
           <m-floating-label :for="`${uid}-title`">{{texts.question.title}}</m-floating-label>
-          <m-line-ripple slot="bottomLine" />
         </m-text-field>
         <TypeSelector v-model="type_" :texts="texts" />
       </div>

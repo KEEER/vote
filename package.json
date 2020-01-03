@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.96",
+  "version": "0.0.99",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
