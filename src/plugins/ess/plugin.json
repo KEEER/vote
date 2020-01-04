@@ -1,7 +1,9 @@
 {
   "name": "Essentials",
+  "description": "Essential functionalities for Vote.",
   "code": "ess",
   "version": "0.0.1",
+  "default": true,
   "required": true,
   "pro": false,
   "uses": {

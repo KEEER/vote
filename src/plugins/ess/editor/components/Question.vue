@@ -147,7 +147,24 @@ import updateObservable from './updateObservable'
 
 export default {
   name: 'Question',
-  mixins: [ updateObservable ],
+  mixins: [
+    updateObservable(async (vm, change) => {
+      for (let i of [ 'value', 'options' ]) {
+        change[i] = JSON.stringify(change[i])
+      }
+      const res = await query(`
+        mutation UpdateQuestion($options: QuestionUpdateInput!) {
+          updateQuestion(options: $options)
+        }
+      `.trim(), {
+        options: {
+          ...change,
+          id: vm.data.id,
+        },
+      })
+      if (res.errors || !res.data.updateQuestion) throw res
+    }),
+  ],
   data () {
     return {
       title_: this.data.title,
@@ -209,36 +226,6 @@ export default {
     },
   },
   methods: {
-    async update () {
-      if (!this.changed) return
-      this.changed = false
-      const change = this.change
-      this.change = {}
-      this.saveState = 'saving'
-      try {
-        for (let i of [ 'value', 'options' ]) {
-          change[i] = JSON.stringify(change[i])
-        }
-        const res = await query(`
-          mutation UpdateQuestion($options: QuestionUpdateInput!) {
-            updateQuestion(options: $options)
-          }
-        `.trim(), {
-          options: {
-            ...change,
-            id: this.data.id,
-          },
-        })
-        if (res.errors || !res.data.updateQuestion) throw res
-      } catch (e) {
-        this.saveState = 'error'
-        alert(this.texts.updateError)
-        console.log('update error', e.stack)
-        return
-      }
-      if (!this.changed) this.saveState = 'saved'
-      this.lastUpdated = Date.now()
-    },
     async remove () {
       try {
         // TODO: prompt before removal

@@ -19,17 +19,19 @@
 </style>
 
 <script>
-import { query } from '../../common/graphql'
 import MTextField from 'material-components-vue/components/text-field/'
 import MFloatingLabel from 'material-components-vue/components/floating-label/'
 import updateObservable from './updateObservable'
+import { updateSetting } from './util'
 
 Vue.use(MTextField)
 Vue.use(MFloatingLabel)
 
 export default {
   name: 'SettingsEntry',
-  mixins: [ updateObservable ],
+  mixins: [
+    updateObservable(vm => updateSetting(vm.name, vm.value_)),
+  ],
   data () {
     return {
       value_: typeof this.value === 'undefined' ? this.data[this.name] : this.value,
@@ -72,30 +74,6 @@ export default {
       }
       this.$emit('update:value', val)
       this.logChange()
-    },
-  },
-  methods: {
-    async update () {
-      if (!this.changed) return
-      this.changed = false
-      this.saveState = 'saving'
-      this.lastUpdated = Date.now()
-      try {
-        const res = await query(`
-          mutation UpdateSettings($name: String!, $value: String) {
-            updateSettings(name: $name, value: $value)
-          }`.trim(), {
-          name: this.name,
-          value: this.value_,
-        })
-        if (res.errors || !res.data.updateSettings) throw res
-      } catch (e) {
-        // TODO
-        alert('Error updating settings')
-        console.log('update error', e)
-        return
-      }
-      if (!this.changed) this.saveState = 'saved'
     },
   },
   computed: {

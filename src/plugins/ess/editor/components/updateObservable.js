@@ -1,4 +1,4 @@
-export default {
+export default updateFunction => ({
   data () {
     return {
       change: {},
@@ -21,6 +21,22 @@ export default {
     },
   },
   methods: {
+    async update () {
+      if (!this.changed) return
+      this.changed = false
+      const change = this.change
+      this.change = {}
+      this.saveState = 'saving'
+      try { await updateFunction(this, change) } catch (e) {
+        this.saveState = 'error'
+        // TODO
+        alert(this.texts.updateError)
+        console.log('update error', e.stack)
+        return
+      }
+      if (!this.changed) this.saveState = 'saved'
+      this.lastUpdated = Date.now()
+    },
     logChange () {
       this.changed = true
       this.lastChanged = Date.now()
@@ -39,4 +55,4 @@ export default {
   mounted () {
     this.intervalId = setInterval(() => this.checkUpdate(), 500)
   },
-}
+})
