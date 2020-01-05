@@ -45,14 +45,13 @@ const config = {
       },
       {
         test: /\.js$/,
-        use: [
-          cache,
-          'babel-loader',
-        ],
-        exclude: /node_modules/,
-        include: [
-          path.resolve(__dirname, 'node_modules/@material'),
-        ],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [ '@babel/preset-env' ],
+            cacheDirectory: '.webpack-cache/babel',
+          },
+        },
       },
       {
         test: /\.mjs$/,
@@ -153,6 +152,7 @@ const config = {
     historyApiFallback: true,
   },
   devtool: process.env.NODE_ENV === 'development' ? 'eval' : 'source-map',
+  optimization: { concatenateModules: false },
 }
 
 module.exports = config
