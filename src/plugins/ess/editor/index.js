@@ -1,10 +1,11 @@
-// import Vue from 'vue';
-import App, { router } from './App'
+import 'regenerator-runtime'
+import App, { getRouter } from './App'
 import hooks from './hooks'
 import UniqueId from 'vue-unique-id'
 
 window.onload = () => {
   window.voteHooks = hooks
+  window.dispatchEvent(new Event('vote:ready'))
 
   const root = document.createElement('div')
   root.id = 'app'
@@ -12,9 +13,9 @@ window.onload = () => {
 
   Vue.use(UniqueId)
 
-  new Vue({
+  Vue.nextTick(() => new Vue({
     el: '#app',
     render: h => h(App),
-    router,
-  })
+    router: getRouter(),
+  }))
 }

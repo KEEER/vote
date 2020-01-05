@@ -1,4 +1,4 @@
-// import Vue from 'vue'
+import 'regenerator-runtime'
 import App from './App'
 import hooks from './hooks'
 import UniqueId from 'vue-unique-id'

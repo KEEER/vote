@@ -11,8 +11,10 @@
       "form:submit"
     ],
     "inject": {
-      "js": "plugin-ess-form",
-      "css": "plugin-ess-form",
+      "form": {
+        "js": "plugin-ess-form",
+        "css": "plugin-ess-form"
+      },
       "server": "server/index.js"
     }
   },
@@ -25,7 +27,11 @@
       "form__preprocessSettings",
       "editor:appMounted",
       "editor:settingsMounted",
-      "editor:editorMounted"
+      "editor:editorMounted",
+      "editor:beforeRouterLoad"
+    ],
+    "injections": [
+      "editor"
     ]
   }
 }

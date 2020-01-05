@@ -130,11 +130,14 @@ const routes = [
     title: 'Settings',
   },
 ]
-const router = new VueRouter({
-  mode: 'history',
-  routes,
-})
-export { router }
+
+export function getRouter () {
+  hooks.emit('editor:beforeRouterLoad', [ routes ])
+  return new VueRouter({
+    mode: 'history',
+    routes,
+  })
+}
 
 export default Vue.extend({
   data: function () {
@@ -147,7 +150,7 @@ export default Vue.extend({
         appBarTitle: 'Vote Editor',
         appBarSubtitle: null,
       },
-      title: '',
+      title: window.KVoteFormData.title,
       documentTitle: document.title,
       routes,
     }
@@ -189,11 +192,7 @@ export default Vue.extend({
     this.$refs.appbar.$on('nav', () => this.toggleDrawer())
     this.texts.drawerTitle = this.formId
 
-    ;(async () => {
-      const title = (await query('{ form { title } }', {})).data.form.title
-      this.title = title
-      this.updateTitle()
-    })()
+    this.updateTitle()
     hooks.emit('editor:appMounted', [ this ])
   },
 })

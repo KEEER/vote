@@ -15,8 +15,14 @@
       "form:texts"
     ],
     "inject": {
-      "js": "plugin-sample",
-      "css": "plugin-sample",
+      "form": {
+        "js": "plugin-sample-form",
+        "css": "plugin-sample-form"
+      },
+      "editor": {
+        "js": "plugin-sample-editor",
+        "css": "plugin-sample-editor"
+      },
       "server": "server.js"
     }
   }

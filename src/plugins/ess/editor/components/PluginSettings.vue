@@ -24,7 +24,7 @@ export default {
     }
   },
   mixins: [
-    updateObservable(async vm => updateSetting('basic.plugins', JSON.stringify(vm.selectedPlugins)))
+    updateObservable(async vm => updateSetting('basic.plugins', JSON.stringify(vm.selectedPlugins))),
   ],
   methods: {
     onChange (code) {

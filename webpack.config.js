@@ -25,7 +25,8 @@ const config = {
   mode: process.env.NODE_ENV || 'production',
   entry: {
     'theme-basic': './src/themes/basic/index.js',
-    'plugin-sample': './src/plugins/sample/index.js',
+    'plugin-sample-form': './src/plugins/sample/form.js',
+    'plugin-sample-editor': './src/plugins/sample/editor.js',
     'plugin-ess-form': './src/plugins/ess/form/index.js',
     'plugin-ess-editor': './src/plugins/ess/editor/index.js',
   },

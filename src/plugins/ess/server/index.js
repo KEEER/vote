@@ -10,11 +10,11 @@ const editorHtml = readFileSync(
 ).toString()
 
 export default function attachTo (form) {
+  form.editorPaths = [ 'edit', 'settings', ...(form.editorPaths || []) ]
   form.on('getPage', async ([ path, ctx, set ]) => {
-    if (path === 'edit' || path === 'settings') {
+    if (form.editorPaths.indexOf(path) > -1) {
       // TODO: authenticate
-      set(editorHtml)
-      return
+      return set(editorHtml.replace(/\/vote-config.js/g, `/${form.id}/_bundle-editor`))
     }
     if (path === '_query' && ctx.method === 'POST') {
       // TODO: authenticate
@@ -30,7 +30,17 @@ export default function attachTo (form) {
       } catch (e) {
         data = { errors: [ e ] }
       }
-      set(JSON.stringify(data))
+      return set(JSON.stringify(data))
+    }
+    if (path === '_bundle-editor') {
+      return set(await form.bundle(null, null, 'editor'))
+    }
+  })
+  form.on('bundle', ([ , data,,, key ]) => {
+    if (key === 'editor') {
+      delete data.action
+      delete data.method
+      delete data.data
     }
   })
   form.on('updateSettings', handleUpdateBasicSettings)

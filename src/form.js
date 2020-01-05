@@ -239,9 +239,10 @@ export class Form extends EventEmitter {
    * Bundles a form to a JS script.
    * @param {string} action The action of the form
    * @param {string} method Must be 'POST', reserved for future use
+   * @param {string} [key] which injection
    * @returns {string} Bundled form
    */
-  async bundle (action, method) {
+  async bundle (action, method, key = 'form') {
     const data = {
       title: this.options.title,
       action,
@@ -252,11 +253,11 @@ export class Form extends EventEmitter {
     }
     if (this.options.plugins) {
       this.options.plugins.forEach(plugin => {
-        if (plugin.config.jsPath) data.pluginJs.push('/js/' + plugin.config.jsPath)
-        if (plugin.config.cssPath) data.pluginCss.push('/css/' + plugin.config.cssPath)
+        if (plugin.config.inject[key].jsPath) data.pluginJs.push('/js/' + plugin.config.inject[key].jsPath)
+        if (plugin.config.inject[key].cssPath) data.pluginCss.push('/css/' + plugin.config.inject[key].cssPath)
       })
     }
-    await this.emit('bundle', [ data ])
+    await this.emit('bundle', [ this, data, action, method, key ])
     return '(function(){ window.KVoteFormData = ' +
       JSON.stringify(data) + ';' +
       loadPluginScript + '})()'

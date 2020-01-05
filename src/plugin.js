@@ -41,22 +41,32 @@ try {
 }
 
 try {
-  plugins = pluginDirs.map(dir => {
+  const pluginJsons = pluginDirs.map(dir => {
     const pluginJson = fs.readFileSync(path.resolve(__dirname, 'plugins', dir, 'plugin.json'))
-    const plugin = JSON.parse(pluginJson.toString())
+    return JSON.parse(pluginJson.toString())
+  })
+  const injectionKeys = [ 'form', ...new Set(pluginJsons.flatMap(p => (p.provides || {}).injections || [])) ]
+  plugins = pluginJsons.map((plugin, i) => {
+    plugin.uses = plugin.uses || {}
+    plugin.uses.inject = plugin.uses.inject || {}
+    plugin.inject = {}
+    for (let k of injectionKeys) {
+      const injections = plugin.uses.inject[k] || {}
+      plugin.inject[k] = {}
+      if (injections.js) {
+        plugin.inject[k].jsPath = js.find(f => f.startsWith(injections.js) && f.endsWith('.js'))
+      }
+      if (injections.css) {
+        plugin.inject[k].cssPath = css.find(f => f.startsWith(injections.css) && f.endsWith('.css'))
+      }
+    }
     let attachTo
-    if (plugin.uses.inject.js) {
-      plugin.jsPath = js.find(f => f.startsWith(plugin.uses.inject.js) && f.endsWith('.js'))
-    }
-    if (plugin.uses.inject.css) {
-      plugin.cssPath = css.find(f => f.startsWith(plugin.uses.inject.css) && f.endsWith('.css'))
-    }
     if (plugin.uses.inject.server) {
       attachTo = require(
         path.resolve(
           __dirname,
           'plugins',
-          dir,
+          pluginDirs[i],
           plugin.uses.inject.server,
         )
       )
