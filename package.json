@@ -1,15 +1,15 @@
 {
   "name": "vote",
-  "version": "0.0.102",
+  "version": "0.0.103",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=production npm run clean && webpack",
+    "build": "NODE_ENV=production npm run clean && webpack && tar -zcvf dist.tgz dist/js dist/css dist/*.html",
     "build:dev": "NODE_ENV=development supervisor -w src -e js,css,vue -x npx -- webpack -w",
     "dev": "webpack-dev-server",
     "start": "node src/index",
     "start:dev": "supervisor -w dist,src src/index",
-    "clean": "rm -rf dist/js && rm -rf dist/css && rm -f dist/*.html",
+    "clean": "rm -rf dist/js && rm -rf dist/css && rm -f dist/*.html && rm -f dist.tgz",
     "clean:cache": "rm -rf .webpack-cache",
     "lint": "eslint --ext .js,.vue .",
     "fix": "eslint --ext .js,.vue . --fix"

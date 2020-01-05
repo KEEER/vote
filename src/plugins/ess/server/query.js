@@ -20,7 +20,7 @@ export default {
       return form.pages[id]
     }
     form.pageCount = form.pages.length
-    let formData = form.data
+    let formData = form.data || {}
     await ctx.state.form.emit('preprocessData', [ ctx.state.form, formData, d => formData = d ])
     form.data = JSON.stringify(formData)
     return form
