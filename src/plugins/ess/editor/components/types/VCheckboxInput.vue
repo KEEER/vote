@@ -1,8 +1,6 @@
 <template>
   <li class="checkbox-li">
-    <m-icon-button @click="remove">
-      <m-icon icon="remove" />
-    </m-icon-button>
+    <m-icon-button @click="remove" icon="remove" />
     <m-checkbox v-model="value_" :value="cbvalue" />
     <m-text-field outlined :id="uid" v-model="label_" class="label">
       <m-floating-label :for="uid">{{texts.question.labelPlaceholder}}</m-floating-label>

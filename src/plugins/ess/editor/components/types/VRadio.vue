@@ -1,12 +1,9 @@
 <template>
   <ul class="radio-ul">
     <div class="radio-controls">
-      <m-icon-button @click="add">
-        <m-icon icon="add" />
-      </m-icon-button><!-- This is to prevent text (only spaces) being inserted into DOM, causing a divider
-   --><m-icon-button @click="value_ = ''">
-        <m-icon icon="clear" />
-      </m-icon-button>
+      <m-icon-button @click="add" icon="add" /><!--
+      This is to prevent text (only spaces) being inserted into DOM, causing a divider
+   --><m-icon-button @click="value_ = ''" icon="clear" />
     </div>
     <draggable
       v-model="options_"
@@ -21,9 +18,7 @@
           v-for="(option, i) in options_"
           :key="option.value"
         >
-          <m-icon-button @click="remove(i)">
-            <m-icon icon="remove" />
-          </m-icon-button>
+          <m-icon-button @click="remove(i)" icon="remove" />
           <m-radio
             :name="uid"
             v-model="value_"

@@ -1,8 +1,6 @@
 <template>
   <ul class="checkbox-ul">
-    <m-icon-button @click="add">
-      <m-icon icon="add" />
-    </m-icon-button>
+    <m-icon-button @click="add" icon="add" />
     <draggable
       v-model="options_"
       @start="dragging = true"

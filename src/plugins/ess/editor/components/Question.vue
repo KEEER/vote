@@ -24,23 +24,17 @@
       <m-icon class="handle" icon="drag_handle" />
     </span>
     <span slot="actionIcons" v-if="!folded">
-      <m-icon-button @click="remove">
-        <m-icon icon="delete" />
-      </m-icon-button>
+      <m-icon-button @click="remove" icon="delete" />
       <span class="divider" />
       {{texts.question.required}}
       <m-switch v-model="required_" class="required-switch" />
       <span class="divider" />
-      <m-icon-button @click="folded = true">
-        <m-icon icon="keyboard_arrow_up" />
-      </m-icon-button>
+      <m-icon-button @click="folded = true" icon="keyboard_arrow_up" />
     </span>
     <div class="folded" v-if="folded">
       <m-icon class="handle handle--folded" icon="drag_handle" />
       <span class="question-title--display">{{title_}}</span>
-      <m-icon-button class="fold-button" @click="folded = false" v-if="folded">
-        <m-icon icon="keyboard_arrow_down" />
-      </m-icon-button>
+      <m-icon-button class="fold-button" @click="folded = false" v-if="folded" icon="keyboard_arrow_down" />
     </div>
   </m-card>
 </template>
