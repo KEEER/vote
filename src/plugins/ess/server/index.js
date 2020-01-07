@@ -10,7 +10,7 @@ const editorHtml = readFileSync(
 ).toString()
 
 export default function attachTo (form) {
-  form.editorPaths = [ 'edit', 'settings', ...(form.editorPaths || []) ]
+  form.editorPaths = [ 'edit', 'settings', 'data', ...(form.editorPaths || []) ]
   form.on('getPage', async ([ path, ctx, set ]) => {
     if (form.editorPaths.indexOf(path) > -1) {
       // TODO: authenticate

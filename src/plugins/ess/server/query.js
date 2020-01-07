@@ -25,6 +25,15 @@ export default {
     form.data = JSON.stringify(formData)
     return form
   },
+  async submission ({ id }, ctx) {
+    const res = await ctx.state.form.submissionFromId(id)
+    if (!res) return null
+    res.data = JSON.stringify(res.data)
+    return res
+  },
+  async submissionIds (_args, ctx) {
+    return await ctx.state.form.getSubmissionIds()
+  },
   async newQuestion ({ pageId, options }, ctx) {
     try {
       options.id = ctx.state.form.questions.map(q => q.options.id).reduce((m, n) => Math.max(m, n), -1) + 1

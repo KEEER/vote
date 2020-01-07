@@ -297,7 +297,7 @@ export class Form extends EventEmitter {
    */
   async handleSubmission (ctx) {
     let res
-    this.emit('handleSubmission', [ ctx, r => res = r ])
+    await this.emit('handleSubmission', [ ctx, r => res = r ])
     if (res) return res
 
     if (ctx.method !== 'POST') {
@@ -315,5 +315,28 @@ export class Form extends EventEmitter {
 
     await query('INSERT INTO PRE_submissions (formid, data) VALUES ($1, $2);', [ this.id, data ])
     return 200
+  }
+
+  /** Gets submissions of the form. */
+  async getSubmissions () {
+    const res = (await query('SELECT * FROM PRE_submissions WHERE formid = $1;', [ this.id ])).rows
+    await this.emit('getSubmissions', [ this, res ])
+    return res
+  }
+
+  /** Gets submission IDs of the form. */
+  async getSubmissionIds () {
+    const res = (await query('SELECT id FROM PRE_submissions WHERE formid = $1;', [ this.id ])).rows.map(r => r.id)
+    await this.emit('getSubmissionIds', [ this, res ])
+    return res
+  }
+
+  /**
+   * Gets submission from given ID.
+   * @param {string} id submission ID
+   */
+  async submissionFromId (id) {
+    const res = (await query('SELECT * FROM PRE_submissions WHERE formid = $1 AND id = $2;', [ this.id, id ])).rows[0]
+    return res || null
   }
 }

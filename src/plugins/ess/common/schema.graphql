@@ -1,5 +1,7 @@
 type Query {
   form: Form!
+  submission(id: String!): Submission
+  submissionIds: [String!]!
 }
 
 type Mutation {
@@ -52,4 +54,10 @@ input QuestionUpdateInput {
   required: Boolean
   options: String # Actually Object
   reorder: Int
+}
+
+type Submission {
+  id: String!
+  data: String # Actually Object
+  formid: String
 }

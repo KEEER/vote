@@ -59,18 +59,18 @@ import MButton from 'material-components-vue/components/button/'
 import MIcon from 'material-components-vue/components/icon/'
 import Question from './components/Question'
 import hooks from './hooks'
-import { types as questionTypes } from '../../../question'
 import { query } from '../common/graphql'
 import draggable from 'vuedraggable'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
+import questionsNeeded from './questionsNeeded'
 
 Vue.use(MButton)
 Vue.use(MIcon)
 
 export default {
   name: 'Editor',
-  mixins: [ saveStateRelay, saveStateDisplay ],
+  mixins: [ saveStateRelay, saveStateDisplay, questionsNeeded ],
   components: {
     Question,
     draggable,
@@ -101,44 +101,10 @@ export default {
         removeError: 'Error occurred while removing the question.',
       },
       newQuestionDialogOpen: false,
-      currentPageId: 0,
-      pageCount: 0,
-      questionTypes,
-      questionLoaded: false,
-      questionLoadError: false,
-      pages: [],
-      questions: [],
       dragging: false,
     }
   },
   methods: {
-    async loadQuestions () {
-      try {
-        const res = await query(`
-          query($id: Int!) {
-            form {
-              page(id: $id) {
-                questions { type, title, id, value, required, options }
-              }
-              pageCount
-            }
-          }`.trim(), {
-          id: this.currentPageId,
-        })
-        if (res.errors) throw res
-        this.questions = res.data.form.page.questions
-        for (let i of [ 'value', 'options' ]) {
-          for (let question of this.questions) {
-            question[i] = JSON.parse(question[i])
-          }
-        }
-        this.pageCount = res.data.form.pageCount
-        this.questionLoaded = true
-      } catch (e) {
-        console.error(e)
-        this.questionLoadError = true
-      }
-    },
     async newQuestion () {
       try {
         const res = await query(`

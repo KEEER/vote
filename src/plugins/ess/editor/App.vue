@@ -93,6 +93,7 @@ import MDrawer from 'material-components-vue/components/drawer/'
 import MList from 'material-components-vue/components/list/'
 import MIcon from 'material-components-vue/components/icon/'
 import MIconButton from 'material-components-vue/components/icon-button/'
+import Data from './Data.vue'
 import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'
@@ -121,6 +122,13 @@ const routes = [
     component: Editor,
     icon: 'edit',
     title: 'Editor',
+  },
+  {
+    path: '/:uid/:id/data',
+    name: 'data',
+    component: Data,
+    icon: 'info',
+    title: 'Data',
   },
   {
     path: '/:uid/:id/settings',
