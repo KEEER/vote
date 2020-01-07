@@ -9,6 +9,7 @@ import Session from 'koa-session'
 import BodyParser from 'koa-bodyparser'
 import serveStatic from 'koa-static'
 import { query } from './db'
+import { User } from './user'
 
 const maxAge = parseInt(process.env.SESSION_MAXAGE)
 

@@ -37,6 +37,7 @@
     "esm": "^3.2.22",
     "fs-extra": "^8.0.1",
     "graphql": "^14.4.2",
+    "kas-client-node": "git+ssh://git@git.keeer.net:KEEER/kas-client-node.git",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
