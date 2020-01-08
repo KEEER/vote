@@ -36,7 +36,7 @@
         </section>
       </m-top-app-bar>
       <m-top-app-bar-fixed-adjust>
-        <router-view />
+        <router-view id="main" />
       </m-top-app-bar-fixed-adjust>
     </div>
   </div>
@@ -58,6 +58,10 @@ body {
 </style>
 
 <style scoped>
+#main {
+  max-width: 720px;
+}
+
 .mdc-drawer--dismissible.mdc-drawer--open ~ #content{
   margin-left: 255px;
 }
