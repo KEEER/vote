@@ -1,7 +1,8 @@
 <template>
   <ul class="checkbox-ul">
-    <m-icon-button @click="add" icon="add" />
+    <m-icon-button v-if="!readonly" @click="add" icon="add" />
     <draggable
+      v-if="!readonly"
       v-model="options_"
       @start="dragging = true"
       @end="syncOptions"
@@ -23,6 +24,17 @@
         />
       </transition-group>
     </draggable>
+    <div v-else>
+      <VCheckboxInput
+        readonly
+        v-for="option in options_"
+        :key="option.value"
+        :label="option.label"
+        :cbvalue="option.value"
+        :value="value_[option.value]"
+        :texts="texts"
+      />
+    </div>
   </ul>
 </template>
 
@@ -59,6 +71,7 @@ export default {
     value: Object,
     options: {},
     texts: Object,
+    readonly: Boolean,
   },
   components: {
     VCheckboxInput,

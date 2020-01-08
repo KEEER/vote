@@ -1,5 +1,5 @@
 <template>
-  <m-text-field full-width v-model="value_" :placeholder="texts.question.valuePlaceholder">
+  <m-text-field :readonly="readonly" full-width v-model="value_" :placeholder="readonly ? texts.question.noValuePlaceholder : texts.question.valuePlaceholder">
     <m-line-ripple slot="bottomLine" />
   </m-text-field>
 </template>
@@ -23,6 +23,7 @@ export default {
   mixins: [ mixin ],
   props: {
     value: String,
+    readonly: Boolean,
   },
 }
 </script>

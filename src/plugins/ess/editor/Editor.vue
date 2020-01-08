@@ -64,6 +64,7 @@ import draggable from 'vuedraggable'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
 import questionsNeeded from './questionsNeeded'
+import questionTexts from './questionTexts'
 
 Vue.use(MButton)
 Vue.use(MIcon)
@@ -85,18 +86,7 @@ export default {
         questionLoading: 'Loading Questions...',
         exiting: 'Saving questions, please wait...',
         exitSaveError: 'Error saving question, data may be not saved. Please refresh to continue.',
-        question: {
-          title: 'Question Title',
-          required: 'Required',
-          type: 'Question Type',
-          valuePlaceholder: 'Default Value',
-          labelPlaceholder: 'Label',
-          nulltype: 'Please specify a question type.',
-          default: {
-            type: 'VText',
-            title: 'New Question',
-          },
-        },
+        question: questionTexts,
         updateError: 'Error occurred while updating the question.',
         removeError: 'Error occurred while removing the question.',
       },

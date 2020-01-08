@@ -1,11 +1,12 @@
 <template>
   <ul class="radio-ul">
-    <div class="radio-controls">
+    <div class="radio-controls" v-if="!readonly">
       <m-icon-button @click="add" icon="add" /><!--
       This is to prevent text (only spaces) being inserted into DOM, causing a divider
    --><m-icon-button @click="value_ = ''" icon="clear" />
     </div>
     <draggable
+      v-if="!readonly"
       v-model="options_"
       @start="dragging = true"
       @end="syncOptions"
@@ -32,6 +33,21 @@
         </li>
       </transition-group>
     </draggable>
+    <div v-else>
+      <li class="radio-li"
+        v-for="option in options_"
+        :key="option.value"
+      >
+        <m-radio
+          disabled
+          :name="uid"
+          v-model="value_"
+          :value="option.value.toString()"
+          :checked="String(value_) === option.value.toString()"
+        />
+        <span>{{option.label}}</span>
+      </li>
+    </div>
   </ul>
 </template>
 
@@ -95,6 +111,7 @@ export default {
     value: {},
     options: {},
     texts: Object,
+    readonly: Boolean,
   },
   components: {
     draggable,

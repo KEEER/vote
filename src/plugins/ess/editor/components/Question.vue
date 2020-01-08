@@ -1,7 +1,7 @@
 <template>
   <m-card class="question-card">
-    <div class="question" v-if="!folded">
-      <div class="title-type">
+    <div class="question" :class="{ readonly }" v-if="!folded">
+      <div class="title-type" v-if="!readonly">
         <m-text-field
           outlined
           required
@@ -13,17 +13,22 @@
         </m-text-field>
         <TypeSelector v-model="type_" :texts="texts" />
       </div>
+      <div v-else class="question-title--display question-title--readonly">
+        {{title_}}
+        <sup v-if="required_" class="title-required"></sup>
+      </div>
       <component
         :is="data.type || 'VNull'"
+        :readonly="readonly"
         v-model="value_"
         :options.sync="options_"
         :texts="texts"
       />
     </div>
-    <span slot="actionButtons" v-if="!folded">
+    <span slot="actionButtons" v-if="!folded && !readonly">
       <m-icon class="handle" icon="drag_handle" />
     </span>
-    <span slot="actionIcons" v-if="!folded">
+    <span slot="actionIcons" v-if="!folded && !readonly">
       <m-icon-button @click="remove" icon="delete" />
       <span class="divider" />
       {{texts.question.required}}
@@ -31,7 +36,7 @@
       <span class="divider" />
       <m-icon-button @click="folded = true" icon="keyboard_arrow_up" />
     </span>
-    <div class="folded" v-if="folded">
+    <div class="folded" v-if="folded && !readonly">
       <m-icon class="handle handle--folded" icon="drag_handle" />
       <span class="question-title--display">{{title_}}</span>
       <m-icon-button class="fold-button" @click="folded = false" v-if="folded" icon="keyboard_arrow_down" />
@@ -56,12 +61,20 @@
   flex-direction: column;
 }
 
+.question.readonly {
+  padding: 16px;
+}
+
 .question-card {
   margin: 16px;
 }
 
 .question-title {
   flex: auto;
+}
+
+.question-title--readonly {
+  margin-bottom: 8px;
 }
 
 .title-type {
@@ -106,6 +119,11 @@
 .handle--folded {
   padding: 0 8px 0 0;
   cursor: pointer;
+}
+
+.title-required::before {
+  content: '*';
+  color: red;
 }
 </style>
 
@@ -177,9 +195,8 @@ export default {
   props: {
     // TODO: check props
     data: Object,
+    readonly: { type: Boolean, required: false, default: false },
     texts: Object,
-    isFirst: Boolean,
-    isLast: Boolean,
   },
   watch: {
     data () {
