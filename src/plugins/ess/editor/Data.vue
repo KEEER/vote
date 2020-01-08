@@ -6,7 +6,7 @@
       <span class="no-submissions" v-else>{{texts.noSubmissions}}</span>
       <m-icon-button :disabled="nextSubmissionDisabled" icon="chevron_right" @click="nextSubmission" />
     </div>
-    <div id="response" v-if="loaded">
+    <div id="response" v-if="loaded && currentSubmission">
       <Question
         v-for="question in questions"
         readonly
