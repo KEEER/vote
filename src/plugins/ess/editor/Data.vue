@@ -2,11 +2,21 @@
   <main id="data">
     <div id="data-navigator" v-if="loaded">
       <m-icon-button :disabled="prevSubmissionDisabled" icon="chevron_left" @click="prevSubmission" />
-      <span class="submission-count" v-if="submissionIds.length > 0">{{submissionIds.indexOf(currentSubmissionId) + 1}} / {{submissionIds.length}} {{texts.submissionCount}}</span>
+      <span class="submission-count" v-if="submissionIds.length > 0">
+        <span id="submission-index"><m-text-field
+          v-model="currentSubmissionIndexPlusOne"
+          type="number"
+          min="1"
+          :max="submissionIds.length"
+          step="1"
+        >
+          <m-line-ripple slot="bottomLine" />
+        </m-text-field></span> / {{submissionIds.length}} {{texts.submissionCount}}
+      </span>
       <span class="no-submissions" v-else>{{texts.noSubmissions}}</span>
       <m-icon-button :disabled="nextSubmissionDisabled" icon="chevron_right" @click="nextSubmission" />
     </div>
-    <div id="response" v-if="loaded && currentSubmission">
+    <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
       <Question
         v-for="question in questions"
         readonly
@@ -16,7 +26,7 @@
       />
     </div>
     <div v-else-if="loadError">{{texts.loadError}}</div>
-    <div v-else>{{texts.loading}}</div>
+    <div v-else-if="!loaded || submissionLoading">{{texts.loading}}</div>
   </main>
 </template>
 
@@ -37,6 +47,12 @@ main {
 }
 </style>
 
+<style>
+#submission-index > .mdc-text-field {
+  width: 90px;
+}
+</style>
+
 <script>
 import { query } from '../common/graphql'
 import questionsNeeded from './questionsNeeded'
@@ -51,9 +67,11 @@ export default {
   data () {
     return {
       currentSubmission: null,
-      currentSubmissionId: -1,
+      currentSubmissionIndex: -1,
+      currentSubmissionIndexPlusOne: '0',
       loaded: false,
       loadError: false,
+      submissionLoading: false,
       submissionIds: [],
       submissions: [],
       texts: {
@@ -65,36 +83,42 @@ export default {
       },
     }
   },
+  watch: {
+    currentSubmissionIndex (val) {
+      this.currentSubmissionIndexPlusOne = String(val + 1)
+      this.updateSubmissionStatus()
+    },
+    currentSubmissionIndexPlusOne (val, old) {
+      const num = Number(val)
+      if (num !== Math.floor(val) || num < 1 || num > this.submissionIds.length) return
+      this.currentSubmissionIndex = num - 1
+    },
+  },
   computed: {
     prevSubmissionDisabled () {
-      return this.submissionIds.length === 0 || this.submissionIds[0] === this.currentSubmissionId
+      return this.submissionIds.length === 0 || this.currentSubmissionIndex === 0
     },
     nextSubmissionDisabled () {
-      return this.submissionIds.length === 0 || this.submissionIds[this.submissionIds.length - 1] === this.currentSubmissionId
+      return this.submissionIds.length === 0 || this.currentSubmissionIndex === this.submissionIds.length - 1
+    },
+    currentSubmissionId () {
+      return (this.submissionIds || [])[this.currentSubmissionIndex] || null
     },
   },
   methods: {
-    async prevSubmission () {
-      try {
-        const i = this.submissionIds.indexOf(this.currentSubmissionId)
-        if (i === 0) return
-        this.loaded = false
-        this.currentSubmissionId = this.submissionIds[i - 1]
-        await this.loadSubmission()
-        return this.loaded = true
-      } catch (e) {
-        console.log(e)
-        return this.loadError = true, false
-      }
+    prevSubmission () {
+      if (this.prevSubmissionDisabled) return
+      this.currentSubmissionIndex--
     },
-    async nextSubmission () {
+    nextSubmission () {
+      if (this.nextSubmissionDisabled) return
+      this.currentSubmissionIndex++
+    },
+    async updateSubmissionStatus () {
       try {
-        const i = this.submissionIds.indexOf(this.currentSubmissionId)
-        if (i === this.submissionIds.length - 1) return
-        this.loaded = false
-        this.currentSubmissionId = this.submissionIds[i + 1]
+        this.submissionLoading = true
         await this.loadSubmission()
-        return this.loaded = true
+        return this.submissionLoading = false
       } catch (e) {
         console.log(e)
         return this.loadError = true, false
@@ -104,7 +128,6 @@ export default {
       try {
         await this.loadQuestions()
         await this.loadSubmissionIds()
-        await this.loadSubmission()
         return this.loaded = true
       } catch (e) {
         console.log(e)
@@ -115,10 +138,12 @@ export default {
       const res = await query('{ submissionIds }', {})
       if (res.errors) throw res
       this.submissionIds = res.data.submissionIds
-      if (this.currentSubmissionId === -1) this.currentSubmissionId = this.submissionIds[0] || -1
+      if (this.currentSubmissionId === null && this.submissionIds.length !== 0) {
+        this.currentSubmissionIndex = 0
+      }
     },
     async loadSubmission (id = this.currentSubmissionId) {
-      if (!id || id === -1) return null
+      if (!id || id === null) return null
       const inCache = this.submissions.find(s => s.id === id)
       if (inCache) return this.currentSubmission = inCache
       const res = await query('query($id: String!) { submission(id: $id) { data } }', { id })
