@@ -1,11 +1,11 @@
 {
   "name": "vote",
-  "version": "0.0.103",
+  "version": "0.0.111",
   "description": "KEEER Vote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=production npm run clean && webpack && tar -zcvf dist.tgz dist/js dist/css dist/*.html",
-    "build:dev": "NODE_ENV=development supervisor -w src -e js,css,vue -x npx -- webpack -w",
+    "build:dev": "npm run clean && NODE_ENV=development webpack",
     "dev": "webpack-dev-server",
     "start": "node src/index",
     "start:dev": "supervisor -w dist,src src/index",

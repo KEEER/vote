@@ -59,5 +59,6 @@ input QuestionUpdateInput {
 type Submission {
   id: String!
   data: String # Actually Object
+  time: String!
   formid: String
 }

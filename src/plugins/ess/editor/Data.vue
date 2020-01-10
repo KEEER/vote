@@ -4,6 +4,7 @@
       <m-icon-button :disabled="prevSubmissionDisabled" icon="chevron_left" @click="prevSubmission" />
       <span class="submission-count" v-if="submissionIds.length > 0">
         <span id="submission-index"><m-text-field
+          outlined
           v-model="currentSubmissionIndexPlusOne"
           type="number"
           min="1"
@@ -17,6 +18,10 @@
       <m-icon-button :disabled="nextSubmissionDisabled" icon="chevron_right" @click="nextSubmission" />
     </div>
     <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
+      <div class="submission-meta">
+        <p class="submission-id">{{texts.submissionId}}{{currentSubmissionId}}</p>
+        <p class="submission-time">{{texts.submissionTime}}{{currentSubmission.time.toLocaleString()}}</p>
+      </div>
       <Question
         v-for="question in questions"
         readonly
@@ -44,6 +49,15 @@ main {
 
 .submission-count, .no-submissions {
   align-self: center;
+}
+
+.submission-id, .submission-time {
+  text-align: center;
+  margin: 0;
+}
+
+.submission-meta {
+  margin-top: 8px;
 }
 </style>
 
@@ -78,6 +92,8 @@ export default {
         loading: 'Loading data...',
         loadError: 'Data loading failed.',
         submissionCount: 'Submission(s)',
+        submissionId: 'Submission ID: ',
+        submissionTime: 'Submission Time: ',
         noSubmissions: 'No submissions.',
         question: questionTexts,
       },
@@ -146,9 +162,10 @@ export default {
       if (!id || id === null) return null
       const inCache = this.submissions.find(s => s.id === id)
       if (inCache) return this.currentSubmission = inCache
-      const res = await query('query($id: String!) { submission(id: $id) { data } }', { id })
+      const res = await query('query($id: String!) { submission(id: $id) { data, time } }', { id })
       if (res.errors) throw res
       const submission = res.data.submission
+      submission.time = new Date(Number(submission.time))
       submission.id = id
       submission.data = JSON.parse(submission.data || '{}')
       this.currentSubmission = submission

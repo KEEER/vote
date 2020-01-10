@@ -48,6 +48,7 @@ CREATE TABLE public.submissions
 (
     id bigserial NOT NULL,
     formid character varying(32) COLLATE pg_catalog."default",
+    time timestamp NOT NULL DEFAULT NOW(),
     data jsonb,
     CONSTRAINT submissions_pkey PRIMARY KEY (id),
     CONSTRAINT submissions_formid_fkey FOREIGN KEY (formid)

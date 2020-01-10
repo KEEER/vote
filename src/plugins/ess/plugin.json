@@ -28,6 +28,7 @@
       "editor:appMounted",
       "editor:settingsMounted",
       "editor:editorMounted",
+      "editor:dataMounted",
       "editor:beforeRouterLoad"
     ],
     "injections": [
