@@ -26,8 +26,8 @@
             :value="option.value.toString()"
             :checked="value_ === option.value.toString()"
           />
-          <m-text-field outlined :id="`${uid}-${i}`" v-model="option.label" class="label">
-            <m-floating-label :for="`${uid}-${i}`" @input="syncOptions">{{texts.question.labelPlaceholder}}</m-floating-label>
+          <m-text-field outlined :id="`${uid}-${i}`" v-model="option.label" class="label" @input="syncOptions">
+            <m-floating-label :for="`${uid}-${i}`">{{texts.question.labelPlaceholder}}</m-floating-label>
           </m-text-field>
           <m-icon icon="drag_handle" class="handle" />
         </li>
