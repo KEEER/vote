@@ -5,8 +5,7 @@
 <script>
 export default {
   name: 'Fill',
-  mounted () {
-    history.back()
+  beforeRouteEnter () {
     location = 'fill'
   },
 }
