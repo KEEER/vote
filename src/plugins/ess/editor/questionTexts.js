@@ -1,5 +1,6 @@
 export default {
   title: 'Question Title',
+  description: 'Question Description (optional)',
   required: 'Required',
   type: 'Question Type',
   valuePlaceholder: 'Default Value',

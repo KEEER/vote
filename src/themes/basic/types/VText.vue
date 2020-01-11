@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <QTitle :title="data.title" :required="data.required" />
-    <input v-model="value_" />
-  </div>
+  <input v-model="value_" />
 </template>
 
 <script>

@@ -17,6 +17,13 @@
         {{title_}}
         <sup v-if="required_" class="title-required"></sup>
       </div>
+      <HTMLEditor
+        class="description"
+        ref="description"
+        :data="description_"
+        @change="logDescriptionChange"
+        :texts="texts"
+      />
       <component
         :is="data.type || 'VNull'"
         :readonly="readonly"
@@ -80,6 +87,9 @@
 .title-type {
   display: flex;
   flex-direction: row;
+}
+
+.description {
   margin-bottom: 16px;
 }
 
@@ -146,6 +156,7 @@ import MIconButton from 'material-components-vue/components/icon-button/'
 import MSwitch from 'material-components-vue/components/switch/'
 import { query } from '../../common/graphql'
 import updateObservable from './updateObservable'
+import HTMLEditor from './HTMLEditor.vue'
 
 ;[
   MCard,
@@ -163,6 +174,9 @@ export default {
     updateObservable(async (vm, change) => {
       for (let i of [ 'value', 'options' ]) {
         change[i] = JSON.stringify(change[i])
+      }
+      if (change.description) {
+        change.description = JSON.stringify(await vm.$refs.description.save())
       }
       const res = await query(`
         mutation UpdateQuestion($options: QuestionUpdateInput!) {
@@ -184,6 +198,7 @@ export default {
       options_: this.data.options,
       type_: this.data.type,
       required_: this.data.required,
+      description_: this.data.description,
       removed: false,
       folded: false,
     }
@@ -191,6 +206,7 @@ export default {
   components: {
     ...questionTypes,
     TypeSelector,
+    HTMLEditor,
   },
   props: {
     // TODO: check props
@@ -268,6 +284,10 @@ export default {
           this.changed = false
         }
       }
+    },
+    logDescriptionChange () {
+      this.change.description = true
+      this.logChange()
     },
   },
   mounted () {

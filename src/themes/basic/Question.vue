@@ -1,22 +1,21 @@
 <template>
-  <component
-    :is="type"
-    :data="data"
-    :value.sync="value"
-    ref="realQuestion">
-    <slot />
-  </component>
+  <div>
+    <QTitle :title="data.title" :required="data.required" />
+    <div v-html="(data.description || {}).html || ''"></div>
+    <component
+      :is="type"
+      :data="data"
+      :value.sync="value"
+      ref="realQuestion">
+      <slot />
+    </component>
+  </div>
 </template>
 
 <script>
-import * as Types from './types.js'
+import * as types from './types.js'
 import hooks from './hooks'
-
-// Fix Vue warning of Types being a Module
-const types = {}
-for (let i in Types) {
-  types[i] = Types[i]
-}
+import QTitle from './Title.vue'
 
 export default {
   name: 'Question',
@@ -25,12 +24,15 @@ export default {
       value: this.$attrs.value,
     }
   },
-  components: types,
+  components: {
+    ...types,
+    QTitle,
+  },
   props: {
     type: {
       type: String,
       validator (val) {
-        return val in Types
+        return val in types
       },
     },
     data: Object,

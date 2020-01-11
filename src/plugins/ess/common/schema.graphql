@@ -32,6 +32,7 @@ type Page {
 type Question {
   type: String!
   title: String!
+  description: String
   id: Int!
   value: String
   required: Boolean
@@ -49,6 +50,7 @@ input QuestionInput {
 input QuestionUpdateInput {
   id: Int!
   type: String
+  description: String # Actually Object
   title: String
   value: String
   required: Boolean

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <QTitle :title="data.title" :required="data.required" />
     <span v-for="option in data.options" :key="option.value">
       <input type="radio" v-model="value_" :id="$id(option.value)" :value="option.value" />
       <label :for="$id(option.value)">{{option.label}}</label>

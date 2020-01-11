@@ -1,6 +1,7 @@
 import Question from '../../../question'
 import log from '../../../log'
 import assert from 'assert'
+import sanitize from 'sanitize-html'
 
 export default {
   async form (args, ctx) {
@@ -9,7 +10,7 @@ export default {
     form.pages.forEach(p => {
       p.questions = p.questions.map(q => {
         const o = q.toObject()
-        for (let i of [ 'value', 'options' ]) {
+        for (let i of [ 'value', 'options', 'description' ]) {
           o[i] = JSON.stringify(o[i])
         }
         return o
@@ -58,10 +59,19 @@ export default {
         assert(!!questions[i + reorder])
         ;[ questions[i + reorder], questions[i] ] = [ questions[i], questions[i + reorder] ]
       }
-      for (let i of [ 'value', 'options' ]) {
+      for (let i of [ 'value', 'options', 'description' ]) {
         if (i in options) {
           options[i] = JSON.parse(options[i])
         }
+      }
+      if ('description' in options) {
+        const desc = (options.description || {}).html || ''
+        options.description = { html: sanitize(desc, {
+          allowedIframeHostnames: [],
+          transformTags: {
+            a: sanitize.simpleTransform('a', { target: '_blank', rel: 'noopener nofollow' }),
+          },
+        }) }
       }
       Object.assign(q.options, options)
       await ctx.state.form.update()

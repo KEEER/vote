@@ -20,7 +20,7 @@ export default {
           query($id: Int!) {
             form {
               page(id: $id) {
-                questions { type, title, id, value, required, options }
+                questions { type, title, description, id, value, required, options }
               }
               pageCount
             }
@@ -29,7 +29,7 @@ export default {
         })
         if (res.errors) throw res
         this.questions = res.data.form.page.questions
-        for (let i of [ 'value', 'options' ]) {
+        for (let i of [ 'value', 'options', 'description' ]) {
           for (let question of this.questions) {
             question[i] = JSON.parse(question[i])
           }
