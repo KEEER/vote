@@ -23,7 +23,9 @@
         :data="description_"
         @change="logDescriptionChange"
         :texts="texts"
+        v-if="!readonly"
       />
+      <div v-else v-html="description_.html"></div>
       <component
         :is="data.type || 'VNull'"
         :readonly="readonly"
