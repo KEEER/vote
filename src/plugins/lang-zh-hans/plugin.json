@@ -1,0 +1,30 @@
+{
+  "name": "Language Pack - Chinese (Simplified)",
+  "description": "Chinese (simplified) language support",
+  "code": "lang-zh-hans",
+  "version": "0.0.1",
+  "default": true,
+  "required": false,
+  "pro": false,
+  "uses": {
+    "hooks": [
+      "form:mounted",
+      "editor:settingsMounted",
+      "editor:editorMounted",
+      "editor:dataMounted",
+      "editor:typeSelectorMounted",
+      "editor:beforeRouterLoad"
+    ],
+    "inject": {
+      "form": {
+        "js": "plugin-lang-zh-hans-form"
+      },
+      "editor": {
+        "js": "plugin-lang-zh-hans-editor"
+      }
+    }
+  },
+  "provides": {
+    "languages": [ "zh-hans" ]
+  }
+}

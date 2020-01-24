@@ -25,7 +25,7 @@
         :texts="texts"
         v-if="!readonly"
       />
-      <div v-else v-html="description_.html"></div>
+      <div v-else-if="description_" v-html="description_.html || ''"></div>
       <component
         :is="data.type || 'VNull'"
         :readonly="readonly"

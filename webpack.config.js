@@ -29,6 +29,8 @@ const config = {
     'plugin-sample-editor': './src/plugins/sample/editor.js',
     'plugin-ess-form': './src/plugins/ess/form/index.js',
     'plugin-ess-editor': './src/plugins/ess/editor/index.js',
+    'plugin-lang-zh-hans-form': './src/plugins/lang-zh-hans/form.js',
+    'plugin-lang-zh-hans-editor': './src/plugins/lang-zh-hans/editor.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

@@ -29,6 +29,7 @@
 import MSelect from 'material-components-vue/components/select/'
 import MList from 'material-components-vue/components/list/'
 import { types as questionTypes } from '../../../../question'
+import hooks from '../hooks'
 
 Vue.use(MSelect)
 Vue.use(MList)
@@ -52,6 +53,9 @@ export default {
     value_ (val) {
       this.$emit('input', val)
     },
+  },
+  mounted () {
+    hooks.emit('editor:typeSelectorMounted', [ this ])
   },
 }
 </script>
