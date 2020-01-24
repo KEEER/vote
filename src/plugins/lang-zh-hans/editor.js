@@ -69,7 +69,7 @@ window.addEventListener('vote:ready', () => {
     vm.texts = {
       ...vm.texts,
       saveHint,
-      titlePlaceholder: '问题标题',
+      titlePlaceholder: '问卷标题',
       settingsLoadError: '加载失败',
       settingsLoading: '正在加载设置……',
       exiting: '正在保存设置，请稍候……',
