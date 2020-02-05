@@ -11,4 +11,6 @@ export default {
     type: 'VText',
     title: 'New Question',
   },
+  remove: 'Remove',
+  theme: 'Theme Configuration',
 }

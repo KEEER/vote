@@ -38,11 +38,24 @@
       <m-icon class="handle" icon="drag_handle" />
     </span>
     <span slot="actionIcons" v-if="!folded && !readonly">
-      <m-icon-button @click="remove" icon="delete" />
-      <span class="divider" />
       {{texts.question.required}}
       <m-switch v-model="required_" class="required-switch" />
       <span class="divider" />
+      <m-menu-anchor>
+        <m-icon-button @click="menuOpen = true" icon="more_vert" />
+        <m-menu v-model="menuOpen">
+          <m-list>
+            <m-list-item @click="themeOpen = true">
+              <m-icon icon="palette" class="question-menu__icon" slot="graphic" />
+              <template slot="text">{{texts.question.theme}}</template>
+            </m-list-item>
+            <m-list-item @click="remove">
+              <m-icon icon="delete" class="question-menu__icon" slot="graphic" />
+              <template slot="text">{{texts.question.remove}}</template>
+            </m-list-item>
+          </m-list>
+        </m-menu>
+      </m-menu-anchor>
       <m-icon-button @click="folded = true" icon="keyboard_arrow_up" />
     </span>
     <div class="folded" v-if="folded && !readonly">
@@ -61,6 +74,8 @@
 @import 'material-components-vue/components/line-ripple/styles';
 @import 'material-components-vue/components/icon-button/styles';
 @import 'material-components-vue/components/switch/styles';
+@import 'material-components-vue/components/menu/styles';
+@import 'material-components-vue/components/list/styles';
 </style>
 
 <style scoped>
@@ -137,6 +152,11 @@
   content: '*';
   color: red;
 }
+
+.mdc-menu .mdc-list .question-menu__icon {
+  color: rgba(0, 0, 0, 0.6);
+  margin-right: 12px;
+}
 </style>
 
 <style>
@@ -156,6 +176,8 @@ import TypeSelector from './TypeSelector.vue'
 import MIcon from 'material-components-vue/components/icon/'
 import MIconButton from 'material-components-vue/components/icon-button/'
 import MSwitch from 'material-components-vue/components/switch/'
+import MMenu from 'material-components-vue/components/menu/'
+import MList from 'material-components-vue/components/list/'
 import { query } from '../../common/graphql'
 import updateObservable from './updateObservable'
 import HTMLEditor from './HTMLEditor.vue'
@@ -168,7 +190,11 @@ import HTMLEditor from './HTMLEditor.vue'
   MIcon,
   MIconButton,
   MSwitch,
+  MMenu,
+  MList,
 ].forEach(component => Vue.use(component))
+
+// TODO: to be decided: should we allow customizing question menu?
 
 export default {
   name: 'Question',
@@ -203,6 +229,8 @@ export default {
       description_: this.data.description,
       removed: false,
       folded: false,
+      menuOpen: false,
+      themeOpen: false, // TODO: API design
     }
   },
   components: {

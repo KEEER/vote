@@ -12,6 +12,8 @@ window.addEventListener('vote:ready', () => {
       type: 'VText',
       title: '新的问题',
     },
+    remove: '删除问题',
+    theme: '主题设置',
   }
   const saveHint = {
     notChanged: '自动保存已开启',
