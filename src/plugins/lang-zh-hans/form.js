@@ -1,4 +1,6 @@
 window.addEventListener('vote:ready', () => {
+  // TODO: allow opt-out language detection
+  if (navigator.language.slice(0, 2).toLowerCase() !== 'zh') return
   const hooks = window.voteHooks
   hooks.on('form:mounted', ([ form ]) => {
     form.texts = {

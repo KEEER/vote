@@ -1,4 +1,6 @@
 window.addEventListener('vote:ready', () => {
+  // TODO: allow opt-out language detection
+  if (navigator.language.slice(0, 2).toLowerCase() !== 'zh') return
   const questionTexts = {
     title: '问题标题',
     description: '问题描述(可选)',
@@ -22,15 +24,13 @@ window.addEventListener('vote:ready', () => {
     saved: '已保存到云端',
   }
   const hooks = window.voteHooks
-  hooks.on('editor:beforeRouterLoad', ([ routes ]) => {
-    const mapping = {
+  hooks.on('editor:appMounted', ([ vm ]) => {
+    vm.texts.routes = {
+      ...vm.texts.routes,
       fill: '填写',
       edit: '编辑器',
       data: '数据',
       settings: '设置',
-    }
-    for (let route of routes) {
-      if (route.name in mapping) route.title = mapping[route.name]
     }
   })
   hooks.on('editor:typeSelectorMounted', ([ vm ]) => {

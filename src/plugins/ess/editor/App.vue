@@ -15,7 +15,7 @@
             <router-link class="navlink" :to="{name: route.name}">
               <m-list-item :activated="$route.name === route.name">
                 <m-icon :icon="route.icon" slot="graphic"/>
-                {{route.title}}
+                {{texts.routes[route.name]}}
               </m-list-item>
             </router-link>
           </span>
@@ -118,28 +118,24 @@ const routes = [
     name: 'fill',
     component: Fill,
     icon: 'open_in_new',
-    title: 'Fill',
   },
   {
     path: '/:uid/:id/edit',
     name: 'edit',
     component: Editor,
     icon: 'edit',
-    title: 'Editor',
   },
   {
     path: '/:uid/:id/data',
     name: 'data',
     component: Data,
     icon: 'info',
-    title: 'Data',
   },
   {
     path: '/:uid/:id/settings',
     name: 'settings',
     component: Settings,
     icon: 'settings',
-    title: 'Settings',
   },
 ]
 
@@ -161,6 +157,12 @@ export default Vue.extend({
         drawerTitle: null,
         appBarTitle: 'Vote Editor',
         appBarSubtitle: null,
+        routes: {
+          fill: 'Fill',
+          edit: 'Editor',
+          data: 'Data',
+          settings: 'Settings',
+        },
       },
       title: window.KVoteFormData.title,
       documentTitle: document.title,

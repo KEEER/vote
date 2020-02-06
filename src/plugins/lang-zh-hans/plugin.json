@@ -13,7 +13,7 @@
       "editor:editorMounted",
       "editor:dataMounted",
       "editor:typeSelectorMounted",
-      "editor:beforeRouterLoad"
+      "editor:appMounted"
     ],
     "inject": {
       "form": {
