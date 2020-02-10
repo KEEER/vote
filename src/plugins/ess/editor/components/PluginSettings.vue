@@ -2,8 +2,8 @@
   <div>
     <m-list two-line role="group">
       <m-list-item role="checkbox" v-for="plugin in allPlugins" :key="plugin.code">
-        <template slot="primaryText">{{ plugin.name }}</template>
-        <template slot="secondaryText">{{ plugin.description }}</template>
+        <template slot="primaryText">{{ $t(`plugin.${plugin.code}.name`) }}</template>
+        <template slot="secondaryText">{{ $t(`plugin.${plugin.code}.description`) }}</template>
         <m-checkbox slot="meta" :checked="selectedPlugins.indexOf(plugin.code) > -1" v-on="{ change: onChange(plugin.code) }" :disabled="plugin.required" />
       </m-list-item>
     </m-list>

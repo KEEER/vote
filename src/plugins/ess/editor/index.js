@@ -2,7 +2,7 @@ import 'regenerator-runtime'
 import App, { getRouter } from './App'
 import hooks from './hooks'
 import UniqueId from 'vue-unique-id'
-import { messages } from '../../../../locale'
+import { locale, messages } from '../../../../locale'
 
 window.onload = () => {
   window.voteHooks = hooks
@@ -14,10 +14,7 @@ window.onload = () => {
 
   Vue.use(UniqueId)
   Vue.use(VueI18n)
-  const i18n = new VueI18n({
-    locale: navigator.language.slice(0, 2).toLowerCase(),
-    messages,
-  })
+  const i18n = new VueI18n({ locale, messages })
 
   Vue.nextTick(() => new Vue({
     el: '#app',

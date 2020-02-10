@@ -1,7 +1,7 @@
 <template>
   <main class="settings">
-    <div v-if="exitSaveError">{{$t('plugin-ess.settings.exitSaveError')}}</div>
-    <div v-else-if="exiting">{{$t('plugin-ess.settings.exiting')}}</div>
+    <div v-if="exitSaveError">{{$t('plugin.ess.settings.exitSaveError')}}</div>
+    <div v-else-if="exiting">{{$t('plugin.ess.settings.exiting')}}</div>
     <ul class="settings-entries" v-else-if="settingsLoaded">
       <li
         class="settings-entry"
@@ -9,7 +9,7 @@
         :key="i"
       >
         <m-card class="settings-card">
-          <m-typo-headline :level="3" class="entry-title">{{entry.name}}</m-typo-headline>
+          <m-typo-headline :level="3" class="entry-title">{{$t(entry.title)}}</m-typo-headline>
           <component
             :ref="`entry-${i}`"
             :is="entry.component"
@@ -19,8 +19,8 @@
         </m-card>
       </li>
     </ul>
-    <div v-else-if="settingsLoadError">{{$t('plugin-ess.settings.settingsLoadError')}}</div>
-    <div v-else>{{$t('plugin-ess.settings.settingsLoading')}}</div>
+    <div v-else-if="settingsLoadError">{{$t('plugin.ess.settings.settingsLoadError')}}</div>
+    <div v-else>{{$t('plugin.ess.settings.settingsLoading')}}</div>
   </main>
 </template>
 
@@ -63,11 +63,11 @@ Vue.use(MTypo)
 
 const entries = [
   {
-    name: 'Basics',
+    title: 'plugin.ess.settings.entry.basic',
     component: BasicSettings,
   },
   {
-    name: 'Plugins',
+    title: 'plugin.ess.settings.entry.plugin',
     component: PluginSettings,
   },
 ]

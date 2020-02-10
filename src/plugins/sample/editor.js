@@ -8,10 +8,11 @@ window.addEventListener('vote:ready', () => {
       name: 'sample',
       component: SampleEntry,
       icon: 'lock',
+      title: 'plugin.sample.route.sample',
     }))
     .on('editor:settingsMounted', ([ { entries } ]) => entries
       .some(e => e.component.name === 'SampleEntry') ? null : entries.push({
-        name: 'Sample Plugin',
+        title: 'plugin.sample.settings.sample',
         component: SampleEntry,
       }))
 })

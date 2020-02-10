@@ -6,7 +6,7 @@
     v-model="value_"
   >
     <m-list-item
-      v-for="(name, value) in questionTypes"
+      v-for="(name, value) in $t('core.question.types')"
       :key="value"
       :data-value="value"
       aria-selected="false"
@@ -14,7 +14,7 @@
     <m-floating-label
       :for="uid"
       slot="label"
-    >{{$t('plugin-ess.question.type')}}</m-floating-label>
+    >{{$t('plugin.ess.question.type')}}</m-floating-label>
   </m-select>
 </template>
 
@@ -28,7 +28,6 @@
 <script>
 import MSelect from 'material-components-vue/components/select/'
 import MList from 'material-components-vue/components/list/'
-import { types as questionTypes } from '../../../../question'
 import hooks from '../hooks'
 
 Vue.use(MSelect)
@@ -39,7 +38,6 @@ export default {
   data () {
     return {
       value_: this.value,
-      questionTypes,
     }
   },
   props: {

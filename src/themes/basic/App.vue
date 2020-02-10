@@ -12,7 +12,7 @@
           :data="question" />
       </Page>
     </Form>
-    <footer class="vote-footer"><a href="/?utm_source=form&utm_medium=footer">Powered by KEEER Vote</a></footer>
+    <footer class="vote-footer"><a href="/?utm_source=form&utm_medium=footer">{{$t('theme.basic.footer')}}</a></footer>
   </div>
 </template>
 

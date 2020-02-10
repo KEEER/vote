@@ -3,7 +3,7 @@
     <SettingsEntry
       name="basic.title"
       preset="textField"
-      :placeholder="$t('plugin-ess.settings.titlePlaceholder')"
+      :placeholder="$t('plugin.ess.settings.titlePlaceholder')"
       required
       @update:saveState="updateSaveState"
       :data="data"

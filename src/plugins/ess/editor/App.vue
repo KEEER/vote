@@ -8,14 +8,14 @@
       :open="drawerOpen"
       :key="modal"
     >
-      <m-drawer-header slot="header" :title="texts.drawerTitle" />
+      <m-drawer-header slot="header" :title="drawerTitle" />
       <m-drawer-content>
         <m-drawer-list>
           <span v-for="route in routes" :key="route.name">
             <router-link class="navlink" :to="{name: route.name}">
               <m-list-item :activated="$route.name === route.name">
                 <m-icon :icon="route.icon" slot="graphic"/>
-                {{$t(`plugin-ess.app.routes.${route.name}`)}}
+                {{$t(route.title)}}
               </m-list-item>
             </router-link>
           </span>
@@ -28,9 +28,9 @@
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <m-icon-button icon="menu" class="mdc-top-app-bar__navigation-icon" />
           <span class="hgroup mdc-top-app-bar__title">
-            <div>{{texts.appBarTitle}}</div>
-            <div class="mdc-top-app-bar__subtitle" v-if="texts.appBarSubtitle">
-              {{texts.appBarSubtitle}}
+            <div>{{appBarTitle}}</div>
+            <div class="mdc-top-app-bar__subtitle" v-if="appBarSubtitle">
+              {{appBarSubtitle}}
             </div>
           </span>
         </section>
@@ -118,24 +118,28 @@ const routes = [
     name: 'fill',
     component: Fill,
     icon: 'open_in_new',
+    title: 'plugin.ess.app.route.fill',
   },
   {
     path: '/:uid/:id/edit',
     name: 'edit',
     component: Editor,
     icon: 'edit',
+    title: 'plugin.ess.app.route.edit',
   },
   {
     path: '/:uid/:id/data',
     name: 'data',
     component: Data,
     icon: 'info',
+    title: 'plugin.ess.app.route.data',
   },
   {
     path: '/:uid/:id/settings',
     name: 'settings',
     component: Settings,
     icon: 'settings',
+    title: 'plugin.ess.app.route.settings',
   },
 ]
 
@@ -153,11 +157,9 @@ export default Vue.extend({
       modal: false,
       dismissible: true,
       drawerOpen: false,
-      texts: {
-        drawerTitle: null,
-        appBarTitle: 'Vote Editor',
-        appBarSubtitle: null,
-      },
+      drawerTitle: null,
+      appBarTitle: 'Vote Editor',
+      appBarSubtitle: null,
       title: window.KVoteFormData.title,
       documentTitle: document.title,
       routes,
@@ -168,7 +170,7 @@ export default Vue.extend({
       this.drawerOpen = !this.drawerOpen
     },
     updateTitle () {
-      this.texts.appBarTitle = `${this.title} - Vote Editor`
+      this.appBarTitle = `${this.title} - Vote Editor`
       document.title = `${this.title} - ${this.documentTitle}`
       this.$emit('update:title', this.title)
     },
@@ -198,7 +200,7 @@ export default Vue.extend({
     toggleMobile()
 
     this.$refs.appbar.$on('nav', () => this.toggleDrawer())
-    this.texts.drawerTitle = this.formId
+    this.drawerTitle = this.formId
 
     this.updateTitle()
     hooks.emit('editor:appMounted', [ this ])

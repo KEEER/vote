@@ -1,7 +1,7 @@
 <template>
   <main id="editor">
-    <div v-if="exitSaveError">{{$t('plugin-ess.editor.exitSaveError')}}</div>
-    <div v-else-if="exiting">{{$t('plugin-ess.editor.exiting')}}</div>
+    <div v-if="exitSaveError">{{$t('plugin.ess.editor.exitSaveError')}}</div>
+    <div v-else-if="exiting">{{$t('plugin.ess.editor.exiting')}}</div>
     <div id="questions" v-else-if="questionLoaded">
       <draggable
         v-model="questions"
@@ -24,12 +24,12 @@
       <div class="bottom-new">
         <m-button @click="newQuestion" unelevated>
           <m-icon slot="icon" icon="add" />
-          {{$t('plugin-ess.editor.new')}}
+          {{$t('plugin.ess.editor.new')}}
         </m-button>
       </div>
     </div>
-    <div v-else-if="questionLoadError">{{$t('plugin-ess.editor.questionLoadError')}}</div>
-    <div v-else>{{$t('plugin-ess.editor.questionLoading')}}</div>
+    <div v-else-if="questionLoadError">{{$t('plugin.ess.editor.questionLoadError')}}</div>
+    <div v-else>{{$t('plugin.ess.editor.questionLoading')}}</div>
   </main>
 </template>
 
@@ -88,12 +88,12 @@ export default {
             newQuestion(pageId: $pageId, options: $options)
           }`.trim(), {
           pageId: this.currentPageId,
-          options: $t('plugin-ess.question.default'),
+          options: this.$t('plugin.ess.question.default'),
         })
         if (res.errors) {
           throw res
         } else {
-          this.questions.push(Object.assign({ id: res.data.newQuestion }, $t('plugin-ess.question.default')))
+          this.questions.push(Object.assign({ id: res.data.newQuestion }, this.$t('plugin.ess.question.default')))
           this.$nextTick(() => window.scrollTo(0, 1048576))
         }
       } catch (e) {

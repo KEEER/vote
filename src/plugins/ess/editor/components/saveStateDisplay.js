@@ -7,7 +7,7 @@ export default {
   },
   watch: {
     saveState (val) {
-      this.$root.$children[0].texts.appBarSubtitle = this.$t(`plugin-ess.saveHint.${val}`)
+      this.$root.$children[0].appBarSubtitle = this.$t(`plugin.ess.saveHint.${val}`)
       switch (val) {
       case 'saved':
         window.onbeforeunload = null
@@ -25,7 +25,7 @@ export default {
     },
   },
   destroyed () {
-    this.$root.$children[0].texts.appBarSubtitle = ''
+    this.$root.$children[0].appBarSubtitle = ''
     window.onbeforeunload = null
   },
   async beforeRouteLeave (_to, _from, next) {

@@ -30,7 +30,7 @@ export default updateFunction => ({
       try { await updateFunction(this, change) } catch (e) {
         this.saveState = 'error'
         // TODO
-        alert(this.$t('plugin-ess.updateError'))
+        alert(this.$t('plugin.ess.updateError'))
         console.log('update error', e.stack)
         return
       }

@@ -2,15 +2,6 @@
 
 import assert from 'assert'
 
-const types = {
-  VText: 'Text (One line)',
-  VTextarea: 'Textarea',
-  VCheckbox: 'Checkbox',
-  VRadio: 'Radio buttons',
-}
-/** Question types. */
-export { types }
-
 /** Class representing a question. */
 class Question {
   /**

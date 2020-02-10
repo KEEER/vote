@@ -40,7 +40,7 @@ export default {
       this.editor = new MediumEditor(this.$el, {
         targerBlank: true,
         placeholder: this.readonly ? false : {
-          text: this.$t('plugin-ess.question.description'),
+          text: this.$t('plugin.ess.question.description'),
           hideOnClick: true,
         },
       })

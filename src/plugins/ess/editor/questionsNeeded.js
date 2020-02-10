@@ -1,4 +1,3 @@
-import { types as questionTypes } from '../../../question'
 import { query } from '../common/graphql'
 
 export default {
@@ -9,7 +8,6 @@ export default {
       pageCount: 0,
       currentPageId: 0,
       questionLoaded: false,
-      questionTypes,
       questionLoadError: false,
     }
   },

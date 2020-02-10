@@ -1,66 +1,90 @@
-plugin-ess:
-  app:
-    routes:
-      fill: Fill
-      edit: Editor
-      data: Data
-      settings: Settings
-      # plugin routes
-      sample: SAAAMple
-
+core:
   question:
-    title: Question Title
-    description: Question Description (optional)
-    required: Required
-    type: Question Type
-    valuePlaceholder: Default Value
-    noValuePlaceholder: No Value
-    labelPlaceholder: Label
-    nulltype: Please specify a question type.
-    default:
-      type: VText # Don't translate this!
-      title: New Question
-    remove: Remove
-    theme: Theme Configuration
+    types:
+      VText: Text (One line)
+      VTextarea: Textarea
+      VCheckbox: Checkbox
+      VRadio: Radio buttons
 
-  saveHint:
-    notChanged: Autosave Enabled
-    awaitInputStop: Waiting for you to stop input...
-    saving: Saving...
-    saved: Saved to cloud
+plugin:
+  ess:
+    name: Essentials
+    description: Essential functionalities for Vote.
+    app:
+      route:
+        fill: Fill
+        edit: Editor
+        data: Data
+        settings: Settings
 
-  updateError: Error occurred while updating.
+    question:
+      title: Question Title
+      description: Question Description (optional)
+      required: Required
+      type: Question Type
+      valuePlaceholder: Default Value
+      noValuePlaceholder: No Value
+      labelPlaceholder: Label
+      nulltype: Please specify a question type.
+      default:
+        type: VText # Don't translate this!
+        title: New Question
+      remove: Remove
+      theme: Theme Configuration
 
-  editor:
-    new: Add question
-    cancel: Cancel
-    ok: OK
-    questionLoadError: Load Error
-    questionLoading: Loading Questions...
-    exiting: Saving questions, please wait...
-    exitSaveError: Error saving question, data may be not saved. Please refresh to continue.
-    removeError: Error occurred while removing the question.
+    saveHint:
+      notChanged: Autosave Enabled
+      awaitInputStop: Waiting for you to stop input...
+      saving: Saving...
+      saved: Saved to cloud
 
-  data:
-    loading: Loading data...
-    loadError: Data loading failed.
-    submissionCount: Submission(s)
-    submissionId: "Submission ID: "
-    submissionTime: "Submission Time: "
-    noSubmissions: No submissions.
+    updateError: Error occurred while updating.
 
-  settings:
-    titlePlaceholder: Title
-    settingsLoadError: Load Error
-    settingsLoading: Loading Settings...
-    exiting: Saving settings, please wait...
-    exitSaveError: Error saving settings, data may be not saved. Please refresh to continue.
+    editor:
+      new: Add question
+      cancel: Cancel
+      ok: OK
+      questionLoadError: Load Error
+      questionLoading: Loading Questions...
+      exiting: Saving questions, please wait...
+      exitSaveError: Error saving question, data may be not saved. Please refresh to continue.
+      removeError: Error occurred while removing the question.
 
-theme-basic:
-  prevPage: ←Prev page
-  nextPage: Next page→
-  submit: Submit
-  page: Page {page}
-  submitting: Submitting...
-  submitted: The form has been submitted. Thank you.
-  submiterror: There is an error submitting the form.
+    data:
+      loading: Loading data...
+      loadError: Data loading failed.
+      submissionCount: Submission(s)
+      submissionId: "Submission ID: "
+      submissionTime: "Submission Time: "
+      noSubmissions: No submissions.
+
+    settings:
+      titlePlaceholder: Title
+      settingsLoadError: Load Error
+      settingsLoading: Loading Settings...
+      exiting: Saving settings, please wait...
+      exitSaveError: Error saving settings, data may be not saved. Please refresh to continue.
+      entry:
+        basic: Basics
+        plugin: Plugins
+
+  sample:
+    name: Sample
+    description: A sample plugin to demonstrate capabilities of plugins.
+    route:
+      sample: SAAAMple
+    settings:
+      sample: Sample Plugin
+
+theme:
+  basic:
+    name: Basic
+    description: Basic UI, should not be used for production.
+    footer: Powered by KEEER Vote
+    prevPage: ←Prev page
+    nextPage: Next page→
+    submit: Submit
+    page: Page {page}
+    submitting: Submitting...
+    submitted: The form has been submitted. Thank you.
+    submiterror: There is an error submitting the form.

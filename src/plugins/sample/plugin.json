@@ -1,6 +1,4 @@
 {
-  "name": "Sample",
-  "description": "A sample plugin to demonstrate capabilities of plugins.",
   "code": "sample",
   "version": "0.0.1",
   "default": false,

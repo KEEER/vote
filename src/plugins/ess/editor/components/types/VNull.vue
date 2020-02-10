@@ -1,5 +1,5 @@
 <template>
-  <b>{{$t('plugin-ess.question.nulltype')}}</b>
+  <b>{{$t('plugin.ess.question.nulltype')}}</b>
 </template>
 
 <script>

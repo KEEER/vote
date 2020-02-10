@@ -9,7 +9,7 @@
           :id="`${uid}-title`"
           class="question-title"
         >
-          <m-floating-label :for="`${uid}-title`">{{$t('plugin-ess.question.title')}}</m-floating-label>
+          <m-floating-label :for="`${uid}-title`">{{$t('plugin.ess.question.title')}}</m-floating-label>
         </m-text-field>
         <TypeSelector v-model="type_" />
       </div>
@@ -36,7 +36,7 @@
       <m-icon class="handle" icon="drag_handle" />
     </span>
     <span slot="actionIcons" v-if="!folded && !readonly">
-      {{$t('plugin-ess.question.required')}}
+      {{$t('plugin.ess.question.required')}}
       <m-switch v-model="required_" class="required-switch" />
       <span class="divider" />
       <m-menu-anchor>
@@ -45,11 +45,11 @@
           <m-list>
             <m-list-item @click="themeOpen = true">
               <m-icon icon="palette" class="question-menu__icon" slot="graphic" />
-              <template slot="text">{{$t('plugin-ess.question.theme')}}</template>
+              <template slot="text">{{$t('plugin.ess.question.theme')}}</template>
             </m-list-item>
             <m-list-item @click="remove">
               <m-icon icon="delete" class="question-menu__icon" slot="graphic" />
-              <template slot="text">{{$t('plugin-ess.question.remove')}}</template>
+              <template slot="text">{{$t('plugin.ess.question.remove')}}</template>
             </m-list-item>
           </m-list>
         </m-menu>
@@ -292,7 +292,7 @@ export default {
         })
         if (res.errors || !res.data.removeQuestion) throw res
       } catch (e) {
-        alert(this.$t('plugin-ess.editor.removeError'))
+        alert(this.$t('plugin.ess.editor.removeError'))
         console.log('remove error', e.stack)
         return
       }

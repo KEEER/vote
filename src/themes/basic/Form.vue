@@ -3,14 +3,14 @@
     <h1>{{this.title}}</h1>
     <slot v-if="!submitting && !submitted && !submiterror" />
     <span v-if="!submitting && !submitted && !submiterror" class="form-controls">
-      {{$t('theme-basic.page', { page: current + 1 })}}
-      <button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme-basic.prevPage')}}</button>
-      <button class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme-basic.nextPage')}}</button>
-      <button class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme-basic.submit')}}</button>
+      {{$t('theme.basic.page', { page: current + 1 })}}
+      <button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.basic.prevPage')}}</button>
+      <button class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme.basic.nextPage')}}</button>
+      <button class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.basic.submit')}}</button>
     </span>
-    <h1 v-if="submitting && !submitted">{{$t('theme-basic.submitting')}}</h1>
-    <h1 v-if="submitted">{{$t('theme-basic.submitted')}}</h1>
-    <h1 v-if="submiterror">{{$t('theme-basic.submiterror')}}</h1>
+    <h1 v-if="submitting && !submitted">{{$t('theme.basic.submitting')}}</h1>
+    <h1 v-if="submitted">{{$t('theme.basic.submitted')}}</h1>
+    <h1 v-if="submiterror">{{$t('theme.basic.submiterror')}}</h1>
   </main>
 </template>
 

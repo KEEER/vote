@@ -12,15 +12,15 @@
           step="1"
         >
           <m-line-ripple slot="bottomLine" />
-        </m-text-field></span> / {{submissionIds.length}} {{$t('plugin-ess.data.submissionCount')}}
+        </m-text-field></span> / {{submissionIds.length}} {{$t('plugin.ess.data.submissionCount')}}
       </span>
-      <span class="no-submissions" v-else>{{$t('plugin-ess.data.noSubmissions')}}</span>
+      <span class="no-submissions" v-else>{{$t('plugin.ess.data.noSubmissions')}}</span>
       <m-icon-button :disabled="nextSubmissionDisabled" icon="chevron_right" @click="nextSubmission" />
     </div>
     <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
       <div class="submission-meta">
-        <p class="submission-id">{{$t('plugin-ess.data.submissionId')}}{{currentSubmissionId}}</p>
-        <p class="submission-time">{{$t('plugin-ess.data.submissionTime')}}{{currentSubmission.time.toLocaleString()}}</p>
+        <p class="submission-id">{{$t('plugin.ess.data.submissionId')}}{{currentSubmissionId}}</p>
+        <p class="submission-time">{{$t('plugin.ess.data.submissionTime')}}{{currentSubmission.time.toLocaleString()}}</p>
       </div>
       <Question
         v-for="question in questions"
@@ -29,8 +29,8 @@
         :data="{ ...question, value: currentSubmission.data[question.id] }"
       />
     </div>
-    <div v-else-if="loadError">{{$t('plugin-ess.data.loadError')}}</div>
-    <div v-else-if="!loaded || submissionLoading">{{$t('plugin-ess.data.loading')}}</div>
+    <div v-else-if="loadError">{{$t('plugin.ess.data.loadError')}}</div>
+    <div v-else-if="!loaded || submissionLoading">{{$t('plugin.ess.data.loading')}}</div>
   </main>
 </template>
 
