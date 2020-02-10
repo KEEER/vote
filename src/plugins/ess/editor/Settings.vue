@@ -1,7 +1,7 @@
 <template>
   <main class="settings">
-    <div v-if="exitSaveError">{{texts.exitSaveError}}</div>
-    <div v-else-if="exiting">{{texts.exiting}}</div>
+    <div v-if="exitSaveError">{{$t('plugin-ess.settings.exitSaveError')}}</div>
+    <div v-else-if="exiting">{{$t('plugin-ess.settings.exiting')}}</div>
     <ul class="settings-entries" v-else-if="settingsLoaded">
       <li
         class="settings-entry"
@@ -13,15 +13,14 @@
           <component
             :ref="`entry-${i}`"
             :is="entry.component"
-            :texts="texts"
             @update:saveState="updateSaveState"
             :data="settingsData"
           />
         </m-card>
       </li>
     </ul>
-    <div v-else-if="settingsLoadError">{{texts.settingsLoadError}}</div>
-    <div v-else>{{texts.settingsLoading}}</div>
+    <div v-else-if="settingsLoadError">{{$t('plugin-ess.settings.settingsLoadError')}}</div>
+    <div v-else>{{$t('plugin-ess.settings.settingsLoading')}}</div>
   </main>
 </template>
 
@@ -79,13 +78,6 @@ export default {
   data () {
     return {
       entries,
-      texts: {
-        titlePlaceholder: 'Title',
-        settingsLoadError: 'Load Error',
-        settingsLoading: 'Loading Settings...',
-        exiting: 'Saving settings, please wait...',
-        exitSaveError: 'Error saving settings, data may be not saved. Please refresh to continue.',
-      },
       settingsData: null,
       settingsLoaded: false,
       settingsLoadError: false,

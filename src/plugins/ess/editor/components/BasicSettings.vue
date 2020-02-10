@@ -3,7 +3,7 @@
     <SettingsEntry
       name="basic.title"
       preset="textField"
-      :placeholder="texts.titlePlaceholder"
+      :placeholder="$t('plugin-ess.settings.titlePlaceholder')"
       required
       @update:saveState="updateSaveState"
       :data="data"
@@ -50,7 +50,6 @@ export default {
     },
   },
   props: {
-    texts: Object,
     data: Object,
   },
 }

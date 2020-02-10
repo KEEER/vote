@@ -15,7 +15,7 @@
             <router-link class="navlink" :to="{name: route.name}">
               <m-list-item :activated="$route.name === route.name">
                 <m-icon :icon="route.icon" slot="graphic"/>
-                {{texts.routes[route.name]}}
+                {{$t(`plugin-ess.app.routes.${route.name}`)}}
               </m-list-item>
             </router-link>
           </span>
@@ -157,12 +157,6 @@ export default Vue.extend({
         drawerTitle: null,
         appBarTitle: 'Vote Editor',
         appBarSubtitle: null,
-        routes: {
-          fill: 'Fill',
-          edit: 'Editor',
-          data: 'Data',
-          settings: 'Settings',
-        },
       },
       title: window.KVoteFormData.title,
       documentTitle: document.title,

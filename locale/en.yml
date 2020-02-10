@@ -1,0 +1,66 @@
+plugin-ess:
+  app:
+    routes:
+      fill: Fill
+      edit: Editor
+      data: Data
+      settings: Settings
+      # plugin routes
+      sample: SAAAMple
+
+  question:
+    title: Question Title
+    description: Question Description (optional)
+    required: Required
+    type: Question Type
+    valuePlaceholder: Default Value
+    noValuePlaceholder: No Value
+    labelPlaceholder: Label
+    nulltype: Please specify a question type.
+    default:
+      type: VText # Don't translate this!
+      title: New Question
+    remove: Remove
+    theme: Theme Configuration
+
+  saveHint:
+    notChanged: Autosave Enabled
+    awaitInputStop: Waiting for you to stop input...
+    saving: Saving...
+    saved: Saved to cloud
+
+  updateError: Error occurred while updating.
+
+  editor:
+    new: Add question
+    cancel: Cancel
+    ok: OK
+    questionLoadError: Load Error
+    questionLoading: Loading Questions...
+    exiting: Saving questions, please wait...
+    exitSaveError: Error saving question, data may be not saved. Please refresh to continue.
+    removeError: Error occurred while removing the question.
+
+  data:
+    loading: Loading data...
+    loadError: Data loading failed.
+    submissionCount: Submission(s)
+    submissionId: "Submission ID: "
+    submissionTime: "Submission Time: "
+    noSubmissions: No submissions.
+
+  settings:
+    titlePlaceholder: Title
+    settingsLoadError: Load Error
+    settingsLoading: Loading Settings...
+    exiting: Saving settings, please wait...
+    exitSaveError: Error saving settings, data may be not saved. Please refresh to continue.
+
+theme-basic:
+  prevPage: ←Prev page
+  nextPage: Next page→
+  submit: Submit
+  page: Page {page}
+  submitting: Submitting...
+  submitted: The form has been submitted. Thank you.
+  submiterror: There is an error submitting the form.

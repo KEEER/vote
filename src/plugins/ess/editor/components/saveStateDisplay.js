@@ -1,21 +1,13 @@
 export default {
   data () {
     return {
-      texts: {
-        saveHint: {
-          notChanged: 'Autosave Enabled',
-          awaitInputStop: 'Waiting for you to stop input...',
-          saving: 'Saving...',
-          saved: 'Saved to cloud',
-        },
-      },
       exiting: false,
       exitSaveError: false,
     }
   },
   watch: {
     saveState (val) {
-      this.$root.$children[0].texts.appBarSubtitle = this.texts.saveHint[val]
+      this.$root.$children[0].texts.appBarSubtitle = this.$t(`plugin-ess.saveHint.${val}`)
       switch (val) {
       case 'saved':
         window.onbeforeunload = null

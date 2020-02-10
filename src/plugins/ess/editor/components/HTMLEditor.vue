@@ -9,7 +9,7 @@
 </style>
 
 <script>
-;{
+; {
   const el = document.createElement('script')
   el.src = 'https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/js/medium-editor.min.js'
   document.head.appendChild(el)
@@ -32,7 +32,6 @@ export default {
   },
   props: {
     data: {},
-    texts: Object,
     readonly: Boolean,
   },
   methods: {
@@ -41,7 +40,7 @@ export default {
       this.editor = new MediumEditor(this.$el, {
         targerBlank: true,
         placeholder: this.readonly ? false : {
-          text: this.texts.question.description,
+          text: this.$t('plugin-ess.question.description'),
           hideOnClick: true,
         },
       })
@@ -56,7 +55,7 @@ export default {
     save () { return { html: this.editor.getContent() } },
     freeze () {
       this.destroy()
-    }
+    },
   },
   mounted () {
     this.init()

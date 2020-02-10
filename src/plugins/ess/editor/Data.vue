@@ -12,26 +12,25 @@
           step="1"
         >
           <m-line-ripple slot="bottomLine" />
-        </m-text-field></span> / {{submissionIds.length}} {{texts.submissionCount}}
+        </m-text-field></span> / {{submissionIds.length}} {{$t('plugin-ess.data.submissionCount')}}
       </span>
-      <span class="no-submissions" v-else>{{texts.noSubmissions}}</span>
+      <span class="no-submissions" v-else>{{$t('plugin-ess.data.noSubmissions')}}</span>
       <m-icon-button :disabled="nextSubmissionDisabled" icon="chevron_right" @click="nextSubmission" />
     </div>
     <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
       <div class="submission-meta">
-        <p class="submission-id">{{texts.submissionId}}{{currentSubmissionId}}</p>
-        <p class="submission-time">{{texts.submissionTime}}{{currentSubmission.time.toLocaleString()}}</p>
+        <p class="submission-id">{{$t('plugin-ess.data.submissionId')}}{{currentSubmissionId}}</p>
+        <p class="submission-time">{{$t('plugin-ess.data.submissionTime')}}{{currentSubmission.time.toLocaleString()}}</p>
       </div>
       <Question
         v-for="question in questions"
         readonly
         :key="question.id"
         :data="{ ...question, value: currentSubmission.data[question.id] }"
-        :texts="texts"
       />
     </div>
-    <div v-else-if="loadError">{{texts.loadError}}</div>
-    <div v-else-if="!loaded || submissionLoading">{{texts.loading}}</div>
+    <div v-else-if="loadError">{{$t('plugin-ess.data.loadError')}}</div>
+    <div v-else-if="!loaded || submissionLoading">{{$t('plugin-ess.data.loading')}}</div>
   </main>
 </template>
 
@@ -72,7 +71,6 @@ import { query } from '../common/graphql'
 import questionsNeeded from './questionsNeeded'
 import hooks from './hooks'
 import Question from './components/Question.vue'
-import questionTexts from './questionTexts'
 
 export default {
   name: 'Data',
@@ -88,15 +86,6 @@ export default {
       submissionLoading: false,
       submissionIds: [],
       submissions: [],
-      texts: {
-        loading: 'Loading data...',
-        loadError: 'Data loading failed.',
-        submissionCount: 'Submission(s)',
-        submissionId: 'Submission ID: ',
-        submissionTime: 'Submission Time: ',
-        noSubmissions: 'No submissions.',
-        question: questionTexts,
-      },
     }
   },
   watch: {
@@ -171,7 +160,7 @@ export default {
       this.currentSubmission = submission
       this.submissions.push(submission)
       return submission
-    }
+    },
   },
   mounted () {
     hooks.emit('editor:dataMounted', [ this ])

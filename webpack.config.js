@@ -29,8 +29,6 @@ const config = {
     'plugin-sample-editor': './src/plugins/sample/editor.js',
     'plugin-ess-form': './src/plugins/ess/form/index.js',
     'plugin-ess-editor': './src/plugins/ess/editor/index.js',
-    'plugin-lang-zh-hans-form': './src/plugins/lang-zh-hans/form.js',
-    'plugin-lang-zh-hans-editor': './src/plugins/lang-zh-hans/editor.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -136,6 +134,7 @@ const config = {
       ],
       scripts: [
         { path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false },
+        { path: 'https://cdn.jsdelivr.net/npm/vue-i18n@8.15.3/dist/vue-i18n.min.js', publicPath: false },
         'vote-config.js',
       ],
       append: false,

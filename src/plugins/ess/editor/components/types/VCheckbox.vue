@@ -20,7 +20,6 @@
           :cbvalue="option.value"
           :value.sync="value_[option.value]"
           @update:value="syncValue"
-          :texts="texts"
         />
       </transition-group>
     </draggable>
@@ -31,8 +30,6 @@
         :key="option.value"
         :label="option.label"
         :cbvalue="option.value"
-        :value="value_[option.value]"
-        :texts="texts"
       />
     </div>
   </ul>
@@ -70,7 +67,6 @@ export default {
   props: {
     value: Object,
     options: {},
-    texts: Object,
     readonly: Boolean,
   },
   components: {

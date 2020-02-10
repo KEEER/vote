@@ -1,0 +1,67 @@
+plugin-ess:
+  app:
+    routes:
+      fill: 填写
+      edit: 编辑器
+      data: 数据
+      settings: 设置
+      # plugin routes
+      sample: 示...例
+
+  question:
+    title: 问题标题
+    description: 问题描述(可选)
+    required: 必填
+    type: 问题类型
+    valuePlaceholder: 默认回答
+    noValuePlaceholder: 没有回答
+    labelPlaceholder: 描述
+    nulltype: 请声明一种问题类型。
+    default:
+      type: VText
+      title: 新的问题
+    remove: 删除问题
+    theme: 主题设置
+
+  saveHint:
+    notChanged: 自动保存已开启
+    awaitInputStop: 正在等待您停止编辑……
+    saving: 正在保存……
+    saved: 已保存到云端
+
+  updateError: 更新过程中出错。
+
+  editor:
+    new: 添加问题
+    cancel: 取消
+    ok: 确定
+    questionLoadError: 问题加载错误
+    questionLoading: 正在加载问题……
+    exiting: 正在保存问题，请稍候……
+    exitSaveError: 保存问题过程中出错，数据可能没有保存。请刷新以继续。
+    updateError: 更新问题过程中出错。
+    removeError: 删除问题过程中出错。
+
+  data:
+    loading: 正在加载数据中……
+    loadError: 加载数据失败
+    submissionCount: 份提交
+    submissionId: "提交ID: "
+    submissionTime: "提交时间: "
+    noSubmissions: 没有回复。
+
+  settings:
+    titlePlaceholder: 问卷标题
+    settingsLoadError: 加载失败
+    settingsLoading: 正在加载设置……
+    exiting: 正在保存设置，请稍候……
+    exitSaveError: 保存数据过程中出错，数据可能没有保存。请刷新以继续。
+
+theme-basic:
+  prevPage: ← 前一页
+  nextPage: 下一页 →
+  submit: 提交！
+  page: 第 {page} 页
+  submitting: 正在提交……
+  submitted: 表单已经提交，感谢您的参与。
+  submiterror: 在提交表单时出错！

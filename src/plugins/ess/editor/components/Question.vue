@@ -9,9 +9,9 @@
           :id="`${uid}-title`"
           class="question-title"
         >
-          <m-floating-label :for="`${uid}-title`">{{texts.question.title}}</m-floating-label>
+          <m-floating-label :for="`${uid}-title`">{{$t('plugin-ess.question.title')}}</m-floating-label>
         </m-text-field>
-        <TypeSelector v-model="type_" :texts="texts" />
+        <TypeSelector v-model="type_" />
       </div>
       <div v-else class="question-title--display question-title--readonly">
         {{title_}}
@@ -22,7 +22,6 @@
         ref="description"
         :data="description_"
         @change="logDescriptionChange"
-        :texts="texts"
         v-if="!readonly"
       />
       <div v-else-if="description_" v-html="description_.html || ''"></div>
@@ -31,14 +30,13 @@
         :readonly="readonly"
         v-model="value_"
         :options.sync="options_"
-        :texts="texts"
       />
     </div>
     <span slot="actionButtons" v-if="!folded && !readonly">
       <m-icon class="handle" icon="drag_handle" />
     </span>
     <span slot="actionIcons" v-if="!folded && !readonly">
-      {{texts.question.required}}
+      {{$t('plugin-ess.question.required')}}
       <m-switch v-model="required_" class="required-switch" />
       <span class="divider" />
       <m-menu-anchor>
@@ -47,11 +45,11 @@
           <m-list>
             <m-list-item @click="themeOpen = true">
               <m-icon icon="palette" class="question-menu__icon" slot="graphic" />
-              <template slot="text">{{texts.question.theme}}</template>
+              <template slot="text">{{$t('plugin-ess.question.theme')}}</template>
             </m-list-item>
             <m-list-item @click="remove">
               <m-icon icon="delete" class="question-menu__icon" slot="graphic" />
-              <template slot="text">{{texts.question.remove}}</template>
+              <template slot="text">{{$t('plugin-ess.question.remove')}}</template>
             </m-list-item>
           </m-list>
         </m-menu>
@@ -242,7 +240,6 @@ export default {
     // TODO: check props
     data: Object,
     readonly: { type: Boolean, required: false, default: false },
-    texts: Object,
   },
   watch: {
     data () {
@@ -295,7 +292,7 @@ export default {
         })
         if (res.errors || !res.data.removeQuestion) throw res
       } catch (e) {
-        alert(this.texts.removeError)
+        alert(this.$t('plugin-ess.editor.removeError'))
         console.log('remove error', e.stack)
         return
       }

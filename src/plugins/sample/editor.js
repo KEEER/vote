@@ -8,9 +8,7 @@ window.addEventListener('vote:ready', () => {
       name: 'sample',
       component: SampleEntry,
       icon: 'lock',
-      title: 'SAAAAmple',
     }))
-    .on('editor:editorMounted', ([ editor ]) => editor.texts.new = 'Ad Question')
     .on('editor:settingsMounted', ([ { entries } ]) => entries
       .some(e => e.component.name === 'SampleEntry') ? null : entries.push({
         name: 'Sample Plugin',

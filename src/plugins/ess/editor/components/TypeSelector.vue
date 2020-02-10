@@ -14,7 +14,7 @@
     <m-floating-label
       :for="uid"
       slot="label"
-    >{{texts.question.type}}</m-floating-label>
+    >{{$t('plugin-ess.question.type')}}</m-floating-label>
   </m-select>
 </template>
 
@@ -44,7 +44,6 @@ export default {
   },
   props: {
     value: String,
-    texts: Object,
   },
   watch: {
     value (val) {

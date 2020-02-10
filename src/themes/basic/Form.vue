@@ -3,14 +3,14 @@
     <h1>{{this.title}}</h1>
     <slot v-if="!submitting && !submitted && !submiterror" />
     <span v-if="!submitting && !submitted && !submiterror" class="form-controls">
-      {{texts.pageno}}
-      <button class="form-prev" :hidden="!prevVisible" @click="prev">{{texts.prevPage}}</button>
-      <button class="form-next" :hidden="!nextVisible" @click="next">{{texts.nextPage}}</button>
-      <button class="form-submit" :hidden="nextVisible" @click="submit">{{texts.submit}}</button>
+      {{$t('theme-basic.page', { page: current + 1 })}}
+      <button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme-basic.prevPage')}}</button>
+      <button class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme-basic.nextPage')}}</button>
+      <button class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme-basic.submit')}}</button>
     </span>
-    <h1 v-if="submitting && !submitted">{{texts.submitting}}</h1>
-    <h1 v-if="submitted">{{texts.submitted}}</h1>
-    <h1 v-if="submiterror">{{texts.submiterror}}</h1>
+    <h1 v-if="submitting && !submitted">{{$t('theme-basic.submitting')}}</h1>
+    <h1 v-if="submitted">{{$t('theme-basic.submitted')}}</h1>
+    <h1 v-if="submiterror">{{$t('theme-basic.submiterror')}}</h1>
   </main>
 </template>
 
@@ -28,16 +28,6 @@ export default Vue.extend({
       prevVisible: false,
       nextVisible: false,
       status: 'filling',
-      texts: {
-        prevPage: '←Prev page',
-        nextPage: 'Next page→',
-        submit: 'Submit',
-        page: form => `Page ${form.current + 1}`,
-        pageno: null,
-        submitting: 'Submitting...',
-        submitted: 'The form has been submitted. Thank you.',
-        submiterror: 'There is an error submitting the form.',
-      },
     }
   },
   props: {
@@ -69,7 +59,6 @@ export default Vue.extend({
       else this.prevVisible = true
       if (this.current === this.pages.length - 1) this.nextVisible = false
       else this.nextVisible = true
-      this.texts.pageno = this.texts.page(this)
       hooks.emit('form:updatevisibility', [ this ])
     },
     submit () {
@@ -85,7 +74,6 @@ export default Vue.extend({
     document.title = this.title
     this.$children[this.current].current = true
     this.updateVisibility()
-    this.texts.pageno = this.texts.page(this)
     hooks.emit('form:mounted', [ this ])
     hooks.emit('form:updatevisibility', [ this ])
   },

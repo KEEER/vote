@@ -1,7 +1,7 @@
 <template>
   <main id="editor">
-    <div v-if="exitSaveError">{{texts.exitSaveError}}</div>
-    <div v-else-if="exiting">{{texts.exiting}}</div>
+    <div v-if="exitSaveError">{{$t('plugin-ess.editor.exitSaveError')}}</div>
+    <div v-else-if="exiting">{{$t('plugin-ess.editor.exiting')}}</div>
     <div id="questions" v-else-if="questionLoaded">
       <draggable
         v-model="questions"
@@ -15,7 +15,6 @@
           <Question v-for="(question, i) in questions"
             :key="question.id"
             :data="question"
-            :texts="texts"
             @remove="remove(i)"
             :ref="`question-${i}`"
             @update:saveState="updateSaveState"
@@ -25,12 +24,12 @@
       <div class="bottom-new">
         <m-button @click="newQuestion" unelevated>
           <m-icon slot="icon" icon="add" />
-          {{texts.new}}
+          {{$t('plugin-ess.editor.new')}}
         </m-button>
       </div>
     </div>
-    <div v-else-if="questionLoadError">{{texts.questionLoadError}}</div>
-    <div v-else>{{texts.questionLoading}}</div>
+    <div v-else-if="questionLoadError">{{$t('plugin-ess.editor.questionLoadError')}}</div>
+    <div v-else>{{$t('plugin-ess.editor.questionLoading')}}</div>
   </main>
 </template>
 
@@ -64,7 +63,6 @@ import draggable from 'vuedraggable'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
 import questionsNeeded from './questionsNeeded'
-import questionTexts from './questionTexts'
 
 Vue.use(MButton)
 Vue.use(MIcon)
@@ -78,18 +76,6 @@ export default {
   },
   data () {
     return {
-      texts: {
-        new: 'Add question',
-        cancel: 'Cancel',
-        ok: 'OK',
-        questionLoadError: 'Load Error',
-        questionLoading: 'Loading Questions...',
-        exiting: 'Saving questions, please wait...',
-        exitSaveError: 'Error saving question, data may be not saved. Please refresh to continue.',
-        question: questionTexts,
-        updateError: 'Error occurred while updating the question.',
-        removeError: 'Error occurred while removing the question.',
-      },
       newQuestionDialogOpen: false,
       dragging: false,
     }
@@ -102,12 +88,12 @@ export default {
             newQuestion(pageId: $pageId, options: $options)
           }`.trim(), {
           pageId: this.currentPageId,
-          options: this.texts.question.default,
+          options: $t('plugin-ess.question.default'),
         })
         if (res.errors) {
           throw res
         } else {
-          this.questions.push(Object.assign({ id: res.data.newQuestion }, this.texts.question.default))
+          this.questions.push(Object.assign({ id: res.data.newQuestion }, $t('plugin-ess.question.default')))
           this.$nextTick(() => window.scrollTo(0, 1048576))
         }
       } catch (e) {

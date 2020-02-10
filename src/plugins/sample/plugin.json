@@ -11,8 +11,7 @@
       "VText"
     ],
     "hooks": [
-      "question:update",
-      "form:texts"
+      "question:update"
     ],
     "inject": {
       "form": {

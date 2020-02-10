@@ -37,7 +37,6 @@ export default {
     },
   },
   props: {
-    texts: Object,
     data: Object,
   },
   mounted () {
