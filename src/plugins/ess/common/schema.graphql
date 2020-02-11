@@ -18,7 +18,8 @@ type Form {
   page(id: Int!): Page!
   pageCount: Int!
   userid: String!
-  theme: String!
+  theme: String! @deprecated
+  themeConfig: String! # Actually Object
   plugins: [String!]
   data: String # Actually Object
 }
@@ -37,6 +38,7 @@ type Question {
   value: String
   required: Boolean
   options: String # Actually Object
+  config: String # Actually Object
 }
 
 input QuestionInput {
@@ -56,6 +58,7 @@ input QuestionUpdateInput {
   required: Boolean
   options: String # Actually Object
   reorder: Int
+  config: String # Actually Object
 }
 
 type Submission {

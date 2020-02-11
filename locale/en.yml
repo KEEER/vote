@@ -44,6 +44,7 @@ plugin:
       new: Add question
       cancel: Cancel
       ok: OK
+      config: Configurations
       questionLoadError: Load Error
       questionLoading: Loading Questions...
       exiting: Saving questions, please wait...
@@ -80,6 +81,9 @@ theme:
   basic:
     name: Basic
     description: Basic UI, should not be used for production.
+    config:
+      question:
+        multiline: Display in separate lines
     footer: Powered by KEEER Vote
     prevPage: ←Prev page
     nextPage: Next page→

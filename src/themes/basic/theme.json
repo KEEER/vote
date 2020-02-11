@@ -9,6 +9,19 @@
       "VText": "0.0.1",
       "VTextarea": "0.0.1"
     },
+    "questionConfig": {
+      "VCheckbox": [
+        {
+          "type": "checkbox",
+          "name": "multiline",
+          "label": "theme.basic.config.question.multiline",
+          "default": true
+        }
+      ]
+    },
+    "formConfig": [
+      "TODO"
+    ],
     "hooks": [
       "form:update",
       "form:beforesubmit",

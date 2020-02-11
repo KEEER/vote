@@ -20,6 +20,8 @@ class Theme {
   applicable (obj) {
     // TODO
   }
+
+  toJSON () { return this.config }
 }
 
 let themeDirs, themes

@@ -26,6 +26,8 @@
       "editor:appMounted",
       "editor:settingsMounted",
       "editor:editorMounted",
+      "question__beforeUpdate",
+      "question__preprocessThemeConfigEntries",
       "editor:dataMounted",
       "editor:beforeRouterLoad"
     ],

@@ -1,5 +1,11 @@
 <template>
   <m-card class="question-card">
+    <QuestionConfigDialog
+      v-if="themeOpen"
+      :value.sync="themeConfig_"
+      :entries="themeConfigEntries"
+      :open.sync="themeOpen"
+    />
     <div class="question" :class="{ readonly }" v-if="!folded">
       <div class="title-type" v-if="!readonly">
         <m-text-field
@@ -43,7 +49,7 @@
         <m-icon-button @click="menuOpen = true" icon="more_vert" />
         <m-menu v-model="menuOpen">
           <m-list>
-            <m-list-item @click="themeOpen = true">
+            <m-list-item v-if="hasThemeConfigEntries" @click="themeOpen = true">
               <m-icon icon="palette" class="question-menu__icon" slot="graphic" />
               <template slot="text">{{$t('plugin.ess.question.theme')}}</template>
             </m-list-item>
@@ -179,6 +185,7 @@ import MList from 'material-components-vue/components/list/'
 import { query } from '../../common/graphql'
 import updateObservable from './updateObservable'
 import HTMLEditor from './HTMLEditor.vue'
+import QuestionConfigDialog from './QuestionConfigDialog.vue'
 
 ;[
   MCard,
@@ -201,9 +208,14 @@ export default {
       for (let i of [ 'value', 'options' ]) {
         change[i] = JSON.stringify(change[i])
       }
+      if ('themeConfig' in change) {
+        change.config = JSON.stringify({ theme: change.themeConfig })
+        delete change.themeConfig
+      }
       if (change.description) {
         change.description = JSON.stringify(await vm.$refs.description.save())
       }
+      vm.$emit('beforeUpdate', [ vm, change ])
       const res = await query(`
         mutation UpdateQuestion($options: QuestionUpdateInput!) {
           updateQuestion(options: $options)
@@ -225,6 +237,7 @@ export default {
       type_: this.data.type,
       required_: this.data.required,
       description_: this.data.description,
+      themeConfig_: (this.data.config || {}).theme || {},
       removed: false,
       folded: false,
       menuOpen: false,
@@ -235,11 +248,25 @@ export default {
     ...questionTypes,
     TypeSelector,
     HTMLEditor,
+    QuestionConfigDialog,
   },
   props: {
     // TODO: check props
     data: Object,
     readonly: { type: Boolean, required: false, default: false },
+  },
+  computed: {
+    themeConfigEntries () {
+      if (!this.hasThemeConfigEntries) return []
+      const cfg = window.KVoteFormData.themeConfig
+      const entries = cfg.provides.questionConfig[this.type_]
+      this.$emit('preprocessThemeConfigEntries', [ this, entries ])
+      return entries
+    },
+    hasThemeConfigEntries () {
+      const cfg = window.KVoteFormData.themeConfig
+      return 'provides' in cfg && 'questionConfig' in cfg.provides && this.type_ in cfg.provides.questionConfig
+    },
   },
   watch: {
     data () {
@@ -264,6 +291,11 @@ export default {
       this.change.options = val
       this.logChange()
       this.$emit('update:options', val)
+    },
+    themeConfig_ (val) {
+      this.change.themeConfig = val
+      this.logChange()
+      this.$emit('update:themeConfig', val)
     },
     required_ (val) {
       this.change.required = val

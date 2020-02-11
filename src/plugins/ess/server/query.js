@@ -2,6 +2,7 @@ import Question from '../../../question'
 import log from '../../../log'
 import assert from 'assert'
 import sanitize from 'sanitize-html'
+import { themes } from '../../../theme'
 
 export default {
   async form (args, ctx) {
@@ -17,10 +18,9 @@ export default {
       })
     })
     form.plugins = form.plugins.map(p => p.config.code)
-    form.page = ({ id }) => {
-      return form.pages[id]
-    }
+    form.page = ({ id }) => form.pages[id]
     form.pageCount = form.pages.length
+    form.themeConfig = JSON.stringify(themes.find(t => t.config.code === form.theme))
     let formData = form.data || {}
     await ctx.state.form.emit('preprocessData', [ ctx.state.form, formData, d => formData = d ])
     form.data = JSON.stringify(formData)
@@ -59,7 +59,7 @@ export default {
         assert(!!questions[i + reorder])
         ;[ questions[i + reorder], questions[i] ] = [ questions[i], questions[i + reorder] ]
       }
-      for (let i of [ 'value', 'options', 'description' ]) {
+      for (let i of [ 'value', 'options', 'description', 'config' ]) {
         if (i in options) {
           options[i] = JSON.parse(options[i])
         }

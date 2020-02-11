@@ -2,6 +2,7 @@
   <div>
     <VCheckboxInput
       v-for="option in data.options"
+      :multiline="multiline"
       :key="option.value"
       :option="option"
       :value.sync="value_[option.value]">
@@ -28,6 +29,12 @@ export default {
       },
     },
     value: Object,
+  },
+  computed: {
+    multiline () {
+      if (!data.config || !data.config.theme) return false
+      return data.config.theme.multiline
+    },
   },
 }
 </script>

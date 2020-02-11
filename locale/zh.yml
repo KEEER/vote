@@ -27,7 +27,7 @@ plugin:
       labelPlaceholder: 描述
       nulltype: 请声明一种问题类型。
       default:
-        type: VText
+        type: VText # 不要翻译!!!
         title: 新的问题
       remove: 删除问题
       theme: 主题设置
@@ -44,6 +44,7 @@ plugin:
       new: 添加问题
       cancel: 取消
       ok: 确定
+      config: 设置
       questionLoadError: 问题加载错误
       questionLoading: 正在加载问题……
       exiting: 正在保存问题，请稍候……
@@ -81,6 +82,9 @@ theme:
   basic:
     name: 基本样式
     description: 基本的 Vote 样式，不应该用于真正的问卷。
+    config:
+      question:
+        multiline: 分多行显示
     footer: 由 KEEER Vote 提供技术支持
     prevPage: ← 前一页
     nextPage: 下一页 →
