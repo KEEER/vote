@@ -11,7 +11,7 @@ export default {
     form.pages.forEach(p => {
       p.questions = p.questions.map(q => {
         const o = q.toObject()
-        for (let i of [ 'value', 'options', 'description' ]) {
+        for (let i of [ 'value', 'options', 'description', 'config' ]) {
           o[i] = JSON.stringify(o[i])
         }
         return o

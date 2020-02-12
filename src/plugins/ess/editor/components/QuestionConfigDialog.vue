@@ -4,7 +4,7 @@
     <m-typo-body :level="1" slot="body">
       <span class="entry" v-for="(entry, i) in entries" :key="i">
         <span class="checkbox-entry" v-if="entry.type === 'checkbox'">
-          <m-checkbox :id="`${uid}-${i}`" v-model="value_[entry.name]"></m-checkbox>
+          <m-checkbox :id="`${uid}-${i}`" v-model="value_[entry.name]" @change="syncValue"></m-checkbox>
           <label :for="`${uid}-${i}`">{{$t(entry.label)}}</label>
         </span>
       </span>
@@ -53,6 +53,11 @@ export default {
     open (val) { this.open_ = val },
     value_ (val) { this.$emit('input', val) },
     value (val) { this.value_ = val },
+  },
+  methods: {
+    syncValue () {
+      this.$emit('input', { ...this.value_ })
+    },
   },
   props: {
     entries: {

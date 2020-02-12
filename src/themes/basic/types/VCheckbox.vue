@@ -17,7 +17,7 @@ export default {
   name: 'VCheckbox',
   data () {
     return {
-      value_: this.value,
+      value_: this.value || {},
     }
   },
   components: { VCheckboxInput },
@@ -25,15 +25,16 @@ export default {
     data: {
       type: Object,
       validator (val) {
-        return val.title && val.options && val.options.every(op => op.label && op.value)
+        const nonnull = a => a !== null && a !== undefined
+        return val.title && val.options && val.options.every(op => nonnull(op.label) && nonnull(op.value))
       },
     },
     value: Object,
   },
   computed: {
     multiline () {
-      if (!data.config || !data.config.theme) return false
-      return data.config.theme.multiline
+      if (!this.data.config || !this.data.config.theme) return false
+      return this.data.config.theme.multiline
     },
   },
 }

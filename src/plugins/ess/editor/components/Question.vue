@@ -2,7 +2,7 @@
   <m-card class="question-card">
     <QuestionConfigDialog
       v-if="themeOpen"
-      :value.sync="themeConfig_"
+      v-model="themeConfig_"
       :entries="themeConfigEntries"
       :open.sync="themeOpen"
     />

@@ -44,7 +44,7 @@ const config = {
           'vue-loader',
         ],
       },
-      {
+      process.env.NODE_ENV === 'development' ? {} : {
         test: /\.js$/,
         use: {
           loader: 'babel-loader',
