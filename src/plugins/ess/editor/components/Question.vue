@@ -147,9 +147,12 @@
   align-items: center;
 }
 
+.handle {
+  cursor: move;
+}
+
 .handle--folded {
   padding: 0 8px 0 0;
-  cursor: pointer;
 }
 
 .title-required::before {

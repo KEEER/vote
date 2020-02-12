@@ -84,6 +84,7 @@
 
 .handle {
   padding: 12px;
+  cursor: move;
 }
 </style>
 
