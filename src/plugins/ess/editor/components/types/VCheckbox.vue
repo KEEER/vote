@@ -30,6 +30,7 @@
         :key="option.value"
         :label="option.label"
         :cbvalue="option.value"
+        :value="value_[option.value]"
       />
     </div>
   </ul>
