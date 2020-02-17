@@ -208,6 +208,15 @@ export default {
   name: 'Question',
   mixins: [
     updateObservable(async (vm, change) => {
+      vm.$emit('update:data', {
+        ...vm.data,
+        title: vm.title_,
+        description: vm.description_,
+        value: vm.value_,
+        options: vm.options_,
+        type: vm.type_,
+        config: { theme: vm.themeConfig_ },
+      })
       for (let i of [ 'value', 'options' ]) {
         change[i] = JSON.stringify(change[i])
       }
@@ -240,7 +249,7 @@ export default {
       type_: this.data.type,
       required_: this.data.required,
       description_: this.data.description,
-      themeConfig_: (this.data.config || {}).theme || {},
+      themeConfig_: (this.data.config || {}).theme || {}, // TODO: default config
       removed: false,
       folded: false,
       menuOpen: false,
@@ -274,9 +283,11 @@ export default {
   watch: {
     data () {
       this.title_ = this.data.title
+      this.description_ = this.data.description
       this.value_ = this.data.value
       this.options_ = this.data.options
       this.type_ = this.data.type
+      this.themeConfig_ = (this.data.config || {}).theme || {}
     },
     title_ (val) {
       if (val) {

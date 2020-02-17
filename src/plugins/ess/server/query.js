@@ -51,6 +51,7 @@ export default {
   async updateQuestion ({ options }, ctx) {
     try {
       const q = ctx.state.form.questions.find(q => q.options.id === options.id)
+      if (!q) return false
       if (options.reorder) {
         const { reorder } = options
         delete options.reorder

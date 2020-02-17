@@ -5,6 +5,7 @@
       null-label="plugin.ess.editor.questionLoading"
       :count="pageCount"
       :current.sync="currentPageId"
+      :before-update="update"
       v-if="!exitSaveError && !questionLoadError"
       allowAdd
       @add="addPage"
@@ -24,6 +25,7 @@
           <Question v-for="(question, i) in questions"
             :key="question.id"
             :data="question"
+            @update:data="updateData"
             @remove="remove(i)"
             :ref="`question-${i}`"
             @update:saveState="updateSaveState"
@@ -91,6 +93,9 @@ export default {
       dragging: false,
     }
   },
+  watch: {
+    currentPageId () { this.processPages() },
+  },
   methods: {
     async newQuestion () {
       try {
@@ -118,14 +123,40 @@ export default {
     },
     remove (i) {
       this.questions.splice(i, 1)
+      this.processPages()
     },
     move (item) {
       this.dragging = false
       const q = this.$refs[`question-${item.newIndex}`][0]
       q.$emit('reorder', item.newIndex - item.oldIndex)
     },
-    addPage () {
+    updateData (val) {
+      const i = this.questions.findIndex(q => q.id === val.id)
+      this.questions[i] = this.pages[this.currentPageId][i] = val
+    },
+    async addPage () {
+      await this.update()
       this.currentPageId = this.pageCount++
+    },
+    /**
+     * WARNING: DO NOT MODIFY this function unless you FULLY understand how it works and know EVERY EDGE CASE
+     * update pages to be consistent with server-side (see Form.processPages)
+     * TODO: unit test
+     */
+    processPages () {
+      this.$nextTick(() => {
+        for (let i = 0; i < this.pageCount; i++) {
+          // loaded, blank and non-current page: filter them out
+          if (i in this.pages && i !== this.currentPageId && this.pages[i].length === 0) {
+            const pages = this.pages.slice(0, i)
+            for (let j = i + 1; j < this.pages.length; j++) if (j in this.pages) pages[j - 1] = this.pages[j]
+            this.pages = pages
+            this.pageCount--
+            if (this.currentPageId > i) this.currentPageId--
+            if (this.currentPageId >= this.pageCount) this.currentPageId = this.pageCount - 1
+          }
+        }
+      })
     },
   },
   mounted () {

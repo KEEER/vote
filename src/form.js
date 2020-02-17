@@ -34,7 +34,6 @@ export class Page {
   /**
    * Creates a page object.
    * @param {Object} options Options, see below.
-   * @param {string} options.title The title of the page
    * @param {number} options.id Page ID
    * @param {module:question~Question[]} options.questions Questions in the page
    */
@@ -64,7 +63,8 @@ export class Page {
   static fromObject (pages, questions) {
     return pages.map(p => {
       const data = Object.assign({}, p)
-      data.questions = data.questions.map(q => questions.find(q_ => q_.id === q))
+      // handle NULL pages
+      data.questions = (data.questions || []).map(q => questions.find(q_ => q_.id === q))
       return new Page(data)
     })
   }
@@ -97,8 +97,7 @@ export class Form extends EventEmitter {
         return true
       },
     })
-    const pages = this.options.pages
-    this.options.pages = new Proxy(pages, {
+    this.options.pages = new Proxy(Form.processPages(this.options.pages), {
       set: (obj, prop, val) => {
         obj[prop] = val
         if (this.updated.indexOf('pages') < 0) this.updated.push('pages')
@@ -141,6 +140,17 @@ export class Form extends EventEmitter {
    */
   get pages () {
     return this.options.pages
+  }
+
+  /**
+   * Removes all blank pages, unless there is only one page.
+   * @param {Page[]} pages pages to be processed
+   * @returns {Page[]} filtered pages
+   */
+  static processPages (pages) {
+    const aPages = pages.filter(p => p.options && p.options.questions && p.options.questions.length > 0)
+    if (aPages.length === 0) aPages.push(new Page({ id: 0, questions: [] }))
+    return aPages
   }
 
   /**
@@ -200,7 +210,7 @@ export class Form extends EventEmitter {
       args.questions = this.questions.map(q => q.toObject())
     }
     if (this.pages.some(p => p.updated) || this.updated.indexOf('pages') > -1) {
-      args.pages = this.pages.map(p => p.toObject())
+      args.pages = Form.processPages(this.pages).map(p => p.toObject())
     }
     if (this.updated.indexOf('plugins') > -1) {
       args.plugins = this.options.plugins.map(p => p.config.code)

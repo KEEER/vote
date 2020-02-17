@@ -40,7 +40,8 @@ export default {
           }
         }
         this.pages[id] = this.questions
-        this.pageCount = res.data.form.pageCount
+        // Do not replace it with `this.pageCount === undefined`
+        if (!this.pageCount) this.pageCount = res.data.form.pageCount
         this.questionLoaded = true
       } catch (e) {
         console.error('loadQuestions', e)

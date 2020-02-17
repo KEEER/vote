@@ -25,7 +25,6 @@ type Form {
 }
 
 type Page {
-  title: String!
   id: Int!
   questions: [Question!]!
 }

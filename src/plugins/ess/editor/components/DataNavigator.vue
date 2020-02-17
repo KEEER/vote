@@ -51,6 +51,7 @@ export default {
     countLabel: String,
     nullLabel: String,
     allowAdd: Boolean,
+    beforeUpdate: {},
   },
   computed: {
     prevDisabled () {
@@ -61,12 +62,14 @@ export default {
     },
   },
   methods: {
-    prev () {
+    async prev () {
       if (this.prevDisabled) return
+      if (this.beforeUpdate) await this.beforeUpdate()
       this.current_--
     },
-    next () {
+    async next () {
       if (this.nextSubmissionDisabled) return
+      if (this.beforeUpdate) await this.beforeUpdate()
       this.current_++
     },
   },
