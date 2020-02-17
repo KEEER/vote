@@ -1,4 +1,5 @@
 import Question from '../../../question'
+import { Page } from '../../../form'
 import log from '../../../log'
 import assert from 'assert'
 import sanitize from 'sanitize-html'
@@ -18,7 +19,7 @@ export default {
       })
     })
     form.plugins = form.plugins.map(p => p.config.code)
-    form.page = ({ id }) => form.pages[id]
+    form.page = ({ id }) => form.pages[id] || { title: null, id, questions: [] }
     form.pageCount = form.pages.length
     form.themeConfig = JSON.stringify(themes.find(t => t.config.code === form.theme))
     let formData = form.data || {}
@@ -38,6 +39,7 @@ export default {
   async newQuestion ({ pageId, options }, ctx) {
     try {
       options.id = ctx.state.form.questions.map(q => q.options.id).reduce((m, n) => Math.max(m, n), -1) + 1
+      if (!(pageId in ctx.state.form.pages)) ctx.state.form.pages[pageId] = new Page({ id: pageId, questions: [] })
       ctx.state.form.pages[pageId].options.questions.push(new Question(options))
       await ctx.state.form.update()
       return options.id

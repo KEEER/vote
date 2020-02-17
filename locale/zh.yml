@@ -51,6 +51,7 @@ plugin:
       exitSaveError: 保存问题过程中出错，数据可能没有保存。请刷新以继续。
       updateError: 更新问题过程中出错。
       removeError: 删除问题过程中出错。
+      pageCount: 页
 
     data:
       loading: 正在加载数据中……

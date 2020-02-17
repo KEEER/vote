@@ -11,8 +11,17 @@ export default {
       questionLoadError: false,
     }
   },
+  watch: {
+    currentPageId () { this.loadQuestions() },
+  },
   methods: {
     async loadQuestions () {
+      if (this.currentPageId in this.pages) {
+        this.questions = this.pages[this.currentPageId]
+        return
+      }
+      this.questionLoaded = false
+      const id = this.currentPageId
       try {
         const res = await query(`
           query($id: Int!) {
@@ -22,9 +31,7 @@ export default {
               }
               pageCount
             }
-          }`.trim(), {
-          id: this.currentPageId,
-        })
+          }`.trim(), { id })
         if (res.errors) throw res
         this.questions = res.data.form.page.questions
         for (let i of [ 'value', 'options', 'description', 'config' ]) {
@@ -32,10 +39,11 @@ export default {
             question[i] = JSON.parse(question[i])
           }
         }
+        this.pages[id] = this.questions
         this.pageCount = res.data.form.pageCount
         this.questionLoaded = true
       } catch (e) {
-        console.error(e)
+        console.error('loadQuestions', e)
         this.questionLoadError = true
         throw e
       }

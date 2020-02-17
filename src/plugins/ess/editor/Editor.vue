@@ -1,5 +1,14 @@
 <template>
   <main id="editor">
+    <DataNavigator
+      count-label="plugin.ess.editor.pageCount"
+      null-label="plugin.ess.editor.questionLoading"
+      :count="pageCount"
+      :current.sync="currentPageId"
+      v-if="!exitSaveError && !questionLoadError"
+      allowAdd
+      @add="addPage"
+    />
     <div v-if="exitSaveError">{{$t('plugin.ess.editor.exitSaveError')}}</div>
     <div v-else-if="exiting">{{$t('plugin.ess.editor.exiting')}}</div>
     <div id="questions" v-else-if="questionLoaded">
@@ -63,6 +72,7 @@ import draggable from 'vuedraggable'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
 import questionsNeeded from './questionsNeeded'
+import DataNavigator from './components/DataNavigator.vue'
 
 Vue.use(MButton)
 Vue.use(MIcon)
@@ -73,6 +83,7 @@ export default {
   components: {
     Question,
     draggable,
+    DataNavigator,
   },
   data () {
     return {
@@ -112,6 +123,9 @@ export default {
       this.dragging = false
       const q = this.$refs[`question-${item.newIndex}`][0]
       q.$emit('reorder', item.newIndex - item.oldIndex)
+    },
+    addPage () {
+      this.currentPageId = this.pageCount++
     },
   },
   mounted () {

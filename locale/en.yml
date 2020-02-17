@@ -50,6 +50,7 @@ plugin:
       exiting: Saving questions, please wait...
       exitSaveError: Error saving question, data may be not saved. Please refresh to continue.
       removeError: Error occurred while removing the question.
+      pageCount: Page(s)
 
     data:
       loading: Loading data...

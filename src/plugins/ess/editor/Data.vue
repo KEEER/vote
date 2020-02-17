@@ -1,22 +1,12 @@
 <template>
   <main id="data">
-    <div id="data-navigator" v-if="loaded">
-      <m-icon-button :disabled="prevSubmissionDisabled" icon="chevron_left" @click="prevSubmission" />
-      <span class="submission-count" v-if="submissionIds.length > 0">
-        <span id="submission-index"><m-text-field
-          outlined
-          v-model="currentSubmissionIndexPlusOne"
-          type="number"
-          min="1"
-          :max="submissionIds.length"
-          step="1"
-        >
-          <m-line-ripple slot="bottomLine" />
-        </m-text-field></span> / {{submissionIds.length}} {{$t('plugin.ess.data.submissionCount')}}
-      </span>
-      <span class="no-submissions" v-else>{{$t('plugin.ess.data.noSubmissions')}}</span>
-      <m-icon-button :disabled="nextSubmissionDisabled" icon="chevron_right" @click="nextSubmission" />
-    </div>
+    <DataNavigator
+      count-label="plugin.ess.data.submissionCount"
+      null-label="plugin.ess.data.noSubmissions"
+      :count="submissionIds.length"
+      :current.sync="currentSubmissionIndex"
+      v-if="loaded"
+    />
     <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
       <div class="submission-meta">
         <p class="submission-id">{{$t('plugin.ess.data.submissionId')}}{{currentSubmissionId}}</p>
@@ -39,17 +29,6 @@ main {
   padding: 10px;
 }
 
-#data-navigator {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-content: baseline;
-}
-
-.submission-count, .no-submissions {
-  align-self: center;
-}
-
 .submission-id, .submission-time {
   text-align: center;
   margin: 0;
@@ -60,27 +39,21 @@ main {
 }
 </style>
 
-<style>
-#submission-index > .mdc-text-field {
-  width: 90px;
-}
-</style>
-
 <script>
 import { query } from '../common/graphql'
 import questionsNeeded from './questionsNeeded'
 import hooks from './hooks'
 import Question from './components/Question.vue'
+import DataNavigator from './components/DataNavigator.vue'
 
 export default {
   name: 'Data',
   mixins: [ questionsNeeded ],
-  components: { Question },
+  components: { Question, DataNavigator },
   data () {
     return {
       currentSubmission: null,
       currentSubmissionIndex: -1,
-      currentSubmissionIndexPlusOne: '0',
       loaded: false,
       loadError: false,
       submissionLoading: false,
@@ -93,32 +66,13 @@ export default {
       this.currentSubmissionIndexPlusOne = String(val + 1)
       this.updateSubmissionStatus()
     },
-    currentSubmissionIndexPlusOne (val, old) {
-      const num = Number(val)
-      if (num !== Math.floor(val) || num < 1 || num > this.submissionIds.length) return
-      this.currentSubmissionIndex = num - 1
-    },
   },
   computed: {
-    prevSubmissionDisabled () {
-      return this.submissionIds.length === 0 || this.currentSubmissionIndex === 0
-    },
-    nextSubmissionDisabled () {
-      return this.submissionIds.length === 0 || this.currentSubmissionIndex === this.submissionIds.length - 1
-    },
     currentSubmissionId () {
       return (this.submissionIds || [])[this.currentSubmissionIndex] || null
     },
   },
   methods: {
-    prevSubmission () {
-      if (this.prevSubmissionDisabled) return
-      this.currentSubmissionIndex--
-    },
-    nextSubmission () {
-      if (this.nextSubmissionDisabled) return
-      this.currentSubmissionIndex++
-    },
     async updateSubmissionStatus () {
       try {
         this.submissionLoading = true
