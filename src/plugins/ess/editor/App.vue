@@ -36,6 +36,11 @@
         </section>
       </m-top-app-bar>
       <m-top-app-bar-fixed-adjust>
+        <div class="lang-fallback" v-if="$t('isFallback') === 'true'">
+          {{$t('languageNotSupported.beforeLink')}}
+          <a :href="$t('languageNotSupported.link')">{{$t('languageNotSupported.linkLabel')}}</a>
+          {{$t('languageNotSupported.afterLink')}}
+        </div>
         <router-view id="main" />
       </m-top-app-bar-fixed-adjust>
     </div>
@@ -51,7 +56,7 @@ body {
 </style>
 
 <style scoped>
-#main {
+#main, .lang-fallback {
   max-width: 720px;
 }
 
@@ -80,6 +85,16 @@ a.navlink {
   font-size: 0.9rem;
   line-height: 0.9rem;
   color: #b0bec5;
+}
+
+.lang-fallback {
+  box-sizing: border-box;
+	border-left: #dc3232 solid 4px;
+	padding: 12px;
+	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
+	box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.1);
+  background-color: #ffaaaa;
+  margin: 12px;
 }
 </style>
 

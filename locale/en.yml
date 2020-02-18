@@ -1,3 +1,10 @@
+# These items should not occur in other languages
+languageNotSupported:
+  beforeLink: "Your language is not currently supported by Vote. Click "
+  linkLabel: here
+  link: https://github.com/KEEER/vote/
+  afterLink: " to help us translate Vote into your language!"
+
 core:
   question:
     types:

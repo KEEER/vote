@@ -3,4 +3,9 @@ import zhStr from 'raw-loader!yaml-loader!./zh.yml'
 
 const en = JSON.parse(enStr), zh = JSON.parse(zhStr)
 export const messages = { en, zh }
-export const locale = navigator.language.slice(0, 2).toLowerCase()
+let navLocale = navigator.language.slice(0, 2).toLowerCase()
+if (!(navLocale in messages)) {
+  navLocale = 'en'
+  messages.en.isFallback = 'true'
+}
+export const locale = navLocale
