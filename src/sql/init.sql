@@ -5,8 +5,29 @@
 CREATE TABLE public.users
 (
     id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    -- updating from v0.0.135:
+    -- ALTER TABLE public.users ADD avatar_url character varying(128);
+    -- ALTER TABLE public.users ADD nickname character varying(64);
+    avatar_url character varying(128),
+    nickname character varying(64),
     settings jsonb,
     CONSTRAINT users_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+-- Table: public.tokens
+
+-- DROP TABLE public.tokens;
+
+CREATE TABLE public.tokens
+(
+    token character varying(36) COLLATE pg_catalog."default" NOT NULL,
+    id character varying(32) NOT NULL,
+    expiry timestamp without time zone NOT NULL,
+    CONSTRAINT tokens_pkey PRIMARY KEY (token)
 )
 WITH (
     OIDS = FALSE
@@ -55,22 +76,6 @@ CREATE TABLE public.submissions
         REFERENCES public.forms (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
--- Table: public.session
-
--- DROP TABLE public.session;
-
-CREATE TABLE public.session
-(
-    id text COLLATE pg_catalog."default" NOT NULL,
-    expiry timestamp without time zone NOT NULL,
-    data jsonb,
-    CONSTRAINT session_pkey PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE

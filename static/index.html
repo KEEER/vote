@@ -22,6 +22,7 @@
         <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" onclick="drawer.open = true">menu</button>
         <span class="mdc-top-app-bar__title">Dashboard - KEEER Vote</span>
       </section>
+      <section id="idframe" class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"></section>
     </div>
   </header>
   <aside class="mdc-drawer mdc-drawer--modal" id="drawer">
@@ -38,6 +39,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@material/drawer@4.0.0/dist/mdc.drawer.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@material/list@4.0.0/dist/mdc.list.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@material/ripple@4.0.0/dist/mdc.ripple.min.js"></script>
+  <script src="https://idframe.keeer.net/js/appbar.js"></script>
   <script>
     var $ = function (sel) { return document.querySelector(sel) }
     var $$ = function (sel) { return Array.from(document.querySelectorAll(sel)) }
@@ -45,6 +47,11 @@
     var drawer = new mdc.drawer.MDCDrawer($('#drawer'))
     $$('.mdc-list').forEach(function (el) { new mdc.list.MDCList(el) })
     $$('.mdc-list-item').forEach(function (el) { new mdc.ripple.MDCRipple(el) })
+    new idFrame.AppBarFrame({
+      base: 'http://localhost:8081/', // TODO
+      container: $('#idframe'),
+      // TODO: pro etc
+    })
   </script>
 </body>
 </html>

@@ -34,6 +34,7 @@
             </div>
           </span>
         </section>
+        <section id="idframe" class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"></section>
       </m-top-app-bar>
       <m-top-app-bar-fixed-adjust>
         <div class="lang-fallback" v-if="$t('isFallback') === 'true'">
@@ -60,8 +61,12 @@ body {
   max-width: 720px;
 }
 
-.mdc-drawer--dismissible.mdc-drawer--open ~ #content{
+.mdc-drawer--dismissible.mdc-drawer--open ~ #content {
   margin-left: 255px;
+}
+
+.mdc-drawer--dismissible.mdc-drawer--open ~ #content .mdc-top-app-bar {
+  width: calc(100% - 255px);
 }
 
 a.navlink {
@@ -96,6 +101,21 @@ a.navlink {
   background-color: #ffaaaa;
   margin: 12px;
 }
+
+#idframe {
+  --mdc-theme-primary: #fff;
+  padding: 0;
+  align-items: start;
+  padding-top: 12px;
+  padding-right: 12px;
+}
+
+@media(max-width: 599px) {
+  #idframe {
+    padding-top: 8px;
+    padding-right: 8px;
+  }
+}
 </style>
 
 <script>
@@ -106,6 +126,13 @@ import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'
 import hooks from './hooks'
+
+{
+  const el = document.createElement('script')
+  el.src = 'https://idframe.keeer.net/js/appbar.js'
+  document.head.appendChild(el)
+  window.idFrame = { mdc: { style: true } }
+}
 
 const routes = [
   {
@@ -199,6 +226,17 @@ export default Vue.extend({
 
     this.updateTitle()
     hooks.emit('editor:appMounted', [ this ])
+
+    const iid = setInterval(() => {
+      if ('AppBarFrame' in window.idFrame) {
+        clearInterval(iid)
+        new idFrame.AppBarFrame({
+          base: 'http://localhost:8081/', // TODO
+          container: '#idframe',
+          // TODO: pro etc
+        })
+      }
+    }, 500)
   },
 })
 </script>

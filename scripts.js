@@ -33,6 +33,36 @@ const fns = {
       process.exit(-1)
     }
   },
+
+  'kas-mock' () {
+    const Koa = require('koa')
+    const Router = require('koa-router')
+    const app = new Koa()
+    const router = new Router()
+    app.use(router.routes()).use(router.allowedMethods())
+    router.post('/api/auth/query_information', ctx => {
+      console.log('query-information')
+      ctx.set('Access-Control-Allow-Origin', '*')
+      // I have no idea why KAS responses are so ugly
+      ctx.body = {
+        status: 0,
+        result: {
+          status: 0,
+          result: {
+            avatar: 'https://keeer.net/img/logo/dark-square.jpg',
+            nickname: 'KEEER',
+            keeer_id: 'keeer',
+          },
+        },
+      }
+    })
+    router.post('/api/auth/examine_token', ctx => ctx.body = {
+      status: 0,
+      result: { status: 0 },
+    })
+    app.listen(8081)
+    console.log('Listening on http://localhost:8081/')
+  },
 }
 
 if (!(script in fns)) {
