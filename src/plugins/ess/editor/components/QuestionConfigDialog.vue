@@ -69,6 +69,11 @@ export default {
   },
   mounted () {
     this.$nextTick(() => this.open_ = this.open)
+    for (let entry of this.entries) {
+      if ('default' in entry && !(entry.name in this.value_)) {
+        this.value_[entry.name] = entry.default
+      }
+    }
   },
 }
 </script>
