@@ -1,4 +1,6 @@
-import log from '../../log'
+import logger from '../../log'
+
+const log = logger.child({ part: 'plugin-sample' })
 
 log.debug('plugin-sample loaded')
 

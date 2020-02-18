@@ -1,9 +1,11 @@
 import Question from '../../../question'
 import { Page } from '../../../form'
-import log from '../../../log'
+import logger from '../../../log'
 import assert from 'assert'
 import sanitize from 'sanitize-html'
 import { themes } from '../../../theme'
+
+const log = logger.child({ part: 'plugin-ess.query' })
 
 export default {
   async form (args, ctx) {

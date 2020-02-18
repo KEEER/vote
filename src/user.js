@@ -2,7 +2,9 @@
 
 import { query, update } from './db'
 import KASClient from 'kas-client-node'
-import log from './log'
+import logger from './log'
+
+const log = logger.child({ part: 'user' })
 
 export const kas = new KASClient({ base: process.env.KAS_BASE, secretKey: process.env.KAS_KEY })
 

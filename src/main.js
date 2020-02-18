@@ -1,13 +1,15 @@
 /** @module main */
 import 'array-flat-polyfill'
 import path from 'path'
-import log from './log'
+import logger from './log'
 import { Form } from './form'
 import Koa from 'koa'
 import Router from 'koa-router'
 import BodyParser from 'koa-bodyparser'
 import serveStatic from 'koa-static'
 import { User } from './user'
+
+const log = logger.child({ part: 'main' })
 
 const app = new Koa()
 const router = new Router()

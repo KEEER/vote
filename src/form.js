@@ -3,11 +3,13 @@ import Question from './question'
 import plugins from './plugin'
 import themes from './theme'
 import { query, update } from './db'
-import log from './log'
+import logger from './log'
 import fs from 'fs-extra'
 import { readFileSync } from 'fs'
 import path from 'path'
 import EventEmitter from 'emittery'
+
+const log = logger.child({ part: 'form' })
 
 const templateCache = {}, jsCache = {}
 themes.forEach(theme => {
