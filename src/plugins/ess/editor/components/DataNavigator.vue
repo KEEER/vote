@@ -22,11 +22,16 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	align-content: baseline;
+	align-items: center;
 }
 
-.data-count, .no-data {
-  align-self: center;
+.data-count {
+  display: flex;
+  align-items: center;
+}
+
+.data-index {
+  margin-right: 8px;
 }
 </style>
 
