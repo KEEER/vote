@@ -52,6 +52,8 @@ plugin:
       updateError: 更新问题过程中出错。
       removeError: 删除问题过程中出错。
       pageCount: 页
+      foldAll: 折叠全部
+      unfoldAll: 展开全部
 
     data:
       loading: 正在加载数据中……

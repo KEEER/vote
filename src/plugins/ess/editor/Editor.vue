@@ -9,7 +9,18 @@
       v-if="!exitSaveError && !questionLoadError"
       allowAdd
       @add="addPage"
-    />
+    >
+      <m-list slot="menu">
+        <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].folded = true)">
+          <m-icon icon="keyboard_arrow_up" class="menu-icon" slot="graphic" />
+          <template slot="text">{{$t('plugin.ess.editor.foldAll')}}</template>
+        </m-list-item>
+        <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].folded = false)">
+          <m-icon icon="keyboard_arrow_down" class="menu-icon" slot="graphic" />
+          <template slot="text">{{$t('plugin.ess.editor.unfoldAll')}}</template>
+        </m-list-item>
+      </m-list>
+    </DataNavigator>
     <div v-if="exitSaveError">{{$t('plugin.ess.editor.exitSaveError')}}</div>
     <div v-else-if="exiting">{{$t('plugin.ess.editor.exiting')}}</div>
     <div id="questions" v-else-if="questionLoaded">
@@ -56,6 +67,11 @@ main {
 .bottom-new {
   text-align: center;
   width: 100%;
+}
+
+.mdc-menu .mdc-list .menu-icon {
+  color: rgba(0, 0, 0, 0.6);
+  margin-right: 12px;
 }
 </style>
 

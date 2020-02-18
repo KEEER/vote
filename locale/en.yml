@@ -51,6 +51,8 @@ plugin:
       exitSaveError: Error saving question, data may be not saved. Please refresh to continue.
       removeError: Error occurred while removing the question.
       pageCount: Page(s)
+      foldAll: Fold all
+      unfoldAll: Unfold all
 
     data:
       loading: Loading data...

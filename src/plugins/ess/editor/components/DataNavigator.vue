@@ -11,6 +11,12 @@
         step="1"
       /></span> / {{count}} {{$t(countLabel)}}
       <m-icon-button v-if="allowAdd" icon="add" @click="$emit('add')" />
+      <m-menu-anchor v-if="$slots.menu">
+        <m-icon-button @click="menuOpen = true" icon="more_vert" />
+        <m-menu v-model="menuOpen">
+          <slot name="menu" />
+        </m-menu>
+      </m-menu-anchor>
     </span>
     <span class="no-data" v-else>{{$t(nullLabel)}}</span>
     <m-icon-button :disabled="nextDisabled" icon="chevron_right" @click="next" />
@@ -48,6 +54,7 @@ export default {
     return {
       current_: this.current || 0,
       currentPlusOne: String(this.current || 0 + 1),
+      menuOpen: false,
     }
   },
   props: {
