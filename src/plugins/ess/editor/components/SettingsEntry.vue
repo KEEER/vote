@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="settings-entry">
     <component v-if="component" :is="component" v-model="value_" v-bind="bindings">
       <slot />
     </component>
@@ -8,6 +8,9 @@
         {{presetSlotText}}
       </component>
     </component>
+    <component v-if="presetLabelComponent" :is="presetLabelComponent" v-bind="presetLabelBindings">
+      {{presetLabelText}}
+    </component>
     <slot v-else :value.sync="value_" />
   </span>
 </template>
@@ -15,6 +18,17 @@
 <style>
 .settings-fullwidth {
   width: 100%;
+}
+.settings-switch {
+  margin: 16px 12px 16px 8px;
+}
+</style>
+
+<style scoped>
+.settings-entry {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
 }
 </style>
 
@@ -42,10 +56,25 @@ export default {
             required: 'required' in this.$attrs,
           },
           slotComponent: 'm-floating-label',
-          slotBindings: {
-            for: this.uid,
-          },
+          slotBindings: { for: this.uid },
           slotText: this.$attrs.placeholder,
+        },
+        checkbox: {
+          component: 'm-checkbox',
+          bindings: { id: this.uid },
+          labelComponent: 'label',
+          labelBindings: { for: this.uid },
+          labelText: this.$attrs.label,
+        },
+        switch: {
+          component: 'm-switch',
+          bindings: {
+            id: this.uid,
+            class: 'settings-switch',
+          },
+          labelComponent: 'label',
+          labelBindings: { for: this.uid },
+          labelText: this.$attrs.label,
         },
       },
     }
@@ -92,6 +121,15 @@ export default {
     },
     presetSlotText () {
       return this.presets[this.preset].slotText
+    },
+    presetLabelComponent () {
+      return this.presets[this.preset].labelComponent
+    },
+    presetLabelBindings () {
+      return this.presets[this.preset].labelBindings
+    },
+    presetLabelText () {
+      return this.presets[this.preset].labelText
     },
   },
 }

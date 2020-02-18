@@ -26,7 +26,7 @@ export async function handleUpdateBasicSettings ([ form, name, value, set ]) {
       return set(true)
 
     default:
-      return set(false)
+      return
     }
   }
 }

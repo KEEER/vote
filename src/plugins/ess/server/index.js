@@ -12,16 +12,25 @@ const editorHtml = readFileSync(
 export default function attachTo (form) {
   form.editorPaths = [ 'edit', 'settings', 'data', ...(form.editorPaths || []) ]
   form.on('getPage', async ([ path, ctx, set ]) => {
+    if (
+      !form.options.data
+      || !form.options.data.settings
+      || !form.options.data.settings['basic.retrieving']
+      && (path === '' || path === 'fill' || path === '_bundle')
+    ) {
+      set(404)
+    }
     if (form.editorPaths.indexOf(path) > -1) {
       let authorized = ctx.user && ctx.user.id === form.options.userid || process.env.NODE_ENV === 'development'
       await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
-      if (!authorized) return set(401)
+      // why not 403: return a 403 will indicate that the form exists.
+      if (!authorized) return set(404)
       return set(editorHtml.replace(/\/vote-config.js/g, `/${form.id}/_bundle-editor`))
     }
     if (path === '_query' && ctx.method === 'POST') {
       let authorized = ctx.user && ctx.user.id === form.options.userid || process.env.NODE_ENV === 'development'
       await form.emit('authorizeQuery', [ form, path, ctx, a => authorized = a ])
-      if (!authorized) return set(401)
+      if (!authorized) return set(404)
       let data
       try {
         data = await graphql(
@@ -39,7 +48,7 @@ export default function attachTo (form) {
     if (path === '_bundle-editor') {
       let authorized = ctx.user && ctx.user.id === form.options.userid || process.env.NODE_ENV === 'development'
       await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
-      if (!authorized) return set(401)
+      if (!authorized) return set(404)
       return set(await form.bundle(null, null, 'editor'))
     }
   })

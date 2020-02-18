@@ -8,8 +8,16 @@
       @update:saveState="updateSaveState"
       :data="data"
       @update:value="updateTitle"
-      @check="([ title, cancel ]) => !title ? cancel() : null"
+      @check="([ val, cancel ]) => !val ? cancel() : null"
       ref="title"
+    />
+    <SettingsEntry
+      name="basic.retrieving"
+      preset="switch"
+      :label="$t('plugin.ess.settings.retrievingLabel')"
+      @update:saveState="updateSaveState"
+      :data="data"
+      ref="retrieving"
     />
   </div>
 </template>
@@ -40,7 +48,8 @@ export default {
       app.updateTitle()
     },
     async update () {
-      return await this.$refs.title.update()
+      await this.$refs.title.update()
+      await this.$refs.u.update()
     },
   },
   props: {

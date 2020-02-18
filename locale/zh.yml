@@ -65,6 +65,7 @@ plugin:
 
     settings:
       titlePlaceholder: 问卷标题
+      retrievingLabel: 允许填写
       settingsLoadError: 加载失败
       settingsLoading: 正在加载设置……
       exiting: 正在保存设置，请稍候……

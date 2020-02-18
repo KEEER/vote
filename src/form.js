@@ -262,6 +262,7 @@ export class Form extends EventEmitter {
       theme: this.options.theme,
       themeConfig: themes.find(t => t.config.code === this.options.theme),
       data: this.pages.map(page => page.options.questions.map(q => q.toObject())),
+      config: this.options.data,
       pluginJs: [],
       pluginCss: [],
     }

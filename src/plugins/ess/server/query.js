@@ -102,6 +102,7 @@ export default {
     try {
       const form = ctx.state.form
       let retval
+      value = JSON.parse(value)
       await form.emit('updateSettings', [ form, name, value, ret => retval = ret ])
       if (typeof retval === 'boolean') return retval
       if (retval !== undefined) value = retval

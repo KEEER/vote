@@ -71,6 +71,7 @@ plugin:
 
     settings:
       titlePlaceholder: Title
+      retrievingLabel: Allow submissions
       settingsLoadError: Load Error
       settingsLoading: Loading Settings...
       exiting: Saving settings, please wait...

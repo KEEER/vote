@@ -21,6 +21,8 @@
       "form:submiterror",
       "form:submitted",
       "form:error",
+      "form:authorizeEditor",
+      "form:authorizeQuery",
       "form__updateSettings",
       "form__preprocessSettings",
       "editor:appMounted",
