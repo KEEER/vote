@@ -9,7 +9,6 @@ export const kas = new KASClient({ base: process.env.KAS_BASE, secretKey: proces
 const maxAge = parseInt(process.env.TOKEN_MAXAGE)
 
 export class KASError extends Error {}
-export class NotLoggedInError extends Error {}
 
 /** Class representing a user. */
 export class User {
@@ -93,11 +92,11 @@ export class User {
    * @async
    * @param {module:Koa~Context} ctx Koa Context
    * @returns {User} the user
-   * @throws {KASError|NotLoggedInError} if exception occurred
+   * @throws {KASError} if exception occurred
    */
   static async fromContext (ctx) {
     const token = ctx.cookies.get(process.env.TOKEN_COOKIE_NAME)
-    if (!token) throw new NotLoggedInError()
+    if (!token) return null
     let user
     user = await this.fromToken(token)
     if (user) return user

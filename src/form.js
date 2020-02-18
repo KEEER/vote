@@ -285,7 +285,12 @@ export class Form extends EventEmitter {
   async getPage (path, ctx) {
     let html = null
     await this.emit('getPage', [ path, ctx, h => html = h ])
-    if (html !== null) return html
+    if (html !== null) {
+      if (typeof html === 'number') return ctx.throw(html)
+      if (typeof html === 'string' || Buffer.isBuffer(html)) return html
+      log.error(`typeof html is ${typeof html}`)
+      return ctx.throw(500)
+    }
 
     switch (path) {
     case '':
