@@ -10,13 +10,6 @@
   </li>
 </template>
 
-<style lang="scss">
-@import '../../styles.scss';
-@import 'material-components-vue/components/text-field/styles';
-@import 'material-components-vue/components/checkbox/styles';
-@import 'material-components-vue/components/floating-label/styles';
-</style>
-
 <style scoped>
 .checkbox-li {
   display: flex;
@@ -36,16 +29,6 @@
 </style>
 
 <script>
-import MCheckbox from 'material-components-vue/components/checkbox/'
-import MTextField from 'material-components-vue/components/text-field/'
-import MFormField from 'material-components-vue/components/form-field/'
-import MFloatingLabel from 'material-components-vue/components/floating-label/'
-
-Vue.use(MCheckbox)
-Vue.use(MTextField)
-Vue.use(MFormField)
-Vue.use(MFloatingLabel)
-
 export default {
   name: 'VCheckboxInput',
   data () {

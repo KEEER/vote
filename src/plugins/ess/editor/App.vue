@@ -42,14 +42,7 @@
   </div>
 </template>
 
-<style lang="scss">
-@import './styles.scss';
-@import 'material-components-vue/components/top-app-bar/styles';
-@import 'material-components-vue/components/drawer/styles';
-@import 'material-components-vue/components/typography/styles';
-@import 'material-components-vue/components/icon-button/styles';
-@import 'material-components-vue/components/list/styles';
-</style>
+<style lang="scss" src="./styles.scss"></style>
 
 <style>
 body {
@@ -91,26 +84,13 @@ a.navlink {
 </style>
 
 <script>
+import './mdc-init'
 import VueRouter from 'vue-router'
-import MTopAppBar from 'material-components-vue/components/top-app-bar/'
-import MDrawer from 'material-components-vue/components/drawer/'
-import MList from 'material-components-vue/components/list/'
-import MIcon from 'material-components-vue/components/icon/'
-import MIconButton from 'material-components-vue/components/icon-button/'
 import Data from './Data.vue'
 import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'
 import hooks from './hooks'
-import { query } from '../common/graphql'
-
-;[
-  MTopAppBar,
-  MDrawer,
-  MIcon,
-  MIconButton,
-  MList,
-].forEach(component => Vue.use(component))
 
 const routes = [
   {

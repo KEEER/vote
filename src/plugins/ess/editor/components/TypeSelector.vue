@@ -18,20 +18,8 @@
   </m-select>
 </template>
 
-<style lang="scss">
-
-@import '../styles.scss';
-@import 'material-components-vue/components/select/styles';
-@import 'material-components-vue/components/list/styles';
-</style>
-
 <script>
-import MSelect from 'material-components-vue/components/select/'
-import MList from 'material-components-vue/components/list/'
 import hooks from '../hooks'
-
-Vue.use(MSelect)
-Vue.use(MList)
 
 export default {
   name: 'TypeSelector',

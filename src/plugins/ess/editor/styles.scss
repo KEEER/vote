@@ -1,3 +1,21 @@
 $mdc-theme-primary: #005c5c;
 $mdc-theme-accent: #002d4d;
 $mdc-theme-background: #fff;
+
+/* Please keep these items in order (dict) */
+@import 'material-components-vue/components/button/styles';
+@import 'material-components-vue/components/card/styles';
+@import 'material-components-vue/components/checkbox/styles';
+@import 'material-components-vue/components/dialog/styles';
+@import 'material-components-vue/components/drawer/styles';
+@import 'material-components-vue/components/floating-label/styles';
+@import 'material-components-vue/components/icon-button/styles';
+@import 'material-components-vue/components/line-ripple/styles';
+@import 'material-components-vue/components/list/styles';
+@import 'material-components-vue/components/menu/styles';
+@import 'material-components-vue/components/radio/styles';
+@import 'material-components-vue/components/select/styles';
+@import 'material-components-vue/components/switch/styles';
+@import 'material-components-vue/components/text-field/styles';
+@import 'material-components-vue/components/top-app-bar/styles';
+@import 'material-components-vue/components/typography/styles';

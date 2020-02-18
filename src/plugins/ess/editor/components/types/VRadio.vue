@@ -51,14 +51,6 @@
   </ul>
 </template>
 
-<style lang="scss">
-@import '../../styles.scss';
-@import 'material-components-vue/components/icon-button/styles';
-@import 'material-components-vue/components/text-field/styles';
-@import 'material-components-vue/components/radio/styles';
-@import 'material-components-vue/components/floating-label/styles';
-</style>
-
 <style scoped>
 .radio-ul {
   padding: 0;
@@ -89,22 +81,7 @@
 </style>
 
 <script>
-import MIconButton from 'material-components-vue/components/icon-button/'
-import MIcon from 'material-components-vue/components/icon/'
-import MRadio from 'material-components-vue/components/radio/'
-import MTextField from 'material-components-vue/components/text-field/'
-import MFormField from 'material-components-vue/components/form-field/'
-import MFloatingLabel from 'material-components-vue/components/floating-label/'
 import draggable from 'vuedraggable'
-
-;[
-  MIconButton,
-  MIcon,
-  MRadio,
-  MTextField,
-  MFormField,
-  MFloatingLabel,
-].forEach(component => Vue.use(component))
 
 export default {
   name: 'VRadio',

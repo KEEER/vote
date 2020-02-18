@@ -70,18 +70,6 @@
   </m-card>
 </template>
 
-<style lang="scss">
-@import '../styles.scss';
-@import 'material-components-vue/components/card/styles';
-@import 'material-components-vue/components/text-field/styles';
-@import 'material-components-vue/components/floating-label/styles';
-@import 'material-components-vue/components/line-ripple/styles';
-@import 'material-components-vue/components/icon-button/styles';
-@import 'material-components-vue/components/switch/styles';
-@import 'material-components-vue/components/menu/styles';
-@import 'material-components-vue/components/list/styles';
-</style>
-
 <style scoped>
 .question {
   padding: 16px 16px 0 16px;
@@ -174,33 +162,12 @@
 </style>
 
 <script>
-import MCard from 'material-components-vue/components/card/'
-import MTextField from 'material-components-vue/components/text-field/'
-import MFloatingLabel from 'material-components-vue/components/floating-label/'
-import MLineRipple from 'material-components-vue/components/line-ripple/'
 import questionTypes from './types'
 import TypeSelector from './TypeSelector.vue'
-import MIcon from 'material-components-vue/components/icon/'
-import MIconButton from 'material-components-vue/components/icon-button/'
-import MSwitch from 'material-components-vue/components/switch/'
-import MMenu from 'material-components-vue/components/menu/'
-import MList from 'material-components-vue/components/list/'
 import { query } from '../../common/graphql'
 import updateObservable from './updateObservable'
 import HTMLEditor from './HTMLEditor.vue'
 import QuestionConfigDialog from './QuestionConfigDialog.vue'
-
-;[
-  MCard,
-  MTextField,
-  MFloatingLabel,
-  MLineRipple,
-  MIcon,
-  MIconButton,
-  MSwitch,
-  MMenu,
-  MList,
-].forEach(component => Vue.use(component))
 
 // TODO: to be decided: should we allow customizing question menu?
 

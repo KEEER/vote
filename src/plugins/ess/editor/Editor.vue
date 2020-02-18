@@ -44,11 +44,6 @@
   </main>
 </template>
 
-<style lang="scss">
-@import './styles.scss';
-@import 'material-components-vue/components/button/styles';
-</style>
-
 <style scoped>
 main {
   padding: 10px;
@@ -65,8 +60,6 @@ main {
 </style>
 
 <script>
-import MButton from 'material-components-vue/components/button/'
-import MIcon from 'material-components-vue/components/icon/'
 import Question from './components/Question'
 import hooks from './hooks'
 import { query } from '../common/graphql'
@@ -75,9 +68,6 @@ import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
 import questionsNeeded from './questionsNeeded'
 import DataNavigator from './components/DataNavigator.vue'
-
-Vue.use(MButton)
-Vue.use(MIcon)
 
 export default {
   name: 'Editor',

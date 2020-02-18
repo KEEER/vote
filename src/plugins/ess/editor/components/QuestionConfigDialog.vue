@@ -17,11 +17,6 @@
   </m-dialog>
 </template>
 
-<style lang="scss">
-@import '../styles.scss';
-@import 'material-components-vue/components/dialog/styles';
-</style>
-
 <style scoped>
 .entry {
   display: block;
@@ -34,10 +29,6 @@
 </style>
 
 <script>
-import MDialog from 'material-components-vue/components/dialog'
-
-Vue.use(MDialog)
-
 const types = [ 'checkbox' ]
 
 export default {

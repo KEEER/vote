@@ -24,12 +24,6 @@
   </main>
 </template>
 
-<style lang="scss">
-@import './styles';
-@import 'material-components-vue/components/card/styles';
-@import 'material-components-vue/components/typography/styles';
-</style>
-
 <style scoped>
 .settings-entries {
   list-style: none;
@@ -48,18 +42,12 @@
 </style>
 
 <script>
-import MCard from 'material-components-vue/components/card/'
-import MTypo from 'material-components-vue/components/typography/'
-
 import BasicSettings from './components/BasicSettings.vue'
 import PluginSettings from './components/PluginSettings.vue'
 import hooks from './hooks'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
 import { query } from '../common/graphql'
-
-Vue.use(MCard)
-Vue.use(MTypo)
 
 const entries = [
   {

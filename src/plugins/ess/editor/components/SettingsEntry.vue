@@ -19,13 +19,8 @@
 </style>
 
 <script>
-import MTextField from 'material-components-vue/components/text-field/'
-import MFloatingLabel from 'material-components-vue/components/floating-label/'
 import updateObservable from './updateObservable'
 import { updateSetting } from './util'
-
-Vue.use(MTextField)
-Vue.use(MFloatingLabel)
 
 export default {
   name: 'SettingsEntry',

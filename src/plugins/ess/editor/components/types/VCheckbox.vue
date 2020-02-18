@@ -36,11 +36,6 @@
   </ul>
 </template>
 
-<style lang="scss">
-@import '../../styles.scss';
-@import 'material-components-vue/components/icon-button/styles';
-</style>
-
 <style scoped>
 .checkbox-ul {
   padding: 0;
@@ -55,13 +50,8 @@
 </style>
 
 <script>
-import MIconButton from 'material-components-vue/components/icon-button/'
-import MIcon from 'material-components-vue/components/icon/'
 import VCheckboxInput from './VCheckboxInput'
 import draggable from 'vuedraggable'
-
-Vue.use(MIconButton)
-Vue.use(MIcon)
 
 export default {
   name: 'VCheckbox',
