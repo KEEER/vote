@@ -44,6 +44,7 @@
 <script>
 import BasicSettings from './components/BasicSettings.vue'
 import PluginSettings from './components/PluginSettings.vue'
+import DangerousSettings from './components/DangerousSettings.vue'
 import hooks from './hooks'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
@@ -57,6 +58,10 @@ const entries = [
   {
     title: 'plugin.ess.settings.entry.plugin',
     component: PluginSettings,
+  },
+  {
+    title: 'plugin.ess.settings.entry.dangerous',
+    component: DangerousSettings,
   },
 ]
 

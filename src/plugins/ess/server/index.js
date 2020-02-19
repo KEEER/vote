@@ -2,8 +2,11 @@ import { readFileSync } from 'fs'
 import path from 'path'
 import { schema } from '../common/graphql'
 import { graphql } from 'graphql'
+import logger from '../../../log'
 import query from './query'
 import { handleUpdateBasicSettings, handlePreprocessBasicSettings } from './basic-settings'
+
+const log = logger.child({ part: 'plugin-ess.main' })
 
 const editorHtml = readFileSync(
   path.resolve(__dirname, '../../../../dist/plugin-ess-editor.html')
@@ -45,6 +48,26 @@ export default function attachTo (form) {
         data = { errors: [ e ] }
       }
       return set(JSON.stringify(data))
+    }
+    if (path === '_rename' || path === '_delete') {
+      let authorized = user && user.id === form.options.userid || process.env.NODE_ENV === 'development'
+      await form.emit('authorizeRenameOrRemoval', [ form, path, ctx, a => authorized = a ])
+      if (!authorized) return set(404)
+      if (path === '_rename') {
+        if (!ctx.query.id || !/^([a-zA-Z0-9]|-|_)*$/i.test(ctx.query.id)) return set(400)
+        form.id = `${user.id}/${ctx.query.id}`
+        if (form.id.length > 64) return set(400)
+        try { await form.update() } catch (e) {
+          log.error(e)
+          return set(500)
+        }
+        ctx.redirect(`/${form.id}/settings`)
+        return set(200)
+      } else { // delete
+        await form.destroy()
+        ctx.redirect('/')
+        return set(200)
+      }
     }
     if (path === '_bundle-editor') {
       let authorized = user && user.id === form.options.userid || process.env.NODE_ENV === 'development'

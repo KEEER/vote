@@ -23,6 +23,7 @@
       "form:error",
       "form:authorizeEditor",
       "form:authorizeQuery",
+      "form:authorizeRenameOrRemoval",
       "form__updateSettings",
       "form__preprocessSettings",
       "editor:appMounted",

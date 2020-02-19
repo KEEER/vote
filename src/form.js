@@ -255,6 +255,12 @@ export class Form extends EventEmitter {
     await query(stmt, this.params)
   }
 
+  async destroy () {
+    if (!this.saved) return
+    await query('DELETE FROM PRE_forms WHERE id = $1;', [ this.id ])
+    this.saved = false
+  }
+
   /**
    * Get the HTML markup corresponding to the form.
    * @returns {string} HTML
@@ -306,12 +312,13 @@ export class Form extends EventEmitter {
    * @example await form.getPage('fill', ctx)
    */
   async getPage (path, ctx) {
-    let html = null
-    await this.emit('getPage', [ path, ctx, h => html = h ])
-    if (html !== null) {
-      if (typeof html === 'number') return ctx.throw(html)
-      if (typeof html === 'string' || Buffer.isBuffer(html)) return html
-      log.error(`typeof html is ${typeof html}`)
+    let res = null
+    await this.emit('getPage', [ path, ctx, r => res = r ])
+    if (res !== null) {
+      if (res === 200) return ''
+      if (typeof res === 'number') return ctx.throw(res)
+      if (typeof res === 'string' || Buffer.isBuffer(res)) return res
+      log.error(`typeof html is ${typeof res}`)
       return ctx.throw(500)
     }
 
