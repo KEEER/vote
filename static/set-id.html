@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set KEEER ID</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/typography@5.0.0/dist/mdc.typography.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/button@4.0.0/dist/mdc.button.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/card@5.0.0/dist/mdc.card.min.css">
+  <link rel="stylesheet" href="https://fonts.loli.net/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="/set-id.css">
+</head>
+<body>
+  <div id="idframe"></div>
+  <div class="center">
+    <div>
+      <main id="container" class="mdc-card">
+        <h1 class="mdc-typography--headline3">Set your KEEER ID.</h1>
+        <p class="mdc-typography--body1">A KEEER ID is required in order to use Vote. for more details, please check out <a href="/">this blog post</a>.</p>
+        <p class="mdc-typography--body1">Click the button below to set your KEEER ID.</p>
+        <a class="mdc-button mdc-button--raised" href="https://account.keeer.net/set-keeer-id">
+          <div class="mdc-button__ripple"></div>
+          <i class="material-icons mdc-button__icon" aria-hidden="true">arrow_forward</i>
+          <span class="mdc-button__label">Go</span>
+        </a>
+      </main>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@material/ripple@4.0.0/dist/mdc.ripple.min.js"></script>
+  <script src="https://idframe.keeer.net/js/appbar.js"></script>
+  <script>
+  var $$ = function (sel) { return Array.from(document.querySelectorAll(sel)) }
+  $$('.mdc-button').forEach(function (el) { new mdc.ripple.MDCRipple(el) })
+  new idFrame.AppBarFrame({
+    base: 'http://localhost:8081/', // TODO
+    container: '#idframe',
+    // TODO: pro etc
+  })
+  </script>
+</body>
+</html>

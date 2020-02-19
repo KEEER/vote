@@ -7,7 +7,7 @@ import Koa from 'koa'
 import Router from 'koa-router'
 import BodyParser from 'koa-bodyparser'
 import serveStatic from 'koa-static'
-import { User } from './user'
+import { User, UserNoIdError } from './user'
 import generateName from 'project-name-generator'
 import { query } from './db'
 import { plugins } from './plugin'
@@ -100,7 +100,16 @@ app.use(async (ctx, next) => {
   log.http(ctx, rt)
 })
 app.use(async (ctx, next) => {
-  ctx.state.user = await User.fromContext(ctx)
+  try {
+    ctx.state.user = await User.fromContext(ctx)
+  } catch (e) {
+    if (e instanceof UserNoIdError) {
+      if (ctx.path.startsWith('/set-id')) { // FIXME: hack
+        if (ctx.path === '/set-id') ctx.path = '/set-id.html'
+        return serveStatic(staticDir)(ctx, next)
+      } else return ctx.redirect('/set-id')
+    }
+  }
   await next()
 })
 app.use(BodyParser())

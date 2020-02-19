@@ -11,6 +11,7 @@ export const kas = new KASClient({ base: process.env.KAS_BASE, secretKey: proces
 const maxAge = parseInt(process.env.TOKEN_MAXAGE)
 
 export class KASError extends Error {}
+export class UserNoIdError extends Error {}
 
 /** Class representing a user. */
 export class User {
@@ -106,6 +107,7 @@ export class User {
       await kas.validateToken(token)
       const info = await kas.getInformation(token)
       const id = info.keeer_id
+      if (!id) throw new UserNoIdError()
       try {
         const expiry = new Date(Date.now() + maxAge)
         await query('INSERT INTO PRE_tokens (token, id, expiry) VALUES ($1, $2, $3);', [ token, id, expiry ])
@@ -122,7 +124,7 @@ export class User {
         return user
       }
       // new user
-      // TODO: guidethrough, users with no IDs
+      // TODO: guidethrough
       user = new User({
         id,
         avatarUrl: info.avatar,
