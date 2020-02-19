@@ -54,6 +54,8 @@ plugin:
       pageCount: 页
       foldAll: 折叠全部
       unfoldAll: 展开全部
+      removeQuestionTitle: 确认删除问题？
+      removeQuestionDescription: 删除操作是不可恢复的。
 
     data:
       loading: 正在加载数据中……

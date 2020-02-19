@@ -53,13 +53,19 @@
               <m-icon icon="palette" class="question-menu__icon" slot="graphic" />
               <template slot="text">{{$t('plugin.ess.question.theme')}}</template>
             </m-list-item>
-            <m-list-item @click="remove">
+            <m-list-item @click="removeDialogOpen = true">
               <m-icon icon="delete" class="question-menu__icon" slot="graphic" />
               <template slot="text">{{$t('plugin.ess.question.remove')}}</template>
             </m-list-item>
           </m-list>
         </m-menu>
       </m-menu-anchor>
+      <m-dialog v-model="removeDialogOpen">
+        <m-typo-headline :level="5" slot="header">{{$t('plugin.ess.editor.removeQuestionTitle')}}</m-typo-headline>
+        <m-typo-body :level="1" slot="body">{{$t('plugin.ess.editor.removeQuestionDescription')}}</m-typo-body>
+        <m-button class="mdc-dialog__button" data-mdc-dialog-action="Cancel" slot="cancelButton">{{$t('plugin.ess.editor.cancel')}}</m-button>
+        <m-button @click="remove" class="mdc-dialog__button" data-mdc-dialog-action="OK" slot="acceptButton">{{$t('plugin.ess.editor.ok')}}</m-button>
+      </m-dialog>
       <m-icon-button @click="folded = true" icon="keyboard_arrow_up" />
     </span>
     <div class="folded" v-if="folded && !readonly">
@@ -216,11 +222,12 @@ export default {
       type_: this.data.type,
       required_: this.data.required,
       description_: this.data.description,
-      themeConfig_: (this.data.config || {}).theme || {}, // TODO: default config
+      themeConfig_: (this.data.config || {}).theme || {},
       removed: false,
       folded: false,
       menuOpen: false,
       themeOpen: false, // TODO: API design
+      removeDialogOpen: false,
     }
   },
   components: {
@@ -295,7 +302,6 @@ export default {
   methods: {
     async remove () {
       try {
-        // TODO: prompt before removal
         const res = await query(`
           mutation RemoveQuestion($id: Int!) {
             removeQuestion(id: $id)

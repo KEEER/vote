@@ -60,6 +60,8 @@ plugin:
       pageCount: Page(s)
       foldAll: Fold all
       unfoldAll: Unfold all
+      removeQuestionTitle: Remove Question?
+      removeQuestionDescription: This operation is not recoverable.
 
     data:
       loading: Loading data...
