@@ -20,3 +20,41 @@ html, body {
     padding-right: 8px;
   }
 }
+
+#main-wrapper {
+  display: flex;
+}
+
+#main-wrapper::before, #main-wrapper::after {
+  content: ' ';
+  flex: auto;
+}
+
+main {
+  width: 100%;
+  max-width: 720px;
+  margin: 32px 8px 0 8px;
+}
+
+#forms-table-div, #forms-table {
+  width: 100%;
+}
+
+.forms-table-edit {
+  width: 64px;
+  padding-right: 0;
+}
+
+.forms-table-edit ~ td, .forms-table-edit ~ th {
+  padding-left: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.title-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

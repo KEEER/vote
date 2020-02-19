@@ -164,8 +164,26 @@ export class Form extends EventEmitter {
   }
 
   /**
+   * Converts a DB object to a Form object.
+   * @param {*} data the object from the database
+   * @returns {Form} the form object
+   * @private
+   */
+  static async _fromDb (data) {
+    data.questions = data.questions.map(q => new Question(q))
+    data.pages = Page.fromObject(data.pages, data.questions)
+    data.plugins = data.plugins.map(
+      p => plugins.find(plugin => plugin.config.code === p)
+    ).filter(p => !!p)
+    const form = new Form(data)
+    form.saved = true
+    return form
+  }
+
+  /**
    * Gets a form by a certain id.
    * @param {string|number} id Form ID
+   * @returns {Form} the form object
    */
   static async fromId (id) {
     const res = await query('SELECT * FROM PRE_forms WHERE id = $1;', [ id.toString() ])
@@ -176,15 +194,17 @@ export class Form extends EventEmitter {
     if (res.rows.length === 0) {
       return null
     }
-    const data = res.rows[0]
-    data.questions = data.questions.map(q => new Question(q))
-    data.pages = Page.fromObject(data.pages, data.questions)
-    data.plugins = data.plugins.map(
-      p => plugins.find(plugin => plugin.config.code === p)
-    ).filter(p => !!p)
-    const form = new Form(data)
-    form.saved = true
-    return form
+    return await Form._fromDb(res.rows[0])
+  }
+
+  /**
+   * Gets the forms of a certain user.
+   * @param {string} userid the user's KEEER ID
+   * @returns {Form[]} form objects
+   */
+  static async fromUserId (userid) {
+    const res = await query('SELECT * FROM PRE_forms WHERE userid = $1;', [ userid ])
+    return await Promise.all(res.rows.map(d => Form._fromDb(d)))
   }
 
   /** Gets parameters for saving into database. */

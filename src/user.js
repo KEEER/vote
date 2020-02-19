@@ -122,7 +122,7 @@ export class User {
         return user
       }
       // new user
-      // TODO: guidethrough
+      // TODO: guidethrough, users with no IDs
       user = new User({
         id,
         avatarUrl: info.avatar,

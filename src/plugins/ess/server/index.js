@@ -20,15 +20,16 @@ export default function attachTo (form) {
     ) {
       set(404)
     }
+    const user = ctx.state.user
     if (form.editorPaths.indexOf(path) > -1) {
-      let authorized = ctx.user && ctx.user.id === form.options.userid || process.env.NODE_ENV === 'development'
+      let authorized = user && user.id === form.options.userid || process.env.NODE_ENV === 'development'
       await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
       // why not 403: return a 403 will indicate that the form exists.
       if (!authorized) return set(404)
       return set(editorHtml.replace(/\/vote-config.js/g, `/${form.id}/_bundle-editor`))
     }
     if (path === '_query' && ctx.method === 'POST') {
-      let authorized = ctx.user && ctx.user.id === form.options.userid || process.env.NODE_ENV === 'development'
+      let authorized = user && user.id === form.options.userid || process.env.NODE_ENV === 'development'
       await form.emit('authorizeQuery', [ form, path, ctx, a => authorized = a ])
       if (!authorized) return set(404)
       let data
@@ -46,7 +47,7 @@ export default function attachTo (form) {
       return set(JSON.stringify(data))
     }
     if (path === '_bundle-editor') {
-      let authorized = ctx.user && ctx.user.id === form.options.userid || process.env.NODE_ENV === 'development'
+      let authorized = user && user.id === form.options.userid || process.env.NODE_ENV === 'development'
       await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
       if (!authorized) return set(404)
       return set(await form.bundle(null, null, 'editor'))

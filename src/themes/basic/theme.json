@@ -1,5 +1,6 @@
 {
   "code": "basic",
+  "default": true,
   "version": "0.0.1",
   "entryName": "theme-basic",
   "provides": {

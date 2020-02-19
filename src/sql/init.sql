@@ -41,7 +41,10 @@ TABLESPACE pg_default;
 CREATE TABLE public.forms
 (
     userid character varying(32) COLLATE pg_catalog."default" NOT NULL,
-    id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    -- migrating from v0.0.138:
+    -- ALTER TABLE public.forms ALTER id TYPE character varying(64) COLLATE pg_catalog."default";
+    -- ALTER TABLE public.submissions ALTER formid TYPE character varying(64) COLLATE pg_catalog."default";
+    id character varying(64) COLLATE pg_catalog."default" NOT NULL,
     title character varying(256) COLLATE pg_catalog."default" NOT NULL,
     pages jsonb[] NOT NULL,
     questions jsonb[] NOT NULL,
@@ -68,7 +71,7 @@ TABLESPACE pg_default;
 CREATE TABLE public.submissions
 (
     id bigserial NOT NULL,
-    formid character varying(32) COLLATE pg_catalog."default",
+    formid character varying(64) COLLATE pg_catalog."default",
     time timestamp NOT NULL DEFAULT NOW(),
     data jsonb,
     CONSTRAINT submissions_pkey PRIMARY KEY (id),
