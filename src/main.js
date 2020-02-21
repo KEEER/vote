@@ -116,7 +116,9 @@ app.use(async (ctx, next) => {
 })
 app.use(async (ctx, next) => {
   const processError = (e = ctx) => {
-    ctx.path = `/${e.statusCode || e.status}`
+    const status = e.statusCode || e.status
+    ctx.status = status
+    ctx.path = `/${status}`
     return distLangServer(ctx, next)
   }
   try {
