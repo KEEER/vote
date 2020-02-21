@@ -25,11 +25,26 @@ static:
     submissionCount: Submission count
     retrieving: Retrieving
     notRetrieving: Not retrieving
+
   setId:
     pageTitle: Set KEEER ID
     slogan: Set your KEEER ID.
     tip: A KEEER ID is required in order to use Vote. for more details, please check out <a href="/">this blog post</a>.
     instruction: Click the button below to set your KEEER ID.
+    go: Go
+
+  error404:
+    pageTitle: (404) Not Found | KEEER Vote
+    slogan: (404) Not Found.
+    tip: Either this resource does not exist, or you do not have the permission to access it.
+    instruction: Click the button below to go back to our home page.
+    go: Go
+
+  error500:
+    pageTitle: (500) Internal Server Error | KEEER Vote
+    slogan: (500) Internal Server Error.
+    tip: Our server crashed. This event has been logged, and we will recover soon.
+    instruction: Click the button below to go back to our home page.
     go: Go
 
 plugin:

@@ -75,7 +75,7 @@ const fns = {
       for (let s of slices) message = message[s] || m
       return message
     }
-    const ejsEntries = [ 'index', 'set-id' ]
+    const ejsEntries = [ 'index', 'set-id', '404', '500' ]
     const data = { $t }
     const opts = {
       root: './ejs',

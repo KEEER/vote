@@ -10,6 +10,7 @@ import serveStatic from 'koa-static'
 import { User, UserNoIdError } from './user'
 import generateName from 'project-name-generator'
 import acceptLanguageParser from 'accept-language-parser'
+import { HttpError } from 'http-errors'
 import { messages as localeMessages } from '../locale'
 import { query } from './db'
 import { plugins } from './plugin'
@@ -42,6 +43,7 @@ router.get('/js/*', distServer)
 router.get('/css/*', distServer)
 
 router.all('/:uid/:id/:pid?', async ctx => {
+  throw new Error()
   const id = ctx.params.uid + '/' + ctx.params.id
   const form = await Form.fromId(id)
   if (form === null) return ctx.throw(404)
@@ -113,6 +115,10 @@ app.use(async (ctx, next) => {
   log.http(ctx, rt)
 })
 app.use(async (ctx, next) => {
+  const processError = (e = ctx) => {
+    ctx.path = `/${e.statusCode || e.status}`
+    return distLangServer(ctx, next)
+  }
   try {
     ctx.state.user = await User.fromContext(ctx)
   } catch (e) {
@@ -123,8 +129,15 @@ app.use(async (ctx, next) => {
     await next()
   } catch (e) {
     if (e === interrupt) return
-    else throw e
+    if (e instanceof HttpError) {
+      if (e.statusCode === 404 || e.statusCode === 500) return processError(e)
+      else throw e
+    } else {
+      log.error(e)
+      return processError({ status: 500 })
+    }
   }
+  if (ctx.status === 404 || ctx.status === 500) return processError()
 })
 app.use(BodyParser())
 app.use(router.routes()).use(router.allowedMethods())

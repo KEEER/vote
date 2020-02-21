@@ -18,12 +18,28 @@ static:
     submissionCount: 回复数量
     retrieving: 允许提交
     notRetrieving: 不允许提交
+
   setId:
     pageTitle: 设置 KEEER ID
     slogan: 请设置你的 KEEER ID。
     tip: 要想使用 Vote 您必须设置一个 KEEER ID。详情请见<a href="/">这篇博文</a>。
     instruction: 点击下面的按钮以设置 KEEER ID。
     go: 设置 KEEER ID
+
+  error404:
+    pageTitle: (404) 未找到 | KEEER Vote
+    slogan: (404) 未找到。
+    tip: 这个资源不存在，或者你没有权限访问这个资源。
+    instruction: 点击下面的按钮回到主页。
+    go: 返回
+
+  error500:
+    pageTitle: (500) 服务器内部错误 | KEEER Vote
+    slogan: (500) 服务器内部错误。
+    tip: 我们的服务器出现了故障。这件事已经被记录，我们将会尽快修复。
+    instruction: 点击下面的按钮回到主页。
+    go: 返回
+
 
 plugin:
   ess:
