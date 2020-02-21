@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.145",
+  "version": "0.0.146",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
@@ -48,7 +48,8 @@
     "pg": "^7.10.0",
     "project-name-generator": "^2.1.7",
     "sanitize-html": "^1.20.1",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "yaml": "^1.7.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -88,7 +89,6 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
-    "yaml": "^1.7.2",
     "yaml-loader": "^0.5.0"
   }
 }
