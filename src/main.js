@@ -43,7 +43,6 @@ router.get('/js/*', distServer)
 router.get('/css/*', distServer)
 
 router.all('/:uid/:id/:pid?', async ctx => {
-  throw new Error()
   const id = ctx.params.uid + '/' + ctx.params.id
   const form = await Form.fromId(id)
   if (form === null) return ctx.throw(404)
