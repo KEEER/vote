@@ -1,11 +1,13 @@
-import enStr from 'raw-loader!yaml-loader!./en.yml'
-import zhStr from 'raw-loader!yaml-loader!./zh.yml'
+const loader = name => typeof window === 'undefined' ?
+  require('yaml').parse(require('fs').readFileSync(require('path').resolve(__dirname, name)).toString()) :
+  JSON.parse(require(`raw-loader!yaml-loader!./${name}`).default)
 
-const en = JSON.parse(enStr), zh = JSON.parse(zhStr)
-export const messages = { en, zh }
-let navLocale = navigator.language.slice(0, 2).toLowerCase()
+const en = loader('en.yml'), zh = loader('zh.yml')
+const messages = exports.messages = { en, zh }
+const nav = typeof navigator === 'undefined' ? { language: 'en-US' } : navigator
+let navLocale = nav.language.slice(0, 2).toLowerCase()
 if (!(navLocale in messages)) {
   navLocale = 'en'
   messages.en.isFallback = 'true'
 }
-export const locale = navLocale
+exports.locale = navLocale

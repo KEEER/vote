@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -101,6 +102,7 @@ const config = {
     ],
   },
   plugins: [
+    new webpack.IgnorePlugin(/^yaml$/),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[contenthash:6].css',

@@ -63,6 +63,31 @@ const fns = {
     app.listen(8081)
     console.log('Listening on http://localhost:8081/')
   },
+
+  async 'build:html' () {
+    const ejs = require('ejs')
+    const { messages } = require('./locale')
+    const languages = Object.keys(messages)
+    let lang
+    const $t = m => {
+      const slices = m.split('.')
+      let message = messages[lang]
+      for (let s of slices) message = message[s] || m
+      return message
+    }
+    const ejsEntries = [ 'index', 'set-id' ]
+    const data = { $t }
+    const opts = {
+      root: './ejs',
+      rmWhitespace: true,
+      async: true,
+    }
+    for (let entry of ejsEntries) {
+      for (lang of languages) {
+        fs.writeFileSync(`./dist/${lang}-${entry}.html`, await ejs.renderFile(`./ejs/${entry}.ejs`, data, opts))
+      }
+    }
+  },
 }
 
 if (!(script in fns)) {

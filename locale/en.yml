@@ -13,6 +13,25 @@ core:
       VCheckbox: Checkbox
       VRadio: Radio buttons
 
+static:
+  index:
+    pageTitle: Dashboard | KEEER Vote
+    logout: Log out
+    myForms: My forms
+    newForm: New form
+    noForm: You have no forms.
+    title: Title
+    status: Status
+    submissionCount: Submission count
+    retrieving: Retrieving
+    notRetrieving: Not retrieving
+  setId:
+    pageTitle: Set KEEER ID
+    slogan: Set your KEEER ID.
+    tip: A KEEER ID is required in order to use Vote. for more details, please check out <a href="/">this blog post</a>.
+    instruction: Click the button below to set your KEEER ID.
+    go: Go
+
 plugin:
   ess:
     name: Essentials

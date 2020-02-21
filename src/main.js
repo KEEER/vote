@@ -9,6 +9,8 @@ import BodyParser from 'koa-bodyparser'
 import serveStatic from 'koa-static'
 import { User, UserNoIdError } from './user'
 import generateName from 'project-name-generator'
+import acceptLanguageParser from 'accept-language-parser'
+import { messages as localeMessages } from '../locale'
 import { query } from './db'
 import { plugins } from './plugin'
 import { themes } from './theme'
@@ -17,39 +19,44 @@ const log = logger.child({ part: 'main' })
 
 const app = new Koa()
 const router = new Router()
+const staticDir = path.resolve(__dirname, '../static')
+const distDir = path.resolve(__dirname, '../dist')
+const staticServer = serveStatic(staticDir)
+const distServer = serveStatic(distDir)
+const languages = Object.keys(localeMessages)
+const distLangServer = async (ctx, next) => {
+  if (ctx.path.split('/').length > 2) return await next()
+  const acceptLanguage = ctx.get('accept-language')
+  const lang = acceptLanguage ? acceptLanguageParser.pick(languages, acceptLanguage) : 'en'
+  const path = ctx.path
+  ctx.path = `/${lang}-${path.split('/')[1] || 'index'}.html`
+  return await distServer(ctx, (...args) => {
+    ctx.path = path
+    return next(...args)
+  })
+}
 
-router.get('/js/*', serveStatic(path.resolve(__dirname, '../dist')))
-router.get('/css/*', serveStatic(path.resolve(__dirname, '../dist')))
+export const interrupt = new Error('interrupt')
+
+router.get('/js/*', distServer)
+router.get('/css/*', distServer)
 
 router.all('/:uid/:id/:pid?', async ctx => {
   const id = ctx.params.uid + '/' + ctx.params.id
   const form = await Form.fromId(id)
-  if (form === null) {
-    // TODO: handle these cases
-    ctx.status = 404
-    return
-  }
+  if (form === null) return ctx.throw(404)
   ctx.state.form = form
   ctx.status = 200
   const resp = await form.getPage(ctx.params.pid || '', ctx)
-  if (resp === null) {
-    ctx.status = 404
-    return
-  }
-  if (typeof resp === 'number') {
-    ctx.status = resp
-    return
-  }
-  if (typeof resp === 'string') {
-    ctx.body = resp
-    return
-  }
+  if (resp === null) return ctx.throw(404)
+  if (typeof resp === 'number') return ctx.status = resp
+  if (typeof resp === 'string') return ctx.body = resp
   throw new TypeError(`typeof resp is ${typeof resp}, expected null|number|string`)
 })
 
 router.get('/_forms', async ctx => {
-  ctx.requireLogin()
-  const forms = await Form.fromUserId(ctx.state.user.id)
+  const user = ctx.requireLogin()
+  const forms = await Form.fromUserId(user.id)
   if (!forms) return ctx.body = []
   const formDatas = await Promise.all(forms.map(async f => ({
     id: f.id,
@@ -67,11 +74,12 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
-const staticDir = path.resolve(__dirname, '../static')
-
-router.get('/', ctx => {
-  if (ctx.state.user) return serveStatic(staticDir)(ctx)
-  else ctx.redirect('/welcome')
+router.get('/', (ctx, next) => {
+  if (ctx.state.user) return staticServer(ctx, next)
+  else {
+    if (ctx.state.userNoId) ctx.requireLogin()
+    else ctx.redirect('/welcome')
+  }
 })
 router.get('/_new', async ctx => {
   const user = ctx.requireLogin()
@@ -91,7 +99,12 @@ router.get('/_new', async ctx => {
   return ctx.redirect(`/${id}/edit`)
 })
 
-router.get('/*', serveStatic(staticDir))
+router.get('/*', distLangServer)
+router.get('/*', staticServer)
+router.get('/*', (ctx, next) => {
+  ctx.path += '.html'
+  return staticServer(ctx, next)
+})
 
 app.use(async (ctx, next) => {
   const start = Date.now()
@@ -103,20 +116,27 @@ app.use(async (ctx, next) => {
   try {
     ctx.state.user = await User.fromContext(ctx)
   } catch (e) {
-    if (e instanceof UserNoIdError) {
-      if (ctx.path.startsWith('/set-id')) { // FIXME: hack
-        if (ctx.path === '/set-id') ctx.path = '/set-id.html'
-        return serveStatic(staticDir)(ctx, next)
-      } else return ctx.redirect('/set-id')
-    }
+    ctx.state.user = null
+    if (e instanceof UserNoIdError) ctx.state.userNoId = true
   }
-  await next()
+  try {
+    await next()
+  } catch (e) {
+    if (e === interrupt) return
+    else throw e
+  }
 })
 app.use(BodyParser())
 app.use(router.routes()).use(router.allowedMethods())
 
 app.context.requireLogin = function () {
-  if (!this.state.user) this.throw(401)
+  if (!this.state.user) {
+    if (this.state.userNoId) {
+      this.redirect('/set-id')
+      throw interrupt
+    }
+    else this.throw(401)
+  }
   return this.state.user
 }
 

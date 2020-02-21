@@ -6,6 +6,25 @@ core:
       VCheckbox: 多选
       VRadio: 单选
 
+static:
+  index:
+    pageTitle: 控制台 | KEEER Vote
+    logout: 退出登录
+    myForms: 我的表单
+    newForm: 新建表单
+    noForm: 你没有表单。
+    title: 标题
+    status: 状态
+    submissionCount: 回复数量
+    retrieving: 允许提交
+    notRetrieving: 不允许提交
+  setId:
+    pageTitle: 设置 KEEER ID
+    slogan: 请设置你的 KEEER ID。
+    tip: 要想使用 Vote 您必须设置一个 KEEER ID。详情请见<a href="/">这篇博文</a>。
+    instruction: 点击下面的按钮以设置 KEEER ID。
+    go: 设置 KEEER ID
+
 plugin:
   ess:
     name: 基本功能

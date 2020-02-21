@@ -1,16 +1,17 @@
 {
   "name": "vote",
-  "version": "0.0.143",
+  "version": "0.0.144",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
-    "build": "npm run clean && cross-env NODE_ENV=production webpack && node ./scripts pack",
-    "build:dev": "npm run clean && cross-env NODE_ENV=development webpack",
+    "build": "npm run clean && cross-env NODE_ENV=production webpack && npm run build:html && node ./scripts pack",
+    "build:dev": "npm run clean && cross-env NODE_ENV=development webpack && npm run build:html",
+    "build:html": "node scripts build:html",
     "wds": "webpack-dev-server",
     "start": "node .",
     "start:dev": "cross-env NODE_ENV=development node .",
-    "clean": "node ./scripts clean",
-    "clean:cache": "node ./scripts clean:cache",
+    "clean": "node scripts clean",
+    "clean:cache": "node scripts clean:cache",
     "lint": "eslint --ext .js,.vue .",
     "fix": "eslint --ext .js,.vue . --fix"
   },
@@ -31,6 +32,7 @@
   "homepage": "https://github.com/KEEER/vote#readme",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "accept-language-parser": "^1.5.0",
     "array-flat-polyfill": "^1.0.1",
     "dotenv": "^7.0.0",
     "emittery": "^0.4.1",
@@ -55,6 +57,7 @@
     "cache-loader": "^4.0.1",
     "cross-env": "^6.0.3",
     "css-loader": "^2.1.1",
+    "ejs": "^3.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "file-loader": "^3.0.1",
@@ -84,6 +87,7 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.2.1",
+    "yaml": "^1.7.2",
     "yaml-loader": "^0.5.0"
   }
 }
