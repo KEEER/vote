@@ -1,6 +1,7 @@
 /** @module plugin */
 import fs from 'fs'
 import path from 'path'
+import { themes } from './theme'
 
 /** Class representing a plugin. */
 class Plugin {
@@ -9,17 +10,9 @@ class Plugin {
    * @param {Object} config The configuration JSON object
    */
   constructor (config, attachTo) {
+    this.is = 'plugin'
     this.config = config
     this.attachTo = attachTo || (() => {})
-  }
-
-  /**
-   * Check if the question/theme could be used with the plugin.
-   * @param {module:question~Question|module:theme~Theme} obj The Question/Theme object
-   * @returns {boolean}
-   */
-  applicable (obj) {
-    // TODO
   }
 }
 
@@ -45,7 +38,9 @@ try {
     const pluginJson = fs.readFileSync(path.resolve(__dirname, 'plugins', dir, 'plugin.json'))
     return JSON.parse(pluginJson.toString())
   })
-  const injectionKeys = [ 'form', ...new Set(pluginJsons.flatMap(p => (p.provides || {}).injections || [])) ]
+  const injectionKeys = [ ...new Set(
+    [ ...themes.map(t => t.config), ...pluginJsons ]
+      .flatMap(p => (p.provides || {}).injections || [])) ]
   plugins = pluginJsons.map((plugin, i) => {
     plugin.uses = plugin.uses || {}
     plugin.uses.inject = plugin.uses.inject || {}

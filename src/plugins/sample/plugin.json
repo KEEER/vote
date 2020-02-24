@@ -9,7 +9,10 @@
       "VText"
     ],
     "hooks": [
-      "question:update"
+      "question:update",
+      "editor:appMounted",
+      "editor:beforeRouterLoad",
+      "editor:settingsMounted"
     ],
     "inject": {
       "form": {

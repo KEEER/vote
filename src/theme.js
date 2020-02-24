@@ -9,16 +9,8 @@ class Theme {
    * @param {Object} config The configuration JSON object
    */
   constructor (config) {
+    this.is = 'theme'
     this.config = config
-  }
-
-  /**
-   * Check if the question/plugin could be used with the theme.
-   * @param {module:question~Question|module:plugin~Plugin} obj The Question/Plugin object
-   * @returns {boolean}
-   */
-  applicable (obj) {
-    // TODO
   }
 
   toJSON () { return this.config }

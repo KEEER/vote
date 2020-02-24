@@ -164,6 +164,74 @@ export class Form extends EventEmitter {
   }
 
   /**
+   * Gets all theme and plugins objects.
+   * @private
+   */
+  get _themeAndPlugins () {
+    return [
+      ...(this.options.plugins || []),
+      themes.find(t => t.config.code === this.options.theme),
+    ]
+  }
+
+  /**
+   * Gets all feature provided by this form.
+   * @param {string} feature hooks|types|injections
+   * @param {(module:theme~Theme|module:plugin~Plugin)[]} [objects] objects to check
+   * @returns {string[]}
+   */
+  provides (feature, objects = this._themeAndPlugins) {
+    return [ ...new Set(objects.flatMap(o => ((o.config.provides || {})[feature] || []))) ]
+  }
+
+  /**
+   * Checks if a theme/plugin is applicable.
+   * @param {module:theme~Theme|module:plugin~Plugin} obj the theme or plugin object
+   * @returns {boolean}
+   */
+  isApplicable (obj) {
+    let objectsToCheck
+    if (obj.is === 'plugin') {
+      if ((this.options.plugins || []).find(p => p.config.code === obj.config.code)) return true
+      objectsToCheck = this._themeAndPlugins
+    } else if (obj.is === 'theme') {
+      if (this.options.theme === obj.config.code) return true
+      objectsToCheck = this.options.plugins || []
+    } else throw new TypeError()
+    if (!obj.config.uses) return true
+    for (let feature of [ 'hooks', 'types', 'injections' ]) {
+      if (obj.config.uses[feature]) {
+        const provided = this.provides(feature, objectsToCheck)
+        if (obj.config.uses[feature].some(f => provided.indexOf(f) < 0)) return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * Checks if a plugin is required.
+   * @param {module:plugin~Plugin} obj the plugin object
+   * @returns {boolean}
+   */
+  isRequired (obj) {
+    if (!obj.is === 'plugin') throw new TypeError()
+    if (!obj.config.provides) return false
+    if (!this.options.plugins || !this.options.plugins.find(p => p.config.code === obj.config.code)) return false
+    const objectsToCheck = this._themeAndPlugins.filter(x => x.is !== 'plugin' || x.config.code !== obj.config.code)
+    const questionTypes = this.provides('types', objectsToCheck)
+    return objectsToCheck.some(o => {
+      if (!o.config.uses) return false
+      for (let feature of [ 'hooks', 'types', 'injections' ]) {
+        if (o.config.uses[feature]) {
+          const provided = this.provides(feature, objectsToCheck.filter(o1 => o1.config.code !== o.config.code))
+          if (o.config.uses[feature].some(f => provided.indexOf(f) < 0)) return true
+        }
+      }
+      return false
+    }) || this.questions.some(q => questionTypes.indexOf(q.config.type) < 0)
+  }
+
+  /**
    * Converts a DB object to a Form object.
    * @param {*} data the object from the database
    * @returns {Form} the form object

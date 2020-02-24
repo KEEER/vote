@@ -88,6 +88,48 @@ const fns = {
       }
     }
   },
+
+  async 'build:compat' () {
+    // TODO
+    const req = require('esm')(module, { cjs: { dedefault: true } })
+    const plugins = req('./src/plugin').plugins
+    const requiredPlugins = plugins.filter(p => p.config.required)
+    const nonRequiredPlugins = plugins.filter(p => !p.config.required)
+    const themes = req('./src/theme').themes
+    const Form = req('./src/form').Form
+    const form = new Form({ pages: [] })
+    const table = {}
+    const map = arr => {
+      const map = {}
+      for (let i of arr) if (!map[i[0]] || map[i[0]].indexOf(i[1]) < 0) {
+        map[i[0]] = [ ...(map[i[0]] || []), i[1] ]
+      }
+      return map
+    }
+    for (let theme of themes) {
+      form.options.theme = theme.config.code
+      const gen = function* (prev = []) {
+        for (let plugin of nonRequiredPlugins) {
+          const pluginsNow = [ ...requiredPlugins, ...prev ]
+          yield* requiredPlugins.map(p => [ pluginsNow, p ])
+          form.options.plugins = pluginsNow
+          const isIn = prev.find(p => p.config.code === plugin.config.code)
+          if (!isIn && form.isApplicable(plugin)) {
+            yield [ pluginsNow, plugin ]
+            yield* gen([ ...prev, plugin ])
+          }
+          if (isIn && form.isRequired(plugin)) {
+            yield [ pluginsNow, plugin ]
+          }
+        }
+      }
+      const mapping = map(Array.from(gen()).map(([ a, b ]) => [ a.map(a => a.config.code).sort().join('/'), b.config.code ]))
+      for (let k in mapping) mapping[k] = mapping[k].join('/')
+      table[theme.config.code] = mapping
+    }
+    require('fs-extra').ensureDirSync('dist')
+    require('fs').writeFileSync('dist/compat.json', JSON.stringify(table))
+  },
 }
 
 if (!(script in fns)) {

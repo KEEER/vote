@@ -4,12 +4,12 @@
   "version": "0.0.1",
   "entryName": "theme-basic",
   "provides": {
-    "types": {
-      "VCheckbox": "0.0.1",
-      "VRadio": "0.0.1",
-      "VText": "0.0.1",
-      "VTextarea": "0.0.1"
-    },
+    "types": [
+      "VCheckbox",
+      "VRadio",
+      "VText",
+      "VTextarea"
+    ],
     "questionConfig": {
       "VCheckbox": [
         {
@@ -36,6 +36,9 @@
       "question:update",
       "question:validate",
       "page:validate"
+    ],
+    "injections": [
+      "form"
     ]
   }
 }
