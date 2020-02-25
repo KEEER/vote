@@ -197,6 +197,18 @@ export class Form extends EventEmitter {
     } else if (obj.is === 'theme') {
       if (this.options.theme === obj.config.code) return true
       objectsToCheck = this.options.plugins || []
+      const thisTheme = themes.find(t => t.config.code === this.options.theme)
+      if (thisTheme.config.provides) {
+        for (let feature of [ 'hooks', 'types', 'injecctions' ]) {
+          if (!thisTheme.config.provides[feature]) continue
+          for (let plugin of objectsToCheck) {
+            if (!plugin.config.uses[feature]) continue
+            const allExceptThis = [ ...objectsToCheck.filter(o => o !== plugin), obj ]
+            const provided = this.provides(feature, allExceptThis)
+            if (plugin.config.uses[feature].some(f => provided.indexOf(f) < 0)) return false
+          }
+        }
+      }
     } else throw new TypeError()
     if (!obj.config.uses) return true
     for (let feature of [ 'hooks', 'types', 'injections' ]) {

@@ -90,7 +90,6 @@ const fns = {
   },
 
   async 'build:compat' () {
-    // TODO
     const req = require('esm')(module, { cjs: { dedefault: true } })
     const plugins = req('./src/plugin').plugins
     const requiredPlugins = plugins.filter(p => p.config.required)
@@ -124,8 +123,13 @@ const fns = {
         }
       }
       const mapping = map(Array.from(gen()).map(([ a, b ]) => [ a.map(a => a.config.code).sort().join('/'), b.config.code ]))
-      for (let k in mapping) mapping[k] = mapping[k].join('/')
-      table[theme.config.code] = mapping
+      for (let k in mapping) {
+        mapping[k] = [ ...themes.filter(t => {
+          form.options.plugins = k.split('/').map(c => plugins.find(p => p.config.code === c))
+          return t.config.code !== theme.config.code && form.isApplicable(t)
+        }).map(t => `theme:${t.config.code}`), ...mapping[k] ]
+        table[`theme:${theme.config.code}/${k}`] = mapping[k].join('/')
+      }
     }
     require('fs-extra').ensureDirSync('dist')
     require('fs').writeFileSync('dist/compat.json', JSON.stringify(table))
