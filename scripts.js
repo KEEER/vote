@@ -12,6 +12,7 @@ const fns = {
     fs.removeSync('dist/js')
     fs.removeSync('dist/css')
     fs.removeSync('dist.tgz')
+    fs.removeSync('dist/compat.json')
 
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html'))
@@ -27,7 +28,7 @@ const fns = {
   async pack () {
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html')).map(f => `dist/${f}`)
-      await tar.c({ gzip: true, file: 'dist.tgz' }, [ 'dist/js', 'dist/css', ...htmlFiles ])
+      await tar.c({ gzip: true, file: 'dist.tgz' }, [ 'dist/js', 'dist/css', ...htmlFiles, 'dist/compat.json' ])
     } catch (e) {
       console.log(`Failed creating pack: ${e}`)
       process.exit(-1)
