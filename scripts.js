@@ -92,45 +92,42 @@ const fns = {
   async 'build:compat' () {
     const req = require('esm')(module, { cjs: { dedefault: true } })
     const plugins = req('./src/plugin').plugins
-    const requiredPlugins = plugins.filter(p => p.config.required)
-    const nonRequiredPlugins = plugins.filter(p => !p.config.required)
     const themes = req('./src/theme').themes
     const Form = req('./src/form').Form
     const form = new Form({ pages: [] })
+    const requiredPlugins = plugins.filter(p => p.config.required)
+    const nonRequiredPlugins = plugins.filter(p => !p.config.required)
+    const objectsToDfs = [ ...nonRequiredPlugins, ...themes ]
     const table = {}
-    const map = arr => {
-      const map = {}
-      for (let i of arr) if (!map[i[0]] || map[i[0]].indexOf(i[1]) < 0) {
-        map[i[0]] = [ ...(map[i[0]] || []), i[1] ]
-      }
-      return map
-    }
-    for (let theme of themes) {
-      form.options.theme = theme.config.code
-      const gen = function* (prev = []) {
-        for (let plugin of nonRequiredPlugins) {
-          const pluginsNow = [ ...requiredPlugins, ...prev ]
-          yield* requiredPlugins.map(p => [ pluginsNow, p ])
-          form.options.plugins = pluginsNow
-          const isIn = prev.find(p => p.config.code === plugin.config.code)
-          if (!isIn && form.isApplicable(plugin)) {
-            yield [ pluginsNow, plugin ]
-            yield* gen([ ...prev, plugin ])
-          }
-          if (isIn && form.isRequired(plugin)) {
-            yield [ pluginsNow, plugin ]
+    const sort = ([ theme, ...plugin ]) => ([ theme, ...plugin.sort((a, b) => plugins.indexOf(a) - plugins.indexOf(b)) ])
+    const stringify = ([ theme, ...plugin ]) => ([ `theme:${theme.config.code}`, ...plugin.map(o => o.config.code) ].join('/'))
+    const dfs = (base = [ themes.find(t => t.config.default), ...requiredPlugins ]) => {
+      base = sort(base)
+      const stringBase = stringify(base)
+      console.log('[dfs]', stringBase)
+      const [ baseTheme, ...basePlugins ] = base
+      for (let object of objectsToDfs) {
+        form.options.plugins = basePlugins
+        form.options.theme = baseTheme.config.code
+        if (!table[stringBase]) table[stringBase] = []
+        if (table[stringBase].indexOf(object) > -1) continue
+        const contains = base.indexOf(object) > -1
+        if (!contains && form.isApplicable(object)) {
+          table[stringBase].push(object)
+          if (object.is === 'theme') {
+            dfs([ object, ...basePlugins ])
+          } else if (object.is === 'plugin') {
+            dfs([ ...base, object ])
           }
         }
-      }
-      const mapping = map(Array.from(gen()).map(([ a, b ]) => [ a.map(a => a.config.code).sort().join('/'), b.config.code ]))
-      for (let k in mapping) {
-        mapping[k] = [ ...themes.filter(t => {
-          form.options.plugins = k.split('/').map(c => plugins.find(p => p.config.code === c))
-          return t.config.code !== theme.config.code && form.isApplicable(t)
-        }).map(t => `theme:${t.config.code}`), ...mapping[k] ]
-        table[`theme:${theme.config.code}/${k}`] = mapping[k].join('/')
+        if (contains && object.is === 'plugin' && !form.isRequired(object)) {
+          table[stringBase].push(object)
+          dfs([ baseTheme, ...basePlugins.filter(p => p !== object) ])
+        }
       }
     }
+    dfs()
+    for (let k in table) table[k] = table[k].map(o => o.is === 'theme' ? `theme:${o.config.code}` : o.config.code).join('/')
     require('fs-extra').ensureDirSync('dist')
     require('fs').writeFileSync('dist/compat.json', JSON.stringify(table))
   },
