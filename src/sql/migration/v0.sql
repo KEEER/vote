@@ -28,13 +28,12 @@ ALTER TABLE public.forms ADD CONSTRAINT forms_user_id_fkey FOREIGN KEY (user_id)
   ON DELETE CASCADE;
 ALTER TABLE public.forms DROP userid;
 ALTER TABLE public.forms RENAME id TO temp_name;
-ALTER TABLE public.forms DROP CONSTRAINT forms_pkey;
+ALTER TABLE public.forms DROP CONSTRAINT forms_pkey CASCADE;
 ALTER TABLE public.forms ADD id bigserial NOT NULL;
 ALTER TABLE public.forms ADD CONSTRAINT forms_pkey PRIMARY KEY (id);
 
 ALTER TABLE public.submissions ADD form_id bigint;
 UPDATE public.submissions SET form_id = ( SELECT id FROM public.forms WHERE temp_name = formid );
-ALTER TABLE public.submissions DROP CONSTRAINT submissions_formid_fkey;
 ALTER TABLE public.submissions DROP formid;
 ALTER TABLE public.submissions ADD CONSTRAINT submissions_form_id_fkey FOREIGN KEY (form_id)
   REFERENCES public.forms (id) MATCH SIMPLE
