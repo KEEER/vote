@@ -55,7 +55,7 @@ export class User {
   /** Saves a user into the database. */
   async save () {
     if (this._saved) return await this.update()
-    const stmt = 'INSERT INTO PRE_users (name, lower_name, avatar_url, nickname, settings) VALUES ($1, LOWER($1), $2, $3, $4);'
+    const stmt = 'INSERT INTO PRE_users (name, lower_name, avatar_url, nickname, settings) VALUES ($1::character varying(32), LOWER($1), $2, $3, $4);'
     await query(stmt, [ this.name, this.avatarUrl, this.nickname, this.settings ])
     this.options.id = Number((await query('SELECT id FROM PRE_users WHERE name = $1;', [ name ])).res.rows[0].id)
     this._saved = true
