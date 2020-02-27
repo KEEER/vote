@@ -39,8 +39,8 @@ const distLangServer = async (ctx, next) => {
 
 export const interrupt = new Error('interrupt')
 
-router.get('/js/*', distServer)
-router.get('/css/*', distServer)
+router.get('/js/(.*)', distServer)
+router.get('/css/(.*)', distServer)
 
 router.all('/:uname/:name/:path?', async ctx => {
   const form = await Form.fromName(ctx.params.uname, ctx.params.name)
@@ -100,9 +100,9 @@ router.get('/_new', async ctx => {
   return ctx.redirect(`/${form.path}/edit`)
 })
 
-router.get('/*', distLangServer)
-router.get('/*', staticServer)
-router.get('/*', (ctx, next) => {
+router.get('/(.*)', distLangServer)
+router.get('/(.*)', staticServer)
+router.get('/(.*)', (ctx, next) => {
   ctx.path += '.html'
   return staticServer(ctx, next)
 })
