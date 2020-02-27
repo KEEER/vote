@@ -15,20 +15,20 @@ const editorHtml = readFileSync(
 export default function attachTo (form) {
   form.editorPaths = [ 'edit', 'settings', 'data', ...(form.editorPaths || []) ]
   form.on('getPage', async ([ path, ctx, set ]) => {
-    if (
+    if ((
       !form.options.data
       || !form.options.data.settings
       || !form.options.data.settings['basic.retrieving']
-      && (path === '' || path === 'fill' || path === '_bundle')
+    ) && (path === '' || path === 'fill' || path === '_bundle')
     ) return set(404)
     const user = ctx.state.user
     const unauthorized = () => ctx.state.userNoId ? ctx.requireLogin() : set(404)
-    let authorized = user && user.id === form.options.userid || process.env.NODE_ENV === 'development'
+    let authorized = user && user.id === form.options.userId || process.env.NODE_ENV === 'development'
     if (form.editorPaths.indexOf(path) > -1) {
       await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
       // why not 403: return a 403 will indicate that the form exists.
       if (!authorized) return unauthorized()
-      return set(editorHtml.replace(/\/vote-config.js/g, `/${form.id}/_bundle-editor`))
+      return set(editorHtml.replace(/\/vote-config.js/g, `/${form.path}/_bundle-editor`))
     }
     if (path === '_query' && ctx.method === 'POST') {
       await form.emit('authorizeQuery', [ form, path, ctx, a => authorized = a ])
@@ -51,14 +51,14 @@ export default function attachTo (form) {
       await form.emit('authorizeRenameOrRemoval', [ form, path, ctx, a => authorized = a ])
       if (!authorized) return unauthorized()
       if (path === '_rename') {
-        if (!ctx.query.id || !/^([a-zA-Z0-9]|-|_)*$/i.test(ctx.query.id)) return set(400)
-        form.id = `${user.id}/${ctx.query.id}`
-        if (form.id.length > 64) return set(400)
+        if (!ctx.query.name || !/^([a-zA-Z0-9]|-|_)*$/i.test(ctx.query.name)) return set(400)
+        if (ctx.query.name.length > 64) return set(400)
+        form.options.name = ctx.query.name
         try { await form.update() } catch (e) {
           log.error(e)
           return set(500)
         }
-        ctx.redirect(`/${form.id}/settings`)
+        ctx.redirect(`/${form.path}/settings`)
         return set(200)
       } else { // delete
         await form.destroy()
@@ -67,7 +67,7 @@ export default function attachTo (form) {
       }
     }
     if (path === '_bundle-editor') {
-      let authorized = user && user.id === form.options.userid || process.env.NODE_ENV === 'development'
+      let authorized = user && user.id === form.options.userId || process.env.NODE_ENV === 'development'
       await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
       if (!authorized) return unauthorized()
       return set(await form.bundle(null, null, 'editor'))

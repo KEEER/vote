@@ -66,7 +66,7 @@
   </div>
   <script language="application/x-template" id="form-template">
     <tr class="mdc-data-table__row">
-      <td class="mdc-data-table__cell forms-table-edit"><a class="mdc-icon-button material-icons" href="/:id:/edit">edit</a></td>
+      <td class="mdc-data-table__cell forms-table-edit"><a class="mdc-icon-button material-icons" href="/:path:/edit">edit</a></td>
       <td class="mdc-data-table__cell">:title:</td>
       <td class="mdc-data-table__cell">:status:</td>
       <td class="mdc-data-table__cell mdc-data-table__cell--numeric">:submissionCount:</td>
@@ -88,7 +88,6 @@
     var formsTableBody = $('#forms-table-body')
     var formTemplate = $('#form-template').innerHTML
     new idFrame.AppBarFrame({
-      base: 'http://localhost:8081/', // TODO
       container: $('#idframe'),
       // TODO: pro etc
     })
@@ -99,7 +98,7 @@
       } else {
         formsTableBody.innerHTML = res.map(function (form) {
           return (formTemplate
-            .replace(/:id:/g, form.id)
+            .replace(/:path:/g, form.userName + '/' + form.name)
             .replace(/:title:/g, form.title)
             .replace(/:status:/g, form.data && form.data.settings && form.data.settings['basic.retrieving'] ? '<%= $t('static.index.retrieving') %>' : '<%= $t('static.index.notRetrieving') %>')
             .replace(/:submissionCount:/g, form.submissionCount)

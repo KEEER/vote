@@ -4,7 +4,7 @@ window.addEventListener('vote:ready', () => {
   window.voteHooks
     .on('editor:appMounted', ([ app ]) => app.documentTitle = 'Sample Vote')
     .on('editor:beforeRouterLoad', ([ routes ]) => routes.push({
-      path: '/:uid/:id/sample',
+      path: '/:uname/:name/sample',
       name: 'sample',
       component: SampleEntry,
       icon: 'lock',

@@ -42,13 +42,12 @@ export const interrupt = new Error('interrupt')
 router.get('/js/*', distServer)
 router.get('/css/*', distServer)
 
-router.all('/:uid/:id/:pid?', async ctx => {
-  const id = ctx.params.uid + '/' + ctx.params.id
-  const form = await Form.fromId(id)
+router.all('/:uname/:name/:path?', async ctx => {
+  const form = await Form.fromName(ctx.params.uname, ctx.params.name)
   if (form === null) return ctx.throw(404)
   ctx.state.form = form
   ctx.status = 200
-  const resp = await form.getPage(ctx.params.pid || '', ctx)
+  const resp = await form.getPage(ctx.params.path || '', ctx)
   if (resp === null) return ctx.throw(404)
   if (typeof resp === 'number') return ctx.status = resp
   if (typeof resp === 'string') return ctx.body = resp
@@ -60,7 +59,8 @@ router.get('/_forms', async ctx => {
   const forms = await Form.fromUserId(user.id)
   if (!forms) return ctx.body = []
   const formDatas = await Promise.all(forms.map(async f => ({
-    id: f.id,
+    name: f.options.name,
+    userName: f.options.userName,
     title: f.options.title,
     data: f.options.data,
     submissionCount: (await f.getSubmissionIds()).length,
@@ -84,20 +84,20 @@ router.get('/', (ctx, next) => {
 })
 router.get('/_new', async ctx => {
   const user = ctx.requireLogin()
-  const generateId = () => `${user.id}/${generateName().dashed}`
-  let id = generateId(), tries = 0
-  while (await Form.fromId(id) && ++tries < 100) id = generateId()
+  let name = generateName().dashed, tries = 0
+  while (await Form.exists(user.id, name) && ++tries < 100) name = generateName().dashed
   if (tries === 100) ctx.throw(418)
   const form = new Form({
-    userid: user.id,
-    id,
+    userId: user.id,
+    userName: user.name,
+    name,
     title: 'Vote',
     pages: [ new Page({ id: 0, questions: [] }) ],
     theme: themes.find(t => t.config.default).config.code,
     plugins: plugins.filter(p => p.config.default),
   })
   await form.save()
-  return ctx.redirect(`/${id}/edit`)
+  return ctx.redirect(`/${form.path}/edit`)
 })
 
 router.get('/*', distLangServer)

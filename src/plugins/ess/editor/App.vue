@@ -8,7 +8,12 @@
       :open="drawerOpen"
       :key="modal"
     >
-      <m-drawer-header slot="header" :title="drawerTitle" />
+      <div slot="header">
+        <m-typo-body :level="1" class="username">
+          <a href="/?utm_source=editor&utm_medium=drawer_header" class="username-link">{{userName}}</a>
+        </m-typo-body>
+        <m-typo-headline :level="5" class="formname">{{formName}}</m-typo-headline>
+      </div>
       <m-drawer-content>
         <m-drawer-list>
           <span v-for="route in routes" :key="route.name">
@@ -116,6 +121,34 @@ a.navlink {
     padding-right: 8px;
   }
 }
+
+.username, .formname {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.username {
+  margin-top: 16px;
+  color: rgba(0, 0, 0, .6);
+}
+
+.username-link:link, .username-link:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+.username-link:hover, .username-link:focus, .username-link:active {
+  text-decoration: underline;
+}
+
+.username::after {
+  content: ' /';
+}
+
+.formname {
+  color: rgba(0, 0, 0, .87);
+}
 </style>
 
 <script>
@@ -136,28 +169,28 @@ import hooks from './hooks'
 
 const routes = [
   {
-    path: '/:uid/:id/fill',
+    path: '/:uname/:name/fill',
     name: 'fill',
     component: Fill,
     icon: 'open_in_new',
     title: 'plugin.ess.app.route.fill',
   },
   {
-    path: '/:uid/:id/edit',
+    path: '/:uname/:name/edit',
     name: 'edit',
     component: Editor,
     icon: 'edit',
     title: 'plugin.ess.app.route.edit',
   },
   {
-    path: '/:uid/:id/data',
+    path: '/:uname/:name/data',
     name: 'data',
     component: Data,
     icon: 'info',
     title: 'plugin.ess.app.route.data',
   },
   {
-    path: '/:uid/:id/settings',
+    path: '/:uname/:name/settings',
     name: 'settings',
     component: Settings,
     icon: 'settings',
@@ -183,6 +216,8 @@ export default Vue.extend({
       appBarTitle: 'Vote Editor',
       appBarSubtitle: null,
       title: window.KVoteFormData.title,
+      userName: window.KVoteFormData.userName,
+      formName: window.KVoteFormData.name,
       documentTitle: document.title,
       routes,
     }
@@ -195,11 +230,6 @@ export default Vue.extend({
       this.appBarTitle = `${this.title} - Vote Editor`
       document.title = `${this.title} - ${this.documentTitle}`
       this.$emit('update:title', this.title)
-    },
-  },
-  computed: {
-    formId () {
-      return `${this.$route.params.uid} / ${this.$route.params.id}`
     },
   },
   components: {},
@@ -222,7 +252,6 @@ export default Vue.extend({
     toggleMobile()
 
     this.$refs.appbar.$on('nav', () => this.toggleDrawer())
-    this.drawerTitle = this.formId
 
     this.updateTitle()
     hooks.emit('editor:appMounted', [ this ])
@@ -231,7 +260,6 @@ export default Vue.extend({
       if ('AppBarFrame' in window.idFrame) {
         clearInterval(iid)
         new idFrame.AppBarFrame({
-          base: 'http://localhost:8081/', // TODO
           container: '#idframe',
           // TODO: pro etc
         })

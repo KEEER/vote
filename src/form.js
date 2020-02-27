@@ -76,24 +76,22 @@ export class Page {
 export class Form extends EventEmitter {
   /**
    * Creates a form object.
-   * @param {object} options Options, see below.
-   * @param {string} options.title The title of the form
-   * @param {string} options.id Form ID
-   * @param {Page[]} options.pages Pages in the form
-   * @param {string} options.userid KEEER ID of the owner
-   * @param {string} options.theme Form theme
-   * @param {Plugin[]} [options.plugins] Plugins used in the form
-   * @param {object} [options.data] Form data
-   * @example const f = new Form({title: 'title', id: 'Alan-Liang/test', userid: 'Alan-Liang', theme: 'basic', plugins: [plugins.find(v => v.config.code === 'ess')], pages: [new Page({title: 'title', id: 0, questions: [new Question({type: 'VText', title: '2', id: 1, value: '2'})]})]})
+   * @param {object} options options, see below.
+   * @param {string} options.title the title of the form
+   * @param {string} options.name form name
+   * @param {number} [options.id] internal form ID
+   * @param {Page[]} options.pages pages in the form
+   * @param {number} options.userId internal ID of the owner
+   * @param {string} options.userName KEEER ID of the owner
+   * @param {string} options.theme form theme
+   * @param {Plugin[]} [options.plugins] plugins used in the form
+   * @param {object} [options.data] form data
    */
   constructor (options) {
     super()
     this.updated = []
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
-        if (prop === 'id') {
-          this.oldid = this.oldid || this.id
-        }
         if (this.updated.indexOf(prop) < 0) this.updated.push(prop)
         obj[prop] = val
         return true
@@ -129,12 +127,7 @@ export class Form extends EventEmitter {
     }
   }
 
-  get id () {
-    return this.options.id
-  }
-  set id (id) {
-    this.options.id = id
-  }
+  get id () { return this.options.id || null }
 
   /**
    * Gets the pages in the form.
@@ -255,43 +248,59 @@ export class Form extends EventEmitter {
     data.plugins = data.plugins.map(
       p => plugins.find(plugin => plugin.config.code === p)
     ).filter(p => !!p)
+    data.userId = data.user_id
+    delete data.user_id
+    data.userName = (await query('SELECT name FROM PRE_users WHERE id = $1;', [ data.userId ])).rows[0].name
     const form = new Form(data)
     form.saved = true
     return form
   }
 
   /**
-   * Gets a form by a certain id.
-   * @param {string|number} id Form ID
+   * Gets a form by a certain path.
+   * @param {string} uname user name
+   * @param {string} name form name
    * @returns {Form} the form object
    */
-  static async fromId (id) {
-    const res = await query('SELECT * FROM PRE_forms WHERE id = $1;', [ id.toString() ])
+  static async fromName (uname, name) {
+    const res = await query(`
+      SELECT * FROM PRE_forms WHERE user_id = (
+        SELECT id FROM PRE_users WHERE lower_name = LOWER($1)
+      ) AND lower_name = LOWER($2);`, [ uname.toString(), name.toString() ])
     if (res.rows.length > 1) {
-      log.error('form.fromId: duplicate IDs')
-      throw new Error('form.fromId: duplicate IDs')
+      log.error('form.fromName: duplicate path')
+      throw new Error('form.fromName: duplicate path')
     }
-    if (res.rows.length === 0) {
-      return null
-    }
+    if (res.rows.length === 0) return null
     return await Form._fromDb(res.rows[0])
   }
 
   /**
+   * Checks if a form exists.
+   * @param {number} uid user id
+   * @param {string} name form name
+   * @returns {boolean}
+   */
+  static async exists (uid, name) {
+    const res = await query('SELECT id FROM PRE_forms WHERE user_id = $1 AND lower_name = LOWER($2);', [ uid, name ])
+    return res.rows.length > 0
+  }
+
+  /**
    * Gets the forms of a certain user.
-   * @param {string} userid the user's KEEER ID
+   * @param {string} userId the user's internal ID
    * @returns {Form[]} form objects
    */
-  static async fromUserId (userid) {
-    const res = await query('SELECT * FROM PRE_forms WHERE userid = $1;', [ userid ])
+  static async fromUserId (userId) {
+    const res = await query('SELECT * FROM PRE_forms WHERE user_id = $1;', [ userId ])
     return await Promise.all(res.rows.map(d => Form._fromDb(d)))
   }
 
   /** Gets parameters for saving into database. */
   get params () {
     return [
-      this.id,
-      this.options.userid,
+      this.options.userId,
+      this.options.name,
       this.options.title,
       this.pages.map(p => p.toObject()),
       this.questions.map(q => q.toObject()),
@@ -317,10 +326,17 @@ export class Form extends EventEmitter {
     if (this.updated.indexOf('plugins') > -1) {
       args.plugins = this.options.plugins.map(p => p.config.code)
     }
-    this.updated.filter(prop => [ 'pages', 'plugins', 'questions' ].indexOf(prop) < 0)
+    if (this.updated.indexOf('name') > -1) {
+      args.name = this.options.name
+      args.lower_name = this.options.name.toLowerCase()
+    }
+    if (this.updated.indexOf('userId') > -1) {
+      args.user_id = this.options.userId
+    }
+    this.updated.filter(prop => [ 'pages', 'plugins', 'questions', 'name', 'userId' ].indexOf(prop) < 0)
       .forEach(prop => args[prop] = this.options[prop])
     this.updated.length = 0
-    await update('PRE_forms', args, 'id', this.oldid || this.id)
+    await update('PRE_forms', args, 'id', this.id)
     this.questions.forEach(q => q.updated = false)
     this.pages.forEach(p => p.updated = false)
   }
@@ -331,7 +347,7 @@ export class Form extends EventEmitter {
       await this.update()
       return
     }
-    const stmt = 'INSERT INTO PRE_forms (id, userid, title, pages, questions, theme, plugins, data) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);'
+    const stmt = 'INSERT INTO PRE_forms (user_id, name, lower_name, title, pages, questions, theme, plugins, data) VALUES ($1, $2::character varying(64), LOWER($2), $3, $4, $5, $6, $7, $8);'
     await query(stmt, this.params)
   }
 
@@ -341,6 +357,8 @@ export class Form extends EventEmitter {
     this.saved = false
   }
 
+  get path () { return `${this.options.userName}/${this.options.name}` }
+
   /**
    * Get the HTML markup corresponding to the form.
    * @returns {string} HTML
@@ -349,7 +367,7 @@ export class Form extends EventEmitter {
     return (templateCache[this.options.theme]
       .replace(
         /\/vote-config.js/g,
-        `/${this.id}/_bundle`
+        `/${this.path}/_bundle`
       ))
   }
 
@@ -363,6 +381,8 @@ export class Form extends EventEmitter {
   async bundle (action, method, key = 'form') {
     const data = {
       title: this.options.title,
+      userName: this.options.userName,
+      name: this.options.name,
       action,
       method,
       theme: this.options.theme,
@@ -408,7 +428,7 @@ export class Form extends EventEmitter {
       return await this.getHtml()
 
     case '_bundle':
-      return await this.bundle(`/${this.id}/_submit`, 'POST')
+      return await this.bundle(`/${this.path}/_submit`, 'POST')
 
     case '_submit':
       return await this.handleSubmission(ctx)
@@ -440,20 +460,24 @@ export class Form extends EventEmitter {
       ctx.request.body.forEach((v, i) => data[i] = v)
     }
 
-    await query('INSERT INTO PRE_submissions (formid, data) VALUES ($1, $2);', [ this.id, data ])
+    await query('INSERT INTO PRE_submissions (form_id, data) VALUES ($1, $2);', [ this.id, data ])
     return 200
   }
 
   /** Gets submissions of the form. */
   async getSubmissions () {
-    const res = (await query('SELECT * FROM PRE_submissions WHERE formid = $1;', [ this.id ])).rows
+    const res = (await query('SELECT * FROM PRE_submissions WHERE form_id = $1;', [ this.id ])).rows
+    for (let submission of res) {
+      submission.formId = submission.form_id
+      delete submission.form_id
+    }
     await this.emit('getSubmissions', [ this, res ])
     return res
   }
 
   /** Gets submission IDs of the form. */
   async getSubmissionIds () {
-    const res = (await query('SELECT id FROM PRE_submissions WHERE formid = $1;', [ this.id ])).rows.map(r => r.id)
+    const res = (await query('SELECT id FROM PRE_submissions WHERE form_id = $1;', [ this.id ])).rows.map(r => r.id)
     await this.emit('getSubmissionIds', [ this, res ])
     return res
   }
@@ -463,7 +487,11 @@ export class Form extends EventEmitter {
    * @param {string} id submission ID
    */
   async submissionFromId (id) {
-    const res = (await query('SELECT * FROM PRE_submissions WHERE formid = $1 AND id = $2;', [ this.id, id ])).rows[0]
+    const res = (await query('SELECT * FROM PRE_submissions WHERE form_id = $1 AND id = $2;', [ this.id, id ])).rows[0]
+    if (res) {
+      res.formId = res.form_id
+      delete res.form_id
+    }
     return res || null
   }
 }

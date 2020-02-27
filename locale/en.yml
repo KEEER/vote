@@ -113,13 +113,13 @@ plugin:
       exiting: Saving settings, please wait...
       exitSaveError: Error saving settings, data may be not saved. Please refresh to continue.
       delete: Delete form
-      rename: Set form ID
+      rename: Set form name
       deleteTitle: Delete form?
-      renameTitle: Set form ID?
-      deleteInstruction: This operation would delete this form and submissions permanently, and there is no going back. To confirm this operation, please type '{routeId}' in the following space.
+      renameTitle: Set form name?
+      deleteInstruction: This operation would delete this form and submissions permanently, and there is no going back. To confirm this operation, please type '{routeName}' in the following space.
       renameInstruction: This operation would move this form to a new location, and previously shared links will become invalid. Please enter the new form ID.
-      deleteConfirmId: Confirm form ID
-      renameNewId: New form ID
+      deleteConfirmName: Confirm form name
+      renameNewName: New form name
       entry:
         basic: Basics
         plugin: Plugins

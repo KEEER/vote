@@ -1,11 +1,18 @@
 <template>
   <div>
-    <m-dialog class="new-question-dialog" :open="deleteOpen || renameOpen">
+    <m-dialog class="new-question-dialog" :open="deleteOpen || renameOpen" @closed="deleteOpen = renameOpen = false">
       <m-typo-headline :level="5" slot="header">{{$t('plugin.ess.settings.' + (deleteOpen ? 'deleteTitle' : 'renameTitle'))}}</m-typo-headline>
       <m-typo-body :level="1" slot="body">
-        <p>{{$t('plugin.ess.settings.' + (deleteOpen ? 'deleteInstruction' : 'renameInstruction'), { routeId })}}</p>
-        <m-text-field :id="`${uid}-id`" outlined v-model="id" :maxlength="maxlen" pattern="([a-zA-Z0-9]|-|_)*">
-          <m-floating-label :for="`${uid}-id`">{{$t('plugin.ess.settings.' + (deleteOpen ? 'deleteConfirmId' : 'renameNewId'))}}</m-floating-label>
+        <p>{{$t('plugin.ess.settings.' + (deleteOpen ? 'deleteInstruction' : 'renameInstruction'), { routeName })}}</p>
+        <m-text-field
+          ref="textField"
+          :id="`${uid}-id`"
+          outlined
+          v-model="name"
+          :maxlength="maxlen"
+          pattern="([a-zA-Z0-9]|-|_)*"
+        >
+          <m-floating-label :for="`${uid}-id`">{{$t('plugin.ess.settings.' + (deleteOpen ? 'deleteConfirmName' : 'renameNewName'))}}</m-floating-label>
         </m-text-field>
       </m-typo-body>
       <m-button
@@ -18,15 +25,15 @@
         data-mdc-dialog-action="OK"
         slot="acceptButton"
         @click="handleClick"
-        :disabled="!id || id.length > maxlen || (deleteOpen && id !== routeId)"
+        :disabled="okDisabled"
       >{{$t('plugin.ess.editor.ok')}}</m-button>
     </m-dialog>
-    <m-button @click="id = routeId, renameOpen = true">
+    <m-button @click="name = routeName, renameOpen = true">
       <m-icon slot="icon" icon="edit" />
       {{$t('plugin.ess.settings.rename')}}
     </m-button>
     <br />
-    <m-button @click="id = '', deleteOpen = true">
+    <m-button @click="name = '', deleteOpen = true">
       <m-icon slot="icon" icon="delete" />
       {{$t('plugin.ess.settings.delete')}}
     </m-button>
@@ -40,16 +47,26 @@ export default {
     return {
       renameOpen: false,
       deleteOpen: false,
-      id: '',
-      routeId: this.$route.params.id,
-      maxlen: 63 - this.$route.params.uid.length,
+      name: '',
+      routeName: window.KVoteFormData.name,
+      maxlen: 64,
     }
+  },
+  computed: {
+    okDisabled () {
+      return (
+        !this.name
+        || this.name.length > this.maxlen
+        || (this.deleteOpen && this.name !== this.routeName)
+        || !this.$refs.textField.mdcTextField.valid
+      )
+    },
   },
   methods: {
     handleClick () {
       if (this.renameOpen) {
         const url = new URL('_rename', location)
-        url.search = new URLSearchParams({ id: this.id })
+        url.search = new URLSearchParams({ name: this.name })
         location = url
         return
       }

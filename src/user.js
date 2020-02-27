@@ -17,17 +17,19 @@ export class UserNoIdError extends Error {}
 export class User {
   /**
    * Creates a new user object.
-   * @param {string} options.id KEEER ID
+   * @param {number} options.id internal ID
+   * @param {string} options.name KEEER ID
    * @param {string} options.nickname nickname of the user
    * @param {string} options.avatarUrl avatar URL
    * @param {*} options.settings settings
    */
   constructor (options) {
     this._updated = []
+    if (options.id !== undefined) options.id = Number(options.id)
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
-        if (prop === 'id') {
-          throw new TypeError('KEEER ID cannot be mutated')
+        if (prop === 'name') {
+          throw new TypeError(`prop ${prop} cannot be mutated`)
         }
         if (this._updated.indexOf(prop) < 0) this._updated.push(prop)
         obj[prop] = val
@@ -38,7 +40,11 @@ export class User {
 
   // getters / setters for aliases
   get id () { return this.options.id }
-  set id (val) { this.options.id = val }
+  set id (_val) { throw new TypeError('prop id cannot be mutated') }
+  get name () { return this.options.name }
+  set name (val) { this.options.name = val }
+  get proExpires () { return this.options.proExpires }
+  set proExpires (val) { this.options.proExpires = val }
   get nickname () { return this.options.nickname }
   set nickname (val) { this.options.nickname = val }
   get avatarUrl () { return this.options.avatarUrl }
@@ -49,8 +55,9 @@ export class User {
   /** Saves a user into the database. */
   async save () {
     if (this._saved) return await this.update()
-    const stmt = 'INSERT INTO PRE_users (id, avatar_url, nickname, settings) VALUES ($1, $2, $3, $4);'
-    await query(stmt, [ this.id, this.avatarUrl, this.nickname, this.settings ])
+    const stmt = 'INSERT INTO PRE_users (name, lower_name, avatar_url, nickname, settings) VALUES ($1, LOWER($1), $2, $3, $4);'
+    await query(stmt, [ this.name, this.avatarUrl, this.nickname, this.settings ])
+    this.options.id = Number((await query('SELECT id FROM PRE_users WHERE name = $1;', [ name ])).res.rows[0].id)
     this._saved = true
   }
 
@@ -66,14 +73,26 @@ export class User {
 
   /**
    * Gets a user from its KEEER ID.
-   * @param {string} id KEEER ID
+   * @param {string} name KEEER ID
+   */
+  static async fromName (name) {
+    const res = await query('SELECT * FROM PRE_users WHERE name = $1;', [ name ])
+    if (res.rows.length > 1) {
+      log.error(`duplicate keeer id ${name}`)
+      throw new Error('duplicate keeer id')
+    }
+    if (res.rows.length === 0) return null
+    const user = new User(res.rows[0])
+    user._saved = true
+    return user
+  }
+
+  /**
+   * Gets a user from its internal ID.
+   * @param {string} id internal ID
    */
   static async fromId (id) {
     const res = await query('SELECT * FROM PRE_users WHERE id = $1;', [ id ])
-    if (res.rows.length > 1) {
-      log.error(`duplicate user id ${id}`)
-      throw new Error('duplicate user id')
-    }
     if (res.rows.length === 0) return null
     const user = new User(res.rows[0])
     user._saved = true
@@ -103,11 +122,7 @@ export class User {
     let user
     user = await this.fromToken(token)
     if (user) return user
-    try {
-      await kas.validateToken(token)
-      const info = await kas.getInformation(token)
-      const id = info.keeer_id
-      if (!id) throw new UserNoIdError()
+    const insertToken = async id => {
       try {
         const expiry = new Date(Date.now() + maxAge)
         await query('INSERT INTO PRE_tokens (token, id, expiry) VALUES ($1, $2, $3);', [ token, id, expiry ])
@@ -116,8 +131,15 @@ export class User {
         // 23505: pkey not unique
         if (e.code !== '23505') throw e
       }
-      user = await this.fromId(id)
+    }
+    try {
+      await kas.validateToken(token)
+      const info = await kas.getInformation(token)
+      const name = info.keeer_id
+      if (!name) throw new UserNoIdError()
+      user = await this.fromName(name)
       if (user) {
+        await insertToken(user.id)
         if (user.avatarUrl !== info.avatarUrl) user.avatarUrl = info.avatarUrl
         if (user.nickname !== info.nickname) user.nickname = info.nickname
         await user.update()
@@ -126,11 +148,12 @@ export class User {
       // new user
       // TODO: guidethrough
       user = new User({
-        id,
+        name,
         avatarUrl: info.avatar,
         nickname: info.nickname,
       })
       await user.save()
+      await insertToken(user.id)
       return user
     } catch (e) {
       throw e
