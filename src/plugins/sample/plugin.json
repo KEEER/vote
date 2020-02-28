@@ -12,7 +12,8 @@
       "question:update",
       "editor:appMounted",
       "editor:beforeRouterLoad",
-      "editor:settingsMounted"
+      "editor:settingsMounted",
+      "editor:questionMounted"
     ],
     "inject": {
       "form": {

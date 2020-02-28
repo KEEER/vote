@@ -49,13 +49,9 @@
         <m-icon-button @click="menuOpen = true" icon="more_vert" />
         <m-menu v-model="menuOpen">
           <m-list>
-            <m-list-item v-if="hasThemeConfigEntries" @click="themeOpen = true">
-              <m-icon icon="palette" class="question-menu__icon" slot="graphic" />
-              <template slot="text">{{$t('plugin.ess.question.theme')}}</template>
-            </m-list-item>
-            <m-list-item @click="removeDialogOpen = true">
-              <m-icon icon="delete" class="question-menu__icon" slot="graphic" />
-              <template slot="text">{{$t('plugin.ess.question.remove')}}</template>
+            <m-list-item v-for="(item, i) in menuItems" :key="i" @click="menuClick(i)">
+              <m-icon :icon="item.icon" class="question-menu__icon" slot="graphic" />
+              <template slot="text">{{$t(item.label)}}</template>
             </m-list-item>
           </m-list>
         </m-menu>
@@ -174,6 +170,7 @@ import { query } from '../../common/graphql'
 import updateObservable from './updateObservable'
 import HTMLEditor from './HTMLEditor.vue'
 import QuestionConfigDialog from './QuestionConfigDialog.vue'
+import hooks from '../hooks'
 
 // TODO: to be decided: should we allow customizing question menu?
 
@@ -223,6 +220,7 @@ export default {
       required_: this.data.required,
       description_: this.data.description,
       themeConfig_: (this.data.config || {}).theme || {},
+      menuItems: [],
       removed: false,
       folded: false,
       menuOpen: false,
@@ -335,8 +333,25 @@ export default {
       this.change.description = true
       this.logChange()
     },
+    menuClick (i) {
+      const handler = this.menuItems[i].handler
+      if (typeof handler === 'function') handler(this)
+    },
   },
   mounted () {
+    this.menuItems = [
+      ...(this.hasThemeConfigEntries ? [ {
+        icon: 'palette',
+        label: 'plugin.ess.question.theme',
+        handler: () => this.themeOpen = true,
+      } ] : []),
+      {
+        icon: 'delete',
+        label: 'plugin.ess.question.remove',
+        handler: () => this.removeDialogOpen = true,
+      },
+    ]
+    hooks.emit('editor:questionMounted', [ this ])
     this.$on('reorder', reorder => this.reorder(reorder))
   },
   beforeDestroy () {

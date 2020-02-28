@@ -29,6 +29,7 @@
       "editor:appMounted",
       "editor:settingsMounted",
       "editor:editorMounted",
+      "editor:questionMounted",
       "question__beforeUpdate",
       "question__preprocessThemeConfigEntries",
       "editor:dataMounted",

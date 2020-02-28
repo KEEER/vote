@@ -127,6 +127,8 @@ plugin:
       sample: 示...例
     settings:
       sample: 示例插件
+    questionMenu:
+      sample: 示例入口
 
 theme:
   basic:

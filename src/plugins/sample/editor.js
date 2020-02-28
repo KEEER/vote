@@ -15,4 +15,11 @@ window.addEventListener('vote:ready', () => {
         title: 'plugin.sample.settings.sample',
         component: SampleEntry,
       }))
+    .on('editor:questionMounted', ([ vm ]) => {
+      vm.menuItems.push({
+        icon: 'signal_wifi_off',
+        label: 'plugin.sample.questionMenu.sample',
+        handler: vm => alert(vm.title_),
+      })
+    })
 })

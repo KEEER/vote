@@ -132,6 +132,8 @@ plugin:
       sample: SAAAMple
     settings:
       sample: Sample Plugin
+    questionMenu:
+      sample: Sample Entry
 
 theme:
   basic:
