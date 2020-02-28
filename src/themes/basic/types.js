@@ -3,7 +3,7 @@ import VCheckbox from './types/VCheckbox'
 import VText from './types/VText'
 import VTextarea from './types/VTextarea'
 
-export {
+export const types = {
   VRadio,
   VCheckbox,
   VText,

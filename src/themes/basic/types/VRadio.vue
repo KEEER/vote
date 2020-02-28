@@ -16,7 +16,8 @@ export default {
     data: {
       type: Object,
       validator (val) {
-        return val.title && val.options && val.options.every(op => op.label && op.value)
+        const e = x => typeof x !== 'undefined'
+        return e(val.title) && e(val.options) && val.options.every(op => e(op.label) && e(op.value))
       },
     },
     value: String,

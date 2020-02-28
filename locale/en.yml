@@ -12,6 +12,7 @@ core:
       VTextarea: Textarea
       VCheckbox: Checkbox
       VRadio: Radio buttons
+      VSample: Plugin Sample
 
 static:
   index:

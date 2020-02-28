@@ -35,6 +35,7 @@ export default {
         this.logChange()
       }
     },
+    update () {},
   },
   props: {
     data: Object,

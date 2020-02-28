@@ -15,11 +15,11 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import Question from './Question'
 import Page from './Page'
 import hooks from './hooks'
 import 'array-flat-polyfill' // MicroMsg doesn't support that
+import { types } from './types'
 
 export default Vue.extend({
   data: function () {
@@ -28,6 +28,7 @@ export default Vue.extend({
       prevVisible: false,
       nextVisible: false,
       status: 'filling',
+      types,
     }
   },
   props: {

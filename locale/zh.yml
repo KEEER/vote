@@ -5,6 +5,7 @@ core:
       VTextarea: 多行填空
       VCheckbox: 多选
       VRadio: 单选
+      VSample: 插件示例
 
 static:
   index:

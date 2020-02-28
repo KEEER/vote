@@ -159,6 +159,7 @@ import Editor from './Editor.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'
 import hooks from './hooks'
+import types from './components/types'
 
 {
   const el = document.createElement('script')
@@ -220,6 +221,7 @@ export default Vue.extend({
       formName: window.KVoteFormData.name,
       documentTitle: document.title,
       routes,
+      types,
     }
   },
   methods: {
@@ -232,7 +234,6 @@ export default Vue.extend({
       this.$emit('update:title', this.title)
     },
   },
-  components: {},
   mounted () {
     const media = window.matchMedia('(max-width: 720px)')
 

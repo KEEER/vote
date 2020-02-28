@@ -48,8 +48,10 @@ export default {
       app.updateTitle()
     },
     async update () {
-      await this.$refs.title.update()
-      await this.$refs.u.update()
+      await Promise.all([
+        this.$refs.title.update(),
+        this.$refs.retrieving.update(),
+      ])
     },
   },
   props: {

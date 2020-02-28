@@ -32,7 +32,7 @@
       />
       <div v-else-if="description_" v-html="description_.html || ''"></div>
       <component
-        :is="data.type || 'VNull'"
+        :is="questionTypes[data.type || 'VNull']"
         :readonly="readonly"
         v-model="value_"
         :options.sync="options_"
@@ -172,8 +172,6 @@ import HTMLEditor from './HTMLEditor.vue'
 import QuestionConfigDialog from './QuestionConfigDialog.vue'
 import hooks from '../hooks'
 
-// TODO: to be decided: should we allow customizing question menu?
-
 export default {
   name: 'Question',
   mixins: [
@@ -224,12 +222,12 @@ export default {
       removed: false,
       folded: false,
       menuOpen: false,
-      themeOpen: false, // TODO: API design
+      themeOpen: false,
       removeDialogOpen: false,
+      questionTypes,
     }
   },
   components: {
-    ...questionTypes,
     TypeSelector,
     HTMLEditor,
     QuestionConfigDialog,

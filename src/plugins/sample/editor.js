@@ -2,7 +2,11 @@ import SampleEntry from './SampleEntry.vue'
 
 window.addEventListener('vote:ready', () => {
   window.voteHooks
-    .on('editor:appMounted', ([ app ]) => app.documentTitle = 'Sample Vote')
+    .on('editor:appMounted', ([ app ]) => {
+      app.documentTitle = 'Sample Vote'
+      app.types.VSample = SampleEntry
+      app.updateTitle()
+    })
     .on('editor:beforeRouterLoad', ([ routes ]) => routes.push({
       path: '/:uname/:name/sample',
       name: 'sample',

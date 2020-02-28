@@ -3,7 +3,7 @@
     <QTitle :title="data.title" :required="data.required" />
     <div v-html="(data.description || {}).html || ''"></div>
     <component
-      :is="type"
+      :is="types[type]"
       :data="data"
       :value.sync="value"
       ref="realQuestion">
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import * as types from './types.js'
+import { types } from './types'
 import hooks from './hooks'
 import QTitle from './Title.vue'
 
@@ -22,19 +22,14 @@ export default {
   data () {
     return {
       value: this.$attrs.value,
+      types,
     }
   },
   components: {
-    ...types,
     QTitle,
   },
   props: {
-    type: {
-      type: String,
-      validator (val) {
-        return val in types
-      },
-    },
+    type: String,
     data: Object,
     id: Number,
   },

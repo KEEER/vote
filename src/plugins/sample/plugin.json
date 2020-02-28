@@ -10,6 +10,7 @@
     ],
     "hooks": [
       "question:update",
+      "form:mounted",
       "editor:appMounted",
       "editor:beforeRouterLoad",
       "editor:settingsMounted",

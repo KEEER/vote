@@ -1,4 +1,5 @@
 import './styles.css'
+import SampleEntry from './SampleEntry.vue'
 
 window.addEventListener('vote:ready', () => {
   const hooks = window.voteHooks
@@ -11,4 +12,5 @@ window.addEventListener('vote:ready', () => {
       }
     }
   })
+  hooks.on('form:mounted', ([ vm ]) => vm.$set(vm.types, 'VSample', SampleEntry))
 })

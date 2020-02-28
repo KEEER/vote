@@ -6,11 +6,11 @@
     v-model="value_"
   >
     <m-list-item
-      v-for="(name, value) in $t('core.question.types')"
-      :key="value"
-      :data-value="value"
+      v-for="(name, i) in this.types"
+      :key="i"
+      :data-value="name"
       aria-selected="false"
-    >{{name}}</m-list-item>
+    >{{$t(`core.question.types.${name}`)}}</m-list-item>
     <m-floating-label
       :for="uid"
       slot="label"
@@ -20,12 +20,14 @@
 
 <script>
 import hooks from '../hooks'
+import types from './types'
 
 export default {
   name: 'TypeSelector',
   data () {
     return {
       value_: this.value,
+      types: Object.keys(types).filter(t => this.$te(`core.question.types.${t}`)),
     }
   },
   props: {
