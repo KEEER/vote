@@ -119,6 +119,7 @@ plugin:
       entry:
         basic: 基本设置
         plugin: 插件设置
+        theme: 主题设置
         dangerous: 危险的设置
 
   sample:
@@ -138,6 +139,8 @@ theme:
     config:
       question:
         multiline: 分多行显示
+      form:
+        color: 前景色
     footer: 由 KEEER Vote 提供技术支持
     prevPage: ← 前一页
     nextPage: 下一页 →

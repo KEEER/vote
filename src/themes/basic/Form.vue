@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main :style="`color:${color};`">
     <h1>{{this.title}}</h1>
     <slot v-if="!submitting && !submitted && !submiterror" />
     <span v-if="!submitting && !submitted && !submiterror" class="form-controls">
@@ -29,6 +29,7 @@ export default Vue.extend({
       nextVisible: false,
       status: 'filling',
       types,
+      color: '#000000',
     }
   },
   props: {
@@ -77,6 +78,9 @@ export default Vue.extend({
     this.updateVisibility()
     hooks.emit('form:mounted', [ this ])
     hooks.emit('form:updatevisibility', [ this ])
+    if (window.KVoteFormData.config && window.KVoteFormData.config.settings && window.KVoteFormData.config.settings['theme-basic.color']) {
+      this.color = window.KVoteFormData.config.settings['theme-basic.color']
+    }
   },
   computed: {
     pages () {

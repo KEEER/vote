@@ -76,6 +76,11 @@ export default {
           labelBindings: { for: this.uid },
           labelText: this.$attrs.label,
         },
+        color: {
+          component: 'color-picker',
+          labelComponent: 'label',
+          labelText: this.$attrs.label,
+        },
       },
     }
   },

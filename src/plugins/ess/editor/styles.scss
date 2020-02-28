@@ -3,6 +3,7 @@ $mdc-theme-accent: #002d4d;
 $mdc-theme-background: #fff;
 
 /* Please keep these items in order (dict) */
+@import '@keeer/color-picker/src/styles';
 @import '@keeer/material-components-vue/components/button/styles';
 @import '@keeer/material-components-vue/components/card/styles';
 @import '@keeer/material-components-vue/components/checkbox/styles';

@@ -124,6 +124,7 @@ plugin:
       entry:
         basic: Basics
         plugin: Plugins
+        theme: Theme
         dangerous: Dangerous Zone
 
   sample:
@@ -143,6 +144,8 @@ theme:
     config:
       question:
         multiline: Display in separate lines
+      form:
+        color: Text color
     footer: Powered by KEEER Vote
     prevPage: ←Prev page
     nextPage: Next page→

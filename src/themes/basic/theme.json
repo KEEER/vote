@@ -22,7 +22,10 @@
     },
     "formConfig": [
       {
-        "type": "color"
+        "type": "color",
+        "name": "theme-basic.color",
+        "label": "theme.basic.config.form.color",
+        "default": "#000000"
       }
     ],
     "hooks": [

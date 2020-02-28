@@ -1,4 +1,5 @@
 // Please keep these in dictionary order (ascending)
+import ColorPicker from '@keeer/color-picker'
 import MButton from '@keeer/material-components-vue/components/button/'
 import MCard from '@keeer/material-components-vue/components/card/'
 import MCheckbox from '@keeer/material-components-vue/components/checkbox/'
@@ -19,6 +20,7 @@ import MTopAppBar from '@keeer/material-components-vue/components/top-app-bar/'
 import MTypo from '@keeer/material-components-vue/components/typography/'
 
 ;[
+  ColorPicker,
   MButton,
   MCard,
   MCheckbox,

@@ -44,6 +44,7 @@
 <script>
 import BasicSettings from './components/BasicSettings.vue'
 import PluginSettings from './components/PluginSettings.vue'
+import ThemeSettings from './components/ThemeSettings.vue'
 import DangerousSettings from './components/DangerousSettings.vue'
 import hooks from './hooks'
 import saveStateRelay from './components/saveStateRelay'
@@ -54,6 +55,10 @@ const entries = [
   {
     title: 'plugin.ess.settings.entry.basic',
     component: BasicSettings,
+  },
+  {
+    title: 'plugin.ess.settings.entry.theme',
+    component: ThemeSettings,
   },
   {
     title: 'plugin.ess.settings.entry.plugin',
