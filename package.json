@@ -1,10 +1,10 @@
 {
   "name": "vote",
-  "version": "0.0.161",
+  "version": "0.0.162",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
-    "build": "npm run clean && cross-env NODE_ENV=production webpack && npm run build:misc && node ./scripts pack",
+    "build": "npm run clean && cross-env NODE_ENV=production webpack && npm run build:misc && node scripts pack",
     "build:dev": "npm run clean && cross-env NODE_ENV=development webpack && npm run build:misc",
     "build:misc": "node scripts build:html && node scripts build:compat",
     "wds": "webpack-dev-server",
@@ -55,7 +55,7 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
-    "@keeer/color-picker": "0.0.1",
+    "@keeer/color-picker": "^0.0.2",
     "@keeer/material-components-vue": "^1.2.0-keeer1",
     "babel-loader": "^8.0.5",
     "cache-loader": "^4.0.1",

@@ -79,7 +79,7 @@ export default Vue.extend({
     hooks.emit('form:mounted', [ this ])
     hooks.emit('form:updatevisibility', [ this ])
     if (window.KVoteFormData.config && window.KVoteFormData.config.settings && window.KVoteFormData.config.settings['theme-basic.color']) {
-      this.color = window.KVoteFormData.config.settings['theme-basic.color']
+      this.color = window.KVoteFormData.config.settings['theme-basic.color'].replace(/;/g, '').replace(/ /g, '')
     }
   },
   computed: {
