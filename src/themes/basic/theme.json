@@ -21,7 +21,9 @@
       ]
     },
     "formConfig": [
-      "TODO"
+      {
+        "type": "color"
+      }
     ],
     "hooks": [
       "form:update",
