@@ -73,6 +73,7 @@ plugin:
         title: New Question
       remove: Remove
       theme: Theme Configuration
+      typeSelectorWidth: 200px # Don't translate
 
     saveHint:
       notChanged: Autosave Enabled

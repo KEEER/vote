@@ -4,6 +4,7 @@
     outlined
     enhanced
     v-model="value_"
+    :width="$t('plugin.ess.question.typeSelectorWidth')"
   >
     <m-list-item
       v-for="(name, i) in this.types"
