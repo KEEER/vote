@@ -197,8 +197,8 @@ export default {
       }
       if ('themeConfig' in change || 'validationConfig' in change) {
         change.config = JSON.stringify({
-          theme: change.themeConfig,
-          validation: change.validationConfig,
+          theme: vm.themeConfig_,
+          validation: vm.validationConfig_,
         })
         delete change.themeConfig
         delete change.validationConfig
