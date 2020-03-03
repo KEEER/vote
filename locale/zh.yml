@@ -6,6 +6,79 @@ core:
       VCheckbox: 多选
       VRadio: 单选
       VSample: 插件示例
+    validation:
+      useValidation: 启用验证
+      type: 验证类型
+      types:
+        text: 文本
+        numeric: 数字
+        length: 文本长度
+        phone: 电话号码
+        mobile: 中国大陆手机号码
+        email: 电子邮件
+        url: URL
+        textType: 文本验证类型
+        textTypes:
+          startsWith: 以...开始
+          notStartsWith: 不以...开始
+          endsWith: 以...结束
+          notEndsWith: 不以...结束
+          includes: 包含
+          notIncludes: 不包含
+          is: 是
+          isNot: 不是
+        numericType: 数值验证类型
+        numericTypes:
+          isNumber: 是数字
+          isInt: 是整数
+          gt: 大于
+          ge: 大于等于
+          lt: 小于
+          le: 小于等于
+          eq: 等于
+          ne: 不等于
+        lengthType: 长度验证类型
+        lengthTypes:
+          minlen: 最小长度
+          maxlen: 最大长度
+      param:
+        showValidation: 显示验证规则
+        invalidTip: 错误提示
+        textContent: 文本内容
+        numericContent: 数字
+        lengthContent: 长度
+        minSelection: 最少选择个数
+        maxSelection: 最多选择个数
+      invalidTip:
+        required: 你必须回答这个问题
+        hidden: 回答不符合要求
+        text:
+          startsWith: 必须以“{rule}”开头
+          notStartsWith: 不能以“{rule}”开头
+          endsWith: 必须以“{rule}”结尾
+          notEndsWith: 不能以“{rule}”结尾
+          includes: 必须包含“{rule}”
+          notIncludes: 不能包含“{rule}”
+          is: 必须填写“{rule}”
+          isNot: 不能填写“{rule}”
+        numeric:
+          isNumber: 必须是数字
+          isInt: 必须是整数
+          gt: 必须大于“{rule}”
+          ge: 必须大于等于“{rule}”
+          lt: 必须小于“{rule}”
+          le: 必须小于等于“{rule}”
+          eq: 必须等于“{rule}”
+          ne: 不能等于“{rule}”
+        length:
+          minlen: 至少填写“{rule}”个字符
+          maxlen: 至多填写“{rule}”个字符
+        phone: 必须是一个电话号码
+        mobile: 必须是一个中国大陆手机号码
+        email: 必须是电子邮件地址
+        url: 必须是一个 URL
+        minSelection: 至少选择 {rule} 项
+        maxSelection: 至多选择 {rule} 项
 
 static:
   index:
@@ -68,6 +141,7 @@ plugin:
       remove: 删除问题
       theme: 主题设置
       typeSelectorWidth: 128px # 不要翻译
+      validation: 验证
 
     saveHint:
       notChanged: 自动保存已开启

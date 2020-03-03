@@ -74,7 +74,7 @@ export default {
   methods: {
     add () {
       this.options_ = this.options_ || []
-      const value = this.options_.map(o => o.value).reduce((a, b) => Math.max(a, b), -1) + 1
+      const value = String(this.options_.map(o => o.value).reduce((a, b) => Math.max(Number(a), Number(b)), -1) + 1)
       this.options_.push({
         label: '',
         value,

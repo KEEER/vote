@@ -13,6 +13,79 @@ core:
       VCheckbox: Checkbox
       VRadio: Radio buttons
       VSample: Plugin Sample
+    validation:
+      useValidation: Use validation
+      type: Validation type
+      types:
+        text: Text
+        numeric: Numeric
+        length: Length
+        phone: Phone number
+        mobile: Mainland China mobile number
+        email: Email address
+        url: URL
+        textType: Text validation type
+        textTypes:
+          startsWith: Starts with
+          notStartsWith: Does not start with
+          endsWith: Ends with
+          notEndsWith: Does not end with
+          includes: Includes
+          notIncludes: Does not include
+          is: Is
+          isNot: Is not
+        numericType: Numeric validation type
+        numericTypes:
+          isNumber: Is number
+          isInt: Is integer
+          gt: Greater then
+          ge: Greater then or equal to
+          lt: Less then
+          le: Less then or equal to
+          eq: Equal to
+          ne: Not equal to
+        lengthType: Length validation type
+        lengthTypes:
+          minlen: Minimum length
+          maxlen: Maximum length
+      param:
+        showValidation: Show validation rules
+        invalidTip: Custom tip on invalid
+        textContent: Text content
+        numericContent: Numeric content
+        lengthContent: Length
+        minSelection: Minimum selection count
+        maxSelection: Maximum selection count
+      invalidTip:
+        required: You must answer this question.
+        hidden: Answer does not fulfill requirements
+        text:
+          startsWith: Must start with “{rule}”
+          notStartsWith: May not start with “{rule}”
+          endsWith: Must end with “{rule}”
+          notEndsWith: May not end with “{rule}”
+          includes: Must include “{rule}”
+          notIncludes: May not include “{rule}”
+          is: Must be “{rule}”
+          isNot: May not be “{rule}”
+        numeric:
+          isNumber: Must be a number
+          isInt: Must be an integer
+          gt: Must be greater then “{rule}”
+          ge: Must be greater then or equal to “{rule}”
+          lt: Must be less then “{rule}”
+          le: Must be less then or equal to “{rule}”
+          eq: Must equal to “{rule}”
+          ne: May not equal to “{rule}”
+        length:
+          minlen: Must be at least “{rule}” characters long
+          maxlen: Must be at most “{rule}” characters long
+        phone: Must be a phone number
+        mobile: Must be a mainland China mobile number
+        email: Must be an email address
+        url: Must be an URL
+        minSelection: Must select at least {rule} items
+        maxSelection: Must select at most {rule} items
 
 static:
   index:
@@ -74,6 +147,7 @@ plugin:
       remove: Remove
       theme: Theme Configuration
       typeSelectorWidth: 200px # Don't translate
+      validation: Validation
 
     saveHint:
       notChanged: Autosave Enabled

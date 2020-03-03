@@ -23,8 +23,8 @@
           <m-radio
             :name="uid"
             v-model="value_"
-            :value="option.value.toString()"
-            :checked="value_ === option.value.toString()"
+            :value="option.value"
+            :checked="value_ === option.value"
           />
           <m-text-field outlined :id="`${uid}-${i}`" v-model="option.label" class="label" @input="syncOptions">
             <m-floating-label :for="`${uid}-${i}`">{{$t('plugin.ess.question.labelPlaceholder')}}</m-floating-label>
@@ -42,8 +42,8 @@
           disabled
           :name="uid"
           v-model="value_"
-          :value="option.value.toString()"
-          :checked="String(value_) === option.value.toString()"
+          :value="option.value"
+          :checked="String(value_) === option.value"
         />
         <span>{{option.label}}</span>
       </li>
@@ -103,7 +103,7 @@ export default {
   methods: {
     add () {
       this.options_ = this.options_ || []
-      const value = this.options_.map(o => o.value).reduce((a, b) => Math.max(a, b), -1) + 1
+      const value = String(this.options_.map(o => o.value).reduce((a, b) => Math.max(Number(a), Number(b)), -1) + 1)
       this.options_.push({
         label: '',
         value,

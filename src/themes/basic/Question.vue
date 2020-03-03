@@ -9,8 +9,15 @@
       ref="realQuestion">
       <slot />
     </component>
+    <div class="invalid-tip" v-if="invalidTip">{{invalidTip}}</div>
   </div>
 </template>
+
+<style scoped>
+.invalid-tip {
+  color: #d93025;
+}
+</style>
 
 <script>
 import { types } from './types'
@@ -23,6 +30,7 @@ export default {
     return {
       value: this.$attrs.value,
       types,
+      invalidTip: '',
     }
   },
   components: {
@@ -34,11 +42,13 @@ export default {
     id: Number,
   },
   computed: {
-    valid () {
-      let valid = !this.data.required || !!this.value
-      hooks.emit('question:validate', [ this, v => valid = v ])
-      return valid
+    validity () {
+      let res
+      hooks.emit('question:validate', [ this, r => res = { valid: false, reason: r } ])
+      if (typeof res === 'undefined') return { valid: true }
+      return res
     },
+    valid () { return this.validity.valid },
   },
   provide () {
     return { Question: this }

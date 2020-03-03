@@ -26,6 +26,7 @@
       "form:authorizeRenameOrRemoval",
       "form__updateSettings",
       "form__preprocessSettings",
+      "form.validateQuestionOverride",
       "editor:appMounted",
       "editor:settingsMounted",
       "editor:editorMounted",
@@ -33,6 +34,7 @@
       "editor:preprocessThemeFormConfigEntries",
       "question__beforeUpdate",
       "question__preprocessThemeConfigEntries",
+      "question:validatorOverride",
       "editor:dataMounted",
       "editor:beforeRouterLoad"
     ],

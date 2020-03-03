@@ -413,7 +413,7 @@ export class Form extends EventEmitter {
    */
   async getPage (path, ctx) {
     let res = null
-    await this.emit('getPage', [ path, ctx, r => res = r ])
+    await this.emit('getPage', [ this, path, ctx, r => res = r ])
     if (res !== null) {
       if (res === 200) return ''
       if (typeof res === 'number') return ctx.throw(res)
@@ -444,21 +444,21 @@ export class Form extends EventEmitter {
    */
   async handleSubmission (ctx) {
     let res
-    await this.emit('handleSubmission', [ ctx, r => res = r ])
+    await this.emit('handleSubmission', [ this, ctx, r => res = r ])
     if (res) return res
 
-    if (ctx.method !== 'POST') {
-      return 405 // Method Not Allowed
-    }
-    if (!ctx.request.body) {
-      return 400
-    }
+    if (ctx.method !== 'POST') return 405 // Method Not Allowed
+    if (!ctx.request.body) return 400
 
     let data = ctx.request.body
     if (Array.isArray(data)) {
       data = {}
       ctx.request.body.forEach((v, i) => data[i] = v)
     }
+
+    let cancel = false
+    await this.emit('validateSubmission', [ this, ctx, data, () => cancel = true ])
+    if (cancel) return 400
 
     await query('INSERT INTO PRE_submissions (form_id, data) VALUES ($1, $2);', [ this.id, data ])
     return 200

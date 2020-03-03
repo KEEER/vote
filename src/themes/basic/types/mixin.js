@@ -1,6 +1,7 @@
 import hooks from '../hooks'
 
 export default {
+  inject: [ 'Question' ],
   data () {
     return {
       value_: this.value,

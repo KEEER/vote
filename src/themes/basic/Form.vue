@@ -109,7 +109,7 @@ export default Vue.extend({
     },
     valid () {
       let validity = this.pages.every(p => p.valid)
-      hooks.emit('form:validate', [ this, v => validity = v ])
+      hooks.emit('form:validate', [ this, () => validity = false ])
       return validity
     },
   },

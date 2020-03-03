@@ -13,11 +13,6 @@
 
 <script>
 import VCheckboxInput from './VCheckboxInput'
-import hooks from '../hooks'
-
-hooks.on('question:validate', ([ q, s ]) => {
-  if (q.type === 'VCheckbox' && q.data.required && Object.values(q.value || {}).every(v => !v)) s(false)
-})
 
 export default {
   name: 'VCheckbox',

@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.162",
+  "version": "0.0.164",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
@@ -32,9 +32,11 @@
   "homepage": "https://github.com/KEEER/vote#readme",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "@keeer/libphonenumber": "^1.7.44-keeer1",
     "accept-language-parser": "^1.5.0",
     "array-flat-polyfill": "^1.0.1",
     "dotenv": "^7.0.0",
+    "email-validator": "^2.0.4",
     "emittery": "^0.4.1",
     "esm": "^3.2.22",
     "fs-extra": "^8.0.1",
@@ -48,6 +50,7 @@
     "pg": "^7.10.0",
     "project-name-generator": "^2.1.7",
     "sanitize-html": "^1.20.1",
+    "url-regex": "^5.0.0",
     "winston": "^3.2.1",
     "yaml": "^1.7.2"
   },

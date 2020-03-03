@@ -6,6 +6,12 @@
       :entries="themeConfigEntries"
       :open.sync="themeOpen"
     />
+    <QuestionConfigDialog
+      v-if="validationOpen"
+      v-model="validationConfig_"
+      :entries="validationEntries"
+      :open.sync="validationOpen"
+    />
     <div class="question" :class="{ readonly }" v-if="!folded">
       <div class="title-type" v-if="!readonly">
         <m-text-field
@@ -165,6 +171,7 @@
 
 <script>
 import questionTypes from './types'
+import validationTypes from '../../common/validationTypes'
 import TypeSelector from './TypeSelector.vue'
 import { query } from '../../common/graphql'
 import updateObservable from './updateObservable'
@@ -183,14 +190,18 @@ export default {
         value: vm.value_,
         options: vm.options_,
         type: vm.type_,
-        config: { theme: vm.themeConfig_ },
+        config: { theme: vm.themeConfig_, validation: vm.validationConfig_ },
       })
       for (let i of [ 'value', 'options' ]) {
         change[i] = JSON.stringify(change[i])
       }
-      if ('themeConfig' in change) {
-        change.config = JSON.stringify({ theme: change.themeConfig })
+      if ('themeConfig' in change || 'validationConfig' in change) {
+        change.config = JSON.stringify({
+          theme: change.themeConfig,
+          validation: change.validationConfig,
+        })
         delete change.themeConfig
+        delete change.validationConfig
       }
       if (change.description) {
         change.description = JSON.stringify(await vm.$refs.description.save())
@@ -218,13 +229,16 @@ export default {
       required_: this.data.required,
       description_: this.data.description,
       themeConfig_: (this.data.config || {}).theme || {},
+      validationConfig_: (this.data.config || {}).validation || {},
       menuItems: [],
       removed: false,
       folded: false,
       menuOpen: false,
       themeOpen: false,
+      validationOpen: false,
       removeDialogOpen: false,
       questionTypes,
+      validationEntries: validationTypes[this.data.type],
     }
   },
   components: {
@@ -249,6 +263,9 @@ export default {
       const cfg = window.KVoteFormData.themeConfig
       return 'provides' in cfg && 'questionConfig' in cfg.provides && this.type_ in cfg.provides.questionConfig
     },
+    hasValidationEntries () {
+      return this.validationEntries.length > 0
+    },
   },
   watch: {
     data () {
@@ -258,6 +275,7 @@ export default {
       this.options_ = this.data.options
       this.type_ = this.data.type
       this.themeConfig_ = (this.data.config || {}).theme || {}
+      this.validationConfig_ = (this.data.config || {}).validation || {}
     },
     title_ (val) {
       if (val) {
@@ -280,6 +298,11 @@ export default {
       this.change.themeConfig = val
       this.logChange()
       this.$emit('update:themeConfig', val)
+    },
+    validationConfig_ (val) {
+      this.change.validationConfig = val
+      this.logChange()
+      this.$emit('update:validationConfig', val)
     },
     required_ (val) {
       this.change.required = val
@@ -338,6 +361,11 @@ export default {
   },
   mounted () {
     this.menuItems = [
+      ...(this.hasValidationEntries ? [ {
+        icon: 'done',
+        label: 'plugin.ess.question.validation',
+        handler: () => this.validationOpen = true,
+      } ] : []),
       ...(this.hasThemeConfigEntries ? [ {
         icon: 'palette',
         label: 'plugin.ess.question.theme',

@@ -20,3 +20,8 @@ $mdc-theme-background: #fff;
 @import '@keeer/material-components-vue/components/text-field/styles';
 @import '@keeer/material-components-vue/components/top-app-bar/styles';
 @import '@keeer/material-components-vue/components/typography/styles';
+
+/* FIXME: hack */
+.mdc-select__selected-text {
+  min-width: 0;
+}
