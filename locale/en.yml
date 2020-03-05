@@ -213,6 +213,15 @@ plugin:
       sample: Sample Entry
 
 theme:
+  common:
+    page: Page {page}
+    prevPage: ←Prev page
+    nextPage: Next page→
+    submit: Submit
+    submitting: Submitting...
+    submitted: The form has been submitted. Thank you.
+    submiterror: There is an error submitting the form.
+
   basic:
     name: Basic
     description: Basic UI, should not be used for production.
@@ -222,10 +231,16 @@ theme:
       form:
         color: Text color
     footer: Powered by KEEER Vote
-    prevPage: ←Prev page
-    nextPage: Next page→
-    submit: Submit
-    page: Page {page}
-    submitting: Submitting...
-    submitted: The form has been submitted. Thank you.
-    submiterror: There is an error submitting the form.
+
+  default:
+    name: Default
+    description: Default theme made for Vote.
+    footer: Vote
+    config:
+      question:
+        multiline: Display in separate lines
+      form:
+        textColor: Text color
+        bgColor: Background color
+        themeColor: Theme color
+        secondaryColor: Secondary color

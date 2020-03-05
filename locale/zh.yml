@@ -208,6 +208,15 @@ plugin:
       sample: 示例入口
 
 theme:
+  common:
+    page: 第 {page} 页
+    prevPage: ← 前一页
+    nextPage: 下一页 →
+    submit: 提交！
+    submitting: 正在提交……
+    submitted: 表单已经提交，感谢您的参与。
+    submiterror: 在提交表单时出错！
+
   basic:
     name: 基本样式
     description: 基本的 Vote 样式，不应该用于真正的问卷。
@@ -217,10 +226,16 @@ theme:
       form:
         color: 前景色
     footer: 由 KEEER Vote 提供技术支持
-    prevPage: ← 前一页
-    nextPage: 下一页 →
-    submit: 提交！
-    page: 第 {page} 页
-    submitting: 正在提交……
-    submitted: 表单已经提交，感谢您的参与。
-    submiterror: 在提交表单时出错！
+
+  default:
+    name: 默认主题
+    description: 为 Vote 定制的默认主题
+    footer: Vote
+    config:
+      question:
+        multiline: 分多行显示
+      form:
+        textColor: 文本颜色
+        bgColor: 表单背景色
+        themeColor: 主题色
+        secondaryColor: 次要主题色

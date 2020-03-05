@@ -2,6 +2,14 @@ window.KVoteFormData = {
   title: 'TestTitle',
   action: '/',
   method: 'POST',
+  config: {
+    settings: {
+      'theme-default.secondary-color': 'red',
+      'theme-default.theme-color': 'blue',
+      'theme-default.bg-color': '#f5fafd',
+      'theme-default.text-color': '#002d4d',
+    },
+  },
   data: [
     [
       {
@@ -10,6 +18,7 @@ window.KVoteFormData = {
         title: '1. Select one',
         value: '2',
         required: true,
+        description: { html: '<b>Hello</b> world.' },
         options: [
           {
             label: 'One',
@@ -65,6 +74,13 @@ window.KVoteFormData = {
     ],
   ],
 }
+
+for (var i of Array(10).keys()) KVoteFormData.data[0].push({
+  id: i + 5,
+  type: 'VTextarea',
+  title: 'Input',
+  value: '2',
+})
 
 window.addEventListener('vote:ready', function () {
   var hooks = window.voteHooks

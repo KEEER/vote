@@ -1,12 +1,9 @@
 import './styles.scss'
 
 // Please keep these in dictionary order (ascending)
-import ColorPicker from '@keeer/color-picker'
 import MButton from '@keeer/material-components-vue/components/button/'
 import MCard from '@keeer/material-components-vue/components/card/'
 import MCheckbox from '@keeer/material-components-vue/components/checkbox/'
-import MDialog from '@keeer/material-components-vue/components/dialog'
-import MDrawer from '@keeer/material-components-vue/components/drawer/'
 import MFloatingLabel from '@keeer/material-components-vue/components/floating-label/'
 import MFormField from '@keeer/material-components-vue/components/form-field/'
 import MIcon from '@keeer/material-components-vue/components/icon/'
@@ -18,16 +15,12 @@ import MRadio from '@keeer/material-components-vue/components/radio/'
 import MSelect from '@keeer/material-components-vue/components/select/'
 import MSwitch from '@keeer/material-components-vue/components/switch/'
 import MTextField from '@keeer/material-components-vue/components/text-field/'
-import MTopAppBar from '@keeer/material-components-vue/components/top-app-bar/'
 import MTypo from '@keeer/material-components-vue/components/typography/'
 
 ;[
-  ColorPicker,
   MButton,
   MCard,
   MCheckbox,
-  MDialog,
-  MDrawer,
   MFloatingLabel,
   MFormField,
   MIcon,
@@ -39,6 +32,5 @@ import MTypo from '@keeer/material-components-vue/components/typography/'
   MSelect,
   MSwitch,
   MTextField,
-  MTopAppBar,
   MTypo,
 ].forEach(component => Vue.use(component))

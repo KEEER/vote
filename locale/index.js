@@ -1,5 +1,5 @@
 const loader = name => typeof window === 'undefined' ?
-  require('yaml').parse(require('fs').readFileSync(require('path').resolve(__dirname, name)).toString()) :
+  require('yaml').parse(require('fs').readFileSync(require('path').resolve(__dirname, `${name}.yml`)).toString()) :
   JSON.parse(require(`raw-loader!yaml-loader!./${name}.yml`).default)
 
 const en = loader('en'), zh = loader('zh')

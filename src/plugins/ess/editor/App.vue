@@ -53,8 +53,6 @@
   </div>
 </template>
 
-<style lang="scss" src="./styles.scss"></style>
-
 <style>
 body {
   margin: 0;

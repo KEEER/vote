@@ -33,5 +33,8 @@ export default {
     question () {
       return this.question_ || this.$parent
     },
+    realQuestion () {
+      return this.question.$children[0]
+    },
   },
 }

@@ -3,12 +3,15 @@
     <component v-if="component" :is="component" v-model="value_" v-bind="bindings">
       <slot />
     </component>
-    <component v-else-if="preset" v-model="value_" :is="presetComponent" v-bind="presetBindings">
+    <component v-if="presetLabelComponent && presetLabelBefore" :is="presetLabelComponent" v-bind="presetLabelBindings">
+      {{presetLabelText}}
+    </component>
+    <component v-if="preset" v-model="value_" :is="presetComponent" v-bind="presetBindings">
       <component v-if="presetSlotComponent" :is="presetSlotComponent" v-bind="presetSlotBindings">
         {{presetSlotText}}
       </component>
     </component>
-    <component v-if="presetLabelComponent" :is="presetLabelComponent" v-bind="presetLabelBindings">
+    <component v-if="presetLabelComponent && presetLabelAfter" :is="presetLabelComponent" v-bind="presetLabelBindings">
       {{presetLabelText}}
     </component>
     <slot v-else :value.sync="value_" />
@@ -65,6 +68,7 @@ export default {
           labelComponent: 'label',
           labelBindings: { for: this.uid },
           labelText: this.$attrs.label,
+          labelAfter: true,
         },
         switch: {
           component: 'm-switch',
@@ -75,11 +79,14 @@ export default {
           labelComponent: 'label',
           labelBindings: { for: this.uid },
           labelText: this.$attrs.label,
+          labelAfter: true,
         },
         color: {
           component: 'color-picker',
-          labelComponent: 'label',
+          labelComponent: 'm-typo-body',
+          labelBindings: { level: 1 },
           labelText: this.$attrs.label,
+          labelBefore: true,
         },
       },
     }
@@ -112,30 +119,16 @@ export default {
       d.class = d.class_
       return d
     },
-    presetComponent () {
-      return this.presets[this.preset].component
-    },
-    presetBindings () {
-      return this.presets[this.preset].bindings
-    },
-    presetSlotComponent () {
-      return this.presets[this.preset].slotComponent
-    },
-    presetSlotBindings () {
-      return this.presets[this.preset].slotBindings
-    },
-    presetSlotText () {
-      return this.presets[this.preset].slotText
-    },
-    presetLabelComponent () {
-      return this.presets[this.preset].labelComponent
-    },
-    presetLabelBindings () {
-      return this.presets[this.preset].labelBindings
-    },
-    presetLabelText () {
-      return this.presets[this.preset].labelText
-    },
+    presetComponent () { return this.presets[this.preset].component },
+    presetBindings () { return this.presets[this.preset].bindings },
+    presetSlotComponent () { return this.presets[this.preset].slotComponent },
+    presetSlotBindings () { return this.presets[this.preset].slotBindings },
+    presetSlotText () { return this.presets[this.preset].slotText },
+    presetLabelComponent () { return this.presets[this.preset].labelComponent },
+    presetLabelBindings () { return this.presets[this.preset].labelBindings },
+    presetLabelText () { return this.presets[this.preset].labelText },
+    presetLabelBefore () { return this.presets[this.preset].labelBefore },
+    presetLabelAfter () { return this.presets[this.preset].labelAfter },
   },
 }
 </script>

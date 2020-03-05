@@ -1,0 +1,31 @@
+$mdc-theme-primary: #005c5c;
+$mdc-theme-accent: #002d4d;
+$mdc-theme-background: #fff;
+
+/* Please keep these items in order (dict) */
+@import '@keeer/material-components-vue/components/button/styles';
+@import '@keeer/material-components-vue/components/card/styles';
+@import '@keeer/material-components-vue/components/checkbox/styles';
+@import '@keeer/material-components-vue/components/elevation/styles';
+@import '@keeer/material-components-vue/components/floating-label/styles';
+@import '@keeer/material-components-vue/components/icon-button/styles';
+@import '@keeer/material-components-vue/components/line-ripple/styles';
+@import '@keeer/material-components-vue/components/list/styles';
+@import '@keeer/material-components-vue/components/menu/styles';
+@import '@keeer/material-components-vue/components/radio/styles';
+@import '@keeer/material-components-vue/components/select/styles';
+@import '@keeer/material-components-vue/components/switch/styles';
+@import '@keeer/material-components-vue/components/text-field/styles';
+@import '@keeer/material-components-vue/components/typography/styles';
+
+/* FIXME: hack */
+.mdc-select__selected-text {
+  min-width: 0;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: $mdc-theme-primary;
+}

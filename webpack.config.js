@@ -26,6 +26,7 @@ const config = {
   mode: process.env.NODE_ENV || 'production',
   entry: {
     'theme-basic': './src/themes/basic/index.js',
+    'theme-default': './src/themes/default/index.js',
     'plugin-sample-form': './src/plugins/sample/form.js',
     'plugin-sample-editor': './src/plugins/sample/editor.js',
     'plugin-ess-form': './src/plugins/ess/form/index.js',
@@ -103,6 +104,9 @@ const config = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^yaml$/),
+    new webpack.NormalModuleReplacementPlugin(/^\.\/styles\.scss$/, resource => {
+      if (/@keeer\/material-components-vue/.test(resource.context)) resource.request = '.'
+    }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[contenthash:6].css',
@@ -125,6 +129,15 @@ const config = {
       title: 'KEEER Vote',
       filename: 'theme-basic.html',
       chunks: [ 'theme-basic' ],
+      xhtml: true,
+      meta: {
+        viewport: 'width=device-width, initial-scale=1.0',
+      },
+    }),
+    new HtmlWebpackPlugin({
+      title: 'KEEER Vote',
+      filename: 'theme-default.html',
+      chunks: [ 'theme-default' ],
       xhtml: true,
       meta: {
         viewport: 'width=device-width, initial-scale=1.0',
