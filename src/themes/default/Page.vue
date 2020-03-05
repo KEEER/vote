@@ -7,7 +7,7 @@
       :type="question.type"
       :value="question.value"
       :data="question"
-      :ref="questions"
+      ref="questions"
     />
   </div>
 </template>

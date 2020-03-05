@@ -15,22 +15,22 @@
       <div class="divider"></div>
       <template v-if="!submitting && !submitted && !submiterror">
         <Page v-for="(page, i) in data.data" :page="page" :key="i" ref="pages" />
+        <div class="form-footer">
+          <span class="form-controls">
+            <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
+            <span>{{$t('theme.common.page', { page: current + 1 })}}</span>
+            <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme.common.nextPage')}}</m-button>
+            <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.common.submit')}}</m-button>
+          </span>
+          <a class="footer-link" href="/?utm_source=form&utm_medium=footer">
+            <img class="vote-icon" src="/img/logo.svg" />
+            {{$t('theme.default.footer')}}
+          </a>
+        </div>
       </template>
-      <div class="form-footer" v-if="!submitting && !submitted && !submiterror">
-        <span class="form-controls">
-          <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
-          <span>{{$t('theme.common.page', { page: current + 1 })}}</span>
-          <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme.common.nextPage')}}</m-button>
-          <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.common.submit')}}</m-button>
-        </span>
-        <a class="footer-link" href="/?utm_source=form&utm_medium=footer">
-          <img class="vote-icon" src="/img/logo.svg" />
-          {{$t('theme.default.footer')}}
-        </a>
-      </div>
-      <h1 v-if="submitting && !submitted">{{$t('theme.common.submitting')}}</h1>
-      <h1 v-if="submitted">{{$t('theme.common.submitted')}}</h1>
-      <h1 v-if="submiterror">{{$t('theme.common.submiterror')}}</h1>
+      <m-typo-headline class="status" :level="5" v-if="showSubmitting">{{$t('theme.common.submitting')}}</m-typo-headline>
+      <m-typo-headline class="status" :level="5" v-if="showSubmitted">{{$t('theme.common.submitted')}}</m-typo-headline>
+      <m-typo-headline class="status" :level="5" v-if="showSubmiterror">{{$t('theme.common.submiterror')}}</m-typo-headline>
     </div>
   </m-card>
 </template>
@@ -122,6 +122,10 @@
 .footer-link:hover, .footer-link:active, .footer-link:focus {
   text-decoration: underline;
 }
+.status {
+  margin: 16px 0;
+  display: block;
+}
 </style>
 
 <style>
@@ -148,6 +152,10 @@ export default {
       onTop: false,
       onBottom: false,
       noTransition: false,
+      showSubmitting: false,
+      showSubmitted: false,
+      showSubmiterror: false,
+      inAnimation: false,
     }
   },
   inject: [ 'data', 'colors' ],
@@ -157,48 +165,59 @@ export default {
     action: String,
     method: String,
   },
+  watch: {
+    status (val) {
+      if (val === 'submitting') this.showSubmitting = true
+      if (val === 'submitted' || val === 'submiterror') {
+        const next = () => {
+          this.showSubmitting = false
+          this[val === 'submitted' ? 'showSubmitted' : 'showSubmiterror'] = true
+        }
+        if (this.inAnimation) next()
+        else this.flipPage(val === 'submitted' ? 'up' : 'down', next)
+      }
+    },
+  },
   methods: {
-    async prev () {
-      if (this.current === 0) return
+    async flipPage (dir, cb) {
+      this.inAnimation = true
+      const name1 = dir === 'down' ? 'onBottom' : 'onTop'
+      const name2 = dir === 'down' ? 'onTop' : 'onBottom'
       document.body.classList.add('locked')
-      this.onBottom = true
+      this[name1] = true
       this.clearInterval()
       this.showScrollTitle = false
       await delay(250)
       this.noTransition = true
-      this.onTop = true
-      this.onBottom = false
-      await delay(100)
-      this.noTransition = false
-      this.onTop = false
-      this.pages[this.current].current = false
-      this.current--
-      this.pages[this.current].current = true
-      this.update()
+      this[name2] = true
+      this[name1] = false
+      if (!cb || await cb() !== 'reverse') {
+        await delay(100)
+        this.noTransition = false
+        this[name2] = false
+      }
       await delay(250)
       this.setInterval()
       document.body.classList.remove('locked')
+      this.inAnimation = false
+    },
+    async prev () {
+      if (this.current === 0) return
+      await this.flipPage('down', () => {
+        this.pages[this.current].current = false
+        this.current--
+        this.pages[this.current].current = true
+        this.update()
+      })
     },
     async next () {
       if (this.current === this.pages.length - 1) return
-      document.body.classList.add('locked')
-      this.onTop = true
-      this.clearInterval()
-      this.showScrollTitle = false
-      await delay(250)
-      this.noTransition = true
-      this.onBottom = true
-      this.onTop = false
-      await delay(100)
-      this.noTransition = false
-      this.onBottom = false
-      this.pages[this.current].current = false
-      this.current++
-      this.pages[this.current].current = true
-      this.update()
-      await delay(250)
-      this.setInterval()
-      document.body.classList.remove('locked')
+      await this.flipPage('up', () => {
+        this.pages[this.current].current = false
+        this.current++
+        this.pages[this.current].current = true
+        this.update()
+      })
     },
     update () {
       this.updateVisibility()
@@ -211,11 +230,11 @@ export default {
       else this.nextVisible = true
       hooks.emit('form:updatevisibility', [ this ])
     },
-    submit () {
+    async submit () {
       let cancel = false
       hooks.emit('form:beforesubmit', [ this, () => cancel = true ])
       if (!cancel) {
-        hooks.emit('form:submit', [ this ])
+        await this.flipPage('up', () => hooks.emit('form:submit', [ this ]))
       }
     },
     setInterval () {
