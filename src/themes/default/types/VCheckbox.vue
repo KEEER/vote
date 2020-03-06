@@ -1,7 +1,7 @@
 <template>
   <div>
     <VCheckboxInput
-      v-for="option in getQuestionConfig(data, 'theme', 'randomOrder', false) ? shuffle(data.options) : data.options"
+      v-for="option in options"
       :multiline="getQuestionConfig(data, 'theme', 'multiline', true)"
       :key="option.value"
       :option="option"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import VCheckboxInput from './VCheckboxInput'
+import VCheckboxInput from './VCheckboxInput.vue'
 import { getQuestionConfig, shuffle } from '../util'
 
 export default {
@@ -22,7 +22,7 @@ export default {
     return {
       value_: this.value || {},
       getQuestionConfig,
-      shuffle,
+      options: getQuestionConfig(this.data, 'theme', 'randomOrder', false) ? shuffle(this.data.options) : this.data.options,
     }
   },
   components: { VCheckboxInput },

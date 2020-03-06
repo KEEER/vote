@@ -3,7 +3,7 @@
     <span
       class="radio"
       :class="{ multiline: getQuestionConfig(data, 'theme', 'multiline', true) }"
-      v-for="option in getQuestionConfig(data, 'theme', 'randomOrder', false) ? shuffle(data.options) : data.options"
+      v-for="option in options"
       :key="option.value"
     >
       <m-radio
@@ -33,7 +33,12 @@ import { getQuestionConfig, shuffle } from '../util'
 export default {
   name: 'VRadio',
   mixins: [ mixin ],
-  data () { return { getQuestionConfig, shuffle } },
+  data () {
+    return {
+      options: getQuestionConfig(this.data, 'theme', 'randomOrder', false) ? shuffle(this.data.options) : this.data.options,
+      getQuestionConfig,
+    }
+  },
   props: {
     data: {
       type: Object,
