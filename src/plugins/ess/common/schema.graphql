@@ -9,6 +9,7 @@ type Mutation {
   updateQuestion(options: QuestionUpdateInput!): Boolean!
   removeQuestion(id: Int!): Boolean!
   updateSettings(name: String!, value: String): Boolean! # value is actually object
+  updateFn(plugins: String!, theme: String!): Boolean! # plugins is actually object
 }
 
 type Form {

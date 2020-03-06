@@ -17,6 +17,7 @@ import MMenu from '@keeer/material-components-vue/components/menu/'
 import MRadio from '@keeer/material-components-vue/components/radio/'
 import MSelect from '@keeer/material-components-vue/components/select/'
 import MSwitch from '@keeer/material-components-vue/components/switch/'
+import MTabs from '@keeer/material-components-vue/components/tabs'
 import MTextField from '@keeer/material-components-vue/components/text-field/'
 import MTopAppBar from '@keeer/material-components-vue/components/top-app-bar/'
 import MTypo from '@keeer/material-components-vue/components/typography/'
@@ -38,6 +39,7 @@ import MTypo from '@keeer/material-components-vue/components/typography/'
   MRadio,
   MSelect,
   MSwitch,
+  MTabs,
   MTextField,
   MTopAppBar,
   MTypo,

@@ -4,6 +4,7 @@ import logger from '../../../log'
 import assert from 'assert'
 import sanitize from 'sanitize-html'
 import { themes } from '../../../theme'
+import { plugins } from '../../../plugin'
 
 const log = logger.child({ part: 'plugin-ess.query' })
 
@@ -117,5 +118,20 @@ export default {
       log.error(e)
       return false
     }
+  },
+  async updateFn ({ plugins: pluginJSON, theme }, ctx) {
+    const form = ctx.state.form
+    assert(typeof pluginJSON === 'string')
+    assert(typeof theme === 'string')
+    assert(themes.some(t => t.config.code === theme))
+    const pluginCodes = JSON.parse(pluginJSON)
+    assert(Array.isArray(pluginCodes))
+    const pluginsUsed = pluginCodes.map(code => plugins.find(p => p.config.code === code))
+    assert(pluginsUsed.every(p => !!p))
+    // TODO: check pro features and compatibility
+    form.options.plugins = pluginsUsed
+    form.options.theme = theme
+    await form.update()
+    return true
   },
 }

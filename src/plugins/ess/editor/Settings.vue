@@ -3,20 +3,23 @@
     <div v-if="exitSaveError">{{$t('plugin.ess.settings.exitSaveError')}}</div>
     <div v-else-if="exiting">{{$t('plugin.ess.settings.exiting')}}</div>
     <ul class="settings-entries" v-else-if="settingsLoaded">
+      <m-tab-bar @activated="activeTab = $event.index">
+        <m-tab-scroller>
+          <m-tab :active="activeTab === i" v-for="(entry, i) in entries" :key="i">{{$t(entry.title)}}</m-tab>
+        </m-tab-scroller>
+      </m-tab-bar>
       <li
         class="settings-entry"
         v-for="(entry, i) in entries"
         :key="i"
+        v-show="activeTab === i"
       >
-        <m-card class="settings-card">
-          <m-typo-headline :level="3" class="entry-title">{{$t(entry.title)}}</m-typo-headline>
-          <component
-            :ref="`entry-${i}`"
-            :is="entry.component"
-            @update:saveState="updateSaveState"
-            :data="settingsData"
-          />
-        </m-card>
+        <component
+          :ref="`entry-${i}`"
+          :is="entry.component"
+          @update:saveState="updateSaveState"
+          :data="settingsData"
+        />
       </li>
     </ul>
     <div v-else-if="settingsLoadError">{{$t('plugin.ess.settings.settingsLoadError')}}</div>
@@ -25,16 +28,18 @@
 </template>
 
 <style scoped>
+.settings {
+  padding: 16px;
+  padding-top: 0;
+}
 .settings-entries {
   list-style: none;
+  margin: 0;
   padding: 0;
 }
-
-.settings-card {
-  margin: 16px;
-  padding: 16px;
+.settings-entry {
+  margin-top: 16px;
 }
-
 .entry-title {
   font-weight: 200;
   margin-bottom: 16px;
@@ -43,7 +48,6 @@
 
 <script>
 import BasicSettings from './components/BasicSettings.vue'
-import PluginSettings from './components/PluginSettings.vue'
 import ThemeSettings from './components/ThemeSettings.vue'
 import DangerousSettings from './components/DangerousSettings.vue'
 import hooks from './hooks'
@@ -61,10 +65,6 @@ const entries = [
     component: ThemeSettings,
   },
   {
-    title: 'plugin.ess.settings.entry.plugin',
-    component: PluginSettings,
-  },
-  {
     title: 'plugin.ess.settings.entry.dangerous',
     component: DangerousSettings,
   },
@@ -79,6 +79,7 @@ export default {
       settingsData: null,
       settingsLoaded: false,
       settingsLoadError: false,
+      activeTab: 0,
     }
   },
   methods: {

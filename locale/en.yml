@@ -130,6 +130,7 @@ plugin:
         fill: Fill
         edit: Editor
         data: Data
+        fn: Functionalities
         settings: Settings
 
     question:
@@ -190,6 +191,8 @@ plugin:
       exitSaveError: Error saving settings, data may be not saved. Please refresh to continue.
       delete: Delete form
       rename: Set form name
+      deleteSummary: Once you delete a form, there is no going back. Please be certain.
+      renameSummary: After renaming your old URLs will show up as not found.
       deleteTitle: Delete form?
       renameTitle: Set form name?
       deleteInstruction: This operation would delete this form and submissions permanently, and there is no going back. To confirm this operation, please type '{routeName}' in the following space.
@@ -198,9 +201,14 @@ plugin:
       renameNewName: New form name
       entry:
         basic: Basics
-        plugin: Plugins
         theme: Theme
         dangerous: Dangerous Zone
+
+    fn:
+      plugins: Plugins
+      theme: Theme
+      submit: Update
+      failed: Update failed!
 
   sample:
     name: Sample

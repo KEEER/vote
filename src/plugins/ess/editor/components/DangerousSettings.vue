@@ -28,17 +28,34 @@
         :disabled="okDisabled"
       >{{$t('plugin.ess.editor.ok')}}</m-button>
     </m-dialog>
+    <m-typo-headline class="typo" :level="4">{{$t('plugin.ess.settings.rename')}}</m-typo-headline>
+    <m-typo-body class="typo" :level="1">{{$t('plugin.ess.settings.renameSummary')}}</m-typo-body>
     <m-button @click="name = routeName, renameOpen = true">
       <m-icon slot="icon" icon="edit" />
       {{$t('plugin.ess.settings.rename')}}
     </m-button>
-    <br />
+    <hr />
+    <m-typo-headline class="typo" :level="4">{{$t('plugin.ess.settings.delete')}}</m-typo-headline>
+    <m-typo-body class="typo" :level="1">{{$t('plugin.ess.settings.deleteSummary')}}</m-typo-body>
     <m-button @click="name = '', deleteOpen = true">
       <m-icon slot="icon" icon="delete" />
       {{$t('plugin.ess.settings.delete')}}
     </m-button>
   </div>
 </template>
+
+<style scoped>
+.typo {
+  display: block;
+  margin: 8px 0;
+}
+hr {
+  height: 0;
+  color: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  width: 100%;
+}
+</style>
 
 <script>
 export default {

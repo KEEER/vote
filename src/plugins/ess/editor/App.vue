@@ -154,6 +154,7 @@ import './mdc-init'
 import VueRouter from 'vue-router'
 import Data from './Data.vue'
 import Editor from './Editor.vue'
+import Fn from './Fn.vue'
 import Settings from './Settings.vue'
 import Fill from './Fill.vue'
 import hooks from './hooks'
@@ -187,6 +188,13 @@ const routes = [
     component: Data,
     icon: 'info',
     title: 'plugin.ess.app.route.data',
+  },
+  {
+    path: '/:uname/:name/fn',
+    name: 'fn',
+    component: Fn,
+    icon: 'power',
+    title: 'plugin.ess.app.route.fn',
   },
   {
     path: '/:uname/:name/settings',

@@ -1,15 +1,20 @@
 import { handleUpdateBasicSettings, handlePreprocessBasicSettings } from './basic-settings'
 import { handleGetPage } from './get-page'
 import { handleValidateSubmission } from './validate-submission'
+import { plugins } from '../../../plugin'
+import { themes } from '../../../theme'
 
 export default function attachTo (form) {
-  form.editorPaths = [ 'edit', 'settings', 'data', ...(form.editorPaths || []) ]
+  form.editorPaths = [ 'edit', 'settings', 'data', 'fn', ...(form.editorPaths || []) ]
   form.on('getPage', handleGetPage)
-  form.on('bundle', ([ , data,,, key ]) => {
+  form.on('bundle', ([ form, data,,, key ]) => {
     if (key === 'editor') {
       delete data.action
       delete data.method
       delete data.data
+      data.plugins = form.options.plugins.map(p => p.config.code)
+      data.allPlugins = plugins.map(p => p.config)
+      data.allThemes = themes.map(t => t.config)
     }
   })
   form.on('validateSubmission', handleValidateSubmission)

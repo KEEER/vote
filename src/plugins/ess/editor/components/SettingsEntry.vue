@@ -3,35 +3,41 @@
     <component v-if="component" :is="component" v-model="value_" v-bind="bindings">
       <slot />
     </component>
-    <component v-if="presetLabelComponent && presetLabelBefore" :is="presetLabelComponent" v-bind="presetLabelBindings">
-      {{presetLabelText}}
-    </component>
-    <component v-if="preset" v-model="value_" :is="presetComponent" v-bind="presetBindings">
-      <component v-if="presetSlotComponent" :is="presetSlotComponent" v-bind="presetSlotBindings">
-        {{presetSlotText}}
-      </component>
-    </component>
-    <component v-if="presetLabelComponent && presetLabelAfter" :is="presetLabelComponent" v-bind="presetLabelBindings">
-      {{presetLabelText}}
-    </component>
+    <template v-else-if="preset">
+      <m-text-field v-if="preset === 'text-field'" v-model="value_" class="settings-fullwidth" :id="uid" outlined :required="'required' in $attrs">
+        <m-floating-label :for="uid">{{$t($attrs.placeholder)}}</m-floating-label>
+      </m-text-field>
+      <div v-if="preset === 'checkbox'" class="labelled">
+        <m-checkbox v-model="value_" :id="uid" />
+        <label :for="uid">{{$t($attrs.label)}}</label>
+      </div>
+      <div v-if="preset === 'switch'" class="labelled">
+        <m-switch class="switch" v-model="value_" :id="uid" />
+        <label :for="uid">{{$t($attrs.label)}}</label>
+      </div>
+      <div v-if="preset === 'color'">
+        <m-typo-headline :level="6" class="color-label">{{$t($attrs.label)}}</m-typo-headline>
+        <color-picker v-model="value_" />
+      </div>
+    </template>
     <slot v-else :value.sync="value_" />
   </span>
 </template>
 
 <style>
-.settings-fullwidth {
-  width: 100%;
-}
-.settings-switch {
-  margin: 16px 12px 16px 8px;
-}
+.settings-fullwidth { width: 100%; }
 </style>
 
 <style scoped>
-.settings-entry {
+.settings-entry { margin-top: 8px; }
+.labelled {
   display: flex;
   align-items: center;
-  margin-top: 8px;
+}
+.switch { margin: 16px 12px 16px 8px; }
+.color-label {
+  display: block;
+  margin: 16px 0 8px;
 }
 </style>
 
@@ -49,46 +55,6 @@ export default {
       value_: typeof this.value === 'undefined' ? this.data[this.name] : this.value,
       class: {},
       id: null,
-      presets: {
-        textField: {
-          component: 'm-text-field',
-          bindings: {
-            class: 'settings-fullwidth',
-            id: this.uid,
-            outlined: true,
-            required: 'required' in this.$attrs,
-          },
-          slotComponent: 'm-floating-label',
-          slotBindings: { for: this.uid },
-          slotText: this.$attrs.placeholder,
-        },
-        checkbox: {
-          component: 'm-checkbox',
-          bindings: { id: this.uid },
-          labelComponent: 'label',
-          labelBindings: { for: this.uid },
-          labelText: this.$attrs.label,
-          labelAfter: true,
-        },
-        switch: {
-          component: 'm-switch',
-          bindings: {
-            id: this.uid,
-            class: 'settings-switch',
-          },
-          labelComponent: 'label',
-          labelBindings: { for: this.uid },
-          labelText: this.$attrs.label,
-          labelAfter: true,
-        },
-        color: {
-          component: 'color-picker',
-          labelComponent: 'm-typo-body',
-          labelBindings: { level: 1 },
-          labelText: this.$attrs.label,
-          labelBefore: true,
-        },
-      },
     }
   },
   props: {
@@ -119,16 +85,6 @@ export default {
       d.class = d.class_
       return d
     },
-    presetComponent () { return this.presets[this.preset].component },
-    presetBindings () { return this.presets[this.preset].bindings },
-    presetSlotComponent () { return this.presets[this.preset].slotComponent },
-    presetSlotBindings () { return this.presets[this.preset].slotBindings },
-    presetSlotText () { return this.presets[this.preset].slotText },
-    presetLabelComponent () { return this.presets[this.preset].labelComponent },
-    presetLabelBindings () { return this.presets[this.preset].labelBindings },
-    presetLabelText () { return this.presets[this.preset].labelText },
-    presetLabelBefore () { return this.presets[this.preset].labelBefore },
-    presetLabelAfter () { return this.presets[this.preset].labelAfter },
   },
 }
 </script>

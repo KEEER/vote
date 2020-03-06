@@ -2,8 +2,8 @@
   <div>
     <SettingsEntry
       name="basic.title"
-      preset="textField"
-      :placeholder="$t('plugin.ess.settings.titlePlaceholder')"
+      preset="text-field"
+      placeholder="plugin.ess.settings.titlePlaceholder"
       required
       @update:saveState="updateSaveState"
       :data="data"
@@ -14,7 +14,7 @@
     <SettingsEntry
       name="basic.retrieving"
       preset="switch"
-      :label="$t('plugin.ess.settings.retrievingLabel')"
+      label="plugin.ess.settings.retrievingLabel"
       @update:saveState="updateSaveState"
       :data="data"
       ref="retrieving"

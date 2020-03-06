@@ -124,6 +124,7 @@ plugin:
         fill: 填写
         edit: 编辑器
         data: 数据
+        fn: 附加功能
         settings: 设置
 
     question:
@@ -185,6 +186,8 @@ plugin:
       exitSaveError: 保存数据过程中出错，数据可能没有保存。请刷新以继续。
       delete: 删除表单
       rename: 设置表单名称
+      deleteSummary: 删除操作是不可恢复的。请务必三思而后行。
+      renameSummary: 改名后，访问您之前使用的链接将会显示“未找到”。
       deleteTitle: 确认删除？
       renameTitle: 设置表单名称
       deleteInstruction: 这样做将会删除表单及其所有回复，并且是永久且不可恢复的。要确认删除，请在下面的文本框里输入 '{routeName}'。
@@ -192,10 +195,15 @@ plugin:
       deleteConfirmName: 确认表单名称
       renameNewName: 新的表单名称
       entry:
-        basic: 基本设置
-        plugin: 插件设置
-        theme: 主题设置
-        dangerous: 危险的设置
+        basic: 基本
+        theme: 主题
+        dangerous: 危险区
+
+    fn:
+      plugins: 插件
+      theme: 主题
+      submit: 更新
+      failed: 更新失败！
 
   sample:
     name: 示例插件

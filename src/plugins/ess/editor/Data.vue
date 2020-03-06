@@ -27,13 +27,13 @@
 <style scoped>
 main {
   padding: 10px;
+  overflow: hidden;
+  overflow-wrap: break-word;
 }
-
 .submission-id, .submission-time {
   text-align: center;
   margin: 0;
 }
-
 .submission-meta {
   margin-top: 8px;
 }

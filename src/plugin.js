@@ -65,6 +65,8 @@ try {
           plugin.uses.inject.server,
         )
       )
+      if (typeof attachTo !== 'function') attachTo = attachTo.default
+      if (typeof attachTo !== 'function') throw new TypeError(`plugin '${plugin.code}' has a non-function attachTo`)
     }
     return new Plugin(plugin, attachTo)
   })
