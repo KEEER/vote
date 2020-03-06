@@ -6,7 +6,7 @@
 
 <style scoped>
 .vote-main { padding: 200px 16px; }
-@media (max-width: 752px) { .vote-main { padding-bottom: 16px; } }
+@media (max-width: 752px) { .vote-main { padding: 128px 16px 16px; } }
 </style>
 
 <script>

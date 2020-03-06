@@ -45,6 +45,7 @@
   overflow: hidden;
   position: relative;
   transition: all 250ms cubic-bezier(.4, 0, .2, 1);
+  -webkit-transition: all 250ms cubic-bezier(.4, 0, .2, 1);
 }
 .form {
   width: 100%;
@@ -59,6 +60,7 @@
 }
 .form.form__no-transition {
   transition: none;
+  -webkit-transition: none;
   opacity: 0;
 }
 .content {
@@ -78,6 +80,7 @@
   padding: 16px;
   line-height: 32px;
   transition: top 200ms cubic-bezier(.4, 0, .2, 1);
+  -webkit-transition: top 200ms cubic-bezier(.4, 0, .2, 1);
   background: white;
   top: -70px;
 }
@@ -108,7 +111,12 @@
   align-items: center;
 }
 .form-controls > * {
-  margin: 0 8px;
+  margin: 8px;
+}
+@media (max-width: 599px) {
+  .form-controls {
+    flex-direction: column;
+  }
 }
 .footer-link {
   color: inherit;
