@@ -1,6 +1,11 @@
 <template>
   <div>
-    <span class="radio" v-for="option in data.options" :key="option.value">
+    <span
+      class="radio"
+      :class="{ multiline: getQuestionConfig(data, 'theme', 'multiline', true) }"
+      v-for="option in getQuestionConfig(data, 'theme', 'randomOrder', false) ? shuffle(data.options) : data.options"
+      :key="option.value"
+    >
       <m-radio
         v-model="value_"
         :checked="value_ === option.value"
@@ -18,13 +23,17 @@
   display: inline-flex;
   align-items: center;
 }
+.radio.multiline { display: flex; }
 </style>
 
 <script>
 import mixin from './mixin'
+import { getQuestionConfig, shuffle } from '../util'
+
 export default {
   name: 'VRadio',
   mixins: [ mixin ],
+  data () { return { getQuestionConfig, shuffle } },
   props: {
     data: {
       type: Object,

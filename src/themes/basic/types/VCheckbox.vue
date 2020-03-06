@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     multiline () {
-      if (!this.data.config || !this.data.config.theme) return false
+      if (!this.data.config || !this.data.config.theme || typeof this.data.config.theme.multiline === 'undefined') return true
       return this.data.config.theme.multiline
     },
   },

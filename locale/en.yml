@@ -247,7 +247,9 @@ theme:
     config:
       question:
         multiline: Display in separate lines
+        randomOrder: Display in random order
       form:
+        allowBack: Allow going backwards
         textColor: Text color
         bgColor: Background color
         themeColor: Theme color

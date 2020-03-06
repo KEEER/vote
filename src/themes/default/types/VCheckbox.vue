@@ -1,8 +1,8 @@
 <template>
   <div>
     <VCheckboxInput
-      v-for="option in data.options"
-      :multiline="multiline"
+      v-for="option in getQuestionConfig(data, 'theme', 'randomOrder', false) ? shuffle(data.options) : data.options"
+      :multiline="getQuestionConfig(data, 'theme', 'multiline', true)"
       :key="option.value"
       :option="option"
       :value.sync="value_[option.value]"
@@ -13,6 +13,7 @@
 
 <script>
 import VCheckboxInput from './VCheckboxInput'
+import { getQuestionConfig, shuffle } from '../util'
 
 export default {
   name: 'VCheckbox',
@@ -20,6 +21,8 @@ export default {
   data () {
     return {
       value_: this.value || {},
+      getQuestionConfig,
+      shuffle,
     }
   },
   components: { VCheckboxInput },
@@ -32,12 +35,6 @@ export default {
       },
     },
     value: Object,
-  },
-  computed: {
-    multiline () {
-      if (!this.data.config || !this.data.config.theme) return false
-      return this.data.config.theme.multiline
-    },
   },
   methods: {
     syncValue () {

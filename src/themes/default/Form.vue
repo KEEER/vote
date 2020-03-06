@@ -139,6 +139,7 @@ import Page from './Page'
 import hooks from './hooks'
 import 'array-flat-polyfill'
 import { types } from './types'
+import { getQuestionConfig } from './util'
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -146,8 +147,6 @@ export default {
   data: function () {
     return {
       current: 0,
-      prevVisible: false,
-      nextVisible: false,
       status: 'filling',
       showScrollTitle: false,
       types,
@@ -158,6 +157,7 @@ export default {
       showSubmitted: false,
       showSubmiterror: false,
       inAnimation: false,
+      pages: [],
     }
   },
   inject: [ 'data', 'colors' ],
@@ -228,10 +228,6 @@ export default {
       hooks.emit('form:update', [ this ])
     },
     updateVisibility () {
-      if (this.current === 0) this.prevVisible = false
-      else this.prevVisible = true
-      if (this.current === this.pages.length - 1) this.nextVisible = false
-      else this.nextVisible = true
       hooks.emit('form:updatevisibility', [ this ])
     },
     async submit () {
@@ -258,33 +254,22 @@ export default {
   },
   mounted () {
     document.title = this.title
+    this.pages = this.$refs.pages
     this.pages[this.current].current = true
     this.updateVisibility()
     hooks.emit('form:mounted', [ this ])
     hooks.emit('form:updatevisibility', [ this ])
-    if (window.KVoteFormData.config && window.KVoteFormData.config.settings && window.KVoteFormData.config.settings['theme-basic.color']) {
-      this.color = window.KVoteFormData.config.settings['theme-basic.color'].replace(/;/g, '').replace(/ /g, '')
-    }
     this.setInterval()
   },
   computed: {
-    pages () {
-      return this.$refs.pages
-    },
     currentPage () {
       let page = this.current + 1
       hooks.emit('form:pageno', [ this, p => page = p ])
       return page
     },
-    submitted () {
-      return this.status === 'submitted'
-    },
-    submitting () {
-      return this.status === 'submitting'
-    },
-    submiterror () {
-      return this.status === 'submiterror'
-    },
+    submitted () { return this.status === 'submitted' },
+    submitting () { return this.status === 'submitting' },
+    submiterror () { return this.status === 'submiterror' },
     formdata () {
       const data = []
       this.pages.flatMap(page => page.questions).forEach(q => {
@@ -296,6 +281,12 @@ export default {
       let validity = this.pages.every(p => p.valid)
       hooks.emit('form:validate', [ this, () => validity = false ])
       return validity
+    },
+    prevVisible () {
+      return this.current !== 0 && getQuestionConfig(this.data, 'settings', 'allowBack', true)
+    },
+    nextVisible () {
+      return this.pages && (this.current !== this.pages.length - 1)
     },
   },
 }

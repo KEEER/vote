@@ -17,10 +17,36 @@
           "name": "multiline",
           "label": "theme.default.config.question.multiline",
           "default": true
+        },
+        {
+          "type": "checkbox",
+          "name": "randomOrder",
+          "label": "theme.default.config.question.randomOrder",
+          "default": false
+        }
+      ],
+      "VRadio": [
+        {
+          "type": "checkbox",
+          "name": "multiline",
+          "label": "theme.default.config.question.multiline",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "name": "randomOrder",
+          "label": "theme.default.config.question.randomOrder",
+          "default": false
         }
       ]
     },
     "formConfig": [
+      {
+        "type": "switch",
+        "name": "allowBack",
+        "label": "theme.default.config.form.allowBack",
+        "default": true
+      },
       {
         "type": "color",
         "name": "theme-default.text-color",
