@@ -16,6 +16,7 @@ import VCheckboxInput from './VCheckboxInput'
 
 export default {
   name: 'VCheckbox',
+  inject: [ 'Question' ],
   data () {
     return {
       value_: this.value || {},

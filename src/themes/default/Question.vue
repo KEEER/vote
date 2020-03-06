@@ -9,13 +9,13 @@
       ref="realQuestion">
       <slot />
     </component>
-    <div class="invalid-tip" v-if="invalidTip">{{invalidTip}}</div>
+    <m-typo-body :level="1" class="invalid-tip" v-if="invalidTip">{{invalidTip}}</m-typo-body>
   </div>
 </template>
 
 <style scoped>
 .question-title { margin-top: 16px; }
-.invalid-tip { color: #d93025; }
+.invalid-tip { color: #d93025; display: block; }
 .description { display: block; }
 </style>
 

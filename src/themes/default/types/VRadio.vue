@@ -1,7 +1,13 @@
 <template>
   <div>
     <span class="radio" v-for="option in data.options" :key="option.value">
-      <m-radio v-model="value_" :name="uid" :id="$id(option.value)" :value="option.value" />
+      <m-radio
+        v-model="value_"
+        :checked="value_ === option.value"
+        :name="uid"
+        :id="$id(option.value)"
+        :value="option.value"
+      />
       <label :for="$id(option.value)"><m-typo-body :level="1">{{option.label}}</m-typo-body></label>
     </span>
   </div>

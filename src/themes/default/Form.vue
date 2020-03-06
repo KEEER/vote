@@ -14,11 +14,12 @@
       <m-typo-headline :level="3" class="form__title">{{this.title}}</m-typo-headline>
       <div class="divider"></div>
       <template v-if="!submitting && !submitted && !submiterror">
+        <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
         <Page v-for="(page, i) in data.data" :page="page" :key="i" ref="pages" />
         <div class="form-footer">
           <span class="form-controls">
             <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
-            <span>{{$t('theme.common.page', { page: current + 1 })}}</span>
+            <span v-if="data.data.length > 1">{{$t('theme.common.page', { page: current + 1 })}}</span>
             <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme.common.nextPage')}}</m-button>
             <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.common.submit')}}</m-button>
           </span>
@@ -48,6 +49,7 @@
 .form {
   width: 100%;
   top: 0;
+  overflow-wrap: break-word;
 }
 .form.form__top {
   top: calc(-100% - 400px);
@@ -191,6 +193,7 @@ export default {
       this.noTransition = true
       this[name2] = true
       this[name1] = false
+      window.scrollTo(0, 0)
       if (!cb || await cb() !== 'reverse') {
         await delay(100)
         this.noTransition = false
@@ -212,6 +215,7 @@ export default {
     },
     async next () {
       if (this.current === this.pages.length - 1) return
+      if (!this.pages[this.current].valid) return this.pages[this.current].$emit('validateNext')
       await this.flipPage('up', () => {
         this.pages[this.current].current = false
         this.current++
@@ -231,6 +235,7 @@ export default {
       hooks.emit('form:updatevisibility', [ this ])
     },
     async submit () {
+      if (!this.pages[this.current].valid) return this.pages[this.current].$emit('validateNext')
       let cancel = false
       hooks.emit('form:beforesubmit', [ this, () => cancel = true ])
       if (!cancel) {

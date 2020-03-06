@@ -52,7 +52,7 @@ const textValidators = {
  * @returns {string|null} null is valid, string is invalid reason
  */
 export function validator (options, value) {
-  if ([ 'VText', 'VTextarea', 'VRadio' ].indexOf(options.type) > -1 && typeof value !== 'string') return false
+  if ([ 'VText', 'VTextarea', 'VRadio' ].indexOf(options.type) > -1 && typeof value !== 'string') value = ''
   if (options.required) {
     if (options.type === 'VCheckbox' && Object.values(value || {}).every(v => !v)) return 'required'
     else if (!value) return 'required'

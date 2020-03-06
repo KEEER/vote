@@ -25,13 +25,13 @@
         "type": "color",
         "name": "theme-default.text-color",
         "label": "theme.default.config.form.textColor",
-        "default": "#ffffff"
+        "default": "#000000"
       },
       {
         "type": "color",
         "name": "theme-default.bg-color",
         "label": "theme.default.config.form.bgColor",
-        "default": "#000000"
+        "default": "#ffffff"
       },
       {
         "type": "color",
