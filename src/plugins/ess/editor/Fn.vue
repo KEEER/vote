@@ -1,6 +1,7 @@
 <template>
   <main>
-    <m-typo-headline class="block" :level="4">{{$t('plugin.ess.fn.plugins')}}</m-typo-headline>
+    <m-typo-headline class="block" :level="5">{{$t('plugin.ess.fn.plugins')}}</m-typo-headline>
+    <m-typo-body class="block typo-body" :level="1">{{$t('plugin.ess.fn.pluginIntroduction')}}</m-typo-body>
     <m-list two-line role="group">
       <m-list-item role="checkbox" v-for="plugin in allPlugins" :key="plugin.code">
         <template slot="primaryText">{{$t(`plugin.${plugin.code}.name`)}}</template>
@@ -9,7 +10,8 @@
       </m-list-item>
     </m-list>
     <hr />
-    <m-typo-headline class="block" :level="4">{{$t('plugin.ess.fn.theme')}}</m-typo-headline>
+    <m-typo-headline class="block" :level="5">{{$t('plugin.ess.fn.theme')}}</m-typo-headline>
+    <m-typo-body class="block typo-body" :level="1">{{$t('plugin.ess.fn.themeIntroduction')}}</m-typo-body>
     <m-list two-line role="radiogroup" v-model="themeId">
       <m-list-item role="radio" v-for="(thisTheme, i) in allThemes" :key="thisTheme.code">
         <m-radio :checked="themeId === i" name="theme" slot="meta" :value="i" />
@@ -28,8 +30,16 @@ hr {
   color: transparent;
   border-bottom: 1px solid rgba(0, 0, 0, .12);
   width: 100%;
+  margin-bottom: 16px;
 }
-.block { display: block; }
+.block {
+  display: block;
+  margin: 0 12px;
+}
+.typo-body {
+  opacity: .78;
+  margin-top: 8px;
+}
 .submit-button {
   float: right;
   margin-right: 16px;

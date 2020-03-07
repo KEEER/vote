@@ -202,6 +202,8 @@ plugin:
     fn:
       plugins: 插件
       theme: 主题
+      pluginIntroduction: Vote 的大多数高级功能都是由插件提供的。默认情况下这些插件均被禁用，您可以在这里启用它们。
+      themeIntroduction: Vote 提供了一系列主题，您可以挑选您最喜欢的一个。
       submit: 更新
       failed: 更新失败！
 

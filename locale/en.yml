@@ -206,6 +206,8 @@ plugin:
 
     fn:
       plugins: Plugins
+      pluginIntroduction: Most of the advanced functionalities of Vote is provided by plugins, and are disabled by default. You can enable them here.
+      themeIntroduction: Vote provides a variety of themes. Pick the one you like the most.
       theme: Theme
       submit: Update
       failed: Update failed!
