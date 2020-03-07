@@ -63,7 +63,8 @@ export default {
         const questions = page.options.questions
         const i = questions.indexOf(q)
         assert(!!questions[i + reorder])
-        ;[ questions[i + reorder], questions[i] ] = [ questions[i], questions[i + reorder] ]
+        questions.splice(i, 1)
+        questions.splice(i + reorder, 0, q)
       }
       for (let i of [ 'value', 'options', 'description', 'config' ]) {
         if (i in options) {

@@ -33,7 +33,7 @@
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <m-icon-button icon="menu" class="mdc-top-app-bar__navigation-icon" />
           <span class="hgroup mdc-top-app-bar__title">
-            <div>{{appBarTitle}}</div>
+            <div class="app-bar-title">{{appBarTitle}}</div>
             <div class="mdc-top-app-bar__subtitle" v-if="appBarSubtitle">
               {{appBarSubtitle}}
             </div>
@@ -85,8 +85,12 @@ a.navlink {
 .hgroup {
   display: flex;
   flex-direction: column;
-  overflow: visible;
   line-height: 1.5rem;
+}
+
+.app-bar-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mdc-top-app-bar__subtitle {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-dialog class="new-question-dialog" :open="deleteOpen || renameOpen" @closed="deleteOpen = renameOpen = false">
+    <m-dialog :open="deleteOpen || renameOpen" @closed="deleteOpen = renameOpen = false">
       <m-typo-headline :level="5" slot="header">{{$t('plugin.ess.settings.' + (deleteOpen ? 'deleteTitle' : 'renameTitle'))}}</m-typo-headline>
       <m-typo-body :level="1" slot="body">
         <p>{{$t('plugin.ess.settings.' + (deleteOpen ? 'deleteInstruction' : 'renameInstruction'), { routeName })}}</p>

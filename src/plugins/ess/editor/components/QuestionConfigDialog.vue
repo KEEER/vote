@@ -1,7 +1,7 @@
 <template>
-  <m-dialog class="new-question-dialog" v-model="open_" scrollable>
+  <m-dialog v-model="open_" scrollable>
     <m-typo-headline :level="5" slot="header">{{$t('plugin.ess.editor.config')}}</m-typo-headline>
-    <m-typo-body :level="1" slot="body">
+    <m-typo-body v-if="showEntries" :level="1" slot="body">
       <span class="entry" v-for="(entry, i) in enabledEntries" :key="entry.name">
         <span class="checkbox-entry" v-if="entry.type === 'checkbox'">
           <m-checkbox :id="`${uid}-${i}`" v-model="value_[entry.name]" @change="syncValue"></m-checkbox>
@@ -61,9 +61,7 @@
   align-items: center;
 }
 
-.switch {
-  margin: 16px 12px 16px 8px;
-}
+.switch { margin: 16px 12px 16px 8px; }
 </style>
 
 <script>
@@ -75,6 +73,7 @@ export default {
     return {
       open_: false,
       value_: this.value || {},
+      showEntries: false,
     }
   },
   watch: {
@@ -132,6 +131,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => this.open_ = this.open)
+    this.$nextTick(() => this.$nextTick(() => this.showEntries = true))
   },
   created () {
     for (let entry of this.entries) {

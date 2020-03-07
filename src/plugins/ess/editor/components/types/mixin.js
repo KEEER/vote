@@ -1,7 +1,7 @@
 export default {
   data () {
     return {
-      value_: this.value,
+      value_: this.value || '',
     }
   },
   watch: {

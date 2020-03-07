@@ -1,5 +1,5 @@
 <template>
-  <m-card class="question-card">
+  <m-card class="question-card" :class="{ 'question-card__folded': folded }" :outlined="folded">
     <QuestionConfigDialog
       v-if="themeOpen"
       v-model="themeConfig_"
@@ -85,30 +85,18 @@
   flex-direction: column;
 }
 
-.question.readonly {
-  padding: 16px;
-}
-
-.question-card {
-  margin: 16px;
-}
-
-.question-title {
-  flex: auto;
-}
-
-.question-title--readonly {
-  margin-bottom: 8px;
-}
+.question.readonly { padding: 16px; }
+.question-card { margin: 16px; }
+.question-card__folded { margin: 8px 16px; }
+.question-title { flex: auto; }
+.question-title--readonly { margin-bottom: 8px; }
 
 .title-type {
   display: flex;
   flex-direction: row;
 }
 
-.description {
-  margin-bottom: 16px;
-}
+.description { margin-bottom: 16px; }
 
 @media(max-width: 720px) {
   .title-type {
@@ -131,7 +119,7 @@
 }
 
 .question-title--display {
-  font-size: 1.45rem;
+  font-size: 1.2rem;
   font-weight: 300;
   flex: auto;
 }
@@ -139,7 +127,8 @@
 .folded {
   display: flex;
   flex-direction: row;
-  padding: 16px;
+  padding: 4px;
+  padding-left: 12px;
   align-items: center;
 }
 
@@ -343,6 +332,7 @@ export default {
       this.change.reorder += reorder
       if (this.change.reorder !== 0) {
         this.logChange()
+        this.update()
       } else {
         // remove log of reordering
         delete this.change.reorder
