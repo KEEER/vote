@@ -3,10 +3,16 @@
 import { query, update } from './db'
 import KASClient from 'kas-client-node'
 import logger from './log'
+import { readFileSync } from 'fs'
 
 const log = logger.child({ part: 'user' })
 
 export const kas = new KASClient({ base: process.env.KAS_BASE, secretKey: process.env.KAS_KEY })
+
+let whitelist = []
+if (process.env.USE_WHITELIST && process.env.USE_WHITELIST !== 'false') {
+  whitelist = readFileSync(process.env.USE_WHITELIST).toString().split('\n').filter(x => !!x)
+}
 
 const maxAge = parseInt(process.env.TOKEN_MAXAGE)
 
@@ -136,6 +142,9 @@ export class User {
       await kas.validateToken(token)
       const info = await kas.getInformation(token)
       const name = info.keeer_id
+      if (process.env.USE_WHITELIST !== 'false' && process.env.USE_WHITELIST) {
+        if (!whitelist.includes(name)) return null
+      }
       if (!name) throw new UserNoIdError()
       user = await this.fromName(name)
       if (user) {
