@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.181",
+  "version": "0.0.182",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
@@ -33,6 +33,7 @@
   "dependencies": {
     "@babel/core": "^7.8.7",
     "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
     "@babel/register": "^7.8.6",
     "@keeer/libphonenumber": "^1.7.44-keeer1",
     "accept-language-parser": "^1.5.0",
@@ -58,7 +59,6 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/preset-env": "^7.8.7",
     "@keeer/color-picker": "0.0.3",
     "@keeer/material-components-vue": "^1.2.0-keeer2",
     "babel-loader": "^8.0.5",
