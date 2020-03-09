@@ -6,7 +6,8 @@
       :is="types[type]"
       :data="data"
       :value.sync="value"
-      ref="realQuestion">
+      ref="realQuestion"
+    >
       <slot />
     </component>
     <m-typo-body :level="1" class="invalid-tip" v-if="invalidTip">{{invalidTip}}</m-typo-body>

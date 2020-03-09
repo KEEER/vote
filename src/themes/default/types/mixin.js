@@ -34,7 +34,7 @@ export default {
       return this.question_ || this.$parent
     },
     realQuestion () {
-      return this.question.$children[0]
+      return this.question.$refs.realQuestion
     },
   },
 }

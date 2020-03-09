@@ -1,3 +1,5 @@
+// this theme is DEPRECATED, use theme:default!
+
 import 'regenerator-runtime'
 import App from './App'
 import hooks from './hooks'

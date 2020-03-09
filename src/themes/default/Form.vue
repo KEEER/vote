@@ -15,7 +15,7 @@
       <div class="divider"></div>
       <template v-if="!submitting && !submitted && !submiterror">
         <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
-        <Page v-for="(page, i) in data.data" :page="page" :key="i" ref="pages" />
+        <Page v-for="(page, i) in data.data" :page="page" :key="i" ref="pages" :current="i === current" />
         <div class="form-footer">
           <span class="form-controls">
             <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
@@ -215,9 +215,7 @@ export default {
     async prev () {
       if (this.current === 0) return
       await this.flipPage('down', () => {
-        this.pages[this.current].current = false
         this.current--
-        this.pages[this.current].current = true
         this.update()
       })
     },
@@ -225,9 +223,7 @@ export default {
       if (this.current === this.pages.length - 1) return
       if (!this.pages[this.current].valid) return this.pages[this.current].$emit('validateNext')
       await this.flipPage('up', () => {
-        this.pages[this.current].current = false
         this.current++
-        this.pages[this.current].current = true
         this.update()
       })
     },
@@ -263,7 +259,6 @@ export default {
   mounted () {
     document.title = this.title
     this.pages = this.$refs.pages
-    this.pages[this.current].current = true
     this.updateVisibility()
     hooks.emit('form:mounted', [ this ])
     hooks.emit('form:updatevisibility', [ this ])

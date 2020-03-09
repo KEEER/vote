@@ -1,5 +1,5 @@
 <template>
-  <div :class="this.current ? 'page current' : 'page'">
+  <div :class="current ? 'page current' : 'page'">
     <Question
       v-for="question in page"
       :key="question.id"
@@ -28,11 +28,6 @@ import Question from './Question.vue'
 export default {
   name: 'Page',
   inject: [ 'data' ],
-  data () {
-    return {
-      current: false,
-    }
-  },
   components: { Question },
   computed: {
     questions () { return this.$refs.questions },
@@ -49,6 +44,6 @@ export default {
       window.scrollBy(0, this.questions.filter(q => !q.valid)[0].$refs.realQuestion.$el.getBoundingClientRect().y - 200)
     })
   },
-  props: { page: Array },
+  props: { page: Array, current: Boolean },
 }
 </script>
