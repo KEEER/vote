@@ -1,5 +1,4 @@
 const fs = require('fs-extra')
-const tar = require('tar')
 
 const script = process.argv[2]
 if (!script) {
@@ -26,6 +25,7 @@ const fns = {
   },
 
   async pack () {
+    const tar = require('tar')
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html')).map(f => `dist/${f}`)
       await tar.c({ gzip: true, file: 'dist.tgz' }, [ 'dist/js', 'dist/css', ...htmlFiles, 'dist/compat.json' ])
