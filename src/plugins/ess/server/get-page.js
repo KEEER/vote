@@ -61,7 +61,6 @@ export const handleGetPage = async ([ form, path, ctx, set ]) => {
     }
   }
   if (path === '_bundle-editor') {
-    let authorized = user && user.id === form.options.userId || process.env.NODE_ENV === 'development'
     await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
     if (!authorized) return unauthorized()
     return set(await form.bundle(null, null, 'editor'))
