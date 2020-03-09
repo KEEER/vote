@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       current_: this.current || 0,
-      currentPlusOne: String(this.current || 0 + 1),
+      currentPlusOne: String((this.current || 0) + 1),
       menuOpen: false,
     }
   },

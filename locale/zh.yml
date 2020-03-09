@@ -173,7 +173,7 @@ plugin:
       loading: 正在加载数据中……
       loadError: 加载数据失败
       submissionCount: 份提交
-      submissionId: "提交ID: "
+      submissionId: "提交 ID: "
       submissionTime: "提交时间: "
       noSubmissions: 没有回复。
 

@@ -12,6 +12,12 @@
         <p class="submission-id">{{$t('plugin.ess.data.submissionId')}}{{currentSubmissionId}}</p>
         <p class="submission-time">{{$t('plugin.ess.data.submissionTime')}}{{currentSubmission.time.toLocaleString()}}</p>
       </div>
+      <DataNavigator
+        count-label="plugin.ess.editor.pageCount"
+        null-label="plugin.ess.editor.questionLoading"
+        :count="pageCount"
+        :current.sync="currentPageId"
+      />
       <Question
         v-for="question in questions"
         readonly
@@ -35,7 +41,7 @@ main {
   margin: 0;
 }
 .submission-meta {
-  margin-top: 8px;
+  margin: 8px 0;
 }
 </style>
 
@@ -62,10 +68,7 @@ export default {
     }
   },
   watch: {
-    currentSubmissionIndex (val) {
-      this.currentSubmissionIndexPlusOne = String(val + 1)
-      this.updateSubmissionStatus()
-    },
+    currentSubmissionIndex () { this.updateSubmissionStatus() },
   },
   computed: {
     currentSubmissionId () {
