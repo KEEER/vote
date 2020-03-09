@@ -174,6 +174,7 @@ export default {
     updateObservable(async (vm, change) => {
       vm.$emit('update:data', {
         ...vm.data,
+        required: vm.required_,
         title: vm.title_,
         description: vm.description_,
         value: vm.value_,
@@ -193,7 +194,9 @@ export default {
         delete change.validationConfig
       }
       if (change.description) {
-        change.description = JSON.stringify(await vm.$refs.description.save())
+        const data = await vm.$refs.description.save()
+        if (data.html === '<br>') data.html = ''
+        change.description = JSON.stringify(data)
       }
       vm.$emit('beforeUpdate', [ vm, change ])
       const res = await query(`
