@@ -17,7 +17,7 @@ export const handleGetPage = async ([ form, path, ctx, set ]) => {
   ) return set(404)
   const user = ctx.state.user
   const unauthorized = () => ctx.state.userNoId ? ctx.requireLogin() : set(404)
-  let authorized = user && user.id === form.options.userId || process.env.NODE_ENV === 'development'
+  let authorized = user && String(user.id) === String(form.options.userId) || process.env.NODE_ENV === 'development'
   if (form.editorPaths.indexOf(path) > -1) {
     await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
     // why not 403: return a 403 will indicate that the form exists.
