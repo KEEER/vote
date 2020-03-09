@@ -48,6 +48,12 @@
         "default": true
       },
       {
+        "type": "switch",
+        "name": "showPageNumber",
+        "label": "theme.default.config.form.showPageNumber",
+        "default": true
+      },
+      {
         "type": "color",
         "name": "theme-default.text-color",
         "label": "theme.default.config.form.textColor",

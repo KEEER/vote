@@ -252,6 +252,7 @@ theme:
         randomOrder: Display in random order
       form:
         allowBack: Allow going backwards
+        showPageNumber: Show page number
         textColor: Text color
         bgColor: Background color
         themeColor: Theme color

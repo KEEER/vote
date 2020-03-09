@@ -19,7 +19,7 @@
         <div class="form-footer">
           <span class="form-controls">
             <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
-            <span v-if="data.data.length > 1">{{$t('theme.common.page', { page: current + 1 })}}</span>
+            <span v-if="showPageNumber && data.data.length > 1">{{$t('theme.common.page', { page: current + 1 })}}</span>
             <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme.common.nextPage')}}</m-button>
             <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.common.submit')}}</m-button>
           </span>
@@ -285,6 +285,7 @@ export default {
       hooks.emit('form:validate', [ this, () => validity = false ])
       return validity
     },
+    showPageNumber () { return getQuestionConfig(this.data, 'settings', 'showPageNumber', true) },
     prevVisible () {
       return this.current !== 0 && getQuestionConfig(this.data, 'settings', 'allowBack', true)
     },

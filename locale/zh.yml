@@ -247,6 +247,7 @@ theme:
         randomOrder: 随机顺序显示
       form:
         allowBack: 允许后退
+        showPageNumber: 显示页码
         textColor: 文本颜色
         bgColor: 表单背景色
         themeColor: 主题色
