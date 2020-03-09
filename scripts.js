@@ -91,10 +91,10 @@ const fns = {
   },
 
   async 'build:compat' () {
-    const req = require('esm')(module, { cjs: { dedefault: true } })
-    const plugins = req('./src/plugin').plugins
-    const themes = req('./src/theme').themes
-    const Form = req('./src/form').Form
+    require('./src/load-babel')
+    const plugins = require('./src/plugin').plugins
+    const themes = require('./src/theme').themes
+    const Form = require('./src/form').Form
     const form = new Form({ pages: [] })
     const requiredPlugins = plugins.filter(p => p.config.required)
     const nonRequiredPlugins = plugins.filter(p => !p.config.required)

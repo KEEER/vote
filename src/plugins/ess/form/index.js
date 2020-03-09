@@ -1,4 +1,3 @@
-import './styles.css'
 import submitMixin from './submit'
 import { validateMixin } from './validate'
 

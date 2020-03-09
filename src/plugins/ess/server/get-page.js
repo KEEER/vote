@@ -1,15 +1,12 @@
-import { readFileSync } from 'fs'
-import path from 'path'
 import { schema } from '../common/graphql'
 import { graphql } from 'graphql'
-import logger from '../../../log'
+import logger from '@vote/core/log'
 import query from './query'
+import { readDistFile } from '@vote/api'
 
 const log = logger.child({ part: 'plugin-ess.get-page' })
 
-const editorHtml = readFileSync(
-  path.resolve(__dirname, '../../../../dist/plugin-ess-editor.html')
-).toString()
+const editorHtml = readDistFile('plugin-ess-editor.html')
 
 export const handleGetPage = async ([ form, path, ctx, set ]) => {
   if ((

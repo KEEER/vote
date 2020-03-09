@@ -1,8 +1,8 @@
 import { handleUpdateBasicSettings, handlePreprocessBasicSettings } from './basic-settings'
 import { handleGetPage } from './get-page'
 import { handleValidateSubmission } from './validate-submission'
-import { plugins } from '../../../plugin'
-import { themes } from '../../../theme'
+import { plugins } from '@vote/core/plugin'
+import { themes } from '@vote/core/theme'
 
 export default function attachTo (form) {
   form.editorPaths = [ 'edit', 'settings', 'data', 'fn', ...(form.editorPaths || []) ]

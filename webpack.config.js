@@ -15,6 +15,8 @@ const extractCss = {
   },
 }
 
+const srcPath = path.resolve(__dirname, 'src')
+
 const cache = {
   loader: 'cache-loader',
   options: {
@@ -106,6 +108,16 @@ const config = {
     new webpack.IgnorePlugin(/^yaml$/),
     new webpack.NormalModuleReplacementPlugin(/^\.\/styles\.scss$/, resource => {
       if (/@keeer\/material-components-vue/.test(resource.context)) resource.request = '.'
+    }),
+    new webpack.NormalModuleReplacementPlugin(/^@vote/, resource => {
+      if (/src\/(?:plugins|themes)\//.test(resource.context)) {
+        const req = resource.request
+        if (/^@vote\/core/.test(req)) resource.request = req.replace('@vote/core', srcPath)
+        if (/^@vote\/api/.test(req)) resource.request = req.replace('@vote/api', path.resolve(srcPath, 'api'))
+        if (/^@vote\/plugins\//.test(req)) resource.request = req.replace('@vote/plugins', path.resolve(srcPath, 'plugins'))
+        if (/^@vote\/themes\//.test(req)) resource.request = req.replace('@vote/themes', path.resolve(srcPath, 'themes'))
+        if (/^@vote\/locale/.test(req)) resource.request = req.replace('@vote/locale', path.resolve(__dirname, 'locale'))
+      }
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({

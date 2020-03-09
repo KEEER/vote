@@ -1,4 +1,6 @@
-import logger from '../../log'
+import logger from '@vote/core/log'
+import { editorRouteMixin } from './common'
+import { addPage } from '@vote/api/server'
 
 const log = logger.child({ part: 'plugin-sample' })
 
@@ -6,11 +8,6 @@ log.debug('plugin-sample loaded')
 
 export default function attachTo (form) {
   log.debug('attached', form)
-  form.editorPaths = [ 'sample', ...(form.editorPaths || []) ]
-  form.on('getPage', async ([ , path, , set ]) => {
-    log.debug('getPage', path, set)
-    if (path === 'whatever') {
-      set('<script>alert("whatever")</script>')
-    }
-  })
+  editorRouteMixin(form)
+  addPage('whatever', '<script>alert("whatever")</script>')(form)
 }

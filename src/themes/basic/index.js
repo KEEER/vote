@@ -4,7 +4,7 @@ import 'regenerator-runtime'
 import App from './App'
 import hooks from './hooks'
 import UniqueId from 'vue-unique-id'
-import { locale, messages } from '../../../locale'
+import { locale, messages } from '@vote/locale'
 
 const root = document.createElement('div')
 root.id = 'app'

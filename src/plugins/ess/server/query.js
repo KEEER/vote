@@ -1,10 +1,10 @@
-import Question from '../../../question'
-import { Page } from '../../../form'
-import logger from '../../../log'
+import Question from '@vote/core/question'
+import { Page } from '@vote/core/form'
+import logger from '@vote/core/log'
 import assert from 'assert'
 import sanitize from 'sanitize-html'
-import { themes } from '../../../theme'
-import { plugins } from '../../../plugin'
+import { themes } from '@vote/core/theme'
+import { plugins } from '@vote/core/plugin'
 
 const log = logger.child({ part: 'plugin-ess.query' })
 

@@ -4,32 +4,18 @@ import plugins from './plugin'
 import themes from './theme'
 import { query, update } from './db'
 import logger from './log'
-import fs from 'fs-extra'
 import { readFileSync } from 'fs'
+import { readDistFile } from '@vote/api'
 import path from 'path'
 import EventEmitter from 'emittery'
 
 const log = logger.child({ part: 'form' })
 
-const templateCache = {}, jsCache = {}
-themes.forEach(theme => {
-  const filename = path.resolve(__dirname, '..', 'dist', `${theme.config.entryName}.html`)
-  templateCache[theme.config.code] = readFileSync(filename).toString()
-})
-const loadPluginScript = fs.readFileSync(path.resolve(__dirname, 'loadPlugins.js')).toString()
-
-try {
-  fs.readdirSync(path.resolve(__dirname, '../dist/js'))
-    .forEach(filename => {
-      if (!filename.endsWith('.js')) return // do not cache .js.map files
-      const realFilename = path.resolve(__dirname, '../dist/js', filename)
-      jsCache[filename] = readFileSync(realFilename).toString()
-    })
-} catch (e) {
-  throw new Error(`Error reading JS build directory: ${e}`)
+export const templateCache = {}
+for (let theme of themes) {
+  templateCache[theme.config.code] = readDistFile(`${theme.config.entryName}.html`)
 }
-
-export { templateCache, jsCache }
+const loadPluginScript = readFileSync(path.resolve(__dirname, 'loadPlugins.js')).toString()
 
 /** Class representing a page. */
 export class Page {
