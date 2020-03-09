@@ -15,7 +15,7 @@ export const templateCache = {}
 for (let theme of themes) {
   templateCache[theme.config.code] = readDistFile(`${theme.config.entryName}.html`)
 }
-const loadPluginScript = readFileSync(path.resolve(__dirname, 'loadPlugins.js')).toString()
+const loadPluginScript = readFileSync(path.resolve(__dirname, 'load-plugins.js')).toString()
 
 /** Class representing a page. */
 export class Page {

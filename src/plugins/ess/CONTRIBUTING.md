@@ -10,13 +10,18 @@ This directory contains the source code of Plugin Essentials. This plugin provid
 
 ## Structure
 
+- `common/` Common files
+    - `query.js` GraphQL Query intepreter
+    - `schema.graphql` GraphQL schema
+    - `schemaText.js` loads the schema both in FE and BE
+    - `validationTypes.js` defines validation types
+    - `validator.js` does actual validation
 - `editor/` Vote Form editor
-- `form/` Scripts to be injected to frontend
+- `form/` Scripts to be injected to form filling
     - `index.js` Entry point
+    - `validate.js` Validator utility
     - `submit.js` Adds a listener to the hook `form:submit` so that the form could be submitted
-    - `styles.css` Styles used by the plugin
 - `server/` Script to be injected to backend
     - `index.js` Entry point
-    - `query.js` GraphQL Query intepreter
 - `common/` Common files
 - `plugin.json` Plugin meta file
