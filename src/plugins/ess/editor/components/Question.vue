@@ -172,11 +172,13 @@ export default {
   name: 'Question',
   mixins: [
     updateObservable(async (vm, change) => {
+      const desc = await vm.$refs.description.save()
+      if (desc && desc.html === '<br>') desc.html = ''
       vm.$emit('update:data', {
         ...vm.data,
         required: vm.required_,
         title: vm.title_,
-        description: vm.description_,
+        description: desc,
         value: vm.value_,
         options: vm.options_,
         type: vm.type_,
@@ -194,9 +196,7 @@ export default {
         delete change.validationConfig
       }
       if (change.description) {
-        const data = await vm.$refs.description.save()
-        if (data.html === '<br>') data.html = ''
-        change.description = JSON.stringify(data)
+        change.description = JSON.stringify(desc)
       }
       vm.$emit('beforeUpdate', [ vm, change ])
       const res = await query(`
@@ -305,6 +305,10 @@ export default {
     type_ (val) {
       this.data.type = val
       if (val) {
+        delete this.data.value
+        this.value_ = null
+        this.validationEntries = validationTypes[this.data.type]
+        this.updateMenuItems()
         this.change.type = val
         this.logChange()
       }
@@ -352,25 +356,28 @@ export default {
       const handler = this.menuItems[i].handler
       if (typeof handler === 'function') handler(this)
     },
+    updateMenuItems () {
+      this.menuItems = [
+        ...(this.hasValidationEntries ? [ {
+          icon: 'done',
+          label: 'plugin.ess.question.validation',
+          handler: () => this.validationOpen = true,
+        } ] : []),
+        ...(this.hasThemeConfigEntries ? [ {
+          icon: 'palette',
+          label: 'plugin.ess.question.theme',
+          handler: () => this.themeOpen = true,
+        } ] : []),
+        {
+          icon: 'delete',
+          label: 'plugin.ess.question.remove',
+          handler: () => this.removeDialogOpen = true,
+        },
+      ]
+    },
   },
   mounted () {
-    this.menuItems = [
-      ...(this.hasValidationEntries ? [ {
-        icon: 'done',
-        label: 'plugin.ess.question.validation',
-        handler: () => this.validationOpen = true,
-      } ] : []),
-      ...(this.hasThemeConfigEntries ? [ {
-        icon: 'palette',
-        label: 'plugin.ess.question.theme',
-        handler: () => this.themeOpen = true,
-      } ] : []),
-      {
-        icon: 'delete',
-        label: 'plugin.ess.question.remove',
-        handler: () => this.removeDialogOpen = true,
-      },
-    ]
+    this.updateMenuItems()
     hooks.emit('editor:questionMounted', [ this ])
     this.$on('reorder', reorder => this.reorder(reorder))
   },
