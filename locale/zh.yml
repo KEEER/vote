@@ -176,6 +176,12 @@ plugin:
       submissionId: "提交 ID: "
       submissionTime: "提交时间: "
       noSubmissions: 没有回复。
+      searchTags: 搜索
+      searchTagsPlaceholder: 根据标签搜索...
+      manageTags: 管理标签
+      editTagPlaceholder: 点击回车以插入
+      finishTags: 完成
+      updateTagsError: 更新标签失败，数据可能尚未保存。
 
     settings:
       titlePlaceholder: 表单标题

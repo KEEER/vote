@@ -2,6 +2,7 @@ type Query {
   form: Form!
   submission(id: String!): Submission
   submissionIds: [String!]!
+  submissionIdsByTag(tags: [String!]!): [String!]!
 }
 
 type Mutation {
@@ -10,6 +11,7 @@ type Mutation {
   removeQuestion(id: Int!): Boolean!
   updateSettings(name: String!, value: String): Boolean! # value is actually object
   updateFn(plugins: String!, theme: String!): Boolean! # plugins is actually object
+  updateSubmissionTags(id: String!, tags: [String!]!): Boolean!
 }
 
 type Form {
@@ -65,6 +67,7 @@ input QuestionUpdateInput {
 type Submission {
   id: String!
   data: String # Actually Object
+  tags: [String!]!
   time: String!
   formId: String
 }

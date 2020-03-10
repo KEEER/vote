@@ -31,13 +31,17 @@ export default {
     return form
   },
   async submission ({ id }, ctx) {
-    const res = await ctx.state.form.submissionFromId(id)
+    const res = await ctx.state.form.getSubmission(id)
     if (!res) return null
+    res.tags = await ctx.state.form.getSubmissionTags(id, true)
     res.data = JSON.stringify(res.data)
     return res
   },
   async submissionIds (_args, ctx) {
     return await ctx.state.form.getSubmissionIds()
+  },
+  async submissionIdsByTag ({ tags }, ctx) {
+    return await ctx.state.form.getSubmissionIdsByTags(tags)
   },
   async newQuestion ({ pageId, options }, ctx) {
     try {
@@ -134,5 +138,14 @@ export default {
     form.options.theme = theme
     await form.update()
     return true
+  },
+  async updateSubmissionTags ({ id, tags }, ctx) {
+    try {
+      await ctx.state.form.updateSubmissionTags(id, tags)
+      return true
+    } catch (e) {
+      log.error(e)
+      return false
+    }
   },
 }

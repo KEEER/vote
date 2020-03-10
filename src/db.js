@@ -6,6 +6,13 @@ const pool = new Pool()
 /** The connection pool. */
 export { pool }
 
+const wrapQuery = (fn, ctx) => {
+  return (...args) => {
+    args[0] = args[0].replace(/PRE_/g, process.env.TABLEPREFIX)
+    return fn.apply(ctx, args)
+  }
+}
+
 /**
  * A wrapper for the database client object.
  * @param {function} cb Callback. The function should be asynchronous, receiving one param which is the client.
@@ -13,6 +20,7 @@ export { pool }
 export async function useClient (cb) {
   const client = await pool.connect()
   try {
+    client.query = wrapQuery(client.query, client)
     await cb(client)
   } finally {
     client.release()
@@ -22,11 +30,7 @@ export async function useClient (cb) {
 /**
  * A wrapper for pool.query(). See pg.Pool
  */
-export function query () {
-  const args = arguments
-  args[0] = args[0].replace(/PRE_/g, process.env.TABLEPREFIX)
-  return pool.query.apply(pool, args)
-}
+export const query = wrapQuery(pool.query, pool)
 
 /**
  * Update some values in a table.

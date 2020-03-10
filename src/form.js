@@ -2,7 +2,7 @@
 import Question from './question'
 import plugins from './plugin'
 import themes from './theme'
-import { query, update } from './db'
+import { query, update, useClient } from './db'
 import logger from './log'
 import { readFileSync } from 'fs'
 import { readDistFile } from '@vote/api'
@@ -472,12 +472,100 @@ export class Form extends EventEmitter {
    * Gets submission from given ID.
    * @param {string} id submission ID
    */
-  async submissionFromId (id) {
+  async getSubmission (id) {
     const res = (await query('SELECT * FROM PRE_submissions WHERE form_id = $1 AND id = $2;', [ this.id, id ])).rows[0]
     if (res) {
       res.formId = res.form_id
       delete res.form_id
     }
     return res || null
+  }
+
+  /**
+   * Gets the tags of a certain submission.
+   * @param {number} id submission ID
+   * @param {boolean} [skipCheck=false] whether to skip checking submission id validity, defaults to false
+   * @param {pg.Client} [client] PG client object to use
+   * @returns {string[]} tags
+   */
+  async getSubmissionTags (id, skipCheck = false, client) {
+    const queryFunc = (...args) => client ? client.query(...args) : query(...args)
+    if (!skipCheck) {
+      const submission = (await queryFunc('SELECT id FROM PRE_submissions WHERE form_id = $1 AND id = $2;', [ this.id, id ])).rows[0]
+      if (!submission) throw new Error('Submission does not belongs to this form')
+    }
+    const res = (await queryFunc(`
+      SELECT tag.name FROM PRE_submission_tags tag, PRE_submission_tagmap tagmap 
+        WHERE tagmap.submission_id = $1 AND tagmap.tag_id = tag.id;
+    `, [ id ])).rows
+    return res.map(x => x.name)
+  }
+
+  /**
+   * Updates the tags of a certain submission.
+   * @param {number} id submission ID
+   * @param {string[]} tags tags of the submission
+   */
+  async updateSubmissionTags (id, tags) {
+    await useClient(async client => {
+      // initialize
+      await client.query('BEGIN;')
+      // fetch current tags
+      const currentTags = await this.getSubmissionTags(id, false, client)
+      // make diff
+      const diffAdd = tags.filter(tag => !currentTags.includes(tag))
+      const diffRemove = currentTags.filter(tag => !tags.includes(tag))
+      const diff = [ ...diffAdd, ...diffRemove ]
+      if (diff.length === 0) return
+      // figure out existing tags ...
+      const existingTagsSql = `SELECT name, id FROM PRE_submission_tags WHERE name IN (${diff.map((_, i) => `$${i + 1}`).join(', ')});`
+      const existingTags = (await client.query(existingTagsSql, diff)).rows
+      // ... and non-existent tags (to add)
+      const tagsToAdd = diffAdd.filter(tag => existingTags.every(etag => tag !== etag.name))
+      // make a mapping of tag name => tag ID
+      const tagIds = {}
+      for (let { name, id } of existingTags) tagIds[name] = id
+      // add tags
+      if (tagsToAdd.length > 0) {
+        const addTagsSql = `INSERT INTO PRE_submission_tags (name, lower_name)
+          VALUES ${tagsToAdd.map((_, i) => `($${i + 1}::character varying(64), LOWER($${i + 1}))`).join(', ')} RETURNING id;`
+        const tagIdAdded = (await client.query(addTagsSql, tagsToAdd)).rows
+        tagIdAdded.forEach((res, i) => tagIds[tagsToAdd[i]] = res.id)
+      }
+      // TODO: clean up stale tags
+      // add diffAdd tags into tag map
+      if (diffAdd.length > 0) {
+        const addTagmapsSql = `INSERT INTO PRE_submission_tagmap (submission_id, tag_id)
+          VALUES ${diffAdd.map((_, i) => `($1, $${i + 2})`).join(', ')};`
+        await client.query(addTagmapsSql, [ id, ...diffAdd.map(tag => tagIds[tag]) ])
+      }
+      // remove diffRemove tags from tag map
+      if (diffRemove.length > 0) {
+        const removeTagmapsSql = `DELETE FROM PRE_submission_tagmap WHERE submission_id = $1
+          AND tag_id IN (${diffRemove.map((_, i) => `$${i + 2}`).join(', ')});`
+        await client.query(removeTagmapsSql, [ id, ...diffRemove.map(tag => tagIds[tag]) ])
+      }
+      // finalize
+      await client.query('COMMIT;')
+    })
+  }
+
+  /**
+   * Get submissions filtered by tags
+   * @param {string[]} tags tags to check
+   */
+  async getSubmissionIdsByTags (tags) {
+    // sanity check
+    if (tags.length === 0) return await this.getSubmissionIds()
+    if (tags.some(tag => typeof tag !== 'string' || tag.length > 64)) return []
+    // see http://howto.philippkeller.com/2005/04/24/Tags-Database-schemas/#%E2%80%9CToxi%E2%80%9D-solution
+    const sql = `SELECT submission.id
+      FROM PRE_submissions submission, PRE_submission_tagmap tagmap, PRE_submission_tags tag
+      WHERE tagmap.tag_id = tag.id
+      AND (tag.name IN (${tags.map((_, i) => `$${i + 1}`).join(', ')}))
+      AND submission.id = tagmap.submission_id
+      GROUP BY submission.id
+      HAVING COUNT ( submission.id ) = ${tags.length}`
+    return (await query(sql, tags)).rows.map(r => r.id)
   }
 }

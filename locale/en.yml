@@ -181,6 +181,12 @@ plugin:
       submissionId: "Submission ID: "
       submissionTime: "Submission Time: "
       noSubmissions: No submissions.
+      searchTags: Search
+      searchTagsPlaceholder: Search by tags...
+      manageTags: Manage tags
+      editTagPlaceholder: Press Enter to confirm
+      finishTags: Done
+      updateTagsError: Error updating tags, data may not be saved.
 
     settings:
       titlePlaceholder: Title

@@ -5,6 +5,7 @@ import ColorPicker from '@keeer/color-picker'
 import MButton from '@keeer/material-components-vue/components/button/'
 import MCard from '@keeer/material-components-vue/components/card/'
 import MCheckbox from '@keeer/material-components-vue/components/checkbox/'
+import MChip from '@keeer/material-components-vue/components/chips/'
 import MDialog from '@keeer/material-components-vue/components/dialog'
 import MDrawer from '@keeer/material-components-vue/components/drawer/'
 import MFloatingLabel from '@keeer/material-components-vue/components/floating-label/'
@@ -27,6 +28,7 @@ import MTypo from '@keeer/material-components-vue/components/typography/'
   MButton,
   MCard,
   MCheckbox,
+  MChip,
   MDialog,
   MDrawer,
   MFloatingLabel,

@@ -1,5 +1,26 @@
 <template>
   <main id="data">
+    <div class="search-tags">
+      <m-chip-set input class="tags">
+        <m-chip v-for="tag in searchTags" :key="tag" @removal="searchTags = searchTags.filter(t => t !== tag)">
+          {{tag}} <m-icon icon="cancel" slot="trailingIcon" />
+        </m-chip>
+        <m-text-field
+          full-width
+          class="tags__input"
+          v-model="searchTagName"
+          :placeholder="$t('plugin.ess.data.searchTagsPlaceholder')"
+          @keydown="handleSearchKeydown"
+          maxlen="64"
+        >
+          <m-line-ripple slot="bottomLine" />
+        </m-text-field>
+        <m-chip @interaction="loadSubmissionIds">
+          <m-icon icon="search" slot="leadingIcon" />
+          {{$t('plugin.ess.data.searchTags')}}
+        </m-chip>
+      </m-chip-set>
+    </div>
     <DataNavigator
       count-label="plugin.ess.data.submissionCount"
       null-label="plugin.ess.data.noSubmissions"
@@ -11,6 +32,34 @@
       <div class="submission-meta">
         <p class="submission-id">{{$t('plugin.ess.data.submissionId')}}{{currentSubmissionId}}</p>
         <p class="submission-time">{{$t('plugin.ess.data.submissionTime')}}{{currentSubmission.time.toLocaleString()}}</p>
+        <div class="submission-tags">
+          <m-chip-set input class="tags">
+            <m-chip
+              v-for="tag in currentSubmission.tags"
+              :key="tag"
+              @removal="currentSubmission.tags = currentSubmission.tags.filter(t => t !== tag)"
+            >
+              {{tag}}
+              <m-icon v-show="editingTag" icon="cancel" slot="trailingIcon" />
+            </m-chip>
+            <m-text-field
+              full-width
+              class="tags__input"
+              ref="tagInput"
+              v-if="editingTag"
+              v-model="tagName"
+              :placeholder="$t('plugin.ess.data.editTagPlaceholder')"
+              @keydown="handleKeydown"
+              maxlen="64"
+            >
+              <m-line-ripple slot="bottomLine" />
+            </m-text-field>
+            <m-chip @interaction="toggleEdit">
+              <m-icon :icon="editingTag ? 'done' : 'edit'" slot="leadingIcon" />
+              {{$t(editingTag ? 'plugin.ess.data.finishTags' : 'plugin.ess.data.manageTags')}}
+            </m-chip>
+          </m-chip-set>
+        </div>
       </div>
       <DataNavigator
         count-label="plugin.ess.editor.pageCount"
@@ -43,6 +92,12 @@ main {
 .submission-meta {
   margin: 8px 0;
 }
+.tags { align-items: center; }
+.tags__input {
+  flex: 1;
+  min-width: 200px;
+}
+.search-tags { margin-bottom: 8px; }
 </style>
 
 <script>
@@ -60,6 +115,10 @@ export default {
     return {
       currentSubmission: null,
       currentSubmissionIndex: -1,
+      editingTag: false,
+      tagName: '',
+      searchTags: [],
+      searchTagName: '',
       loaded: false,
       loadError: false,
       submissionLoading: false,
@@ -77,7 +136,11 @@ export default {
   },
   methods: {
     async updateSubmissionStatus () {
+      if (this.currentSubmissionIndex === null) return this.currentSubmission = null
       try {
+        if (this.currentSubmissionIndex === null) {
+          return this.currentSubmission = null
+        }
         this.submissionLoading = true
         await this.loadSubmission()
         return this.submissionLoading = false
@@ -97,18 +160,17 @@ export default {
       }
     },
     async loadSubmissionIds () {
-      const res = await query('{ submissionIds }', {})
+      const res = await query('query ($tags: [String!]!) { submissionIdsByTag(tags: $tags) }', { tags: this.searchTags })
       if (res.errors) throw res
-      this.submissionIds = res.data.submissionIds
-      if (this.currentSubmissionId === null && this.submissionIds.length !== 0) {
-        this.currentSubmissionIndex = 0
-      }
+      this.submissionIds = res.data.submissionIdsByTag
+      if (this.submissionIds.length !== 0) this.currentSubmissionIndex = 0
+      else this.currentSubmissionIndex = null
     },
     async loadSubmission (id = this.currentSubmissionId) {
       if (!id || id === null) return null
       const inCache = this.submissions.find(s => s.id === id)
       if (inCache) return this.currentSubmission = inCache
-      const res = await query('query($id: String!) { submission(id: $id) { data, time } }', { id })
+      const res = await query('query ($id: String!) { submission(id: $id) { data, tags, time } }', { id })
       if (res.errors) throw res
       const submission = res.data.submission
       submission.time = new Date(Number(submission.time))
@@ -117,6 +179,39 @@ export default {
       this.currentSubmission = submission
       this.submissions.push(submission)
       return submission
+    },
+    handleKeydown (e) {
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        if (!this.currentSubmission.tags.includes(this.tagName)) {
+          this.currentSubmission.tags.push(this.tagName)
+        }
+        this.tagName = ''
+      }
+    },
+    handleSearchKeydown (e) {
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        if (!this.searchTags.includes(this.searchTagName)) {
+          this.searchTags.push(this.searchTagName)
+        }
+        this.searchTagName = ''
+      }
+    },
+    async toggleEdit () {
+      if (this.editingTag) {
+        this.editingTag = false
+        try {
+          const res = await query(`mutation updateSubmissionTags ($id: String!, $tags: [String!]!) {
+            updateSubmissionTags(id: $id, tags: $tags)
+          }`, { id: this.currentSubmissionId, tags: this.currentSubmission.tags })
+          if (res.errors || !res.data.updateSubmissionTags) throw res
+        } catch (e) {
+          alert(this.$t('plugin.ess.data.updateTagsError'))
+          console.log(e)
+        }
+      } else {
+        this.editingTag = true
+        this.$nextTick(() => this.$refs.tagInput.focus())
+      }
     },
   },
   mounted () {
