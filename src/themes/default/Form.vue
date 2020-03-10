@@ -186,9 +186,13 @@ export default {
         if (this.inAnimation) next()
         else this.flipPage(val === 'submitted' ? 'up' : 'down', next)
       }
+      this.updateLayout()
     },
   },
   methods: {
+    updateLayout () {
+      this.$el.parentElement.style.height = this.$el.getBoundingClientRect().height + 'px'
+    },
     async flipPage (dir, cb) {
       this.inAnimation = true
       const name1 = dir === 'down' ? 'onBottom' : 'onTop'
@@ -201,7 +205,7 @@ export default {
       this.noTransition = true
       this[name2] = true
       this[name1] = false
-      window.scrollTo(0, 0)
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       if (!cb || await cb() !== 'reverse') {
         await delay(100)
         this.noTransition = false
@@ -232,6 +236,7 @@ export default {
       hooks.emit('form:update', [ this ])
     },
     updateVisibility () {
+      this.$nextTick(() => this.updateLayout())
       hooks.emit('form:updatevisibility', [ this ])
     },
     async submit () {
