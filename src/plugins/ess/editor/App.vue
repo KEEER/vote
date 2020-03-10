@@ -5,7 +5,7 @@
       :class="{'drawer-dismissible': dismissible}"
       :modal="modal"
       :dismissible="dismissible"
-      :open="drawerOpen"
+      v-model="drawerOpen"
       :key="modal"
     >
       <div slot="header">
@@ -18,7 +18,7 @@
         <m-drawer-list>
           <span v-for="route in routes" :key="route.name">
             <router-link class="navlink" :to="{name: route.name}">
-              <m-list-item :activated="$route.name === route.name">
+              <m-list-item :activated="$route.name === route.name" @click="modal ? drawerOpen = false : null">
                 <m-icon :icon="route.icon" slot="graphic"/>
                 {{$t(route.title)}}
               </m-list-item>
@@ -29,7 +29,7 @@
     </m-drawer>
     <m-drawer-scrim v-if="modal" />
     <div id="content">
-      <m-top-app-bar ref="appbar">
+      <m-top-app-bar @nav="drawerOpen = !drawerOpen">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <m-icon-button icon="menu" class="mdc-top-app-bar__navigation-icon" />
           <span class="hgroup mdc-top-app-bar__title">
@@ -235,9 +235,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    toggleDrawer () {
-      this.drawerOpen = !this.drawerOpen
-    },
     updateTitle () {
       this.appBarTitle = `${this.title} - Vote Editor`
       document.title = `${this.title} - ${this.documentTitle}`
@@ -261,8 +258,6 @@ export default Vue.extend({
     }
     media.addListener(toggleMobile)
     toggleMobile()
-
-    this.$refs.appbar.$on('nav', () => this.toggleDrawer())
 
     this.updateTitle()
     hooks.emit('editor:appMounted', [ this ])

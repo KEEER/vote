@@ -172,6 +172,7 @@ export default {
   name: 'Question',
   mixins: [
     updateObservable(async (vm, change) => {
+      if (vm.readonly) return
       const desc = await vm.$refs.description.save()
       if (desc && desc.html === '<br>') desc.html = ''
       vm.$emit('update:data', {
