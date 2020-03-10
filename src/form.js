@@ -562,7 +562,7 @@ export class Form extends EventEmitter {
     const sql = `SELECT submission.id
       FROM PRE_submissions submission, PRE_submission_tagmap tagmap, PRE_submission_tags tag
       WHERE tagmap.tag_id = tag.id
-      AND (tag.name IN (${tags.map((_, i) => `$${i + 1}`).join(', ')}))
+      AND (tag.lower_name IN (${tags.map((_, i) => `LOWER($${i + 1})`).join(', ')}))
       AND submission.id = tagmap.submission_id
       GROUP BY submission.id
       HAVING COUNT ( submission.id ) = ${tags.length}`
