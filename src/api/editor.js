@@ -55,3 +55,5 @@ export const addQuestionMenuEntry = makeEntry => hooks => {
     if (entry) vm.menuItems.push(entry)
   })
 }
+
+export { default as SettingsEntry } from '../plugins/ess/editor/components/SettingsEntry.vue'

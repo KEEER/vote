@@ -558,14 +558,16 @@ export class Form extends EventEmitter {
     // sanity check
     if (tags.length === 0) return await this.getSubmissionIds()
     if (tags.some(tag => typeof tag !== 'string' || tag.length > 64)) return []
+    tags = Array.from(new Set(tags.map(tag => tag.toLowerCase())))
     // see http://howto.philippkeller.com/2005/04/24/Tags-Database-schemas/#%E2%80%9CToxi%E2%80%9D-solution
     const sql = `SELECT submission.id
       FROM PRE_submissions submission, PRE_submission_tagmap tagmap, PRE_submission_tags tag
       WHERE tagmap.tag_id = tag.id
-      AND (tag.lower_name IN (${tags.map((_, i) => `LOWER($${i + 1})`).join(', ')}))
+      AND submission.form_id = $1
+      AND (tag.lower_name IN (${tags.map((_, i) => `LOWER($${i + 2})`).join(', ')}))
       AND submission.id = tagmap.submission_id
       GROUP BY submission.id
       HAVING COUNT ( submission.id ) = ${tags.length}`
-    return (await query(sql, tags)).rows.map(r => r.id)
+    return (await query(sql, [ this.id, ...tags ])).rows.map(r => r.id)
   }
 }

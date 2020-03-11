@@ -1,5 +1,5 @@
 import { addEditorRoute } from '@vote/api'
-const SampleEntry = typeof window !== 'undefined' ? require('./SampleEntry.vue').default : null
+import SampleEntry from './SampleEntry.vue'
 
 export const editorRouteMixin = addEditorRoute({
   name: 'sample',

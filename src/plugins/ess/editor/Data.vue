@@ -1,6 +1,6 @@
 <template>
   <main id="data">
-    <div class="search-tags">
+    <div v-if="showTags" class="search-tags">
       <m-chip-set input class="tags">
         <m-chip v-for="tag in searchTags" :key="tag" @removal="searchTags = searchTags.filter(t => t !== tag)">
           {{tag}} <m-icon icon="cancel" slot="trailingIcon" />
@@ -32,7 +32,7 @@
       <div class="submission-meta">
         <p class="submission-id">{{$t('plugin.ess.data.submissionId')}}{{currentSubmissionId}}</p>
         <p class="submission-time">{{$t('plugin.ess.data.submissionTime')}}{{currentSubmission.time.toLocaleString()}}</p>
-        <div class="submission-tags">
+        <div v-if="showTags" class="submission-tags">
           <m-chip-set input class="tags">
             <m-chip
               v-for="tag in currentSubmission.tags"
@@ -106,10 +106,11 @@ import questionsNeeded from './questionsNeeded'
 import hooks from './hooks'
 import Question from './components/Question.vue'
 import DataNavigator from './components/DataNavigator.vue'
+import settingsNeeded from './settingsNeeded'
 
 export default {
   name: 'Data',
-  mixins: [ questionsNeeded ],
+  mixins: [ questionsNeeded, settingsNeeded ],
   components: { Question, DataNavigator },
   data () {
     return {
@@ -133,6 +134,7 @@ export default {
     currentSubmissionId () {
       return (this.submissionIds || [])[this.currentSubmissionIndex] || null
     },
+    showTags () { return this.settingsLoaded && this.settingsData['tags.enabled'] },
   },
   methods: {
     async updateSubmissionStatus () {
@@ -151,6 +153,7 @@ export default {
     },
     async load () {
       try {
+        await this.loadSettings()
         await this.loadQuestions()
         await this.loadSubmissionIds()
         return this.loaded = true
@@ -160,6 +163,7 @@ export default {
       }
     },
     async loadSubmissionIds () {
+      if (this.searchTagName !== '') this.handleSearchKeydown({ key: 'Enter' })
       const res = await query('query ($tags: [String!]!) { submissionIdsByTag(tags: $tags) }', { tags: this.searchTags })
       if (res.errors) throw res
       this.submissionIds = res.data.submissionIdsByTag
@@ -182,7 +186,7 @@ export default {
     },
     handleKeydown (e) {
       if (e.key === 'Enter' || e.keyCode === 13) {
-        if (!this.currentSubmission.tags.includes(this.tagName)) {
+        if (!this.currentSubmission.tags.includes(this.tagName) && this.tagName) {
           this.currentSubmission.tags.push(this.tagName)
         }
         this.tagName = ''
@@ -199,6 +203,7 @@ export default {
     async toggleEdit () {
       if (this.editingTag) {
         this.editingTag = false
+        if (this.tagName !== '') this.handleKeydown({ key: 'Enter' })
         try {
           const res = await query(`mutation updateSubmissionTags ($id: String!, $tags: [String!]!) {
             updateSubmissionTags(id: $id, tags: $tags)
@@ -210,7 +215,7 @@ export default {
         }
       } else {
         this.editingTag = true
-        this.$nextTick(() => this.$refs.tagInput.focus())
+        this.$nextTick(() => this.$refs.tagInput.$el.querySelector('input').focus())
       }
     },
   },

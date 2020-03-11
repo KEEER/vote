@@ -53,7 +53,7 @@ import DangerousSettings from './components/DangerousSettings.vue'
 import hooks from './hooks'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
-import { query } from '../common/graphql'
+import settingsNeeded from './settingsNeeded'
 
 const entries = [
   {
@@ -72,28 +72,14 @@ const entries = [
 
 export default {
   name: 'Settings',
-  mixins: [ saveStateRelay, saveStateDisplay ],
+  mixins: [ saveStateRelay, saveStateDisplay, settingsNeeded ],
   data () {
     return {
       entries,
-      settingsData: null,
-      settingsLoaded: false,
-      settingsLoadError: false,
       activeTab: 0,
     }
   },
   methods: {
-    async loadSettings () {
-      try {
-        const res = await query('{ form { data } }', {})
-        if (res.errors) throw res
-        this.settingsData = (JSON.parse(res.data.form.data) || {}).settings || {}
-        this.settingsLoaded = true
-      } catch (e) {
-        console.error(e)
-        this.settingsLoadError = true
-      }
-    },
     async update () {
       return await Promise.all(this.entries.map((_, i) => this.$refs[`entry-${i}`][0].update()))
     },

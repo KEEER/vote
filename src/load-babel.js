@@ -19,3 +19,5 @@ Module._resolveFilename = function (request, parent, isMain) {
   }
   return oldResolveFilename.call(this, request, parent, isMain)
 }
+
+Module._extensions['.vue'] = () => {}

@@ -19,6 +19,14 @@
       :data="data"
       ref="retrieving"
     />
+    <SettingsEntry
+      name="tags.enabled"
+      preset="switch"
+      label="plugin.ess.settings.enableTagsLabel"
+      @update:saveState="updateSaveState"
+      :data="data"
+      ref="tags"
+    />
   </div>
 </template>
 
@@ -51,6 +59,7 @@ export default {
       await Promise.all([
         this.$refs.title.update(),
         this.$refs.retrieving.update(),
+        this.$refs.tags.update(),
       ])
     },
   },

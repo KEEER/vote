@@ -9,3 +9,5 @@ import path from 'path'
  * @returns {string}
  */
 export const readDistFile = (name) => readFileSync(path.resolve(__dirname, '../../dist', name)).toString()
+
+export { query } from '../plugins/ess/common/graphql'
