@@ -1,8 +1,11 @@
 import './styles.css'
 import SampleEntry from './SampleEntry.vue'
+import { createFormInjection, addQuestionType } from '@vote/api'
+import { addValidationMixin } from './common'
 
-window.addEventListener('vote:ready', () => {
-  const hooks = window.voteHooks
+createFormInjection(hooks => {
+  addQuestionType('VSample', SampleEntry)
+  addValidationMixin()
   hooks.on('question:update', ([ q, n ]) => {
     if (q.Question.type === 'VText') {
       if (/hello(,)? ?world/i.test(n)) {
@@ -12,5 +15,4 @@ window.addEventListener('vote:ready', () => {
       }
     }
   })
-  hooks.on('form:mounted', ([ vm ]) => vm.$set(vm.types, 'VSample', SampleEntry))
 })

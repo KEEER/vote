@@ -1,6 +1,4 @@
-import hooks from '../hooks'
-
-export default {
+export const questionMixin = {
   inject: [ 'Question' ],
   data () {
     return {
@@ -16,7 +14,7 @@ export default {
   watch: {
     value_ (val) {
       this.$emit('update:value', val)
-      hooks.emit('question:update', [ this, val, this.old ])
+      window.voteHooks.emit('question:update', [ this, val, this.old ])
       this.syncOld()
     },
     value (val) {
@@ -32,6 +30,9 @@ export default {
     },
     question () {
       return this.question_ || this.$parent
+    },
+    realQuestion () {
+      return this.question.$refs.realQuestion
     },
   },
 }

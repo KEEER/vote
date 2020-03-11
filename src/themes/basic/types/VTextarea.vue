@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import mixin from './mixin'
+import { questionMixin as mixin } from '@vote/api'
+
 export default {
   name: 'VTextarea',
   mixins: [ mixin ],

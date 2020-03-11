@@ -103,21 +103,18 @@ const config = {
       '.js',
       '.vue',
     ],
+    alias: {
+      '@vote/core': srcPath,
+      '@vote/api': path.resolve(srcPath, 'api'),
+      '@vote/plugins': path.resolve(srcPath, 'plugins'),
+      '@vote/themes': path.resolve(srcPath, 'themes'),
+      '@vote/locale': path.resolve(__dirname, 'locale'),
+    },
   },
   plugins: [
     new webpack.IgnorePlugin(/^yaml$/),
     new webpack.NormalModuleReplacementPlugin(/^\.\/styles\.scss$/, resource => {
       if (/@keeer\/material-components-vue/.test(resource.context)) resource.request = '.'
-    }),
-    new webpack.NormalModuleReplacementPlugin(/^@vote/, resource => {
-      if (/src\/(?:plugins|themes)\//.test(resource.context)) {
-        const req = resource.request
-        if (/^@vote\/core/.test(req)) resource.request = req.replace('@vote/core', srcPath)
-        if (/^@vote\/api/.test(req)) resource.request = req.replace('@vote/api', path.resolve(srcPath, 'api'))
-        if (/^@vote\/plugins\//.test(req)) resource.request = req.replace('@vote/plugins', path.resolve(srcPath, 'plugins'))
-        if (/^@vote\/themes\//.test(req)) resource.request = req.replace('@vote/themes', path.resolve(srcPath, 'themes'))
-        if (/^@vote\/locale/.test(req)) resource.request = req.replace('@vote/locale', path.resolve(__dirname, 'locale'))
-      }
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({

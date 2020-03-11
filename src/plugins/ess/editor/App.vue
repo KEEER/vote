@@ -104,17 +104,15 @@ a.navlink {
 	border-left: #dc3232 solid 4px;
 	padding: 12px;
 	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
-	box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.1);
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
   background-color: #ffaaaa;
   margin: 12px;
 }
 
 #idframe {
   --mdc-theme-primary: #fff;
-  padding: 0;
   align-items: start;
-  padding-top: 12px;
-  padding-right: 12px;
+  padding: 12px 12px 0 0;
 }
 
 @media(max-width: 599px) {

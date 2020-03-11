@@ -232,7 +232,7 @@ export default {
       validationOpen: false,
       removeDialogOpen: false,
       questionTypes,
-      validationEntries: validationTypes[this.data.type],
+      validationEntries: validationTypes[this.data.type] || [],
     }
   },
   components: {
@@ -308,7 +308,7 @@ export default {
       if (val) {
         delete this.data.value
         this.value_ = null
-        this.validationEntries = validationTypes[this.data.type]
+        this.validationEntries = validationTypes[this.data.type] || []
         this.updateMenuItems()
         this.change.type = val
         this.logChange()
@@ -375,6 +375,7 @@ export default {
           handler: () => this.removeDialogOpen = true,
         },
       ]
+      this.$emit('update:menuItems')
     },
   },
   mounted () {

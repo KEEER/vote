@@ -33,7 +33,7 @@ export function validateMixin (hooks) {
     let res
     hooks.emit('question:validatorOverride', [ q, r => res = r ])
     if (typeof res !== 'undefined') {
-      if (!res) invalidate(res)
+      if (res === false || typeof res === 'string') invalidate(res)
       return
     }
     res = validator(q.data, q.value)

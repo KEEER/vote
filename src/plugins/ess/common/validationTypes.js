@@ -1,11 +1,11 @@
-const useValidation = {
+export const useValidation = {
   type: 'switch',
   label: 'core.question.validation.useValidation',
   name: 'useValidation',
   default: false,
 }
 
-const showValidation = {
+export const showValidation = {
   type: 'checkbox',
   if: value => value.useValidation,
   label: 'core.question.validation.param.showValidation',
@@ -13,7 +13,7 @@ const showValidation = {
   default: true,
 }
 
-const invalidTip = {
+export const invalidTip = {
   type: 'text-field',
   if: value => value.useValidation,
   label: 'core.question.validation.param.invalidTip',
