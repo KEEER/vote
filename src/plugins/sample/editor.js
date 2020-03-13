@@ -16,7 +16,7 @@ createEditorInjection(hooks => {
   editorRouteMixin()
   addValidationMixin()
   addQuestionType('VSample', SampleEntry)
-  hooks.on('editor:appMounted', ([ app ]) => {
+  hooks.on('editor:appMounted', app => {
     app.documentTitle = 'Sample Vote'
     app.updateTitle()
   })

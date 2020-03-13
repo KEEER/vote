@@ -88,6 +88,11 @@ export default {
   watch: {
     current (val) { this.current_ = val },
     current_ (val) {
+      /**
+       * Current page update event.
+       * @event editor:DataNavigator#update:current
+       * @type {number}
+       */
       this.$emit('update:current', val)
       this.currentPlusOne = String(val + 1)
     },

@@ -1,4 +1,4 @@
-export async function handleUpdateBasicSettings ([ form, name, value, set ]) {
+export async function handleUpdateBasicSettings ({ form, name, value, set }) {
   if (name.startsWith('basic.')) {
     switch (name.substr(6)) {
     case 'title':
@@ -13,7 +13,7 @@ export async function handleUpdateBasicSettings ([ form, name, value, set ]) {
   }
 }
 
-export function handlePreprocessBasicSettings ([ form, data ]) {
+export function handlePreprocessBasicSettings ({ form, data }) {
   if (!data.settings) data.settings = {}
   data.settings['basic.title'] = form.options.title
 }

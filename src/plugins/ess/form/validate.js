@@ -1,7 +1,7 @@
 import { validator } from '../common/validator'
 
 export function validateMixin (hooks) {
-  hooks.on('question:update', ([ q ]) => {
+  hooks.on('question:update', ({ question: q }) => {
     const question = q.Question
     if (!question.valid) {
       if (question.validity.reason === 'required') return question.invalidTip = q.$t('core.question.validation.invalidTip.required')
@@ -29,14 +29,21 @@ export function validateMixin (hooks) {
       if (msgKey) return question.invalidTip = q.$t(`core.question.validation.invalidTip.${msgKey}`, data)
     } else question.invalidTip = ''
   })
-  hooks.on('question:validate', ([ q, invalidate ]) => {
+  hooks.on('question:validate', ({ question, invalidate }) => {
     let res
-    hooks.emit('question:validatorOverride', [ q, r => res = r ])
+    /**
+     * Question validator override event.
+     * @event form.question:validatorOverride
+     * @type {object}
+     * @property {form:Question} question Vue instance
+     * @property {function} set set result callback
+     */
+    hooks.emit('question:validatorOverride', { question, set: r => res = r })
     if (typeof res !== 'undefined') {
       if (res === false || typeof res === 'string') invalidate(res)
       return
     }
-    res = validator(q.data, q.value)
+    res = validator(question.data, question.value)
     if (res !== null) return invalidate(res)
   })
 }

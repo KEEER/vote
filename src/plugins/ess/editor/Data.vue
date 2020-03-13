@@ -220,7 +220,12 @@ export default {
     },
   },
   mounted () {
-    hooks.emit('editor:dataMounted', [ this ])
+    /**
+     * Data component mounted event.
+     * @event editor.editor:dataMounted
+     * @type {editor:Data}
+     */
+    hooks.emit('editor:dataMounted', this)
     this.load()
   },
 }

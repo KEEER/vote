@@ -29,6 +29,7 @@ export async function useClient (cb) {
 
 /**
  * A wrapper for pool.query(). See pg.Pool
+ * @function
  */
 export const query = wrapQuery(pool.query, pool)
 

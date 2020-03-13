@@ -38,14 +38,24 @@ export const emit = (...args) => ee.emit(...args)
 const serverMixinQueue = []
 const doServerActions = form => {
   for (const mixin of serverMixinQueue) mixin(form)
-  emit('attached', [ form ])
+  /**
+   * Form attached event.
+   * @event api.attached
+   * @type {module:form~Form}
+   */
+  emit('attached', form)
 }
 const browserMixinQueue = []
 const doBrowserActions = cb => () => {
   const hooks = window.voteHooks
   cb(hooks)
   for (const mixin of browserMixinQueue) mixin(hooks)
-  emit('loaded', [ hooks ])
+  /**
+   * Page loaded
+   * @event api.loaded
+   * @type {EventEmitter}
+   */
+  emit('loaded', hooks)
 }
 
 const decorateServerApi = fn => (...args) => {
@@ -61,6 +71,7 @@ const decorateEditorApi = fn => (...args) => {
 
 /**
  * Adds a route into the editor.
+ * @function
  * @param {string} route.path pathname
  * @param {any} route.component Vue component
  * @param {string} route.icon MD icon
@@ -72,7 +83,7 @@ export const addEditorRoute = route => {
     serverMixinQueue.push(form => form.editorPaths = [ route.name, ...(form.editorPaths || []) ])
   } else { // browser
     route.path = `/:uname/:name/${route.name}`
-    browserMixinQueue.push(hooks => hooks.on('editor:beforeRouterLoad', ([ routes ]) => routes.push(route)))
+    browserMixinQueue.push(hooks => hooks.on('editor:beforeRouterLoad', routes => routes.push(route)))
   }
 }
 
@@ -94,22 +105,24 @@ export const addEditorRoute = route => {
 
 /**
  * Adds a validation type.
- * @param {string} type question type
- * @param {addValidationTypeValidatorCallback} validator validate function
- * @param {function} entryMixin mixin to insert type into editor
- * @param {string|addValidationTypeTipCallback} tip invalid tip
+ * @function
+ * @param {object} options see below
+ * @param {string} options.type question type
+ * @param {addValidationTypeValidatorCallback} options.validator validate function
+ * @param {function} options.entryMixin mixin to insert type into editor
+ * @param {string|addValidationTypeTipCallback} options.tip invalid tip
  */
-export const addValidationType = (type, validator, entryMixin, tip) => {
+export const addValidationType = ({ type, validator, entryMixin, tip }) => {
   assertState('form', 'editor', 'server')
   if (state === 'server') serverMixinQueue.push(form => {
-    form.on('validateQuestionOverride', ([ question, form, ctx, data, cancel, finalize ]) => {
+    form.on('validateQuestionOverride', ({ question, form, ctx, data, invalidate, finalize }) => {
       if (question.options.type !== type) return
       const res = validator(question.options, data[question.id], { type: 'server', form, ctx, question, data })
-      if (!res && res !== null) cancel()
+      if (!res && res !== null) invalidate()
       finalize()
     })
   })
-  if (state === 'form') browserMixinQueue.push(hooks => hooks.on('question:validatorOverride', ([ q, set ]) => {
+  if (state === 'form') browserMixinQueue.push(hooks => hooks.on('question:validatorOverride', ({ question: q, set }) => {
     if (q.type !== type) return
     const res = validator(q.data, q.value, { type: 'form', question: q })
     if (res === null || typeof res === 'boolean' || typeof res === 'string') {
@@ -122,7 +135,7 @@ export const addValidationType = (type, validator, entryMixin, tip) => {
       }
     }
   }))
-  if (state === 'editor') browserMixinQueue.push(hooks => hooks.on('editor:questionMounted', ([ q ]) => {
+  if (state === 'editor') browserMixinQueue.push(hooks => hooks.on('editor:questionMounted', q => {
     const triggerMixin = type1 => {
       if (type1 === type) {
         entryMixin(q.validationEntries)
@@ -138,26 +151,27 @@ export { useValidation, showValidation, invalidTip } from '@vote/plugins/ess/com
 
 /**
  * Adds a question type.
+ * @function
  * @param {string} name question type name
  * @param {any} component question component
  */
 export const addQuestionType = (name, component) => {
   assertState('editor', 'form')
   browserMixinQueue.push(state === 'editor' ?
-    hooks => hooks.on('editor:appMounted', ([ app ]) => app.types[name] = component) :
-    hooks => hooks.on('form:mounted', ([ vm ]) => vm.$set(vm.types, name, component)))
+    hooks => hooks.on('editor:appMounted', app => app.types[name] = component) :
+    hooks => hooks.on('form:mounted', vm => vm.$set(vm.types, name, component)))
 }
 
 /**
  * Adds an entry into settings page.
+ * @function
  * @param {string} entry.name unique name of the entry
  * @param {any} entry.component Vue component
  * @param {string} entry.title entry title locale path
  */
-export const addSettingsEntry = decorateEditorApi(entry => hooks => {
-  hooks.on('editor:settingsMounted', ([ { entries } ]) => entries
-    .some(e => e.name === entry.name) ? null : entries.splice(entries.length - 1, 0, entry))
-})
+export const addSettingsEntry = decorateEditorApi(entry => hooks => hooks.on('editor:settingsMounted', vm => {
+  vm.entries.every(e => e.name !== entry.name) ? vm.entries.splice(vm.entries.length - 1, 0, entry) : null
+}))
 
 /**
  * @callback questionMenuEntryHandler
@@ -179,10 +193,11 @@ export const addSettingsEntry = decorateEditorApi(entry => hooks => {
 
 /**
  * Adds a question menu entry.
+ * @function
  * @param {addQuestionMenuEntryCallback|QuestionMenuEntry} makeEntry callback to make an entry from vm, or the menu entry itself
  */
 export const addQuestionMenuEntry = decorateEditorApi(makeEntry => hooks => {
-  hooks.on('editor:questionMounted', ([ vm ]) => vm.$on('update:menuItems', () => {
+  hooks.on('editor:questionMounted', vm => vm.$on('update:menuItems', () => {
     const entry = typeof makeEntry === 'function' ? makeEntry(vm) : makeEntry
     if (entry) vm.menuItems.push(entry)
   }))
@@ -194,6 +209,7 @@ export { default as SettingsEntry } from '../plugins/ess/editor/components/Setti
 
 /**
  * Reads a file from `dist`.
+ * @function
  * @param {string} name filename
  * @returns {string}
  */
@@ -211,10 +227,11 @@ export { query } from '../plugins/ess/common/graphql'
 
 /**
  * Adds a page entry to the form.
+ * @function
  * @param {string} path path to listen on
  * @param {string|Buffer|addPageCallback} callback the page itself or a callback to get the page
  */
-export const addPage = decorateServerApi((path, callback) => form => form.on('getPage', async ([ form, path1, ctx, set ]) => {
+export const addPage = decorateServerApi((path, callback) => form => form.on('getPage', async ({ form, path: path1, ctx, set }) => {
   if (path === path1) {
     const res = typeof callback === 'function' ? await callback(ctx, form, path1) : callback
     if (typeof res !== 'undefined') set(res)
@@ -224,3 +241,31 @@ export const addPage = decorateServerApi((path, callback) => form => form.on('ge
 // form apis
 
 export { questionMixin } from './question-mixin'
+
+/**
+ * Gets configuration from data with default values.
+ * @function
+ * @param {object} data question / form data
+ * @param {string} kind configuration type (e.g. 'theme', 'settings', etc.)
+ * @param {string} name config entry name
+ * @param {any} defaultValue default value for config
+ */
+export const getConfig = (data, kind, name, defaultValue) => {
+  // Badly wanted to use ?. but it is not supported by Vue right now :(
+  if (!data.config || !data.config[kind] || typeof data.config[kind][name] === 'undefined') return defaultValue
+  return data.config[kind][name]
+}
+
+/**
+ * Sets configuration to data object.
+ * @function
+ * @param {object} data question / form data
+ * @param {string} kind configuration type (e.g. 'theme', 'settings', etc.)
+ * @param {string} name config entry name
+ * @param {any} value value to set
+ */
+export const setConfig = (data, kind, name, value) => {
+  if (!data.config) return data.config = { [kind]: { [name]: value } }
+  else if (!data.config[kind]) return data.config[kind] = { [name]: value }
+  return data.config[kind][name] = value
+}

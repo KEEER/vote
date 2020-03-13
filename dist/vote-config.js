@@ -84,19 +84,7 @@ for (var i of Array(10).keys()) KVoteFormData.data[0].push({
 
 window.addEventListener('vote:ready', function () {
   var hooks = window.voteHooks
-  hooks.on('form:texts', function ([ , set ]) {
-    set({
-      prevPage: '上一页',
-      submit: '提交',
-    })
-  })
-  hooks.on('form:texts', function ([ form, set ]) {
-    set({
-      submit: '提交!',
-      pageno: '页码' + (form.currentPage + 1) + (form.current % 2 == 0 ? '，奇数页' : '，偶数页'),
-    })
-  })
-  hooks.on('form:pageno', function ([ form, set ]) {
+  hooks.on('form:pageNo', function ({ form, set }) {
     set(form.current + 0.1415926)
   })
   hooks.on('form:submitted', function () {
@@ -105,7 +93,7 @@ window.addEventListener('vote:ready', function () {
   hooks.on('form:submitting', function () {
     console.log('submitting')
   })
-  hooks.on('question:update', function ([ q, , o ]) {
+  hooks.on('question:update', function ({ question: q, oldValue }) {
     if (q.question.type === 'VCheckbox') {
       var count = 0
       for (var i in q.question.value) {
@@ -113,7 +101,7 @@ window.addEventListener('vote:ready', function () {
       }
       if (count > 2) {
         q.$nextTick(function () {
-          q.value_ = o
+          q.value_ = oldValue
           q.$nextTick(function () {
             q.question.data.title = '2. Do not select more than 2!'
           })
@@ -123,7 +111,7 @@ window.addEventListener('vote:ready', function () {
       }
     }
   })
-  hooks.on('form:beforesubmit', function ([ form, cancel ]) {
+  hooks.on('form:beforeSubmit', function ({ form, cancel }) {
     if (form.pages[1].questions[0].value === '2') {
       form.pages[1].questions[0].data.title = '3. Please type something other than 2.'
       cancel()

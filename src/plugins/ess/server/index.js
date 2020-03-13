@@ -7,7 +7,7 @@ import { themes } from '@vote/core/theme'
 export default function attachTo (form) {
   form.editorPaths = [ 'edit', 'settings', 'data', 'fn', ...(form.editorPaths || []) ]
   form.on('getPage', handleGetPage)
-  form.on('bundle', ([ form, data,,, key ]) => {
+  form.on('bundle', ({ form, data, key }) => {
     if (key === 'editor') {
       delete data.action
       delete data.method

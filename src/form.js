@@ -153,10 +153,12 @@ export class Form extends EventEmitter {
     ]
   }
 
+  /** @typedef {module:theme~Theme|module:plugin~Plugin} ThemeOrPlugin */
+
   /**
    * Gets all feature provided by this form.
    * @param {string} feature hooks|types|injections
-   * @param {(module:theme~Theme|module:plugin~Plugin)[]} [objects] objects to check
+   * @param {ThemeOrPlugin[]} [objects] objects to check
    * @returns {string[]}
    */
   provides (feature, objects = this._themeAndPlugins) {
@@ -165,7 +167,7 @@ export class Form extends EventEmitter {
 
   /**
    * Checks if a theme/plugin is applicable.
-   * @param {module:theme~Theme|module:plugin~Plugin} obj the theme or plugin object
+   * @param {ThemeOrPlugin} obj the theme or plugin object
    * @returns {boolean}
    */
   isApplicable (obj) {
@@ -363,6 +365,7 @@ export class Form extends EventEmitter {
    * @param {string} method Must be 'POST', reserved for future use
    * @param {string} [key] which injection
    * @returns {string} Bundled form
+   * @fires Form#bundle
    */
   async bundle (action, method, key = 'form') {
     const data = {
@@ -384,7 +387,17 @@ export class Form extends EventEmitter {
         if (plugin.config.inject[key].cssPath) data.pluginCss.push('/css/' + plugin.config.inject[key].cssPath)
       })
     }
-    await this.emit('bundle', [ this, data, action, method, key ])
+    /**
+     * Form bundle event.
+     * @event Form#bundle
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {object} data prepared data
+     * @property {string} action HTTP action (e.g. _submit)
+     * @property {string} method HTTP method (e.g. GET, POST, etc.)
+     * @property {string} key bundle key
+     */
+    await this.emit('bundle', { form: this, data, action, method, key })
     return '(function(){ window.KVoteFormData = ' +
       JSON.stringify(data) + ';' +
       loadPluginScript + '})()'
@@ -393,13 +406,28 @@ export class Form extends EventEmitter {
   /**
    * Get a page corresponding to the relative URL.
    * @param {string} path The requested path
-   * @param {Koa.context} ctx The Koa context
+   * @param {Koa.Context} ctx The Koa context
    * @returns {string|number} The response to be sent or the error to be thrown
    * @example await form.getPage('fill', ctx)
+   * @fires Form#getPage
    */
   async getPage (path, ctx) {
     let res = null
-    await this.emit('getPage', [ this, path, ctx, r => res = r ])
+    /**
+     * @callback getPageEventCallback
+     * @param {number|string|Buffer} result
+     */
+
+    /**
+     * Get page event.
+     * @event Form#getPage
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {string} path the path to get
+     * @property {Koa.Context} ctx Koa context
+     * @property {getPageEventCallback} set setter function
+     */
+    await this.emit('getPage', { form: this, path, ctx, set: r => res = r })
     if (res !== null) {
       if (res === 200) return ''
       if (typeof res === 'number') return ctx.throw(res)
@@ -427,10 +455,20 @@ export class Form extends EventEmitter {
   /**
    * Handles a submission entry.
    * @param {Koa.Context} ctx Koa context
+   * @fires Form#handleSubmission
+   * @fires Form#validateSubmission
    */
   async handleSubmission (ctx) {
     let res
-    await this.emit('handleSubmission', [ this, ctx, r => res = r ])
+    /**
+     * Handle submission event.
+     * @event Form#handleSubmission
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {Koa.Context} ctx Koa context
+     * @property {function} set setter function
+     */
+    await this.emit('handleSubmission', { form: this, ctx, set: r => res = r })
     if (res) return res
 
     if (ctx.method !== 'POST') return 405 // Method Not Allowed
@@ -443,28 +481,57 @@ export class Form extends EventEmitter {
     }
 
     let cancel = false
-    await this.emit('validateSubmission', [ this, ctx, data, () => cancel = true ])
+    /**
+     * Validate submission event.
+     * @event Form#validateSubmission
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {Koa.Context} ctx Koa context
+     * @property {any} data submission data
+     * @property {function} invalidate call to invalidate submission
+     */
+    await this.emit('validateSubmission', { form: this, ctx, data, invalidate: () => cancel = true })
     if (cancel) return 400
 
     await query('INSERT INTO PRE_submissions (form_id, data) VALUES ($1, $2);', [ this.id, data ])
     return 200
   }
 
-  /** Gets submissions of the form. */
+  /**
+   * Gets submissions of the form.
+   * @fires Form#getSubmissions
+   */
   async getSubmissions () {
     const res = (await query('SELECT * FROM PRE_submissions WHERE form_id = $1;', [ this.id ])).rows
     for (let submission of res) {
       submission.formId = submission.form_id
       delete submission.form_id
     }
-    await this.emit('getSubmissions', [ this, res ])
+    /**
+     * Get submissions event.
+     * @event Form#getSubmissions
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {object[]} result result set
+     */
+    await this.emit('getSubmissions', { form: this, result: res })
     return res
   }
 
-  /** Gets submission IDs of the form. */
+  /**
+   * Gets submission IDs of the form.
+   * @fires Form#getSubmissionIds
+   */
   async getSubmissionIds () {
     const res = (await query('SELECT id FROM PRE_submissions WHERE form_id = $1;', [ this.id ])).rows.map(r => r.id)
-    await this.emit('getSubmissionIds', [ this, res ])
+    /**
+     * Get submission IDs event.
+     * @event Form#getSubmissionIds
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {string[]} result form IDs
+     */
+    await this.emit('getSubmissionIds', { form: this, result: res })
     return res
   }
 

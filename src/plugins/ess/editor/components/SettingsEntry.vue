@@ -70,7 +70,14 @@ export default {
     },
     value_ (val, old) {
       let cancel = false
-      this.$emit('check', [ val, () => cancel = true ])
+      /**
+       * Check if the settings entry value is valid event.
+       * @event editor:SettingsEntry#check
+       * @type {object}
+       * @property {any} value the value of the entry
+       * @property {function} cancel call to invalidate
+       */
+      this.$emit('check', { value: val, cancel: () => cancel = true })
       if (cancel) {
         this.value_ = old
       }

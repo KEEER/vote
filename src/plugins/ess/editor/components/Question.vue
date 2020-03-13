@@ -175,6 +175,11 @@ export default {
       if (vm.readonly) return
       const desc = await vm.$refs.description.save()
       if (desc && desc.html === '<br>') desc.html = ''
+      /**
+       * Question data update event.
+       * @event editor:Question#update:data
+       * @type {object}
+       */
       vm.$emit('update:data', {
         ...vm.data,
         required: vm.required_,
@@ -199,7 +204,14 @@ export default {
       if (change.description) {
         change.description = JSON.stringify(desc)
       }
-      vm.$emit('beforeUpdate', [ vm, change ])
+      /**
+       * Before update (sync) event.
+       * @event editor:Question#beforeUpdate
+       * @type {object}
+       * @property {editor:Question} question the question itself
+       * @property {object} changes made and prepared
+       */
+      vm.$emit('beforeUpdate', { question: vm, change })
       const res = await query(`
         mutation UpdateQuestion($options: QuestionUpdateInput!) {
           updateQuestion(options: $options)
@@ -250,7 +262,14 @@ export default {
       if (!this.hasThemeConfigEntries) return []
       const cfg = window.KVoteFormData.themeConfig
       const entries = cfg.provides.questionConfig[this.type_]
-      this.$emit('preprocessThemeConfigEntries', [ this, entries ])
+      /**
+       * Preprocess theme config entries event.
+       * @event editor:Question#preprocessThemeConfigEntries
+       * @type {object}
+       * @property {editor:Question} question Vue instance of the question itself
+       * @property {object[]} entries question config entries.
+       */
+      this.$emit('preprocessThemeConfigEntries', { question: this, entries })
       return entries
     },
     hasThemeConfigEntries () {
@@ -270,38 +289,6 @@ export default {
       this.type_ = this.data.type
       this.themeConfig_ = (this.data.config || {}).theme || {}
       this.validationConfig_ = (this.data.config || {}).validation || {}
-    },
-    title_ (val) {
-      if (val) {
-        this.change.title = val
-        this.logChange()
-      }
-      this.$emit('update:title', val)
-    },
-    value_ (val) {
-      this.change.value = val
-      this.logChange()
-      this.$emit('update:value', val)
-    },
-    options_ (val) {
-      this.change.options = val
-      this.logChange()
-      this.$emit('update:options', val)
-    },
-    themeConfig_ (val) {
-      this.change.themeConfig = val
-      this.logChange()
-      this.$emit('update:themeConfig', val)
-    },
-    validationConfig_ (val) {
-      this.change.validationConfig = val
-      this.logChange()
-      this.$emit('update:validationConfig', val)
-    },
-    required_ (val) {
-      this.change.required = val
-      this.logChange()
-      this.$emit('update:required', val)
     },
     type_ (val) {
       this.data.type = val
@@ -332,6 +319,10 @@ export default {
         console.log('remove error', e.stack)
         return
       }
+      /**
+       * Question removal event.
+       * @event editor:Question#remove
+       */
       this.$emit('remove')
       this.removed = true
     },
@@ -375,12 +366,29 @@ export default {
           handler: () => this.removeDialogOpen = true,
         },
       ]
+      /**
+       * Menu items update event.
+       * @event editor:Question#update:menuItems
+       */
       this.$emit('update:menuItems')
     },
   },
   mounted () {
     this.updateMenuItems()
-    hooks.emit('editor:questionMounted', [ this ])
+    const thingsToWatch = [ 'title', 'value', 'options', 'themeConfig', 'validationConfig', 'required' ]
+    for (const i of thingsToWatch) {
+      this.$watch(`${i}_`, val => {
+        this.change[i] = val
+        this.logChange()
+        this.$emit(`update:${i}`, val)
+      })
+    }
+    /**
+     * Editor Question component mounted event
+     * @event editor.editor:questionMounted
+     * @type {editor:Question}
+     */
+    hooks.emit('editor:questionMounted', this)
     this.$on('reorder', reorder => this.reorder(reorder))
   },
   beforeDestroy () {

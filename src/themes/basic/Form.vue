@@ -54,20 +54,20 @@ export default Vue.extend({
     },
     update () {
       this.updateVisibility()
-      hooks.emit('form:update', [ this ])
+      hooks.emit('form:update', this)
     },
     updateVisibility () {
       if (this.current === 0) this.prevVisible = false
       else this.prevVisible = true
       if (this.current === this.pages.length - 1) this.nextVisible = false
       else this.nextVisible = true
-      hooks.emit('form:updatevisibility', [ this ])
+      hooks.emit('form:updateVisibility', this)
     },
     submit () {
       let cancel = false
-      hooks.emit('form:beforesubmit', [ this, () => cancel = true ])
+      hooks.emit('form:beforeSubmit', { form: this, cancel: () => cancel = true })
       if (!cancel) {
-        hooks.emit('form:submit', [ this ])
+        hooks.emit('form:submit', this)
       }
     },
   },
@@ -76,8 +76,8 @@ export default Vue.extend({
     document.title = this.title
     this.$children[this.current].current = true
     this.updateVisibility()
-    hooks.emit('form:mounted', [ this ])
-    hooks.emit('form:updatevisibility', [ this ])
+    hooks.emit('form:mounted', this)
+    hooks.emit('form:updateVisibility', this)
     if (window.KVoteFormData.config && window.KVoteFormData.config.settings && window.KVoteFormData.config.settings['theme-basic.color']) {
       this.color = window.KVoteFormData.config.settings['theme-basic.color'].replace(/;/g, '').replace(/ /g, '')
     }
@@ -88,7 +88,7 @@ export default Vue.extend({
     },
     currentPage () {
       let page = this.current + 1
-      hooks.emit('form:pageno', [ this, p => page = p ])
+      hooks.emit('form:pageNo', { form: this, set: p => page = p })
       return page
     },
     submitted () {
@@ -109,7 +109,7 @@ export default Vue.extend({
     },
     valid () {
       let validity = this.pages.every(p => p.valid)
-      hooks.emit('form:validate', [ this, () => validity = false ])
+      hooks.emit('form:validate', { form: this, invalidate: () => validity = false })
       return validity
     },
   },

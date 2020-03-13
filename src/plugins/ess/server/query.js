@@ -26,7 +26,15 @@ export default {
     form.pageCount = form.pages.length
     form.themeConfig = JSON.stringify(themes.find(t => t.config.code === form.theme))
     let formData = form.data || {}
-    await ctx.state.form.emit('preprocessData', [ ctx.state.form, formData, d => formData = d ])
+    /**
+     * Preprocess GraphQL form query event.
+     * @event Form#preprocessData
+     * @type {object}
+     * @property {module:form~Form} form the form itself
+     * @property {object} data form data to send
+     * @property {function} set setter function
+     */
+    await ctx.state.form.emit('preprocessData', { form: ctx.state.form, data: formData, set: d => formData = d })
     form.data = JSON.stringify(formData)
     return form
   },
@@ -109,7 +117,15 @@ export default {
       const form = ctx.state.form
       let retval
       value = JSON.parse(value)
-      await form.emit('updateSettings', [ form, name, value, ret => retval = ret ])
+      /**
+       * Update settings event.
+       * @event Form#updateSettings
+       * @property {module:form~Form} form the form itself
+       * @property {string} name settings entry name
+       * @property {any} value settings value
+       * @property {function} set setter function, call with boolean to directly return true of false, else to override value
+       */
+      await form.emit('updateSettings', { form, name, value, set: ret => retval = ret })
       if (typeof retval === 'boolean') return retval
       if (retval !== undefined) value = retval
       const data = form.options.data || {}

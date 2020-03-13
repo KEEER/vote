@@ -41,7 +41,15 @@ export default {
   computed: {
     nodataTip () {
       let tip = 'No form data supplied. This is usually an error in the URL.'
-      hooks.emit('app:nodata', [ this, t => tip = t ])
+      /**
+       * Data (window.KVoteFormData) not found event. Note that this event is `theme-basic`-only.
+       * @deprecated
+       * @event form.app:nodata
+       * @type {object}
+       * @property {form:App} vm the Vue instance
+       * @property {function} set setter for tip to show
+       */
+      hooks.emit('app:nodata', { vm: this, set: t => tip = t })
       return tip
     },
   },

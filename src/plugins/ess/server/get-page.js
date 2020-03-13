@@ -8,7 +8,7 @@ const log = logger.child({ part: 'plugin-ess.get-page' })
 
 const editorHtml = readDistFile('plugin-ess-editor.html')
 
-export const handleGetPage = async ([ form, path, ctx, set ]) => {
+export const handleGetPage = async ({ form, path, ctx, set }) => {
   if ((
     !form.options.data
     || !form.options.data.settings
@@ -19,13 +19,31 @@ export const handleGetPage = async ([ form, path, ctx, set ]) => {
   const unauthorized = () => ctx.state.userNoId ? ctx.requireLogin() : set(404)
   let authorized = user && String(user.id) === String(form.options.userId) || process.env.NODE_ENV === 'development'
   if (form.editorPaths.indexOf(path) > -1) {
-    await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
+    /**
+     * @typedef {object} AuthorizeEventParam
+     * @property {module:form~Form} form the form itself
+     * @property {string} path editor path
+     * @property {Koa.Context} ctx Koa context
+     * @property {function} set setter function
+     */
+
+    /**
+     * Authorize editor event.
+     * @event Form#authorizeEditor
+     * @type {AuthorizeEventParam}
+     */
+    await form.emit('authorizeEditor', { form, path, ctx, set: a => authorized = a })
     // why not 403: return a 403 will indicate that the form exists.
     if (!authorized) return unauthorized()
     return set(editorHtml.replace(/\/vote-config.js/g, `/${form.path}/_bundle-editor`))
   }
   if (path === '_query' && ctx.method === 'POST') {
-    await form.emit('authorizeQuery', [ form, path, ctx, a => authorized = a ])
+    /**
+     * Authorize editor query event.
+     * @event Form#authorizeQuery
+     * @type {AuthorizeEventParam}
+     */
+    await form.emit('authorizeQuery', { form, path, ctx, set: a => authorized = a })
     if (!authorized) return unauthorized()
     let data
     try {
@@ -42,7 +60,12 @@ export const handleGetPage = async ([ form, path, ctx, set ]) => {
     return set(JSON.stringify(data))
   }
   if (path === '_rename' || path === '_delete') {
-    await form.emit('authorizeRenameOrRemoval', [ form, path, ctx, a => authorized = a ])
+    /**
+     * Authorize editor rename / delete event.
+     * @event Form#authorizeRenameOrRemoval
+     * @type {AuthorizeEventParam}
+     */
+    await form.emit('authorizeRenameOrRemoval', { form, path, ctx, set: a => authorized = a })
     if (!authorized) return unauthorized()
     if (path === '_rename') {
       if (!ctx.query.name || !/^([a-zA-Z0-9]|-|_)*$/i.test(ctx.query.name)) return set(400)
@@ -61,7 +84,7 @@ export const handleGetPage = async ([ form, path, ctx, set ]) => {
     }
   }
   if (path === '_bundle-editor') {
-    await form.emit('authorizeEditor', [ form, path, ctx, a => authorized = a ])
+    await form.emit('authorizeEditor', { form, path, ctx, set: a => authorized = a })
     if (!authorized) return unauthorized()
     return set(await form.bundle(null, null, 'editor'))
   }

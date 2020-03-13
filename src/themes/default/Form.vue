@@ -147,7 +147,7 @@ import Page from './Page'
 import hooks from './hooks'
 import 'array-flat-polyfill'
 import { types } from './types'
-import { getQuestionConfig } from './util'
+import { getConfig } from '@vote/api'
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -225,6 +225,10 @@ export default {
     },
     async next () {
       if (this.current === this.pages.length - 1) return
+      /**
+       * Validation event when current page is invalid and user requests to flip to the next page.
+       * @event form:Page#validateNext
+       */
       if (!this.pages[this.current].valid) return this.pages[this.current].$emit('validateNext')
       await this.flipPage('up', () => {
         this.current++
@@ -233,18 +237,37 @@ export default {
     },
     update () {
       this.updateVisibility()
-      hooks.emit('form:update', [ this ])
+      /**
+       * Event when the form updates.
+       * @event form.form:update
+       * @type {form:Form}
+       */
+      hooks.emit('form:update', this)
     },
     updateVisibility () {
       this.$nextTick(() => this.updateLayout())
-      hooks.emit('form:updatevisibility', [ this ])
+      /**
+       * Event when the form updates its layout.
+       * @event form.form:updateVisibility
+       * @type {form:Form}
+       */
+      hooks.emit('form:updateVisibility', this)
     },
     async submit () {
       if (!this.pages[this.current].valid) return this.pages[this.current].$emit('validateNext')
       let cancel = false
-      hooks.emit('form:beforesubmit', [ this, () => cancel = true ])
+      /**
+       * Event when we checks before submit.
+       * @event form.form:beforeSubmit
+       */
+      hooks.emit('form:beforeSubmit', { form: this, cancel: () => cancel = true })
       if (!cancel) {
-        await this.flipPage('up', () => hooks.emit('form:submit', [ this ]))
+        /**
+         * Form submit event.
+         * @event form.form:submit
+         * @type {form:Form}
+         */
+        await this.flipPage('up', () => hooks.emit('form:submit', this))
       }
     },
     setInterval () {
@@ -265,14 +288,25 @@ export default {
     document.title = this.title
     this.pages = this.$refs.pages
     this.updateVisibility()
-    hooks.emit('form:mounted', [ this ])
-    hooks.emit('form:updatevisibility', [ this ])
+    /**
+     * Form Vue instance mounted event.
+     * @event form.form:mounted
+     * @type {form:Form}
+     */
+    hooks.emit('form:mounted', this)
     this.setInterval()
   },
   computed: {
     currentPage () {
       let page = this.current + 1
-      hooks.emit('form:pageno', [ this, p => page = p ])
+      /**
+       * Page number calculation event.
+       * @event form.form:pageNo
+       * @type {object}
+       * @property {form:Form} form the form Vue instance
+       * @property {function} set setter for page number
+       */
+      hooks.emit('form:pageNo', { form: this, set: p => page = p })
       return page
     },
     submitted () { return this.status === 'submitted' },
@@ -287,12 +321,18 @@ export default {
     },
     valid () {
       let validity = this.pages.every(p => p.valid)
-      hooks.emit('form:validate', [ this, () => validity = false ])
+      /**
+       * Form validation override event.
+       * @event form.form:validate
+       * @property {form:Form} the form Vue instance
+       * @property {function} invalidate call to invalidate form
+       */
+      hooks.emit('form:validate', { form: this, invalidate: () => validity = false })
       return validity
     },
-    showPageNumber () { return getQuestionConfig(this.data, 'settings', 'showPageNumber', true) },
+    showPageNumber () { return getConfig(this.data, 'settings', 'showPageNumber', true) },
     prevVisible () {
-      return this.current !== 0 && getQuestionConfig(this.data, 'settings', 'allowBack', true)
+      return this.current !== 0 && getConfig(this.data, 'settings', 'allowBack', true)
     },
     nextVisible () {
       return this.pages && (this.current !== this.pages.length - 1)

@@ -1,5 +1,5 @@
 export default hooks => {
-  hooks.on('form:submit', ([ form ]) => {
+  hooks.on('form:submit', form => {
     if (form.method !== 'POST') throw new Error('Only POST is supported by now')
     const payload = JSON.stringify(form.formdata)
     const xhr = new XMLHttpRequest()
@@ -9,10 +9,20 @@ export default hooks => {
       if (xhr.readyState !== 4) return
       if (xhr.status !== 200) {
         form.status = 'submiterror'
-        hooks.emit('form:submiterror', [ form, xhr ])
+        /**
+         * Form submit error event.
+         * @type {object}
+         * @property {form:Form} form Vue instance of the form
+         * @property {XMLHttpRequest} xhr the XMLHttpRequest
+         */
+        hooks.emit('form:submiterror', { form, xhr })
       } else {
         form.status = 'submitted'
-        hooks.emit('form:submitted', [ form ])
+        /**
+         * Form submitted event.
+         * @type {form:Form}
+         */
+        hooks.emit('form:submitted', form)
       }
     }
     try {
@@ -20,13 +30,8 @@ export default hooks => {
       form.status = 'submitting'
     } catch (e) {
       console.error(e)
-      hooks.emit('form:error', [ e ])
+      hooks.emit('form:error', e)
     }
   })
-  hooks.on('form:beforesubmit', ([ form, cancel ]) => {
-    if (!form.valid) {
-      // TODO: Jump to the first invalid question
-      cancel()
-    }
-  })
+  hooks.on('form:beforeSubmit', ({ form, cancel }) => form.valid ? null : cancel())
 }

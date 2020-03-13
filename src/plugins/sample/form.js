@@ -6,11 +6,11 @@ import { addValidationMixin } from './common'
 createFormInjection(hooks => {
   addQuestionType('VSample', SampleEntry)
   addValidationMixin()
-  hooks.on('question:update', ([ q, n ]) => {
-    if (q.Question.type === 'VText') {
-      if (/hello(,)? ?world/i.test(n)) {
-        q.$nextTick(function () {
-          q.value_ = n.replace(/hello(,)? ?world/gi, 'Hello, World')
+  hooks.on('question:update', ({ question, value }) => {
+    if (question.Question.type === 'VText') {
+      if (/hello(,)? ?world/i.test(value)) {
+        question.$nextTick(function () {
+          question.value_ = value.replace(/hello(,)? ?world/gi, 'Hello, World')
         })
       }
     }

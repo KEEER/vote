@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ hidden }">
     <QTitle :title="data.title" :required="data.required" />
     <div v-html="(data.description || {}).html || ''"></div>
     <component
@@ -14,15 +14,15 @@
 </template>
 
 <style scoped>
-.invalid-tip {
-  color: #d93025;
-}
+.hidden { display: none; }
+.invalid-tip { color: #d93025; }
 </style>
 
 <script>
 import { types } from './types'
 import hooks from './hooks'
 import QTitle from './Title.vue'
+import { getConfig } from '@vote/api'
 
 export default {
   name: 'Question',
@@ -44,11 +44,12 @@ export default {
   computed: {
     validity () {
       let res
-      hooks.emit('question:validate', [ this, r => res = { valid: false, reason: r } ])
+      hooks.emit('question:validate', { question: this, invalidate: r => res = { valid: false, reason: r } })
       if (typeof res === 'undefined') return { valid: true }
       return res
     },
     valid () { return this.validity.valid },
+    hidden () { return getConfig(this.data, 'display', 'hidden', false) },
   },
   provide () {
     return { Question: this }

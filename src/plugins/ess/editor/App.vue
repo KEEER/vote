@@ -169,6 +169,15 @@ import types from './components/types'
   window.idFrame = { mdc: { style: true } }
 }
 
+/**
+ * @typedef {object} Route
+ * @property {string} path Vue path
+ * @property {string} name path name
+ * @property {Component} component Vue component
+ * @property {string} icon MD icon
+ * @property {string} title title locale path
+ */
+
 const routes = [
   {
     path: '/:uname/:name/fill',
@@ -208,7 +217,12 @@ const routes = [
 ]
 
 export function getRouter () {
-  hooks.emit('editor:beforeRouterLoad', [ routes ])
+  /**
+   * Before router load event, inject routes here.
+   * @event editor.editor:beforeRouterLoad
+   * @type {Route[]}
+   */
+  hooks.emit('editor:beforeRouterLoad', routes)
   return new VueRouter({
     mode: 'history',
     routes,
@@ -236,6 +250,11 @@ export default Vue.extend({
     updateTitle () {
       this.appBarTitle = `${this.title} - Vote Editor`
       document.title = `${this.title} - ${this.documentTitle}`
+      /**
+       * Update title event.
+       * @event editor:App#update:title
+       * @type {string}
+       */
       this.$emit('update:title', this.title)
     },
   },
@@ -258,7 +277,12 @@ export default Vue.extend({
     toggleMobile()
 
     this.updateTitle()
-    hooks.emit('editor:appMounted', [ this ])
+    /**
+     * Editor app mounted event.
+     * @event editor.editor:appMounted
+     * @type {editor:App}
+     */
+    hooks.emit('editor:appMounted', this)
 
     const iid = setInterval(() => {
       if ('AppBarFrame' in window.idFrame) {

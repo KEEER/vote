@@ -27,16 +27,16 @@
 </style>
 
 <script>
-import { questionMixin as mixin } from '@vote/api'
-import { getQuestionConfig, shuffle } from '../util'
+  import { getConfig, questionMixin as mixin } from '@vote/api'
+import { shuffle } from '../util'
 
 export default {
   name: 'VRadio',
   mixins: [ mixin ],
   data () {
     return {
-      options: getQuestionConfig(this.data, 'theme', 'randomOrder', false) ? shuffle(this.data.options) : this.data.options,
-      getQuestionConfig,
+      options: getConfig(this.data, 'theme', 'randomOrder', false) ? shuffle(this.data.options) : this.data.options,
+      getQuestionConfig: getConfig,
     }
   },
   props: {

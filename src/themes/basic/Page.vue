@@ -28,7 +28,7 @@ export default {
     },
     valid () {
       let validity = this.questions.every(q => q.valid)
-      hooks.emit('page:validate', [ this, () => validity = false ])
+      hooks.emit('page:validate', { page: this, invalidate: () => validity = false })
       return validity
     },
   },

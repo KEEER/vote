@@ -45,6 +45,10 @@ export default {
         },
       })
       this.editor.setContent((this.data || {}).html || '')
+      /**
+       * HTML editor content update event.
+       * @event editor:HTMLEditor#change
+       */
       this.editor.subscribe('editableInput', () => this.$emit('change'))
     },
     destroy () {

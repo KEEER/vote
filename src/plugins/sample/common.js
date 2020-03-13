@@ -1,6 +1,5 @@
-import { addEditorRoute, invalidTip, showValidation, useValidation } from '@vote/api'
+import { addEditorRoute, getConfig, invalidTip, showValidation, useValidation, addValidationType } from '@vote/api'
 import SampleEntry from './SampleEntry.vue'
-import { addValidationType } from '../../api'
 
 export const editorRouteMixin = () => addEditorRoute({
   name: 'sample',
@@ -9,14 +8,14 @@ export const editorRouteMixin = () => addEditorRoute({
   title: 'plugin.sample.route.sample',
 })
 
-export const addValidationMixin = () => addValidationType(
-  'VSample',
-  q => q.config && q.config.validation && q.config.validation.useValidation ? 'always-invalid' : null,
-  e => e.push(useValidation, {
+export const addValidationMixin = () => addValidationType({
+  type: 'VSample',
+  validator: q => getConfig(q, 'validation', 'useValidation', false) ? 'always-invalid' : null,
+  entryMixin: e => e.push(useValidation, {
     type: 'text-field',
-    if: value => value.useValidation,
+    if: cfg => cfg.useValidation,
     label: 'core.question.types.VSample',
     name: 'sample',
   }, showValidation, invalidTip),
-  (reason, q) => reason + q.data.config.validation.sample
-)
+  tip: (reason, q) => reason + q.data.config.validation.sample,
+})

@@ -2,7 +2,7 @@
   <div>
     <VCheckboxInput
       v-for="option in options"
-      :multiline="getQuestionConfig(data, 'theme', 'multiline', true)"
+      :multiline="multiline"
       :key="option.value"
       :option="option"
       :value.sync="value_[option.value]"
@@ -13,7 +13,8 @@
 
 <script>
 import VCheckboxInput from './VCheckboxInput.vue'
-import { getQuestionConfig, shuffle } from '../util'
+import { shuffle } from '../util'
+import { getConfig } from '@vote/api'
 
 export default {
   name: 'VCheckbox',
@@ -21,8 +22,7 @@ export default {
   data () {
     return {
       value_: this.value || {},
-      getQuestionConfig,
-      options: getQuestionConfig(this.data, 'theme', 'randomOrder', false) ? shuffle(this.data.options) : this.data.options,
+      getQuestionConfig: getConfig,
     }
   },
   components: { VCheckboxInput },
@@ -39,6 +39,14 @@ export default {
   methods: {
     syncValue () {
       this.$emit('update:value', { ...this.value_ })
+    },
+  },
+  computed: {
+    options () {
+      return getConfig(this.data, 'theme', 'randomOrder', false) ? shuffle(this.data.options) : this.data.options
+    },
+    multiline () {
+      return getConfig(this.data, 'theme', 'multiline', true)
     },
   },
 }

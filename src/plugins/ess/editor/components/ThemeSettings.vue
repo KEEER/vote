@@ -35,7 +35,14 @@ export default {
     entries () {
       const cfg = window.KVoteFormData.themeConfig
       const entries = cfg.provides.formConfig
-      hooks.emit('editor:preprocessThemeFormConfigEntries', [ this, entries ])
+      /**
+       * Preprocess theme form config entries event, inject theme form config here.
+       * @event editor:ThemeSettings#editor:preprocessThemeFormConfigEntries
+       * @type {object}
+       * @property {editor:ThemeConfigEntries} vm the Vue instance
+       * @property {object[]} form config entries
+       */
+      hooks.emit('editor:preprocessThemeFormConfigEntries', { vm: this, entries })
       return entries
     },
   },

@@ -43,7 +43,12 @@ export default {
     },
   },
   mounted () {
-    hooks.emit('editor:typeSelectorMounted', [ this ])
+    /**
+     * TypeSelector mounted event.
+     * @event editor.editor:typeSelectorMounted
+     * @type {editor:TypeSelector}
+     */
+    hooks.emit('editor:typeSelectorMounted', this)
   },
 }
 </script>

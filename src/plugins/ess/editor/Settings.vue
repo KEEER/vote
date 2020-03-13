@@ -85,7 +85,12 @@ export default {
     },
   },
   mounted () {
-    hooks.emit('editor:settingsMounted', [ this ])
+    /**
+     * Settings component mounted event.
+     * @event editor.editor:editorMounted
+     * @type {editor:Settings}
+     */
+    hooks.emit('editor:settingsMounted', this)
     this.loadSettings()
   },
 }

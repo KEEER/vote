@@ -134,6 +134,11 @@ export default {
     move (item) {
       this.dragging = false
       const q = this.$refs[`question-${item.newIndex}`][0]
+      /**
+       * Question reorder event, payload is reorder count.
+       * @event editor:Question#reorder
+       * @type {number}
+       */
       q.$emit('reorder', item.newIndex - item.oldIndex)
     },
     updateData (val) {
@@ -166,7 +171,12 @@ export default {
     },
   },
   mounted () {
-    hooks.emit('editor:editorMounted', [ this ])
+    /**
+     * Editor component mounted event.
+     * @event editor.editor:editorMounted
+     * @type {editor:Editor}
+     */
+    hooks.emit('editor:editorMounted', this)
     this.loadQuestions()
   },
 }

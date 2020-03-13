@@ -87,7 +87,12 @@ export default {
     data: Object,
   },
   mounted () {
-    hooks.emit('editor:fnMounted', [ this ])
+    /**
+     * Fn component mounted event.
+     * @event editor.editor:editorMounted
+     * @type {editor:Fn}
+     */
+    hooks.emit('editor:fnMounted', this)
   },
 }
 </script>
