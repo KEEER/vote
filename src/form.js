@@ -637,4 +637,61 @@ export class Form extends EventEmitter {
       HAVING COUNT ( submission.id ) = ${tags.length}`
     return (await query(sql, [ this.id, ...tags ])).rows.map(r => r.id)
   }
+
+  /**
+   * Decides whether the form has statistics data.
+   * @returns {boolean}
+   * @fires Form#hasStats
+   */
+  async hasStats () {
+    const submissionCount = (await this.getSubmissionIds()).length
+    let hasStats = submissionCount <= parseInt(process.env.MAX_ALLOWED_SUBMISSIONS_FOR_STATS)
+    /**
+     * Form has statistics hook.
+     * @event Form#hasStats
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {number} submissionCount submission count of the form
+     * @property {function} set setter function, call with {boolean}
+     */
+    await this.emit('hasStats', { form: this, submissionCount, set: s => hasStats = s })
+    return hasStats
+  }
+
+  /**
+   * Gets statistics data.
+   * @return {null|Object[]} stats data
+   * @fires Form#getStat
+   * @fires Form#preprocessStats
+   */
+  async getStats () {
+    if (!await this.hasStats()) return null
+    const submissions = await this.getSubmissions()
+    const statsArray = await Promise.all(this.questions.map(async question => {
+      let data = null
+      /**
+       * Get statistics hook for a single question.
+       * @event Form#getStat
+       * @type {object}
+       * @property {Form} form the form itself
+       * @property {module:question~Question} question the question to get stats
+       * @property {object[]} submissions submission objects
+       * @property {function} set setter for stats data
+       */
+      await this.emit('getStat', { form: this, question, submissions, set: d => data = d })
+      return { id: question.options.id, data }
+    }))
+    const stats = {}
+    for (const { id, data } of statsArray) stats[id] = data
+    /**
+     * Preprocess statistics event for all questions.
+     * @event Form#preprocessStats
+     * @type {object}
+     * @property {Form} form the form itself
+     * @property {object[]} submissions submission objects
+     * @property {object[]} stats statistics data
+     */
+    await this.emit('preprocessStats', { form: this, submissions, stats })
+    return stats
+  }
 }

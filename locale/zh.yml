@@ -79,6 +79,9 @@ core:
         url: 必须是一个 URL
         minSelection: 至少选择 {rule} 项
         maxSelection: 至多选择 {rule} 项
+    stats:
+      unavailableForType: 这个问题类型的统计暂不可用。
+      unavailableForQuestion: 这个问题的统计暂不可用。
 
 static:
   index:
@@ -124,6 +127,7 @@ plugin:
         fill: 填写
         edit: 编辑器
         data: 数据
+        stats: 统计
         fn: 附加功能
         settings: 设置
 
@@ -182,6 +186,11 @@ plugin:
       editTagPlaceholder: 点击回车以插入
       finishTags: 完成
       updateTagsError: 更新标签失败，数据可能尚未保存。
+
+    stats:
+      loading: 正在加载统计数据……
+      loadError: 加载统计数据的过程中发生错误。
+      noStats: 这个表单没有统计数据。
 
     settings:
       titlePlaceholder: 表单标题

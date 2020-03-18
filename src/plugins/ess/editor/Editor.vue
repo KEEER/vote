@@ -35,6 +35,7 @@
         <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
           <Question v-for="(question, i) in questions"
             :key="question.id"
+            route="editor"
             :data="question"
             @update:data="updateData"
             @remove="remove(i)"

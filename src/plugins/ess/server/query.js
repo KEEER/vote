@@ -164,4 +164,5 @@ export default {
       return false
     }
   },
+  async stats (_args, ctx) { return JSON.stringify(await ctx.state.form.getStats()) },
 }

@@ -9,21 +9,11 @@
 </style>
 
 <script>
-; {
-  const el = document.createElement('script')
-  el.src = 'https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/js/medium-editor.min.js'
-  document.head.appendChild(el)
-}
-for (let css of [
-  'https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/css/themes/flat.min.css',
-  'https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/css/medium-editor.min.css',
-]) {
-  const el = document.createElement('link')
-  el.href = css
-  el.rel = 'stylesheet'
-  el.type = 'text/css'
-  document.head.appendChild(el)
-}
+import { injectScript, injectStyle } from '@vote/api'
+
+injectScript('https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/js/medium-editor.min.js')
+injectStyle('https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/css/themes/flat.min.css')
+injectStyle('https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/css/medium-editor.min.css')
 
 export default {
   name: 'HTMLEditor',
@@ -38,7 +28,7 @@ export default {
     init () {
       if (this.editor) return
       this.editor = new MediumEditor(this.$el, {
-        targerBlank: true,
+        targetBlank: true,
         placeholder: this.readonly ? false : {
           text: this.$t('plugin.ess.question.description'),
           hideOnClick: true,
@@ -57,9 +47,7 @@ export default {
       this.editor = null
     },
     save () { return { html: this.editor.getContent() } },
-    freeze () {
-      this.destroy()
-    },
+    freeze () { this.destroy() },
   },
   mounted () {
     this.init()

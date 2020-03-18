@@ -12,8 +12,8 @@
       :entries="validationEntries"
       :open.sync="validationOpen"
     />
-    <div class="question" :class="{ readonly }" v-if="!folded">
-      <div class="title-type" v-if="!readonly">
+    <div class="question" :class="{ 'is-data': isData, 'is-stats': isStats }" v-if="!folded">
+      <div class="title-type" v-if="isEditor">
         <m-text-field
           outlined
           required
@@ -25,7 +25,7 @@
         </m-text-field>
         <TypeSelector v-model="type_" />
       </div>
-      <div v-else class="question-title--display question-title--readonly">
+      <div v-else class="question-title--display question-title--data">
         {{title_}}
         <sup v-if="required_" class="title-required"></sup>
       </div>
@@ -34,43 +34,46 @@
         ref="description"
         :data="description_"
         @change="logDescriptionChange"
-        v-if="!readonly"
+        v-if="isEditor"
       />
       <div v-else-if="description_" v-html="description_.html || ''"></div>
       <component
         :is="questionTypes[data.type || 'VNull']"
-        :readonly="readonly"
+        :route="route"
         v-model="value_"
         :options.sync="options_"
+        :stats="stats"
       />
     </div>
-    <span slot="actionButtons" v-if="!folded && !readonly">
-      <m-icon class="handle" icon="drag_handle" />
-    </span>
-    <span slot="actionIcons" v-if="!folded && !readonly">
-      {{$t('plugin.ess.question.required')}}
-      <m-switch v-model="required_" class="required-switch" />
-      <span class="divider" />
-      <m-menu-anchor>
-        <m-icon-button @click="menuOpen = true" icon="more_vert" />
-        <m-menu v-model="menuOpen">
-          <m-list>
-            <m-list-item v-for="(item, i) in menuItems" :key="i" @click="menuClick(i)">
-              <m-icon :icon="item.icon" class="question-menu__icon" slot="graphic" />
-              <template slot="text">{{$t(item.label)}}</template>
-            </m-list-item>
-          </m-list>
-        </m-menu>
-      </m-menu-anchor>
-      <m-dialog v-model="removeDialogOpen">
-        <m-typo-headline :level="5" slot="header">{{$t('plugin.ess.editor.removeQuestionTitle')}}</m-typo-headline>
-        <m-typo-body :level="1" slot="body">{{$t('plugin.ess.editor.removeQuestionDescription')}}</m-typo-body>
-        <m-button class="mdc-dialog__button" data-mdc-dialog-action="Cancel" slot="cancelButton">{{$t('plugin.ess.editor.cancel')}}</m-button>
-        <m-button @click="remove" class="mdc-dialog__button" data-mdc-dialog-action="OK" slot="acceptButton">{{$t('plugin.ess.editor.ok')}}</m-button>
-      </m-dialog>
-      <m-icon-button @click="folded = true" icon="keyboard_arrow_up" />
-    </span>
-    <div class="folded" v-if="folded && !readonly">
+    <template v-if="!folded && isEditor">
+      <span slot="actionButtons">
+        <m-icon class="handle" icon="drag_handle" />
+      </span>
+        <span slot="actionIcons" v-if="!folded && isEditor">
+        {{$t('plugin.ess.question.required')}}
+        <m-switch v-model="required_" class="required-switch" />
+        <span class="divider" />
+        <m-menu-anchor>
+          <m-icon-button @click="menuOpen = true" icon="more_vert" />
+          <m-menu v-model="menuOpen">
+            <m-list>
+              <m-list-item v-for="(item, i) in menuItems" :key="i" @click="menuClick(i)">
+                <m-icon :icon="item.icon" class="question-menu__icon" slot="graphic" />
+                <template slot="text">{{$t(item.label)}}</template>
+              </m-list-item>
+            </m-list>
+          </m-menu>
+        </m-menu-anchor>
+        <m-dialog v-model="removeDialogOpen">
+          <m-typo-headline :level="5" slot="header">{{$t('plugin.ess.editor.removeQuestionTitle')}}</m-typo-headline>
+          <m-typo-body :level="1" slot="body">{{$t('plugin.ess.editor.removeQuestionDescription')}}</m-typo-body>
+          <m-button class="mdc-dialog__button" data-mdc-dialog-action="Cancel" slot="cancelButton">{{$t('plugin.ess.editor.cancel')}}</m-button>
+          <m-button @click="remove" class="mdc-dialog__button" data-mdc-dialog-action="OK" slot="acceptButton">{{$t('plugin.ess.editor.ok')}}</m-button>
+        </m-dialog>
+        <m-icon-button @click="folded = true" icon="keyboard_arrow_up" />
+      </span>
+    </template>
+    <div class="folded" v-if="folded && isEditor">
       <m-icon class="handle handle--folded" icon="drag_handle" />
       <span class="question-title--display">{{title_}}</span>
       <m-icon-button class="fold-button" @click="folded = false" v-if="folded" icon="keyboard_arrow_down" />
@@ -85,11 +88,11 @@
   flex-direction: column;
 }
 
-.question.readonly { padding: 16px; }
+.question.is-data, .question.is-stats { padding: 16px; }
 .question-card { margin: 16px; }
 .question-card__folded { margin: 8px 16px; }
 .question-title { flex: auto; }
-.question-title--readonly { margin-bottom: 8px; }
+.question-title--data { margin-bottom: 8px; }
 
 .title-type {
   display: flex;
@@ -172,7 +175,7 @@ export default {
   name: 'Question',
   mixins: [
     updateObservable(async (vm, change) => {
-      if (vm.readonly) return
+      if (!vm.isEditor) return
       const desc = await vm.$refs.description.save()
       if (desc && desc.html === '<br>') desc.html = ''
       /**
@@ -255,7 +258,8 @@ export default {
   props: {
     // TODO: check props
     data: Object,
-    readonly: { type: Boolean, required: false, default: false },
+    route: String,
+    stats: {},
   },
   computed: {
     themeConfigEntries () {
@@ -279,6 +283,9 @@ export default {
     hasValidationEntries () {
       return this.validationEntries.length > 0
     },
+    isEditor () { return this.route === 'editor' },
+    isData () { return this.route === 'data' },
+    isStats () { return this.route === 'stats' },
   },
   watch: {
     data () {

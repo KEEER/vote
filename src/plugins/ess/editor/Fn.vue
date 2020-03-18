@@ -51,7 +51,7 @@ import hooks from './hooks'
 import { query } from '../common/graphql'
 
 export default {
-  name: 'PluginSettings',
+  name: 'Fn',
   data () {
     return {
       submitting: false,
@@ -89,7 +89,7 @@ export default {
   mounted () {
     /**
      * Fn component mounted event.
-     * @event editor.editor:editorMounted
+     * @event editor.editor:fnMounted
      * @type {editor:Fn}
      */
     hooks.emit('editor:fnMounted', this)

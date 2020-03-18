@@ -3,6 +3,7 @@ type Query {
   submission(id: String!): Submission
   submissionIds: [String!]!
   submissionIdsByTag(tags: [String!]!): [String!]!
+  stats: String # actually object
 }
 
 type Mutation {

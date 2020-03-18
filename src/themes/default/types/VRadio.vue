@@ -27,7 +27,7 @@
 </style>
 
 <script>
-  import { getConfig, questionMixin as mixin } from '@vote/api'
+import { getConfig, questionMixin as mixin } from '@vote/api'
 import { shuffle } from '../util'
 
 export default {

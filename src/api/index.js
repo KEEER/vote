@@ -67,7 +67,48 @@ const decorateEditorApi = fn => (...args) => {
   browserMixinQueue.push(fn(...args))
 }
 
+/**
+ * Waits until a predicate.
+ * @param {function} predicate called to check the predicate
+ * @param {number} [timeout] timeout
+ * @returns {Promise<void>} resolved when predicate is true
+ */
+export const waitUntil = (predicate, timeout) => new Promise((resolve, reject) => {
+  if (timeout) setTimeout(() => {
+    clearInterval(iid)
+    reject('timeout')
+  }, timeout)
+  const iid = setInterval(() => {
+    if (predicate()) {
+      clearInterval(iid)
+      resolve()
+    }
+  }, 128)
+})
+
 // editor apis
+
+/**
+ * Injects a stylesheet.
+ * @param {string} src stylesheet source
+ */
+export const injectStyle = src => {
+  const el = document.createElement('link')
+  el.href = src
+  el.rel = 'stylesheet'
+  el.type = 'text/css'
+  document.head.appendChild(el)
+}
+
+/**
+ * Injects a script.
+ * @param {string} src stylesheet source
+ */
+export const injectScript = src => {
+  const el = document.createElement('script')
+  el.src = src
+  document.head.appendChild(el)
+}
 
 /**
  * Adds a route into the editor.

@@ -152,22 +152,20 @@ a.navlink {
 </style>
 
 <script>
-import './mdc-init'
+import './vendor-init'
 import VueRouter from 'vue-router'
 import Data from './Data.vue'
 import Editor from './Editor.vue'
 import Fn from './Fn.vue'
 import Settings from './Settings.vue'
+import Stats from './Stats.vue'
 import Fill from './Fill.vue'
 import hooks from './hooks'
 import types from './components/types'
+import { injectScript, waitUntil } from '@vote/api'
 
-{
-  const el = document.createElement('script')
-  el.src = 'https://idframe.keeer.net/js/appbar.js'
-  document.head.appendChild(el)
-  window.idFrame = { mdc: { style: true } }
-}
+window.idFrame = { mdc: { style: true } }
+injectScript('https://idframe.keeer.net/js/appbar.js')
 
 /**
  * @typedef {object} Route
@@ -199,6 +197,13 @@ const routes = [
     component: Data,
     icon: 'info',
     title: 'plugin.ess.app.route.data',
+  },
+  {
+    path: '/:uname/:name/stats',
+    name: 'stats',
+    component: Stats,
+    icon: 'bar_chart',
+    title: 'plugin.ess.app.route.stats',
   },
   {
     path: '/:uname/:name/fn',
@@ -284,15 +289,11 @@ export default Vue.extend({
      */
     hooks.emit('editor:appMounted', this)
 
-    const iid = setInterval(() => {
-      if ('AppBarFrame' in window.idFrame) {
-        clearInterval(iid)
-        new idFrame.AppBarFrame({
-          container: '#idframe',
-          // TODO: pro etc
-        })
-      }
-    }, 500)
+    waitUntil(() => 'AppBarFrame' in window.idFrame)
+      .then(() => new idFrame.AppBarFrame({
+        container: '#idframe',
+        // TODO: pro etc
+      }))
   },
 })
 </script>

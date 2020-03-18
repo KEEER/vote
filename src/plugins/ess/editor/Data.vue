@@ -69,7 +69,7 @@
       />
       <Question
         v-for="question in questions"
-        readonly
+        route="data"
         :key="question.id"
         :data="{ ...question, value: currentSubmission.data[question.id] }"
       />
@@ -140,9 +140,6 @@ export default {
     async updateSubmissionStatus () {
       if (this.currentSubmissionIndex === null) return this.currentSubmission = null
       try {
-        if (this.currentSubmissionIndex === null) {
-          return this.currentSubmission = null
-        }
         this.submissionLoading = true
         await this.loadSubmission()
         return this.submissionLoading = false

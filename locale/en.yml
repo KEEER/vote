@@ -86,6 +86,9 @@ core:
         url: Must be an URL
         minSelection: Must select at least {rule} items
         maxSelection: Must select at most {rule} items
+    stats:
+      unavailableForType: Statistics unavailable for this question type now.
+      unavailableForQuestion: Statistics unavailable for this question.
 
 static:
   index:
@@ -130,6 +133,7 @@ plugin:
         fill: Fill
         edit: Editor
         data: Data
+        stats: Stats
         fn: Functionalities
         settings: Settings
 
@@ -187,6 +191,11 @@ plugin:
       editTagPlaceholder: Press Enter to confirm
       finishTags: Done
       updateTagsError: Error updating tags, data may not be saved.
+
+    stats:
+      loading: Statistics loading...
+      loadError: Statistics load error.
+      noStats: Statistics unavailable for this form.
 
     settings:
       titlePlaceholder: Title
