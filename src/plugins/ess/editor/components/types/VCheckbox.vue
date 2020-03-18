@@ -91,7 +91,7 @@ export default {
         tooltip: {},
         series: [ {
           type: 'bar',
-          data: this.options.map(o => o.value),
+          data: this.options.map(o => this.stats[o.value]),
         } ],
       }
     },
