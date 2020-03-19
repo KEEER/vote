@@ -38,7 +38,7 @@
         </div>
       </ul>
     </template>
-    <v-chart class="vote-chart" v-else-if="stats" :options="chartOptions"/>
+    <v-chart class="vote-chart" v-else-if="stats" :options="chartOptions" />
     <m-typo-body v-else :level="1">{{$t('core.question.stats.unavailableForQuestion')}}</m-typo-body>
   </div>
 </template>
@@ -71,7 +71,6 @@ export default {
   components: {
     VCheckboxInput,
     draggable,
-    get 'v-chart' () { return window.VueECharts },
   },
   data () {
     return {

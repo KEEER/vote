@@ -92,10 +92,7 @@ export default {
     route: String,
     stats: {},
   },
-  components: {
-    draggable,
-    get 'v-chart' () { return window.VueECharts },
-  },
+  components: { draggable },
   data () {
     return {
       value_: this.value || null,
@@ -115,7 +112,7 @@ export default {
         },
         series: [ {
           type: 'pie',
-          data: this.options.map(({ label, value }) => ({ name: label, value })),
+          data: this.options.map(({ label, value }) => ({ name: label, value: this.stats[value] })),
         } ],
       }
     },

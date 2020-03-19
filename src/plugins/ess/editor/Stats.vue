@@ -37,10 +37,10 @@ hr {
 </style>
 
 <style>
-  .echarts.vote-chart {
-    width: 400px;
-    height: 300px;
-  }
+.echarts.vote-chart {
+  width: 400px;
+  height: 300px;
+}
 </style>
 
 <script>
@@ -70,6 +70,7 @@ export default {
         // injecting VueECharts before echarts load would result in error, so we need to load them in order
         injectScript('https://cdn.jsdelivr.net/npm/vue-echarts@4.1.0/dist/vue-echarts.js')
         await waitUntil(() => 'VueECharts' in window, 300000)
+        Vue.component('v-chart', window.VueECharts)
         await this.load()
       } catch (e) {
         console.log(e)

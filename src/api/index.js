@@ -88,26 +88,33 @@ export const waitUntil = (predicate, timeout) => new Promise((resolve, reject) =
 
 // editor apis
 
+const stylesInjected = {}
 /**
  * Injects a stylesheet.
  * @param {string} src stylesheet source
  */
 export const injectStyle = src => {
+  if (stylesInjected[src]) return
   const el = document.createElement('link')
   el.href = src
   el.rel = 'stylesheet'
   el.type = 'text/css'
   document.head.appendChild(el)
+  stylesInjected[src] = true
 }
+
+const scriptsInjected = {}
 
 /**
  * Injects a script.
  * @param {string} src stylesheet source
  */
 export const injectScript = src => {
+  if (scriptsInjected[src]) return
   const el = document.createElement('script')
   el.src = src
   document.head.appendChild(el)
+  scriptsInjected[src] = true
 }
 
 /**
