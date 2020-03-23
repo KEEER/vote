@@ -99,7 +99,7 @@ static:
   setId:
     pageTitle: 设置 KEEER ID
     slogan: 请设置你的 KEEER ID。
-    tip: 要想使用 Vote 您必须设置一个 KEEER ID。详情请见<a href="/">这篇博文</a>。
+    tip: 要想使用 Vote 您必须设置一个 KEEER ID。您设置的 KEEER ID 是唯一且不可更改的，会被用在您创建的问卷的链接中，请谨慎设置。
     instruction: 点击下面的按钮以设置 KEEER ID。
     go: 设置 KEEER ID
 

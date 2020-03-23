@@ -82,6 +82,8 @@ router.get('/', (ctx, next) => {
     else ctx.redirect('/welcome')
   }
 })
+// FIXME: remove this route and add welcome page after alpha stage
+router.get('/welcome', ctx => ctx.redirect('/equableyear/invite-only'))
 router.get('/_new', async ctx => {
   const user = ctx.requireLogin()
   let name = generateName().dashed, tries = 0

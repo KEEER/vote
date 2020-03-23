@@ -106,7 +106,7 @@ static:
   setId:
     pageTitle: Set KEEER ID
     slogan: Set your KEEER ID.
-    tip: A KEEER ID is required in order to use Vote. for more details, please check out <a href="/">this blog post</a>.
+    tip: A KEEER ID is required in order to use Vote. The KEEER ID is unique and could not change. It will be used in the URL of the forms you create.
     instruction: Click the button below to set your KEEER ID.
     go: Go
 
