@@ -35,9 +35,9 @@ html { height: 100%; }
 }
 
 @media (max-width: 599px) {
-  #container {
-    padding: 16px;
-  }
+  #container { padding: 16px; }
+  h1.mdc-typography--headline3 { font-size: 2rem; }
+  #container { min-height: 280px; }
 }
 
 #idframe {

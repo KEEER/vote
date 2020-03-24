@@ -51,7 +51,7 @@
   width: 100%;
   transform: none;
   overflow-wrap: break-word;
-  will-change: transform, opacity;
+  /* DO NOT use `will-change: transform` here, see: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context */
 }
 .form.form__top {
   transform: translateY(calc(-100% - 400px));
@@ -94,6 +94,7 @@
     line-height: 24px;
     transform: translateY(-64px);
   }
+  .form__title { font-size: 2rem; }
 }
 .form__title--scroll.form__title--scroll--show {
   position: fixed;
