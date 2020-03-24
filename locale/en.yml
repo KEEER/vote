@@ -98,6 +98,11 @@ static:
     newForm: New form
     noForm: You have no forms.
     title: Title
+    creation: Creation time
+    lastUpdate: Last update
+    justNow: Just now
+    unknown: Unknown
+    today: Today
     status: Status
     submissionCount: Submission count
     retrieving: Retrieving

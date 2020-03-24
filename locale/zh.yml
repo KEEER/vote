@@ -91,6 +91,11 @@ static:
     newForm: 新建表单
     noForm: 你没有表单。
     title: 标题
+    creation: 创建时间
+    lastUpdate: 最后编辑时间
+    justNow: 刚刚
+    unknown: 未知
+    today: 今天
     status: 状态
     submissionCount: 回复数量
     retrieving: 允许提交

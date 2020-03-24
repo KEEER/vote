@@ -54,6 +54,9 @@ main .empty { flex: 1; }
   padding-left: 0;
 }
 
+@media (max-width: 599px) { .creation { display: none; } }
+@media (max-width: 479px) { .last-update { display: none; } }
+
 .hidden {
   display: none;
 }

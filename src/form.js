@@ -304,6 +304,10 @@ export class Form extends EventEmitter {
       await this.save()
       return
     }
+    this.options.data = this.options.data || {}
+    if (!this.options.data.creation) this.options.data.creation = Date.now()
+    this.options.data.lastUpdate = Date.now()
+    this.updated.push('data')
     const args = {}
     if (this.questions.some(q => q.updated) || this.updated.indexOf('plugins') > -1) {
       args.questions = this.questions.map(q => q.toObject())
@@ -334,6 +338,11 @@ export class Form extends EventEmitter {
     if (this.saved) {
       await this.update()
       return
+    }
+    this.options.data = {
+      ...(this.options.data || {}),
+      creation: Date.now(),
+      lastUpdate: Date.now(),
     }
     const stmt = 'INSERT INTO PRE_forms (user_id, name, lower_name, title, pages, questions, theme, plugins, data) VALUES ($1, $2::character varying(64), LOWER($2), $3, $4, $5, $6, $7, $8);'
     await query(stmt, this.params)
