@@ -1,4 +1,4 @@
-import 'regenerator-runtime'
+import 'regenerator-runtime/runtime'
 import App, { getRouter } from './App'
 import hooks from './hooks'
 import UniqueId from 'vue-unique-id'

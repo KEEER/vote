@@ -50,11 +50,16 @@ const config = {
       },
       process.env.NODE_ENV === 'development' ? {} : {
         test: /\.js$/,
+        exclude: /core-js|webpack|babel/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [ '@babel/preset-env' ],
+            presets: [ [
+              '@babel/preset-env',
+              { useBuiltIns: 'usage', corejs: 3 },
+            ] ],
             cacheDirectory: '.webpack-cache/babel',
+            sourceType: 'unambiguous',
           },
         },
       },

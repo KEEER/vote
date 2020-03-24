@@ -1,4 +1,4 @@
-require('regenerator-runtime')
+require('regenerator-runtime/runtime')
 require('@babel/register')({ ignore: [ /buffer/ ] })
 
 // monkeypatching node Module

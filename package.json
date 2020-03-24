@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.201",
+  "version": "0.0.202",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
@@ -63,6 +63,7 @@
     "@keeer/material-components-vue": "^1.2.0-keeer2",
     "babel-loader": "^8.0.5",
     "cache-loader": "^4.1.0",
+    "core-js": "^3.6.4",
     "cross-env": "^6.0.3",
     "css-loader": "^2.1.1",
     "ejs": "^3.0.1",

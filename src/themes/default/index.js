@@ -1,5 +1,5 @@
 import './mdc-init'
-import 'regenerator-runtime'
+import 'regenerator-runtime/runtime'
 import App from './App'
 import hooks from './hooks'
 import UniqueId from 'vue-unique-id'
