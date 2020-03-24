@@ -95,6 +95,10 @@ static:
     submissionCount: 回复数量
     retrieving: 允许提交
     notRetrieving: 不允许提交
+    tac: 用户协议
+    privacyPolicy: 隐私政策
+    contact: 联系我们
+    copyright: 版权所有 © 2015 至今 KEEER。保留一切权利。
 
   setId:
     pageTitle: 设置 KEEER ID

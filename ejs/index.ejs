@@ -8,35 +8,13 @@
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://fonts.loli.net/icon?family=Material+Icons" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/icon-button@4.0.0/dist/mdc.icon-button.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/top-app-bar@4.0.0/dist/mdc.top-app-bar.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/drawer@4.0.0/dist/mdc.drawer.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/list@4.0.0/dist/mdc.list.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/ripple@4.0.0/dist/mdc.ripple.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/data-table@5.0.0/dist/mdc.data-table.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/typography@5.0.0/dist/mdc.typography.min.css">
   <link rel="stylesheet" href="/index.css">
 </head>
 <body>
-  <header class="mdc-top-app-bar" id="top-app-bar">
-    <div class="mdc-top-app-bar__row">
-      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" onclick="drawer.open = true">menu</button>
-        <span class="mdc-top-app-bar__title"><%= $t('static.index.pageTitle') %></span>
-      </section>
-      <section id="idframe" class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"></section>
-    </div>
-  </header>
-  <aside class="mdc-drawer mdc-drawer--modal" id="drawer">
-    <div class="mdc-drawer__content">
-      <nav class="mdc-list">
-        <a class="mdc-list-item mdc-list-item--activated" href="/logout" aria-current="page">
-          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">exit_to_app</i>
-          <span class="mdc-list-item__text"><%= $t('static.index.logout') %></span>
-        </a>
-    </div>
-  </aside>
-  <div class="mdc-drawer-scrim"></div>
-  <div class="mdc-top-app-bar--fixed-adjust" id="main-wrapper">
+  <div id="main-wrapper">
     <main>
       <div class="title-button">
         <h1 class="mdc-typography--headline4"><%= $t('static.index.myForms') %></h1>
@@ -62,8 +40,19 @@
           <tbody class="mdc-data-table__content" id="forms-table-body"></tbody>
         </table>
       </div>
+      <div class="empty"></div>
+      <footer>
+        <a href="https://keeer.net/?utm_source=vote&utm_medium=indexfooter" class="link">
+          <img class="footer-logo" alt="KEEER Logo" src="https://keeer.net/img/logo/dark-large.svg">
+        </a>
+        <a href="/tac?utm_source=indexfooter" class="link"><%= $t('static.index.tac') %></a>
+        <a href="/privacy-policy?utm_source=indexfooter" class="link"><%= $t('static.index.privacyPolicy') %></a>
+        <a href="https://vote-lab.keeer.net/equableyear/contact-keeer/fill?utm_source=vote&utm_medium=indexfooter" class="link"><%= $t('static.index.contact') %></a>
+        <p><%= $t('static.index.copyright') %></p>
+      </footer>
     </main>
   </div>
+  <div id="idframe"></div>
   <script language="application/x-template" id="form-template">
     <tr class="mdc-data-table__row">
       <td class="mdc-data-table__cell forms-table-edit"><a class="mdc-icon-button material-icons" href="/:path:/edit">edit</a></td>
@@ -72,18 +61,11 @@
       <td class="mdc-data-table__cell mdc-data-table__cell--numeric">:submissionCount:</td>
     </tr>
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@material/top-app-bar@4.0.0/dist/mdc.topAppBar.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@material/drawer@4.0.0/dist/mdc.drawer.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@material/list@4.0.0/dist/mdc.list.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@material/ripple@4.0.0/dist/mdc.ripple.min.js"></script>
   <script src="https://idframe.keeer.net/js/appbar.js"></script>
   <script>
     var $ = function (sel) { return document.querySelector(sel) }
     var $$ = function (sel) { return Array.from(document.querySelectorAll(sel)) }
-    new mdc.topAppBar.MDCTopAppBar($('#top-app-bar'))
-    var drawer = new mdc.drawer.MDCDrawer($('#drawer'))
-    $$('.mdc-list').forEach(function (el) { new mdc.list.MDCList(el) })
-    $$('.mdc-list-item').forEach(function (el) { new mdc.ripple.MDCRipple(el) })
     $$('.mdc-button').forEach(function (el) { new mdc.ripple.MDCRipple(el) })
     var formsTableBody = $('#forms-table-body')
     var formTemplate = $('#form-template').innerHTML

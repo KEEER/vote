@@ -102,6 +102,10 @@ static:
     submissionCount: Submission count
     retrieving: Retrieving
     notRetrieving: Not retrieving
+    tac: Terms
+    privacyPolicy: Privacy
+    contact: Contact
+    copyright: Copyright © 2015-present KEEER. All rights reserved.
 
   setId:
     pageTitle: Set KEEER ID
