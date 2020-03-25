@@ -31,10 +31,7 @@ const distLangServer = async (ctx, next) => {
   const lang = acceptLanguage ? acceptLanguageParser.pick(languages, acceptLanguage) : 'en'
   const path = ctx.path
   ctx.path = `/${lang}-${path.split('/')[1] || 'index'}.html`
-  return await distServer(ctx, (...args) => {
-    ctx.path = path
-    return next(...args)
-  })
+  return await distServer(ctx, () => {})
 }
 
 export const interrupt = new Error('interrupt')

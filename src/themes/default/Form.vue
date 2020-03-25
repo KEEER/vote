@@ -210,7 +210,8 @@ export default {
       this.noTransition = true
       this[name2] = true
       this[name1] = false
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      try { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }) }
+      catch (_e) { try { window.scrollTo(0, 0) } catch (_e2) {} } // eslint-disable-line no-empty
       if (!cb || await cb() !== 'reverse') {
         await delay(100)
         this.noTransition = false
