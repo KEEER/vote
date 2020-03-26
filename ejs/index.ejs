@@ -32,7 +32,7 @@
           <thead>
             <tr class="mdc-data-table__header-row">
               <th class="mdc-data-table__header-cell forms-table-edit" role="columnheader" scope="col"></th>
-              <th class="mdc-data-table__header-cell" role="columnheader" scope="col"><%= $t('static.index.title') %></th>
+              <th class="mdc-data-table__header-cell title" role="columnheader" scope="col"><%= $t('static.index.title') %></th>
               <th class="mdc-data-table__header-cell creation" role="columnheader" scope="col"><%= $t('static.index.creation') %></th>
               <th class="mdc-data-table__header-cell last-update" role="columnheader" scope="col"><%= $t('static.index.lastUpdate') %></th>
               <th class="mdc-data-table__header-cell" role="columnheader" scope="col"><%= $t('static.index.status') %></th>
@@ -58,7 +58,7 @@
   <script language="application/x-template" id="form-template">
     <tr class="mdc-data-table__row">
       <td class="mdc-data-table__cell forms-table-edit"><a class="mdc-icon-button material-icons" href="/:path:/edit">edit</a></td>
-      <td class="mdc-data-table__cell">:title:</td>
+      <td class="mdc-data-table__cell title">:title:</td>
       <td class="mdc-data-table__cell creation">:creation:</td>
       <td class="mdc-data-table__cell last-update">:lastUpdate:</td>
       <td class="mdc-data-table__cell">:status:</td>
