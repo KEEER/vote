@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.210",
+  "version": "0.0.211",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
@@ -61,6 +61,7 @@
     "@babel/cli": "^7.8.4",
     "@keeer/color-picker": "0.0.3",
     "@keeer/material-components-vue": "^1.2.0-keeer2",
+    "ali-oss": "^6.5.1",
     "babel-loader": "^8.0.5",
     "cache-loader": "^4.1.0",
     "core-js": "^3.6.4",

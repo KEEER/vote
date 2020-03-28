@@ -1,4 +1,6 @@
 const fs = require('fs-extra')
+const path = require('path')
+const oss = require('ali-oss')
 
 const script = process.argv[2]
 if (!script) {
@@ -28,7 +30,8 @@ const fns = {
     const tar = require('tar')
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html')).map(f => `dist/${f}`)
-      await tar.c({ gzip: true, file: 'dist.tgz' }, [ 'dist/js', 'dist/css', ...htmlFiles, 'dist/compat.json' ])
+      const files = process.env.PUBLIC_PATH ? [ ...htmlFiles, 'dist/compat.json' ] : [ 'dist/js', 'dist/css', ...htmlFiles, 'dist/compat.json' ]
+      await tar.c({ gzip: true, file: 'dist.tgz' }, files)
     } catch (e) {
       console.log(`Failed creating pack: ${e}`)
       process.exit(-1)
@@ -132,6 +135,26 @@ const fns = {
     require('fs-extra').ensureDirSync('dist')
     require('fs').writeFileSync('dist/compat.json', JSON.stringify(table))
   },
+
+  async 'deploy-oss' () {
+    const cfg = {
+      accessKeyId: process.env.ACCESS_KEY_ID,
+      accessKeySecret: process.env.ACCESS_KEY_SECRET,
+      region: process.env.REGION,
+      bucket: process.env.BUCKET,
+    }
+    if (Object.values(cfg).some(x => typeof x !== 'string')) throw new Error('Invalid config')
+    const store = new oss(cfg)
+    const deploy = async (localPath, remotePath) => {
+      for (const file of await fs.readdir(localPath)) {
+        await store.put(path.join(remotePath, file), path.join(localPath, file), {
+          headers: { 'Cache-Control': 'public, max-age=31536000' },
+        })
+      }
+    }
+    await deploy(path.resolve(__dirname, 'dist/js'), 'js')
+    await deploy(path.resolve(__dirname, 'dist/css'), 'css')
+  },
 }
 
 if (!(script in fns)) {
@@ -140,4 +163,9 @@ if (!(script in fns)) {
   process.exit(1)
 }
 
-fns[script]()
+;(async () => {
+  try { await fns[script]() } catch (e) {
+    console.error(e)
+    process.exit(1)
+  }
+})()
