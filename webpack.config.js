@@ -164,7 +164,7 @@ const config = {
       scripts: [
         { path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false },
         { path: 'https://cdn.jsdelivr.net/npm/vue-i18n@8.15.3/dist/vue-i18n.min.js', publicPath: false },
-        'vote-config.js',
+        { path: 'vote-config.js', publicPath: false },
       ],
       append: false,
     }),

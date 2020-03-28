@@ -363,7 +363,7 @@ export class Form extends EventEmitter {
   async getHtml () {
     return (templateCache[this.options.theme]
       .replace(
-        /\/vote-config.js/g,
+        /\/?vote-config.js/g,
         `/${this.path}/_bundle`
       ))
   }
@@ -392,8 +392,9 @@ export class Form extends EventEmitter {
     }
     if (this.options.plugins) {
       this.options.plugins.forEach(plugin => {
-        if (plugin.config.inject[key].jsPath) data.pluginJs.push('/js/' + plugin.config.inject[key].jsPath)
-        if (plugin.config.inject[key].cssPath) data.pluginCss.push('/css/' + plugin.config.inject[key].cssPath)
+        const base = process.env.PUBLIC_PATH || ''
+        if (plugin.config.inject[key].jsPath) data.pluginJs.push(base + '/js/' + plugin.config.inject[key].jsPath)
+        if (plugin.config.inject[key].cssPath) data.pluginCss.push(base + '/css/' + plugin.config.inject[key].cssPath)
       })
     }
     /**

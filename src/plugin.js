@@ -16,22 +16,13 @@ class Plugin {
   }
 }
 
-let pluginDirs, plugins, js, css
+let pluginDirs, plugins
 try {
   pluginDirs = fs.readdirSync(path.resolve(__dirname, 'plugins'))
 } catch (e) {
   throw new Error(`Error reading plugin directories: ${e}`)
 }
-try {
-  js = fs.readdirSync(path.resolve(__dirname, '../dist/js'))
-} catch (e) {
-  throw new Error(`Error reading JS build directory: ${e}`)
-}
-try {
-  css = fs.readdirSync(path.resolve(__dirname, '../dist/css'))
-} catch (e) {
-  throw new Error(`Error reading CSS build directory: ${e}`)
-}
+const { js, css } = require('../dist/build.json')
 
 try {
   const pluginJsons = pluginDirs.map(dir => {

@@ -1,6 +1,5 @@
 const fs = require('fs-extra')
 const path = require('path')
-const oss = require('ali-oss')
 
 const script = process.argv[2]
 if (!script) {
@@ -136,7 +135,16 @@ const fns = {
     require('fs').writeFileSync('dist/compat.json', JSON.stringify(table))
   },
 
+  async 'build:meta' () {
+    await fs.ensureDir('dist')
+    await fs.writeFile('dist/build.json', JSON.stringify({
+      js: await fs.readdir('dist/js'),
+      css: await fs.readdir('dist/css'),
+    }))
+  },
+
   async 'deploy-oss' () {
+    const oss = require('ali-oss')
     const cfg = {
       accessKeyId: process.env.ACCESS_KEY_ID,
       accessKeySecret: process.env.ACCESS_KEY_SECRET,
