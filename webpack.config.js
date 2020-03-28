@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin')
+const HtmlWebpackInjectAttributesPlugin = require('html-webpack-inject-attributes-plugin')
 
 const extractCss = {
   loader: MiniCssExtractPlugin.loader,
@@ -168,6 +169,7 @@ const config = {
       ],
       append: false,
     }),
+    new HtmlWebpackInjectAttributesPlugin({ crossorigin: 'anonymous' }),
   ],
   node: {
     fs: 'empty',
