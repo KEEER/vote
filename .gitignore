@@ -8,6 +8,7 @@ lerna-debug.log*
 
 .vscode
 .idea
+whitelist
 
 # Build cache
 .webpack-cache
