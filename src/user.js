@@ -30,14 +30,14 @@ export class User {
    * @param {*} options.settings settings
    */
   constructor (options) {
-    this._updated = []
+    this._updated = new Set()
     if (options.id !== undefined) options.id = Number(options.id)
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
         if (prop === 'name') {
           throw new TypeError(`prop ${prop} cannot be mutated`)
         }
-        if (this._updated.indexOf(prop) < 0) this._updated.push(prop)
+        this._updated.add(prop)
         obj[prop] = val
         return true
       },
@@ -70,10 +70,18 @@ export class User {
   /** Updates a user in database. */
   async update () {
     if (!this._saved) return await this.save()
-    if (this._updated.length === 0) return
+    if (this._updated.size === 0) return
     const args = {}
+    if (this._updated.has('avatarUrl')) {
+      this._updated.delete('avatarUrl')
+      args.avatar_url = this.options.avatarUrl
+    }
+    if (this._updated.has('proExpires')) {
+      this._updated.delete('proExpires')
+      args.pro_expires = this.options.proExpires
+    }
     for (let name of this._updated) args[name] = this.options[name]
-    this._updated.length = 0
+    this._updated.clear()
     await update('PRE_users', args, 'id', this.id)
   }
 
