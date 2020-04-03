@@ -3,6 +3,7 @@ import { graphql } from 'graphql'
 import logger from '@vote/core/log'
 import query from './query'
 import { readDistFile } from '@vote/api'
+import { isDev } from '@vote/core/is-dev'
 
 const log = logger.child({ part: 'plugin-ess.get-page' })
 
@@ -17,7 +18,7 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
   ) return set(404)
   const user = ctx.state.user
   const unauthorized = () => ctx.state.userNoId ? ctx.requireLogin() : set(404)
-  let authorized = user && String(user.id) === String(form.options.userId) || process.env.NODE_ENV === 'development'
+  let authorized = user && String(user.id) === String(form.options.userId) || isDev
   if (form.editorPaths.indexOf(path) > -1) {
     /**
      * @typedef {object} AuthorizeEventParam
@@ -35,7 +36,8 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
     await form.emit('authorizeEditor', { form, path, ctx, set: a => authorized = a })
     // why not 403: return a 403 will indicate that the form exists.
     if (!authorized) return unauthorized()
-    return set(editorHtml.replace(/\/?vote-config.js/g, `/${form.path}/_bundle-editor`))
+    const html = process.env.NODE_ENV === 'development' ? readDistFile('plugin-ess-editor.html') : editorHtml
+    return set(html.replace(/\/?vote-config.js/g, `/${form.path}/_bundle-editor`))
   }
   if (path === '_query' && ctx.method === 'POST') {
     /**

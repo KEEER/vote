@@ -7,16 +7,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin')
 const HtmlWebpackInjectAttributesPlugin = require('html-webpack-inject-attributes-plugin')
 
-const extractCss = {
+const isDev = process.env.NODE_ENV === 'development'
+const srcPath = path.resolve(__dirname, 'src')
+
+const extractCss = isDev ? 'style-loader' : {
   loader: MiniCssExtractPlugin.loader,
   options: {
-    hmr: process.env.NODE_ENV === 'development',
     reloadAll: true,
     sourceMap: true,
   },
 }
-
-const srcPath = path.resolve(__dirname, 'src')
 
 const cache = {
   loader: 'cache-loader',
@@ -28,16 +28,16 @@ const cache = {
 const config = {
   mode: process.env.NODE_ENV || 'production',
   entry: {
-    'theme-basic': './src/themes/basic/index.js',
-    'theme-default': './src/themes/default/index.js',
-    'plugin-sample-form': './src/plugins/sample/form.js',
-    'plugin-sample-editor': './src/plugins/sample/editor.js',
-    'plugin-ess-form': './src/plugins/ess/form/index.js',
-    'plugin-ess-editor': './src/plugins/ess/editor/index.js',
+    'theme-basic': [ './src/themes/basic/index.js' ],
+    'theme-default': [ './src/themes/default/index.js' ],
+    'plugin-sample-form': [ './src/plugins/sample/form.js' ],
+    'plugin-sample-editor': [ './src/plugins/sample/editor.js' ],
+    'plugin-ess-form': [ './src/plugins/ess/form/index.js' ],
+    'plugin-ess-editor': [ './src/plugins/ess/editor/index.js' ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[name]-[contenthash:6].js',
+    filename: isDev ? 'js/[name].js' : 'js/[name]-[contenthash:6].js',
     publicPath: process.env.PUBLIC_PATH || '/',
   },
   module: {
@@ -49,7 +49,7 @@ const config = {
           'vue-loader',
         ],
       },
-      process.env.NODE_ENV === 'development' ? {} : {
+      isDev ? {} : {
         test: /\.js$/,
         exclude: /core-js|webpack|babel/,
         use: {
@@ -124,7 +124,7 @@ const config = {
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name]-[contenthash:6].css',
+      filename: isDev ? 'css/[name].css' : 'css/[name]-[contenthash:6].css',
     }),
     new OptimizeCssAssetsPlugin({
       cssProcessorOptions: {
@@ -177,14 +177,13 @@ const config = {
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
-    compress: true,
     port: 8080,
     watchOptions: {
       poll: true,
     },
     historyApiFallback: true,
   },
-  devtool: process.env.NODE_ENV === 'development' ? 'eval' : 'source-map',
+  devtool: isDev ? 'eval' : 'source-map',
   optimization: { concatenateModules: false },
 }
 

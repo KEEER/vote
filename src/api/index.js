@@ -261,7 +261,7 @@ export { default as SettingsEntry } from '../plugins/ess/editor/components/Setti
  * @param {string} name filename
  * @returns {string}
  */
-export const readDistFile = (name) => readFileSync(path.resolve(__dirname, '../../dist', name)).toString()
+export const readDistFile = name => readFileSync(path.resolve(__dirname, '../../dist', name)).toString()
 
 export { query } from '../plugins/ess/common/graphql'
 

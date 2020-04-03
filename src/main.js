@@ -15,6 +15,7 @@ import { messages as localeMessages } from '@vote/locale'
 import { query } from './db'
 import { plugins } from './plugin'
 import { themes } from './theme'
+import { isDev } from './is-dev'
 
 const log = logger.child({ part: 'main' })
 
@@ -68,7 +69,7 @@ router.get('/_forms', async ctx => {
   return ctx.body = formDatas
 })
 
-if (process.env.NODE_ENV === 'development') {
+if (isDev) {
   router.get('/_clear-tokens', async ctx => {
     await query('TRUNCATE TABLE PRE_tokens;')
     return ctx.body = 'ok'
@@ -142,25 +143,38 @@ app.use(async (ctx, next) => {
   }
   if (ctx.status === 404 || ctx.status === 500) return processError()
 })
-app.use(BodyParser())
-app.use(router.routes()).use(router.allowedMethods())
 
-app.context.requireLogin = function () {
-  if (!this.state.user) {
-    if (this.state.userNoId) {
-      this.redirect('/set-id')
-      throw interrupt
-    }
-    else this.throw(401)
+;(async () => {
+  if (isDev) {
+    const koaWebpack = require('koa-webpack')
+    const config = require('../webpack.config')
+    app.use(await koaWebpack({ config, hotClient: { allEntries: true } }))
   }
-  return this.state.user
-}
 
-try {
-  app.listen(parseInt(process.env.PORT), process.env.HOST)
-} catch (e) {
-  log.error(e.stack)
+  app.use(BodyParser())
+  app.use(router.routes()).use(router.allowedMethods())
+
+  app.context.requireLogin = function () {
+    if (!this.state.user) {
+      if (this.state.userNoId) {
+        this.redirect('/set-id')
+        throw interrupt
+      }
+      else this.throw(401)
+    }
+    return this.state.user
+  }
+
+  try {
+    app.listen(parseInt(process.env.PORT), process.env.HOST)
+  } catch (e) {
+    log.error(e.stack)
+    process.exit(1)
+  }
+
+  log.info('Server Restart')
+})().catch(e => {
+  log.error(e)
   process.exit(1)
-}
+})
 
-log.info('Server Restart')

@@ -4,6 +4,7 @@ import plugins from './plugin'
 import themes from './theme'
 import { query, update, useClient } from './db'
 import logger from './log'
+import { isDev } from './is-dev'
 import { readFileSync } from 'fs'
 import { readDistFile } from '@vote/api'
 import path from 'path'
@@ -361,11 +362,10 @@ export class Form extends EventEmitter {
    * @returns {string} HTML
    */
   async getHtml () {
-    return (templateCache[this.options.theme]
-      .replace(
-        /\/?vote-config.js/g,
-        `/${this.path}/_bundle`
-      ))
+    const template = isDev ?
+      templateCache[this.options.theme] :
+      readDistFile(`${themes.find(x => x.code === this.options.theme).config.entryName}.html`)
+    return template.replace(/\/?vote-config.js/g, `/${this.path}/_bundle`)
   }
 
   /**
