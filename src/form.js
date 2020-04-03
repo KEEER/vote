@@ -362,9 +362,7 @@ export class Form extends EventEmitter {
    * @returns {string} HTML
    */
   async getHtml () {
-    const template = isDev ?
-      templateCache[this.options.theme] :
-      readDistFile(`${themes.find(x => x.code === this.options.theme).config.entryName}.html`)
+    const template = templateCache[this.options.theme]
     return template.replace(/\/?vote-config.js/g, `/${this.path}/_bundle`)
   }
 

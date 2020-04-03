@@ -36,8 +36,7 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
     await form.emit('authorizeEditor', { form, path, ctx, set: a => authorized = a })
     // why not 403: return a 403 will indicate that the form exists.
     if (!authorized) return unauthorized()
-    const html = process.env.NODE_ENV === 'development' ? readDistFile('plugin-ess-editor.html') : editorHtml
-    return set(html.replace(/\/?vote-config.js/g, `/${form.path}/_bundle-editor`))
+    return set(editorHtml.replace(/\/?vote-config.js/g, `/${form.path}/_bundle-editor`))
   }
   if (path === '_query' && ctx.method === 'POST') {
     /**
