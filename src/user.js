@@ -7,7 +7,7 @@ import { readFileSync } from 'fs'
 
 const log = logger.child({ part: 'user' })
 
-export const kas = new KASClient({ base: process.env.KAS_BASE, secretKey: process.env.KAS_KEY })
+export const kas = new KASClient({ base: process.env.KAS_BASE, token: process.env.KAS_SERVICE_TOKEN })
 
 let whitelist = []
 if (process.env.USE_WHITELIST && process.env.USE_WHITELIST !== 'false') {
@@ -139,9 +139,8 @@ export class User {
       }
     }
     try {
-      await kas.validateToken(token)
       const info = await kas.getInformation(token)
-      const name = info.keeer_id
+      const name = info.keeerId
       if (process.env.USE_WHITELIST !== 'false' && process.env.USE_WHITELIST) {
         if (!whitelist.includes(name)) return null
       }
@@ -149,7 +148,7 @@ export class User {
       user = await this.fromName(name)
       if (user) {
         await insertToken(user.id)
-        if (user.avatarUrl !== info.avatarUrl) user.avatarUrl = info.avatarUrl
+        if (user.avatarUrl !== info.avatar) user.avatarUrl = info.avatar
         if (user.nickname !== info.nickname) user.nickname = info.nickname
         await user.update()
         return user
@@ -165,6 +164,7 @@ export class User {
       await insertToken(user.id)
       return user
     } catch (e) {
+      if (e.code === 'ENOT_LOGGED_IN') return null
       throw e
     }
   }

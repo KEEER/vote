@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.214",
+  "version": "0.0.215",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "fs-extra": "^8.0.1",
     "graphql": "^14.6.0",
     "http-errors": "^1.7.3",
-    "kas-client-node": "git+ssh://git@git.keeer.net:KEEER/kas-client-node.git",
+    "kas-client-node": "git+ssh://git@git.keeer.net:KEEER/kas-client-node.git#node-kas",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
