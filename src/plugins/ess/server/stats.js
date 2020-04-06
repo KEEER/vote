@@ -16,5 +16,15 @@ export function handleGetStats ({ question, submissions, set }) {
     }
     return set(count)
   }
+
+  case 'VText':
+  case 'VTextarea':
+  {
+    const res = {
+      data: answers.slice(0, 64),
+      hasMore: answers.length > 64,
+    }
+    return set(res)
+  }
   }
 }

@@ -89,6 +89,9 @@ core:
     stats:
       unavailableForType: Statistics unavailable for this question type now.
       unavailableForQuestion: Statistics unavailable for this question.
+      textCount: "{value} (Appeared {count} times)"
+      textEmpty: <empty>
+      textLimited: (Only the first {count} entries are shown.
 
 static:
   index:

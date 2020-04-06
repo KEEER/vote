@@ -82,6 +82,9 @@ core:
     stats:
       unavailableForType: 这个问题类型的统计暂不可用。
       unavailableForQuestion: 这个问题的统计暂不可用。
+      textCount: "{value}（出现 {count} 次）"
+      textEmpty: <空>
+      textLimited: （仅展示前 {count} 条数据）
 
 static:
   index:
