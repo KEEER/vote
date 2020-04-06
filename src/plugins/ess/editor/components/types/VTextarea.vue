@@ -49,6 +49,7 @@ li {
   color: #202124;
   margin: 4px 0;
   padding: 4px;
+  white-space: pre-wrap;
 }
 .has-more { color: #7e7e7e; }
 </style>
