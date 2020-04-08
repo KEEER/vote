@@ -2,13 +2,13 @@
   <div>
     <m-drawer
       ref="drawer"
-      :class="{'drawer-dismissible': dismissible}"
+      :class="{'drawer-permanent': !modal}"
       :modal="modal"
-      :dismissible="dismissible"
       v-model="drawerOpen"
       :key="modal"
     >
-      <div slot="header">
+      <m-icon-button icon="arrow_back" href="/?utm_source=editor&utm_medium=drawer_header_icon" class="back-button" />
+      <div class="mdc-drawer__header">
         <m-typo-body :level="1" class="username">
           <a href="/?utm_source=editor&utm_medium=drawer_header" class="username-link">{{userName}}</a>
         </m-typo-body>
@@ -31,7 +31,7 @@
     <div id="content">
       <m-top-app-bar @nav="drawerOpen = !drawerOpen">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-          <m-icon-button icon="menu" class="mdc-top-app-bar__navigation-icon" />
+          <m-icon-button v-if="modal" icon="menu" class="mdc-top-app-bar__navigation-icon" />
           <span class="hgroup mdc-top-app-bar__title">
             <div class="app-bar-title">{{appBarTitle}}</div>
             <div class="mdc-top-app-bar__subtitle" v-if="appBarSubtitle">
@@ -54,29 +54,18 @@
 </template>
 
 <style>
-body {
-  margin: 0;
-}
+body { margin: 0; }
 </style>
 
 <style scoped>
-#main, .lang-fallback {
-  max-width: 720px;
-}
+#main, .lang-fallback { max-width: 720px; }
 
-.mdc-drawer--dismissible.mdc-drawer--open ~ #content {
-  margin-left: 255px;
-}
+.drawer-permanent ~ #content { margin-left: 255px; }
+.drawer-permanent ~ #content .mdc-top-app-bar { width: calc(100% - 255px); }
 
-.mdc-drawer--dismissible.mdc-drawer--open ~ #content .mdc-top-app-bar {
-  width: calc(100% - 255px);
-}
+a.navlink { text-decoration: none; }
 
-a.navlink {
-  text-decoration: none;
-}
-
-.drawer-dismissible {
+.drawer-permanent {
   position: fixed;
   top: 0;
   left: 0;
@@ -113,12 +102,14 @@ a.navlink {
   --mdc-theme-primary: #fff;
   align-items: start;
   padding: 12px 12px 0 0;
+  min-width: 140px;
 }
 
 @media(max-width: 599px) {
   #idframe {
     padding-top: 8px;
     padding-right: 8px;
+    min-width: 60px;
   }
 }
 
@@ -128,27 +119,15 @@ a.navlink {
   display: block;
 }
 
-.username {
-  margin-top: 16px;
-  color: rgba(0, 0, 0, .6);
-}
-
+.back-button { margin-top: 8px; }
+.username { color: #666; }
+.formname { color: #212121; }
 .username-link:link, .username-link:visited {
   color: inherit;
   text-decoration: none;
 }
-
-.username-link:hover, .username-link:focus, .username-link:active {
-  text-decoration: underline;
-}
-
-.username::after {
-  content: ' /';
-}
-
-.formname {
-  color: rgba(0, 0, 0, .87);
-}
+.username-link:hover, .username-link:focus, .username-link:active { text-decoration: underline; }
+.username::after { content: ' /'; }
 </style>
 
 <script>
@@ -238,7 +217,6 @@ export default Vue.extend({
   data: function () {
     return {
       modal: false,
-      dismissible: true,
       drawerOpen: false,
       drawerTitle: null,
       appBarTitle: 'Vote Editor',
@@ -265,19 +243,7 @@ export default Vue.extend({
   },
   mounted () {
     const media = window.matchMedia('(max-width: 720px)')
-
-    const toggleMobile = () => {
-      const isMobile = media.matches
-      if (isMobile) {
-        this.dismissible = false
-        this.modal = true
-      } else {
-        this.modal = false
-        this.dismissible = true
-      }
-
-      this.$nextTick(() => this.drawerOpen = !isMobile)
-    }
+    const toggleMobile = () => this.modal = media.matches
     media.addListener(toggleMobile)
     toggleMobile()
 
