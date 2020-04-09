@@ -29,7 +29,7 @@ const fns = {
     const tar = require('tar')
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html')).map(f => `dist/${f}`)
-      const files = process.env.PUBLIC_PATH ? [ ...htmlFiles, 'dist/compat.json', 'dist/build.json' ] : [ 'dist/js', 'dist/css', ...htmlFiles, 'dist/compat.json' ]
+      const files = process.env.PUBLIC_PATH ? [ ...htmlFiles, 'dist/build.json' ] : [ 'dist/js', 'dist/css', ...htmlFiles ]
       await tar.c({ gzip: true, file: 'dist.tgz' }, files)
     } catch (e) {
       console.log(`Failed creating pack: ${e}`)
