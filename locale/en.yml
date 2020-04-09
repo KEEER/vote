@@ -203,6 +203,7 @@ plugin:
       editTagPlaceholder: Press Enter to confirm
       finishTags: Done
       updateTagsError: Error updating tags, data may not be saved.
+      export: Export data
 
     stats:
       loading: Statistics loading...
@@ -239,6 +240,11 @@ plugin:
       theme: Theme
       submit: Update
       failed: Update failed!
+
+    export:
+      id: Submission ID
+      time: Time
+      tags: Tags
 
   sample:
     name: Sample

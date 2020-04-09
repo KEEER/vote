@@ -27,7 +27,14 @@
       :count="submissionIds.length"
       :current.sync="currentSubmissionIndex"
       v-if="loaded"
-    />
+    >
+      <m-list slot="menu">
+        <m-list-item @click="exportData">
+          <m-icon icon="get_app" class="menu-icon" slot="graphic" />
+          <template slot="text">{{$t('plugin.ess.data.export')}}</template>
+        </m-list-item>
+      </m-list>
+    </DataNavigator>
     <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
       <div class="submission-meta">
         <p class="submission-id">{{$t('plugin.ess.data.submissionId')}}{{currentSubmissionId}}</p>
@@ -98,6 +105,10 @@ main {
   min-width: 200px;
 }
 .search-tags { margin-bottom: 8px; }
+.mdc-menu .mdc-list .menu-icon {
+  color: #626262;
+  margin-right: 12px;
+}
 </style>
 
 <script>
@@ -215,6 +226,7 @@ export default {
         this.$nextTick(() => this.$refs.tagInput.$el.querySelector('input').focus())
       }
     },
+    exportData () { window.open('_export', '_blank') },
   },
   mounted () {
     /**

@@ -26,12 +26,22 @@ const distDir = path.resolve(__dirname, '../dist')
 const staticServer = serveStatic(staticDir)
 const distServer = serveStatic(distDir)
 const languages = Object.keys(localeMessages)
+app.context.getLanguage = function () {
+  if (this.state._lang) return this.state._lang
+  const acceptLanguage = this.get('accept-language')
+  return this.state._lang = acceptLanguage ? acceptLanguageParser.pick(languages, acceptLanguage) : 'en'
+}
+app.context.$t = function (key) {
+  const lang = this.getLanguage()
+  const slices = key.split('.')
+  let message = localeMessages[lang]
+  for (let s of slices) message = message[s] || key
+  return message
+}
 const distLangServer = async (ctx, next) => {
   if (ctx.path.split('/').length > 2) return await next()
-  const acceptLanguage = ctx.get('accept-language')
-  const lang = acceptLanguage ? acceptLanguageParser.pick(languages, acceptLanguage) : 'en'
   const path = ctx.path
-  ctx.path = `/${lang}-${path.split('/')[1] || 'index'}.html`
+  ctx.path = `/${ctx.getLanguage()}-${path.split('/')[1] || 'index'}.html`
   return await distServer(ctx, (...args) => {
     ctx.path = path
     return next(...args)
@@ -51,8 +61,8 @@ router.all('/:uname/:name/:path?', async (ctx, next) => {
   const resp = await form.getPage(ctx.params.path || '', ctx)
   if (resp === null) return ctx.throw(404)
   if (typeof resp === 'number') return ctx.status = resp
-  if (typeof resp === 'string') return ctx.body = resp
-  throw new TypeError(`typeof resp is ${typeof resp}, expected null|number|string`)
+  if (typeof resp === 'string' || (resp && typeof resp.pipe === 'function')) return ctx.body = resp
+  throw new TypeError(`typeof resp is ${typeof resp}, expected null|number|string|stream`)
 })
 
 router.get('/_forms', async ctx => {

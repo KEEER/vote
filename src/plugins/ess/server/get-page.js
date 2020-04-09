@@ -2,6 +2,7 @@ import { schema } from '../common/graphql'
 import { graphql } from 'graphql'
 import logger from '@vote/core/log'
 import query from './query'
+import { exportForm } from './export'
 import { readDistFile } from '@vote/api'
 import { isDev } from '@vote/core/is-dev'
 
@@ -17,35 +18,46 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
   ) && (path === '' || path === 'fill' || path === '_bundle')
   ) return set(404)
   const user = ctx.state.user
-  const unauthorized = () => ctx.state.userNoId ? ctx.requireLogin() : set(404)
+  const authorize = what => async () => {
+    await form.emit(`authorize${what[0].toUpperCase()}${what.substr(1)}`, { form, path, ctx, set: a => authorized = a })
+    // why not 403: return a 403 will indicate that the form exists.
+    if (!authorized) ctx.state.userNoId ? ctx.requireLogin() : set(404)
+    return authorized
+  }
+  /**
+   * @typedef {object} AuthorizeEventParam
+   * @property {module:form~Form} form the form itself
+   * @property {string} path editor path
+   * @property {Koa.Context} ctx Koa context
+   * @property {function} set setter function
+   */
+  /**
+   * Authorize editor event.
+   * @event Form#authorizeEditor
+   * @type {AuthorizeEventParam}
+   */
+  /**
+   * Authorize editor query event.
+   * @event Form#authorizeQuery
+   * @type {AuthorizeEventParam}
+   */
+  /**
+   * Authorize editor export event.
+   * @event Form#authorizeExport
+   * @type {AuthorizeEventParam}
+   */
+  /**
+   * Authorize editor rename / delete event.
+   * @event Form#authorizeRenameOrRemoval
+   * @type {AuthorizeEventParam}
+   */
   let authorized = user && String(user.id) === String(form.options.userId) || isDev
   if (form.editorPaths.indexOf(path) > -1) {
-    /**
-     * @typedef {object} AuthorizeEventParam
-     * @property {module:form~Form} form the form itself
-     * @property {string} path editor path
-     * @property {Koa.Context} ctx Koa context
-     * @property {function} set setter function
-     */
-
-    /**
-     * Authorize editor event.
-     * @event Form#authorizeEditor
-     * @type {AuthorizeEventParam}
-     */
-    await form.emit('authorizeEditor', { form, path, ctx, set: a => authorized = a })
-    // why not 403: return a 403 will indicate that the form exists.
-    if (!authorized) return unauthorized()
+    if (!await authorize('editor')) return
     return set(editorHtml.replace(/\/?vote-config.js/g, `/${form.path}/_bundle-editor`))
   }
   if (path === '_query' && ctx.method === 'POST') {
-    /**
-     * Authorize editor query event.
-     * @event Form#authorizeQuery
-     * @type {AuthorizeEventParam}
-     */
-    await form.emit('authorizeQuery', { form, path, ctx, set: a => authorized = a })
-    if (!authorized) return unauthorized()
+    if (!await authorize('query')) return
     let data
     try {
       data = await graphql(
@@ -61,13 +73,7 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
     return set(JSON.stringify(data))
   }
   if (path === '_rename' || path === '_delete') {
-    /**
-     * Authorize editor rename / delete event.
-     * @event Form#authorizeRenameOrRemoval
-     * @type {AuthorizeEventParam}
-     */
-    await form.emit('authorizeRenameOrRemoval', { form, path, ctx, set: a => authorized = a })
-    if (!authorized) return unauthorized()
+    if (!await authorize('renameOrRemoval')) return
     if (path === '_rename') {
       if (!ctx.query.name || !/^([a-zA-Z0-9]|-|_)*$/i.test(ctx.query.name)) return set(400)
       if (ctx.query.name.length > 64) return set(400)
@@ -85,8 +91,11 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
     }
   }
   if (path === '_bundle-editor') {
-    await form.emit('authorizeEditor', { form, path, ctx, set: a => authorized = a })
-    if (!authorized) return unauthorized()
-    return set(await form.bundle(null, null, 'editor'))
+    if (!await authorize('editor')) return
+    return set(await form.bundle('', '', 'editor'))
+  }
+  if (path === '_export') {
+    if (!await authorize('export')) return
+    return set(await exportForm(form, ctx))
   }
 }

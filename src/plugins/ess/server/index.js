@@ -2,6 +2,7 @@ import { handleUpdateBasicSettings, handlePreprocessBasicSettings } from './basi
 import { handleGetPage } from './get-page'
 import { handleValidateSubmission } from './validate-submission'
 import { handleGetStats } from './stats'
+import { handleExportQuestionData } from './export'
 import { plugins } from '@vote/core/plugin'
 import { themes } from '@vote/core/theme'
 
@@ -22,4 +23,5 @@ export default function attachTo (form) {
   form.on('updateSettings', handleUpdateBasicSettings)
   form.on('preprocessData', handlePreprocessBasicSettings)
   form.on('getStat', handleGetStats)
+  form.on('exportQuestionData', handleExportQuestionData)
 }

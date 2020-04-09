@@ -198,6 +198,7 @@ plugin:
       editTagPlaceholder: 点击回车以插入
       finishTags: 完成
       updateTagsError: 更新标签失败，数据可能尚未保存。
+      export: 导出数据
 
     stats:
       loading: 正在加载统计数据……
@@ -234,6 +235,11 @@ plugin:
       themeIntroduction: Vote 提供了一系列主题，您可以挑选您最喜欢的一个。
       submit: 更新
       failed: 更新失败！
+
+    export:
+      id: 提交 ID
+      time: 提交时间
+      tags: 标签
 
   sample:
     name: 示例插件

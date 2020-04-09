@@ -299,6 +299,8 @@ export { questionMixin } from './question-mixin'
  * @param {any} defaultValue default value for config
  */
 export const getConfig = (data, kind, name, defaultValue) => {
+  if (!data) return defaultValue
+  if (data.is === 'Form') data = { config: data.options.data }
   // Badly wanted to use ?. but it is not supported by Vue right now :(
   if (!data.config || !data.config[kind] || typeof data.config[kind][name] === 'undefined') return defaultValue
   return data.config[kind][name]

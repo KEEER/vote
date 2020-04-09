@@ -76,6 +76,7 @@ export class Form extends EventEmitter {
    */
   constructor (options) {
     super()
+    this.is = 'Form'
     this.updated = []
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
@@ -439,7 +440,8 @@ export class Form extends EventEmitter {
     if (res !== null) {
       if (res === 200) return ''
       if (typeof res === 'number') return ctx.throw(res)
-      if (typeof res === 'string' || Buffer.isBuffer(res)) return res
+      // string, stream or buffer: return them
+      if (typeof res === 'string' || (res && typeof res.pipe === 'function') || Buffer.isBuffer(res)) return res
       log.error(`typeof html is ${typeof res}`)
       return ctx.throw(500)
     }
