@@ -29,9 +29,9 @@
     </m-drawer>
     <m-drawer-scrim v-if="modal" />
     <div id="content">
-      <m-top-app-bar @nav="drawerOpen = !drawerOpen">
+      <m-top-app-bar>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-          <m-icon-button v-if="modal" icon="menu" class="mdc-top-app-bar__navigation-icon" />
+          <m-icon-button v-if="modal" icon="menu" class="mdc-top-app-bar__navigation-icon" @click="drawerOpen = !drawerOpen" />
           <span class="hgroup mdc-top-app-bar__title">
             <div class="app-bar-title">{{appBarTitle}}</div>
             <div class="mdc-top-app-bar__subtitle" v-if="appBarSubtitle">

@@ -1,5 +1,17 @@
+import { Transform } from 'stream'
 import stringify from 'csv-stringify'
 import { getConfig } from '@vote/api/index'
+
+const bom = Buffer.from('EFBBBF', 'hex')
+class AddBomTransform extends Transform {
+  constructor (stream, options) {
+    super(options)
+    stream.pipe(this)
+    // FXXX MICRO$OFT, see: https://stackoverflow.com/questions/15685053/save-csv-with-bom
+    this.push(bom)
+  }
+  _transform (chunk, _encoding, callback) { callback(null, chunk) }
+}
 
 export async function exportForm (form, ctx) {
   const stringifier = stringify()
@@ -7,7 +19,7 @@ export async function exportForm (form, ctx) {
   writeData(form, stringifier, ctx)
   ctx.set('Content-Type', 'text/csv')
   ctx.set('Content-Disposition', `attachment; filename="${form.options.name}.csv"`)
-  return stringifier
+  return new AddBomTransform(stringifier)
 }
 
 export function handleExportQuestionData ({ question, answer, set }) {
@@ -35,7 +47,6 @@ const writeData = async (form, stringifier, ctx) => {
     await form.emit('exportQuestionHeader', { form, question, set: d => data = d })
     return data
   }))
-  // TODO: i18n
   const hasTags = getConfig(form, 'settings', 'tags.enabled', false)
   header.unshift(ctx.$t('plugin.ess.export.id'), ctx.$t('plugin.ess.export.time'), ...(hasTags ? [ ctx.$t('plugin.ess.export.tags') ] : []))
   /**
