@@ -13,7 +13,7 @@ class Question {
    * @param {*} [options.value] Default value of the question
    */
   constructor (options) {
-    this.is = 'Question'
+    this.is = 'question'
     assert(typeof options === 'object')
     assert(typeof options.type === 'string')
     assert(typeof options.title === 'string')

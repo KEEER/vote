@@ -27,7 +27,7 @@ export class Page {
    * @param {module:question~Question[]} options.questions Questions in the page
    */
   constructor (options) {
-    this.is = 'Page'
+    this.is = 'page'
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
         obj[prop] = val
@@ -76,51 +76,38 @@ export class Form extends EventEmitter {
    */
   constructor (options) {
     super()
-    this.is = 'Form'
-    this.updated = []
+    this.is = 'form'
+    this._updated = new Set()
+    // make observers
     this.options = new Proxy(options, {
       set: (obj, prop, val) => {
-        if (this.updated.indexOf(prop) < 0) this.updated.push(prop)
+        this._updated.add(prop)
         obj[prop] = val
         return true
       },
     })
-    this.options.pages = new Proxy(Form.processPages(this.options.pages), {
+    const constructProxy = (target, name) => new Proxy(target, {
       set: (obj, prop, val) => {
+        this._updated.add(name)
         obj[prop] = val
-        if (this.updated.indexOf('pages') < 0) this.updated.push('pages')
         return true
       },
     })
-    const questions = this.options.questions
-    if (questions) this.options.questions = new Proxy(questions, {
-      set: (obj, prop, val) => {
-        obj[prop] = val
-        if (this.updated.indexOf('questions') < 0) this.updated.push('questions')
-        return true
-      },
-    })
-    if (this.options.plugins) {
-      this.options.plugins.forEach(plugin => {
-        plugin.attachTo(this)
-      })
-      const plugins = this.options.plugins
-      this.options.plugins = new Proxy(plugins, {
-        set: (obj, prop, val) => {
-          obj[prop] = val
-          if (this.updated.indexOf('plugins') < 0) this.updated.push('plugins')
-          return true
-        },
-      })
+    const { plugins, questions } = this.options
+    this.options.pages = constructProxy(Form.processPages(this.options.pages), 'pages')
+    if (questions) this.options.questions = constructProxy(questions, 'questions')
+    if (plugins) {
+      for (const plugin of plugins) plugin.attachTo(this)
+      this.options.plugins = constructProxy(plugins, 'plugins')
     }
-    this.updated.length = 0
+    this._updated.clear()
   }
 
   get id () { return this.options.id || null }
 
   /**
    * Gets the pages in the form.
-   * @returns {Page} Pages
+   * @returns {Page[]} Pages
    */
   get pages () {
     return this.options.pages
@@ -165,7 +152,7 @@ export class Form extends EventEmitter {
    * @returns {string[]}
    */
   provides (feature, objects = this._themeAndPlugins) {
-    return [ ...new Set(objects.flatMap(o => ((o.config.provides || {})[feature] || []))) ]
+    return Array.from(new Set(objects.flatMap(o => ((o.config.provides || {})[feature] || []))))
   }
 
   /**
@@ -310,27 +297,22 @@ export class Form extends EventEmitter {
     this.options.data = this.options.data || {}
     if (!this.options.data.creation) this.options.data.creation = Date.now()
     this.options.data.lastUpdate = Date.now()
-    this.updated.push('data')
+    this._updated.add('data')
     const args = {}
-    if (this.questions.some(q => q.updated) || this.updated.indexOf('plugins') > -1) {
+    if (this._updated.delete('questions') || this._updated.has('pages') || this.questions.some(q => q.updated)) {
       args.questions = this.questions.map(q => q.toObject())
     }
-    if (this.pages.some(p => p.updated) || this.updated.indexOf('pages') > -1) {
+    if (this._updated.delete('pages') || this.pages.some(p => p.updated)) {
       args.pages = Form.processPages(this.pages).map(p => p.toObject())
     }
-    if (this.updated.indexOf('plugins') > -1) {
-      args.plugins = this.options.plugins.map(p => p.config.code)
-    }
-    if (this.updated.indexOf('name') > -1) {
+    if (this._updated.delete('plugins')) args.plugins = this.options.plugins.map(p => p.config.code)
+    if (this._updated.delete('name')) {
       args.name = this.options.name
       args.lower_name = this.options.name.toLowerCase()
     }
-    if (this.updated.indexOf('userId') > -1) {
-      args.user_id = this.options.userId
-    }
-    this.updated.filter(prop => [ 'pages', 'plugins', 'questions', 'name', 'userId' ].indexOf(prop) < 0)
-      .forEach(prop => args[prop] = this.options[prop])
-    this.updated.length = 0
+    if (this._updated.delete('userId')) args.user_id = this.options.userId
+    for (const prop of this._updated) args[prop] = this.options[prop]
+    this._updated.clear()
     await update('PRE_forms', args, 'id', this.id)
     this.questions.forEach(q => q.updated = false)
     this.pages.forEach(p => p.updated = false)
