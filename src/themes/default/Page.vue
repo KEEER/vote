@@ -13,12 +13,8 @@
 </template>
 
 <style scoped>
-.page {
-  display: none;
-}
-.page.current {
-  display: block;
-}
+.page { display: none; }
+.page.current { display: block; }
 </style>
 
 <script>

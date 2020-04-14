@@ -251,6 +251,10 @@ plugin:
     questionMenu:
       sample: 示例入口
 
+  breakpoint:
+    name: 断点续填
+    description: 网页刷新时不会丢失数据（谁来写一下这个介绍）
+
 theme:
   common:
     page: 第 {page} 页

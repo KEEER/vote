@@ -24,7 +24,7 @@
             <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.common.submit')}}</m-button>
           </span>
           <a class="footer-link" href="/?utm_source=form&utm_medium=footer">
-            <img class="vote-icon" src="/img/logo.svg" />
+            <img class="vote-icon" src="/img/logo.svg" alt="Vote icon" />
             {{$t('theme.default.footer')}}
           </a>
         </div>
@@ -261,6 +261,14 @@ export default {
     },
     async submit () {
       if (!this.pages[this.current].valid) return this.pages[this.current].$emit('validateNext')
+      if (!this.valid) {
+        // Some previous page(s) is invalid
+        await this.flipPage('down', () => {
+          this.current = this.pages.findIndex(x => !x.valid)
+          this.update()
+        })
+        this.pages.find(x => !x.valid).$emit('validateNext')
+      }
       let cancel = false
       /**
        * Event when we checks before submit.

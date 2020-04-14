@@ -2,6 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 import { themes } from './theme'
+import { isDev } from './is-dev'
 
 /** Class representing a plugin. */
 class Plugin {
@@ -40,10 +41,10 @@ try {
       const injections = plugin.uses.inject[k] || {}
       plugin.inject[k] = {}
       if (injections.js) {
-        plugin.inject[k].jsPath = js.find(f => f.startsWith(injections.js) && f.endsWith('.js'))
+        plugin.inject[k].jsPath = isDev ? injections.js + '.js' : js.find(f => f.startsWith(injections.js) && f.endsWith('.js'))
       }
       if (injections.css) {
-        plugin.inject[k].cssPath = css.find(f => f.startsWith(injections.css) && f.endsWith('.css'))
+        plugin.inject[k].cssPath = isDev ? injections.css + '.css' : css.find(f => f.startsWith(injections.css) && f.endsWith('.css'))
       }
     }
     let attachTo

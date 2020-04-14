@@ -315,7 +315,10 @@ export const getConfig = (data, kind, name, defaultValue) => {
  * @param {any} value value to set
  */
 export const setConfig = (data, kind, name, value) => {
-  if (!data.config) return data.config = { [kind]: { [name]: value } }
-  else if (!data.config[kind]) return data.config[kind] = { [name]: value }
-  return data.config[kind][name] = value
+  const isForm = data.is === 'Form'
+  if (isForm) data = data.options
+  const configKey = isForm ? 'data' : 'config'
+  if (!data[configKey]) return data[configKey] = { [kind]: { [name]: value } }
+  else if (!data[configKey][kind]) return data[configKey][kind] = { [name]: value }
+  return data[configKey][kind][name] = value
 }

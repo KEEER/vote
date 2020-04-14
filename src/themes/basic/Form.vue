@@ -57,10 +57,8 @@ export default Vue.extend({
       hooks.emit('form:update', this)
     },
     updateVisibility () {
-      if (this.current === 0) this.prevVisible = false
-      else this.prevVisible = true
-      if (this.current === this.pages.length - 1) this.nextVisible = false
-      else this.nextVisible = true
+      this.prevVisible = this.current !== 0;
+      this.nextVisible = this.current !== this.pages.length - 1;
       hooks.emit('form:updateVisibility', this)
     },
     submit () {

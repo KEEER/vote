@@ -34,6 +34,7 @@ const config = {
     'plugin-sample-editor': [ './src/plugins/sample/editor.js' ],
     'plugin-ess-form': [ './src/plugins/ess/form/index.js' ],
     'plugin-ess-editor': [ './src/plugins/ess/editor/index.js' ],
+    'plugin-breakpoint': [ './src/plugins/breakpoint/index.js' ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

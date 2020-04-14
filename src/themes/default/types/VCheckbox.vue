@@ -25,6 +25,9 @@ export default {
       getQuestionConfig: getConfig,
     }
   },
+  watch: {
+    value (val) { this.value_ = val },
+  },
   components: { VCheckboxInput },
   props: {
     data: {

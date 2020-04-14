@@ -256,6 +256,10 @@ plugin:
     questionMenu:
       sample: Sample Entry
 
+  breakpoint:
+    name: Breakpoints
+    description: Data will not be lost on refresh
+
 theme:
   common:
     page: Page {page}

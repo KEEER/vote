@@ -113,6 +113,7 @@ export class Form extends EventEmitter {
         },
       })
     }
+    this.updated.length = 0
   }
 
   get id () { return this.options.id || null }
