@@ -102,13 +102,8 @@
 .description { margin-bottom: 16px; }
 
 @media(max-width: 720px) {
-  .title-type {
-    flex-direction: column;
-  }
-
-  .question-title {
-    margin-bottom: 16px;
-  }
+  .title-type { flex-direction: column; }
+  .question-title { margin-bottom: 16px; }
 }
 
 .divider {
@@ -117,9 +112,7 @@
   margin: 0 16px;
 }
 
-.required-switch {
-  margin-left: 8px;
-}
+.required-switch { margin-left: 8px; }
 
 .question-title--display {
   font-size: 1.2rem;
@@ -135,13 +128,9 @@
   align-items: center;
 }
 
-.handle {
-  cursor: move;
-}
+.handle { cursor: move; }
 
-.handle--folded {
-  padding: 0 8px 0 0;
-}
+.handle--folded { padding: 0 8px 0 0; }
 
 .title-required::before {
   content: '*';
@@ -254,7 +243,9 @@ export default {
     TypeSelector,
     HTMLEditor,
     QuestionConfigDialog,
+    ...questionTypes,
   },
+  provide () { return { Question: this } },
   props: {
     // TODO: check props
     data: Object,

@@ -27,12 +27,8 @@ class Question {
     })
   }
 
-  get id () {
-    return this.options.id
-  }
-  set id (id) {
-    this.options.id = id
-  }
+  get id () { return this.options.id }
+  set id (id) { this.options.id = id }
 
   /**
    * Get a object to be stored.

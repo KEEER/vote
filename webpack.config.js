@@ -35,6 +35,8 @@ const config = {
     'plugin-ess-form': [ './src/plugins/ess/form/index.js' ],
     'plugin-ess-editor': [ './src/plugins/ess/editor/index.js' ],
     'plugin-breakpoint': [ './src/plugins/breakpoint/index.js' ],
+    'plugin-autofill-form': [ './src/plugins/autofill/form.js' ],
+    'plugin-autofill-editor': [ './src/plugins/autofill/editor.js' ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

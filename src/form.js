@@ -28,13 +28,16 @@ export class Page {
    */
   constructor (options) {
     this.is = 'page'
-    this.options = new Proxy(options, {
+    const constructProxy = obj => new Proxy(obj, {
       set: (obj, prop, val) => {
         obj[prop] = val
         this.updated = true
         return true
       },
     })
+    options.questions = options.questions || []
+    options.questions = constructProxy(options.questions)
+    this.options = constructProxy(options)
   }
 
   /**
@@ -299,10 +302,11 @@ export class Form extends EventEmitter {
     this.options.data.lastUpdate = Date.now()
     this._updated.add('data')
     const args = {}
-    if (this._updated.delete('questions') || this._updated.has('pages') || this.questions.some(q => q.updated)) {
+    if (this._updated.delete('questions') || this.questions.some(q => q.updated)) {
       args.questions = this.questions.map(q => q.toObject())
     }
     if (this._updated.delete('pages') || this.pages.some(p => p.updated)) {
+      args.questions = this.questions.map(q => q.toObject())
       args.pages = Form.processPages(this.pages).map(p => p.toObject())
     }
     if (this._updated.delete('plugins')) args.plugins = this.options.plugins.map(p => p.config.code)

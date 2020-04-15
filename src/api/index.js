@@ -86,6 +86,34 @@ export const waitUntil = (predicate, timeout) => new Promise((resolve, reject) =
   }, 128)
 })
 
+/**
+ * Debounce a function.
+ * @param {function} func function to debounce
+ * @param {number} wait wait time
+ * @returns {function(...[*]=)} debounced function
+ */
+export const debounce = (func, wait) => {
+  let lastCallTime = -1
+  let timeoutId = -1
+  return (...args) => {
+    const time = Date.now()
+    const callFunc = () => func(...args)
+    if (lastCallTime < time - wait) {
+      lastCallTime = time
+      if (timeoutId > -1) {
+        clearTimeout(timeoutId)
+        window.removeEventListener('beforeunload', callFunc)
+      }
+      timeoutId = -1
+      callFunc()
+      return
+    }
+    if (timeoutId > -1) return
+    setTimeout(func, timeoutId, ...args)
+    window.addEventListener('beforeunload', callFunc)
+  }
+}
+
 // editor apis
 
 const stylesInjected = {}
@@ -211,6 +239,23 @@ export const addQuestionType = (name, component) => {
 }
 
 /**
+ * @typedef SubQuestion
+ * @type Object
+ * @property {string|component} type question type
+ * @property {boolean} [show=false] whether to show the sub-question
+ */
+
+/**
+ * Adds a combined question type.
+ * @param {string} name
+ * @param {function(Question=SubQuestion[])} subQuestions
+ */
+export const addCombinedQuestionType = (name, subQuestions) => {
+  addQuestionType(name, 'VCombined')
+  browserMixinQueue.push(hooks => hooks.on('v-combined:mounted', vm => vm.subQuestions = subQuestions(vm)))
+}
+
+/**
  * Adds an entry into settings page.
  * @function
  * @param {string} entry.name unique name of the entry
@@ -321,4 +366,43 @@ export const setConfig = (data, kind, name, value) => {
   if (!data[configKey]) return data[configKey] = { [kind]: { [name]: value } }
   else if (!data[configKey][kind]) return data[configKey][kind] = { [name]: value }
   return data[configKey][kind][name] = value
+}
+
+/** A storage wrapper for localStorage. */
+export class FormStorage {
+  /**
+   * Create a storage.
+   * @param {string} name storage name
+   * @param {'global'|'user'|'form'|'fill'} [scope='form'] storage scope
+   */
+  constructor (name, scope = 'form') {
+    name = 'vote-' + name
+    let storageKey = ''
+    if (scope === 'global') storageKey = name
+    else if (scope === 'user') storageKey = name + location.pathname.match(/^(\/[^/]*)\//)[1].toLowerCase()
+    else if (scope === 'form') storageKey = name + location.pathname.match(/^(\/[^/]*\/[^/]*)\//)[1].toLowerCase()
+    else if (scope === 'fill') {
+      let pathname = location.pathname
+      const fill = '/fill'
+      const slash = '/'
+      if (pathname.endsWith(fill)) pathname = pathname.slice(0, -fill.length)
+      if (pathname.endsWith(slash)) pathname = pathname.slice(0, -slash.length)
+      pathname = pathname.toLowerCase()
+      storageKey = name + pathname
+    } else throw new Error(`Unknown FormStorage scope ${scope}.`)
+    this.storageKey = storageKey
+    // do NOT use proxies here as they could not be polyfilled
+    this.data = {}
+    if (storageKey in localStorage) try { this.data = JSON.parse(localStorage[storageKey]) } catch (e) { console.error(e) }
+    this.update = debounce(() => {
+      if (Object.keys(this.data).length > 0) localStorage[storageKey] = JSON.stringify(this.data)
+    }, 500)
+  }
+  /** Updates the storage. */
+  update () {}
+  /** Clears the storage. */
+  clear () {
+    this.data = {}
+    delete localStorage[this.storageKey]
+  }
 }

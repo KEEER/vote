@@ -13,6 +13,7 @@ core:
       VCheckbox: Checkbox
       VRadio: Radio buttons
       VSample: Plugin Sample
+      VAutofill: Autofill Question
     validation:
       useValidation: Use validation
       type: Validation type
@@ -259,6 +260,22 @@ plugin:
   breakpoint:
     name: Breakpoints
     description: Data will not be lost on refresh
+
+  autofill:
+    name: Autofill
+    description: （谁来写一下这个介绍）
+    type: 这里应该写什么
+    types:
+      name: Name
+      gender: Gender
+      mobile: Mobile Phone
+      phone: Telephone
+      email: Email
+      address: Address
+      birthday: Birthday
+      telegram: Telegram
+      wechat: WeChat
+      qq: QQ
 
 theme:
   common:
