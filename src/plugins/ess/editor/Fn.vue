@@ -3,10 +3,10 @@
     <m-typo-headline class="block" :level="5">{{ $t('plugin.ess.fn.plugins') }}</m-typo-headline>
     <m-typo-body class="block typo-body" :level="1">{{ $t('plugin.ess.fn.pluginIntroduction') }}</m-typo-body>
     <m-list two-line role="group">
-      <m-list-item role="checkbox" v-for="plugin in allPlugins" :key="plugin.code">
+      <m-list-item role="checkbox" :aria-checked="isSelected(plugin)" v-for="plugin in allPlugins" :key="plugin.code">
         <template slot="primaryText">{{ $t(`plugin.${plugin.code}.name`) }}</template>
         <template slot="secondaryText">{{ $t(`plugin.${plugin.code}.description`) }}</template>
-        <m-checkbox slot="meta" :checked="selectedPlugins.indexOf(plugin.code) > -1" v-on="{ change: onChange(plugin.code) }" :disabled="plugin.required" />
+        <m-checkbox slot="meta" :checked="isSelected(plugin)" v-on="{ change: onChange(plugin.code) }" :disabled="plugin.required" />
       </m-list-item>
     </m-list>
     <hr />
@@ -63,10 +63,10 @@ export default {
   },
   methods: {
     onChange (code) {
-      return () => {
+      return state => {
         const i = this.selectedPlugins.indexOf(code)
-        if (i < 0) this.selectedPlugins.push(code)
-        else this.selectedPlugins.splice(i, 1)
+        if (i < 0 && state) this.selectedPlugins.push(code)
+        if (i > -1 && !state) this.selectedPlugins.splice(i, 1)
       }
     },
     async submit () {
@@ -82,6 +82,7 @@ export default {
       }
       location.reload()
     },
+    isSelected (plugin) { return this.selectedPlugins.includes(plugin.code) },
   },
   props: { data: Object },
   mounted () {
