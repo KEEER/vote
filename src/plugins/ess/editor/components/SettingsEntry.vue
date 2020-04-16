@@ -5,18 +5,18 @@
     </component>
     <template v-else-if="preset">
       <m-text-field v-if="preset === 'text-field'" v-model="value_" class="settings-fullwidth" :id="uid" outlined :required="'required' in $attrs">
-        <m-floating-label :for="uid">{{$t($attrs.placeholder)}}</m-floating-label>
+        <m-floating-label :for="uid">{{ $t($attrs.placeholder) }}</m-floating-label>
       </m-text-field>
       <div v-if="preset === 'checkbox'" class="labelled">
         <m-checkbox v-model="value_" :id="uid" />
-        <label :for="uid">{{$t($attrs.label)}}</label>
+        <label :for="uid">{{ $t($attrs.label) }}</label>
       </div>
       <div v-if="preset === 'switch'" class="labelled">
         <m-switch class="switch" v-model="value_" :id="uid" />
-        <label :for="uid">{{$t($attrs.label)}}</label>
+        <label :for="uid">{{ $t($attrs.label) }}</label>
       </div>
       <div v-if="preset === 'color'">
-        <m-typo-headline :level="6" class="color-label">{{$t($attrs.label)}}</m-typo-headline>
+        <m-typo-headline :level="6" class="color-label">{{ $t($attrs.label) }}</m-typo-headline>
         <color-picker v-model="value_" />
       </div>
     </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="vote-main">
-    <h1 v-if="nodata">{{nodataTip}}</h1>
+    <h1 v-if="nodata">{{ nodataTip }}</h1>
     <Form v-else :title="data.title" :action="data.action" :method="data.method">
       <Page v-for="(page, i) in data.data" :key="i">
         <Question
@@ -12,7 +12,7 @@
           :data="question" />
       </Page>
     </Form>
-    <footer class="vote-footer"><a href="/?utm_source=form&utm_medium=footer">{{$t('theme.basic.footer')}}</a></footer>
+    <footer class="vote-footer"><a href="/?utm_source=form&utm_medium=footer">{{ $t('theme.basic.footer') }}</a></footer>
   </div>
 </template>
 

@@ -10,9 +10,9 @@
       <m-icon-button icon="arrow_back" href="/?utm_source=editor&utm_medium=drawer_header_icon" class="back-button" />
       <div class="mdc-drawer__header">
         <m-typo-body :level="1" class="username">
-          <a href="/?utm_source=editor&utm_medium=drawer_header" class="username-link">{{userName}}</a>
+          <a href="/?utm_source=editor&utm_medium=drawer_header" class="username-link">{{ userName }}</a>
         </m-typo-body>
-        <m-typo-headline :level="5" class="formname">{{formName}}</m-typo-headline>
+        <m-typo-headline :level="5" class="formname">{{ formName }}</m-typo-headline>
       </div>
       <m-drawer-content>
         <m-drawer-list>
@@ -20,7 +20,7 @@
             <router-link class="navlink" :to="{name: route.name}">
               <m-list-item :activated="$route.name === route.name" @click="modal ? drawerOpen = false : null">
                 <m-icon :icon="route.icon" slot="graphic"/>
-                {{$t(route.title)}}
+                {{ $t(route.title) }}
               </m-list-item>
             </router-link>
           </span>
@@ -33,9 +33,9 @@
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <m-icon-button v-if="modal" icon="menu" class="mdc-top-app-bar__navigation-icon" @click="drawerOpen = !drawerOpen" />
           <span class="hgroup mdc-top-app-bar__title">
-            <div class="app-bar-title">{{appBarTitle}}</div>
+            <div class="app-bar-title">{{ appBarTitle }}</div>
             <div class="mdc-top-app-bar__subtitle" v-if="appBarSubtitle">
-              {{appBarSubtitle}}
+              {{ appBarSubtitle }}
             </div>
           </span>
         </section>
@@ -43,9 +43,9 @@
       </m-top-app-bar>
       <m-top-app-bar-fixed-adjust>
         <div class="lang-fallback" v-if="$t('isFallback') === 'true'">
-          {{$t('languageNotSupported.beforeLink')}}
-          <a :href="$t('languageNotSupported.link')">{{$t('languageNotSupported.linkLabel')}}</a>
-          {{$t('languageNotSupported.afterLink')}}
+          {{ $t('languageNotSupported.beforeLink') }}
+          <a :href="$t('languageNotSupported.link')">{{ $t('languageNotSupported.linkLabel') }}</a>
+          {{ $t('languageNotSupported.afterLink') }}
         </div>
         <router-view id="main" />
       </m-top-app-bar-fixed-adjust>

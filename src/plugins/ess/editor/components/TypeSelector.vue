@@ -11,11 +11,11 @@
       :key="i"
       :data-value="name"
       aria-selected="false"
-    >{{$t(`core.question.types.${name}`)}}</m-list-item>
+    >{{ $t(`core.question.types.${name}`) }}</m-list-item>
     <m-floating-label
       :for="uid"
       slot="label"
-    >{{$t('plugin.ess.question.type')}}</m-floating-label>
+    >{{ $t('plugin.ess.question.type') }}</m-floating-label>
   </m-select>
 </template>
 

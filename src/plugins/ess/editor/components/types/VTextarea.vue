@@ -9,7 +9,7 @@
       :id="uid"
     >
       <m-floating-label v-if="isEditor || !value_" :for="uid">
-        {{$t(isData ? 'plugin.ess.question.noValuePlaceholder' : 'plugin.ess.question.valuePlaceholder')}}
+        {{ $t(isData ? 'plugin.ess.question.noValuePlaceholder' : 'plugin.ess.question.valuePlaceholder') }}
       </m-floating-label>
     </m-text-field>
     <template v-else-if="statsData">

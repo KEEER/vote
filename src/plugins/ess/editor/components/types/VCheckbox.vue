@@ -39,7 +39,7 @@
       </ul>
     </template>
     <v-chart class="vote-chart" v-else-if="stats" :options="chartOptions" />
-    <m-typo-body v-else :level="1">{{$t('core.question.stats.unavailableForQuestion')}}</m-typo-body>
+    <m-typo-body v-else :level="1">{{ $t('core.question.stats.unavailableForQuestion') }}</m-typo-body>
   </div>
 </template>
 

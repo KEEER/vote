@@ -1,5 +1,5 @@
 <template>
-  <h3>{{title}}<sup v-if="required" class="title-required">*</sup></h3>
+  <h3>{{ title }}<sup v-if="required" class="title-required">*</sup></h3>
 </template>
 
 <style scoped>

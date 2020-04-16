@@ -1,16 +1,16 @@
 <template>
   <main :style="`color:${color};`">
-    <h1>{{this.title}}</h1>
+    <h1>{{ this.title }}</h1>
     <slot v-if="!submitting && !submitted && !submiterror" />
     <span v-if="!submitting && !submitted && !submiterror" class="form-controls">
-      {{$t('theme.common.page', { page: current + 1 })}}
-      <button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</button>
-      <button class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme.common.nextPage')}}</button>
-      <button class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.common.submit')}}</button>
+      {{ $t('theme.common.page', { page: current + 1 }) }}
+      <button class="form-prev" :hidden="!prevVisible" @click="prev">{{ $t('theme.common.prevPage') }}</button>
+      <button class="form-next" :hidden="!nextVisible" @click="next">{{ $t('theme.common.nextPage') }}</button>
+      <button class="form-submit" :hidden="nextVisible" @click="submit">{{ $t('theme.common.submit') }}</button>
     </span>
-    <h1 v-if="submitting && !submitted">{{$t('theme.common.submitting')}}</h1>
-    <h1 v-if="submitted">{{$t('theme.common.submitted')}}</h1>
-    <h1 v-if="submiterror">{{$t('theme.common.submiterror')}}</h1>
+    <h1 v-if="submitting && !submitted">{{ $t('theme.common.submitting') }}</h1>
+    <h1 v-if="submitted">{{ $t('theme.common.submitted') }}</h1>
+    <h1 v-if="submiterror">{{ $t('theme.common.submiterror') }}</h1>
   </main>
 </template>
 
@@ -57,8 +57,8 @@ export default Vue.extend({
       hooks.emit('form:update', this)
     },
     updateVisibility () {
-      this.prevVisible = this.current !== 0;
-      this.nextVisible = this.current !== this.pages.length - 1;
+      this.prevVisible = this.current !== 0
+      this.nextVisible = this.current !== this.pages.length - 1
       hooks.emit('form:updateVisibility', this)
     },
     submit () {

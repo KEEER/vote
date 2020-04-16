@@ -10,7 +10,7 @@
     >
       <slot />
     </component>
-    <m-typo-body :level="1" class="invalid-tip" v-if="invalidTip">{{invalidTip}}</m-typo-body>
+    <m-typo-body :level="1" class="invalid-tip" v-if="invalidTip">{{ invalidTip }}</m-typo-body>
   </div>
 </template>
 

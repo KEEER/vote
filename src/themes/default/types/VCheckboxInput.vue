@@ -1,7 +1,7 @@
 <template>
   <span class="checkbox" :class="{ multiline }">
     <m-checkbox v-model="value_" :id="uid" :value="option.value" />
-    <label :for="uid"><m-typo-body :level="1">{{option.label}}</m-typo-body></label>
+    <label :for="uid"><m-typo-body :level="1">{{ option.label }}</m-typo-body></label>
   </span>
 </template>
 

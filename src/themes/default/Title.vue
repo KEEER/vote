@@ -1,6 +1,6 @@
 <template>
   <m-typo-headline :level="5" class="question-title">
-    {{title}}
+    {{ title }}
     <sup v-if="required" class="title-required">*</sup>
   </m-typo-headline>
 </template>

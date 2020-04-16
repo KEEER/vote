@@ -9,7 +9,7 @@
         min="1"
         :max="count"
         step="1"
-      /></span> / {{count}} {{$t(countLabel)}}
+      /></span> / {{ count }} {{ $t(countLabel) }}
       <m-icon-button v-if="allowAdd" icon="add" @click="$emit('add')" />
       <m-menu-anchor v-if="$slots.menu">
         <m-icon-button @click="menuOpen = true" icon="more_vert" />
@@ -18,7 +18,7 @@
         </m-menu>
       </m-menu-anchor>
     </span>
-    <span class="no-data" v-else>{{$t(nullLabel)}}</span>
+    <span class="no-data" v-else>{{ $t(nullLabel) }}</span>
     <m-icon-button :disabled="nextDisabled" icon="chevron_right" @click="next" />
   </div>
 </template>

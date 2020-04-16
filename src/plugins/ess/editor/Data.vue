@@ -3,7 +3,7 @@
     <div v-if="showTags" class="search-tags">
       <m-chip-set input class="tags">
         <m-chip v-for="tag in searchTags" :key="tag" @removal="searchTags = searchTags.filter(t => t !== tag)">
-          {{tag}} <m-icon icon="cancel" slot="trailingIcon" />
+          {{ tag }} <m-icon icon="cancel" slot="trailingIcon" />
         </m-chip>
         <m-text-field
           full-width
@@ -17,7 +17,7 @@
         </m-text-field>
         <m-chip @interaction="loadSubmissionIds">
           <m-icon icon="search" slot="leadingIcon" />
-          {{$t('plugin.ess.data.searchTags')}}
+          {{ $t('plugin.ess.data.searchTags') }}
         </m-chip>
       </m-chip-set>
     </div>
@@ -31,14 +31,14 @@
       <m-list slot="menu">
         <m-list-item @click="exportData">
           <m-icon icon="get_app" class="menu-icon" slot="graphic" />
-          <template slot="text">{{$t('plugin.ess.data.export')}}</template>
+          <template slot="text">{{ $t('plugin.ess.data.export') }}</template>
         </m-list-item>
       </m-list>
     </DataNavigator>
     <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
       <div class="submission-meta">
-        <p class="submission-id">{{$t('plugin.ess.data.submissionId')}}{{currentSubmissionId}}</p>
-        <p class="submission-time">{{$t('plugin.ess.data.submissionTime')}}{{currentSubmission.time.toLocaleString()}}</p>
+        <p class="submission-id">{{ $t('plugin.ess.data.submissionId') }}{{ currentSubmissionId }}</p>
+        <p class="submission-time">{{ $t('plugin.ess.data.submissionTime') }}{{ currentSubmission.time.toLocaleString() }}</p>
         <div v-if="showTags" class="submission-tags">
           <m-chip-set input class="tags">
             <m-chip
@@ -46,7 +46,7 @@
               :key="tag"
               @removal="currentSubmission.tags = currentSubmission.tags.filter(t => t !== tag)"
             >
-              {{tag}}
+              {{ tag }}
               <m-icon v-show="editingTag" icon="cancel" slot="trailingIcon" />
             </m-chip>
             <m-text-field
@@ -63,7 +63,7 @@
             </m-text-field>
             <m-chip @interaction="toggleEdit">
               <m-icon :icon="editingTag ? 'done' : 'edit'" slot="leadingIcon" />
-              {{$t(editingTag ? 'plugin.ess.data.finishTags' : 'plugin.ess.data.manageTags')}}
+              {{ $t(editingTag ? 'plugin.ess.data.finishTags' : 'plugin.ess.data.manageTags') }}
             </m-chip>
           </m-chip-set>
         </div>
@@ -81,8 +81,8 @@
         :data="{ ...question, value: currentSubmission.data[question.id] }"
       />
     </div>
-    <div v-else-if="loadError">{{$t('plugin.ess.data.loadError')}}</div>
-    <div v-else-if="!loaded || submissionLoading">{{$t('plugin.ess.data.loading')}}</div>
+    <div v-else-if="loadError">{{ $t('plugin.ess.data.loadError') }}</div>
+    <div v-else-if="!loaded || submissionLoading">{{ $t('plugin.ess.data.loading') }}</div>
   </main>
 </template>
 

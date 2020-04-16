@@ -1,15 +1,15 @@
 <template>
   <m-dialog v-model="open_" scrollable>
-    <m-typo-headline :level="5" slot="header">{{$t('plugin.ess.editor.config')}}</m-typo-headline>
+    <m-typo-headline :level="5" slot="header">{{ $t('plugin.ess.editor.config') }}</m-typo-headline>
     <m-typo-body v-if="showEntries" :level="1" slot="body">
       <span class="entry" v-for="(entry, i) in enabledEntries" :key="entry.name">
         <span class="checkbox-entry" v-if="entry.type === 'checkbox'">
           <m-checkbox :id="`${uid}-${i}`" v-model="value_[entry.name]" @change="syncValue"></m-checkbox>
-          <label :for="`${uid}-${i}`">{{$t(entry.label)}}</label>
+          <label :for="`${uid}-${i}`">{{ $t(entry.label) }}</label>
         </span>
         <span class="switch-entry" v-if="entry.type === 'switch'">
           <m-switch class="switch" :id="`${uid}-${i}`" v-model="value_[entry.name]" @change="syncValue"></m-switch>
-          <label :for="`${uid}-${i}`">{{$t(entry.label)}}</label>
+          <label :for="`${uid}-${i}`">{{ $t(entry.label) }}</label>
         </span>
         <span class="cascade-entry" v-if="entry.type === 'cascade'">
           <m-select
@@ -23,8 +23,8 @@
             v-model="value_[entry.name][j]"
             @model="syncValue()"
           >
-            <m-list-item v-for="(item, k) in sel.items" :key="k" :data-value="item.value">{{$t(item.label)}}</m-list-item>
-            <m-floating-label :for="`${uid}-${i}-${j}`" slot="label">{{$t(sel.label)}}</m-floating-label>
+            <m-list-item v-for="(item, k) in sel.items" :key="k" :data-value="item.value">{{ $t(item.label) }}</m-list-item>
+            <m-floating-label :for="`${uid}-${i}-${j}`" slot="label">{{ $t(sel.label) }}</m-floating-label>
           </m-select>
         </span>
         <span class="text-field-entry" v-if="entry.type === 'text-field'">
@@ -37,7 +37,7 @@
             :type="entry.validation === 'number' ? 'number' : 'text'"
             @model="$refs[`${uid}-${i}`][0].mdcTextField.valid ? syncValue() : null"
           >
-            <m-floating-label :for="`${uid}-${i}`">{{$t(entry.label)}}</m-floating-label>
+            <m-floating-label :for="`${uid}-${i}`">{{ $t(entry.label) }}</m-floating-label>
           </m-text-field>
         </span>
       </span>
@@ -46,7 +46,7 @@
       class="mdc-dialog__button"
       data-mdc-dialog-action="OK"
       slot="acceptButton"
-    >{{$t('plugin.ess.editor.ok')}}</m-button>
+    >{{ $t('plugin.ess.editor.ok') }}</m-button>
   </m-dialog>
 </template>
 

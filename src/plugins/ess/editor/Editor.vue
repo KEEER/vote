@@ -13,16 +13,16 @@
       <m-list slot="menu">
         <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].folded = true)">
           <m-icon icon="keyboard_arrow_up" class="menu-icon" slot="graphic" />
-          <template slot="text">{{$t('plugin.ess.editor.foldAll')}}</template>
+          <template slot="text">{{ $t('plugin.ess.editor.foldAll') }}</template>
         </m-list-item>
         <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].folded = false)">
           <m-icon icon="keyboard_arrow_down" class="menu-icon" slot="graphic" />
-          <template slot="text">{{$t('plugin.ess.editor.unfoldAll')}}</template>
+          <template slot="text">{{ $t('plugin.ess.editor.unfoldAll') }}</template>
         </m-list-item>
       </m-list>
     </DataNavigator>
-    <div v-if="exitSaveError">{{$t('plugin.ess.editor.exitSaveError')}}</div>
-    <div v-else-if="exiting">{{$t('plugin.ess.editor.exiting')}}</div>
+    <div v-if="exitSaveError">{{ $t('plugin.ess.editor.exitSaveError') }}</div>
+    <div v-else-if="exiting">{{ $t('plugin.ess.editor.exiting') }}</div>
     <div id="questions" v-else-if="questionLoaded">
       <draggable
         v-model="questions"
@@ -47,12 +47,12 @@
       <div class="bottom-new">
         <m-button @click="newQuestion" unelevated>
           <m-icon slot="icon" icon="add" />
-          {{$t('plugin.ess.editor.new')}}
+          {{ $t('plugin.ess.editor.new') }}
         </m-button>
       </div>
     </div>
-    <div v-else-if="questionLoadError">{{$t('plugin.ess.editor.questionLoadError')}}</div>
-    <div v-else>{{$t('plugin.ess.editor.questionLoading')}}</div>
+    <div v-else-if="questionLoadError">{{ $t('plugin.ess.editor.questionLoadError') }}</div>
+    <div v-else>{{ $t('plugin.ess.editor.questionLoading') }}</div>
   </main>
 </template>
 

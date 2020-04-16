@@ -9,29 +9,29 @@
       class="form__title--scroll mdc-elevation--z3"
       :class="{ 'form__title--scroll--show': showScrollTitle }"
       :style="`background-color: ${this.colors.bgColor || 'white'};`"
-    >{{this.title}}</m-typo-headline>
+    >{{ this.title }}</m-typo-headline>
     <div class="content">
-      <m-typo-headline :level="3" class="form__title">{{this.title}}</m-typo-headline>
+      <m-typo-headline :level="3" class="form__title">{{ this.title }}</m-typo-headline>
       <div class="divider"></div>
       <template v-if="!submitting && !submitted && !submiterror">
-        <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
+        <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{ $t('theme.common.prevPage') }}</m-button>
         <Page v-for="(page, i) in data.data" :page="page" :key="i" ref="pages" :current="i === current" />
         <div class="form-footer">
           <span class="form-controls">
-            <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{$t('theme.common.prevPage')}}</m-button>
-            <span v-if="showPageNumber && data.data.length > 1">{{$t('theme.common.page', { page: current + 1 })}}</span>
-            <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next">{{$t('theme.common.nextPage')}}</m-button>
-            <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{$t('theme.common.submit')}}</m-button>
+            <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{ $t('theme.common.prevPage') }}</m-button>
+            <span v-if="showPageNumber && data.data.length > 1">{{ $t('theme.common.page', { page: current + 1 }) }}</span>
+            <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next">{{ $t('theme.common.nextPage') }}</m-button>
+            <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{ $t('theme.common.submit') }}</m-button>
           </span>
           <a class="footer-link" href="/?utm_source=form&utm_medium=footer">
             <img class="vote-icon" src="/img/logo.svg" alt="Vote icon" />
-            {{$t('theme.default.footer')}}
+            {{ $t('theme.default.footer') }}
           </a>
         </div>
       </template>
-      <m-typo-headline class="status" :level="5" v-if="showSubmitting">{{$t('theme.common.submitting')}}</m-typo-headline>
-      <m-typo-headline class="status" :level="5" v-if="showSubmitted">{{$t('theme.common.submitted')}}</m-typo-headline>
-      <m-typo-headline class="status" :level="5" v-if="showSubmiterror">{{$t('theme.common.submiterror')}}</m-typo-headline>
+      <m-typo-headline class="status" :level="5" v-if="showSubmitting">{{ $t('theme.common.submitting') }}</m-typo-headline>
+      <m-typo-headline class="status" :level="5" v-if="showSubmitted">{{ $t('theme.common.submitted') }}</m-typo-headline>
+      <m-typo-headline class="status" :level="5" v-if="showSubmiterror">{{ $t('theme.common.submiterror') }}</m-typo-headline>
     </div>
   </m-card>
 </template>

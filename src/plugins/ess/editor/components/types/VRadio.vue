@@ -29,7 +29,7 @@
                 :checked="value_ === option.value"
               />
               <m-text-field outlined :id="`${uid}-${i}`" v-model="option.label" class="label" @input="syncOptions">
-                <m-floating-label :for="`${uid}-${i}`">{{$t('plugin.ess.question.labelPlaceholder')}}</m-floating-label>
+                <m-floating-label :for="`${uid}-${i}`">{{ $t('plugin.ess.question.labelPlaceholder') }}</m-floating-label>
               </m-text-field>
               <m-icon icon="drag_handle" class="handle" />
             </li>
@@ -47,13 +47,13 @@
               :value="option.value"
               :checked="String(value_) === option.value"
             />
-            <span>{{option.label}}</span>
+            <span>{{ option.label }}</span>
           </li>
         </div>
       </ul>
     </template>
     <v-chart class="vote-chart" v-else-if="stats" :options="chartOptions" />
-    <m-typo-body v-else :level="1">{{$t('core.question.stats.unavailableForQuestion')}}</m-typo-body>
+    <m-typo-body v-else :level="1">{{ $t('core.question.stats.unavailableForQuestion') }}</m-typo-body>
   </div>
 </template>
 

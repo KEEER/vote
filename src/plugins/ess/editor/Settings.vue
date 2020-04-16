@@ -1,11 +1,11 @@
 <template>
   <main class="settings">
-    <div v-if="exitSaveError">{{$t('plugin.ess.settings.exitSaveError')}}</div>
-    <div v-else-if="exiting">{{$t('plugin.ess.settings.exiting')}}</div>
+    <div v-if="exitSaveError">{{ $t('plugin.ess.settings.exitSaveError') }}</div>
+    <div v-else-if="exiting">{{ $t('plugin.ess.settings.exiting') }}</div>
     <ul class="settings-entries" v-else-if="settingsLoaded">
       <m-tab-bar @activated="activeTab = $event.index">
         <m-tab-scroller>
-          <m-tab :active="activeTab === i" v-for="(entry, i) in entries" :key="i">{{$t(entry.title)}}</m-tab>
+          <m-tab :active="activeTab === i" v-for="(entry, i) in entries" :key="i">{{ $t(entry.title) }}</m-tab>
         </m-tab-scroller>
       </m-tab-bar>
       <li
@@ -22,8 +22,8 @@
         />
       </li>
     </ul>
-    <div v-else-if="settingsLoadError">{{$t('plugin.ess.settings.settingsLoadError')}}</div>
-    <div v-else>{{$t('plugin.ess.settings.settingsLoading')}}</div>
+    <div v-else-if="settingsLoadError">{{ $t('plugin.ess.settings.settingsLoadError') }}</div>
+    <div v-else>{{ $t('plugin.ess.settings.settingsLoading') }}</div>
   </main>
 </template>
 

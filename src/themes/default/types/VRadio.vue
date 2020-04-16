@@ -13,7 +13,7 @@
         :id="$id(option.value)"
         :value="option.value"
       />
-      <label :for="$id(option.value)"><m-typo-body :level="1">{{option.label}}</m-typo-body></label>
+      <label :for="$id(option.value)"><m-typo-body :level="1">{{ option.label }}</m-typo-body></label>
     </span>
   </div>
 </template>

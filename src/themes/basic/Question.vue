@@ -9,7 +9,7 @@
       ref="realQuestion">
       <slot />
     </component>
-    <div class="invalid-tip" v-if="invalidTip">{{invalidTip}}</div>
+    <div class="invalid-tip" v-if="invalidTip">{{ invalidTip }}</div>
   </div>
 </template>
 

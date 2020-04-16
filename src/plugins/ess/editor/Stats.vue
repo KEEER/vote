@@ -15,9 +15,9 @@
         :stats="stats[question.id]"
       />
     </template>
-    <m-typo-body :level="1" v-else-if="loaded && !stats">{{$t('plugin.ess.stats.noStats')}}</m-typo-body>
-    <div v-else-if="loadError">{{$t('plugin.ess.stats.loadError')}}</div>
-    <div v-else>{{$t('plugin.ess.stats.loading')}}</div>
+    <m-typo-body :level="1" v-else-if="loaded && !stats">{{ $t('plugin.ess.stats.noStats') }}</m-typo-body>
+    <div v-else-if="loadError">{{ $t('plugin.ess.stats.loadError') }}</div>
+    <div v-else>{{ $t('plugin.ess.stats.loading') }}</div>
   </main>
 </template>
 
