@@ -214,6 +214,9 @@ plugin:
       settingsLoading: 正在加载设置……
       exiting: 正在保存设置，请稍候……
       exitSaveError: 保存数据过程中出错，数据可能没有保存。请刷新以继续。
+      shortLink: 填写问卷的链接：<a href="{link}">{link}</a>
+      clickToCopy: 点击复制
+      manualCopy: 请手动复制下面的链接
       delete: 删除表单
       rename: 设置表单名称
       deleteSummary: 删除操作是不可恢复的。请务必三思而后行。

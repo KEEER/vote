@@ -122,6 +122,7 @@ const config = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^yaml$/),
+    new webpack.IgnorePlugin(/^hashids$/),
     new webpack.NormalModuleReplacementPlugin(/^\.\/styles\.scss$/, resource => {
       if (/@keeer\/material-components-vue/.test(resource.context)) resource.request = '.'
     }),

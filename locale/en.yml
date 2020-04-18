@@ -219,6 +219,9 @@ plugin:
       settingsLoading: Loading Settings...
       exiting: Saving settings, please wait...
       exitSaveError: Error saving settings, data may be not saved. Please refresh to continue.
+      shortLink: 'Form fill link: <a href="{link}">{link}</a>'
+      clickToCopy: Click to copy
+      manualCopy: Please copy the link below manually
       delete: Delete form
       rename: Set form name
       deleteSummary: Once you delete a form, there is no going back. Please be certain.

@@ -18,7 +18,16 @@
       @update:saveState="updateSaveState"
       :data="data"
       ref="retrieving"
+      :value.sync="retrieving"
     />
+    <p v-show="retrieving">
+      <m-typo-body :level="1" v-html="$t('plugin.ess.settings.shortLink', { link })" />
+      <m-button @click="copyLink">
+        <m-icon v-if="copyOk" icon="done" slot="icon" />
+        {{ $t('plugin.ess.settings.clickToCopy') }}
+      </m-button>
+      <input :value="link" ref="linkInput" />
+    </p>
     <SettingsEntry
       name="tags.enabled"
       preset="switch"
@@ -30,9 +39,18 @@
   </div>
 </template>
 
-<style>
-.form-title {
-  width: 100%;
+<style scoped>
+input {
+  position: absolute;
+  bottom: -100%;
+  left: -100%;
+}
+p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
 }
 </style>
 
@@ -44,7 +62,11 @@ export default {
   name: 'BasicSettings',
   mixins: [ saveStateRelay ],
   data () {
-    return {}
+    return {
+      link: window.KVoteFormData.shortLink,
+      retrieving: this.data['basic.retrieving'],
+      copyOk: false,
+    }
   },
   components: {
     SettingsEntry,
@@ -61,6 +83,11 @@ export default {
         this.$refs.retrieving.update(),
         this.$refs.tags.update(),
       ])
+    },
+    copyLink () {
+      this.$refs.linkInput.select()
+      if (!document.execCommand('copy')) prompt(this.$t('plugin.ess.settings.manualCopy'), this.link)
+      this.copyOk = true
     },
   },
   props: {

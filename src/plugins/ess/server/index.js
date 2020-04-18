@@ -5,6 +5,7 @@ import { handleGetStats } from './stats'
 import { handleExportQuestionData } from './export'
 import { plugins } from '@vote/core/plugin'
 import { themes } from '@vote/core/theme'
+import { getShortLink } from '@vote/api'
 
 export default function attachTo (form) {
   form.editorPaths = [ 'edit', 'settings', 'data', 'stats', 'fn', ...(form.editorPaths || []) ]
@@ -17,6 +18,7 @@ export default function attachTo (form) {
       data.plugins = form.options.plugins.map(p => p.config.code)
       data.allPlugins = plugins.map(p => p.config)
       data.allThemes = themes.map(t => t.config)
+      data.shortLink = getShortLink(form)
     }
   })
   form.on('validateSubmission', handleValidateSubmission)

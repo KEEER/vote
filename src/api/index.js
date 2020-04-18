@@ -114,6 +114,20 @@ export const debounce = (func, wait) => {
   }
 }
 
+let hashids
+try {
+  const Hashids = require('hashids/cjs')
+  hashids = new Hashids(process.env.HASHID_SALT, undefined, '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ')
+} catch (_e) { /* empty */ }
+
+/**
+ * Gets a short link for the form.
+ * Please ONLY call from server-side.
+ * @param {module:form~Form} form the form of the link
+ * @returns {string} url
+ */
+export const getShortLink = form => process.env.LINK_PREFIX + hashids.encode(form.id)
+
 // editor apis
 
 const stylesInjected = {}
