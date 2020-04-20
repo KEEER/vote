@@ -1,6 +1,6 @@
 {
   "name": "vote",
-  "version": "0.0.232",
+  "version": "0.0.233",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {

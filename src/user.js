@@ -184,4 +184,4 @@ setInterval(async () => {
   } catch (e) {
     log.error(e)
   }
-}, parseInt(process.env.SESSION_CLEAN_INTERVAL))
+}, parseInt(process.env.TOKEN_CLEAN_INTERVAL))
