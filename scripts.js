@@ -13,6 +13,8 @@ const fns = {
     fs.removeSync('dist/css')
     fs.removeSync('dist.tgz')
     fs.removeSync('dist/compat.json')
+    fs.removeSync('dist/build.json')
+    fs.removeSync('lib')
 
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html'))
@@ -29,7 +31,7 @@ const fns = {
     const tar = require('tar')
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html')).map(f => `dist/${f}`)
-      const files = process.env.PUBLIC_PATH ? [ ...htmlFiles, 'dist/build.json' ] : [ 'dist/js', 'dist/css', ...htmlFiles ]
+      const files = process.env.PUBLIC_PATH ? [ ...htmlFiles, 'dist/build.json', 'lib' ] : [ 'dist/js', 'dist/css', 'lib', ...htmlFiles ]
       await tar.c({ gzip: true, file: 'dist.tgz' }, files)
     } catch (e) {
       console.log(`Failed creating pack: ${e}`)
@@ -93,7 +95,7 @@ const fns = {
   },
 
   async 'build:compat' () {
-    require('./src/load-babel')
+    require('./src/bootstrap')(true)
     const plugins = require('./src/plugin').plugins
     const themes = require('./src/theme').themes
     const Form = require('./src/form').Form

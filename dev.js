@@ -1,5 +1,5 @@
 require('dotenv').config()
-require('./src/load-babel')
+require('./src/bootstrap')(true)
 global.query = require('./src/db').query
 global.Form = require('./src/form').Form
 global.Page = require('./src/form').Page

@@ -1,5 +1,4 @@
 /** @module main */
-import 'array-flat-polyfill'
 import path from 'path'
 import logger from './log'
 import { Form, Page } from './form'

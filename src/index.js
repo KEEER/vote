@@ -1,4 +1,2 @@
-// Load env config before anything else
-require('dotenv').config()
-require('./load-babel')
+require('./bootstrap')(process.env.NODE_ENV === 'development')
 require('./main')

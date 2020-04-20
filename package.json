@@ -1,15 +1,15 @@
 {
   "name": "vote",
-  "version": "0.0.234",
+  "version": "0.0.235",
   "description": "KEEER Vote",
   "main": "src/index.js",
   "scripts": {
-    "build": "npm run clean && cross-env NODE_ENV=production webpack && npm run build:misc && node scripts pack",
+    "build": "npm run clean && cross-env NODE_ENV=production webpack && babel src -d lib --copy-files && npm run build:misc && node scripts pack",
     "build:dev": "cross-env NODE_ENV=development webpack && npm run build:misc",
     "build:misc": "node scripts build:meta && node scripts build:html",
     "wds": "cross-env NODE_ENV=development webpack-dev-server",
     "dev": "cross-env NODE_ENV=development node .",
-    "start": "node .",
+    "start": "node lib",
     "start:dev": "cross-env NODE_ENV=development node .",
     "clean": "node scripts clean",
     "clean:cache": "node scripts clean:cache",

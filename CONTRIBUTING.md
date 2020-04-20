@@ -38,7 +38,6 @@ TBD: publish these actual packages so that IntelliSense could work.
     - `db.js` Database helper
     - `form.js` Form utils
     - `index.js` Entry point
-    - `load-babel.js` loading `@babel/register` and monkeypatching `Module`
     - `load-plugins.js` [Not executed] A file to be included in `_bundle`
     - `log.js` Logging utils
     - `main.js` Koa application
