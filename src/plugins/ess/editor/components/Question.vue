@@ -70,13 +70,13 @@
           <m-button class="mdc-dialog__button" data-mdc-dialog-action="Cancel" slot="cancelButton">{{ $t('plugin.ess.editor.cancel') }}</m-button>
           <m-button @click="remove" class="mdc-dialog__button" data-mdc-dialog-action="OK" slot="acceptButton">{{ $t('plugin.ess.editor.ok') }}</m-button>
         </m-dialog>
-        <m-icon-button @click="folded = true" icon="keyboard_arrow_up" />
+        <m-icon-button @click="fold" icon="keyboard_arrow_up" />
       </span>
     </template>
     <div class="folded" v-if="folded && isEditor">
       <m-icon class="handle handle--folded" icon="drag_handle" />
       <span class="question-title--display">{{ title_ }}</span>
-      <m-icon-button class="fold-button" @click="folded = false" v-if="folded" icon="keyboard_arrow_down" />
+      <m-icon-button class="fold-button" @click="unfold" v-if="folded" icon="keyboard_arrow_down" />
     </div>
   </m-card>
 </template>
@@ -165,7 +165,8 @@ export default {
   mixins: [
     updateObservable(async (vm, change) => {
       if (!vm.isEditor) return
-      const desc = await vm.$refs.description.save()
+      const desc = vm.folded ? vm.description_ : await vm.$refs.description.save()
+      vm.description_ = desc
       if (desc && desc.html === '<br>') desc.html = ''
       /**
        * Question data update event.
@@ -193,9 +194,7 @@ export default {
         delete change.themeConfig
         delete change.validationConfig
       }
-      if (change.description) {
-        change.description = JSON.stringify(desc)
-      }
+      if (change.description) change.description = JSON.stringify(desc)
       /**
        * Before update (sync) event.
        * @event editor:Question#beforeUpdate
@@ -302,6 +301,11 @@ export default {
     },
   },
   methods: {
+    async fold () {
+      await this.update()
+      this.folded = true
+    },
+    unfold () { this.folded = false },
     async remove () {
       try {
         const res = await query(`

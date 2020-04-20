@@ -11,11 +11,11 @@
       @add="addPage"
     >
       <m-list slot="menu">
-        <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].folded = true)">
+        <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].fold())">
           <m-icon icon="keyboard_arrow_up" class="menu-icon" slot="graphic" />
           <template slot="text">{{ $t('plugin.ess.editor.foldAll') }}</template>
         </m-list-item>
-        <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].folded = false)">
+        <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].unfold())">
           <m-icon icon="keyboard_arrow_down" class="menu-icon" slot="graphic" />
           <template slot="text">{{ $t('plugin.ess.editor.unfoldAll') }}</template>
         </m-list-item>

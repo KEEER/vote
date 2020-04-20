@@ -31,7 +31,7 @@ export default updateFunction => ({
         this.saveState = 'error'
         // TODO
         alert(this.$t('plugin.ess.updateError'))
-        console.log('update error', e.stack)
+        console.log('update error', e)
         return
       }
       if (!this.changed) this.saveState = 'saved'
