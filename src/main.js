@@ -28,7 +28,7 @@ const languages = Object.keys(localeMessages)
 app.context.getLanguage = function () {
   if (this.state._lang) return this.state._lang
   const acceptLanguage = this.get('accept-language')
-  return this.state._lang = acceptLanguage ? acceptLanguageParser.pick(languages, acceptLanguage) : 'en'
+  return this.state._lang = acceptLanguage ? acceptLanguageParser.pick(languages, acceptLanguage, { loose: true }) || 'en' : 'en'
 }
 app.context.$t = function (key) {
   const lang = this.getLanguage()
@@ -86,7 +86,7 @@ if (isDev) {
 }
 
 router.get('/', (ctx, next) => {
-  if (ctx.state.user) return staticServer(ctx, next)
+  if (ctx.state.user) return next()
   else {
     if (ctx.state.userNoId) ctx.requireLogin()
     else ctx.redirect('/welcome')

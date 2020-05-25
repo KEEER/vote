@@ -18,7 +18,7 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
   ) && (path === '' || path === 'fill' || path === '_bundle')
   ) return set(404)
   const user = ctx.state.user
-  const authorize = what => async () => {
+  const authorize = async what => {
     await form.emit(`authorize${what[0].toUpperCase()}${what.substr(1)}`, { form, path, ctx, set: a => authorized = a })
     // why not 403: return a 403 will indicate that the form exists.
     if (!authorized) ctx.state.userNoId ? ctx.requireLogin() : set(404)
