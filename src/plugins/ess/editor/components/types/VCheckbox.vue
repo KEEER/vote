@@ -44,16 +44,16 @@
 </template>
 
 <style scoped>
-  .checkbox-ul {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-  }
+.checkbox-ul {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
 
-  .ghost {
-    opacity: 0.5;
-  }
+.ghost {
+  opacity: 0.5;
+}
 </style>
 
 <script>

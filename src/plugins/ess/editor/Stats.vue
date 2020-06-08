@@ -38,8 +38,10 @@ hr {
 
 <style>
 .echarts.vote-chart {
-  width: 400px;
+  max-width: 400px;
   height: 300px;
+  width: initial;
+  overflow: auto;
 }
 </style>
 

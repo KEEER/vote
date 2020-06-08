@@ -89,7 +89,12 @@
 }
 
 .question.is-data, .question.is-stats { padding: 16px; }
-.question-card { margin: 16px; }
+.question-card {
+  margin: 16px;
+  overflow: hidden;
+  hyphens: auto;
+  word-break: break-word;
+}
 .question-card__folded { margin: 8px 16px; }
 .question-title { flex: auto; }
 .question-title--data { margin-bottom: 8px; }
