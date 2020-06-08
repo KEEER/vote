@@ -6,7 +6,7 @@
       :is="types[type]"
       :data="data"
       :value.sync="value"
-      ref="realQuestion">
+      ref="questionContent">
       <slot />
     </component>
     <div class="invalid-tip" v-if="invalidTip">{{ invalidTip }}</div>

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+// Vue component for the editor component for VAutofill.
 export default {
   name: 'VoteAutofillEditor',
   inject: [ 'Question' ],

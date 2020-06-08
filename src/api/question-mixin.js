@@ -7,9 +7,11 @@ export const questionMixin = {
     }
   },
   methods: {
-    syncOld () {
-      this.old = this.value_
-    },
+    /**
+     * Syncs the old value.
+     * @private
+     */
+    syncOld () { this.old = this.value_ },
   },
   watch: {
     value_ (val) {
@@ -34,18 +36,10 @@ export const questionMixin = {
       this.value_ = val
     },
   },
-  mounted () {
-    this.syncOld()
-  },
+  mounted () { this.syncOld() },
   computed: {
-    overridesParent () {
-      return !!this.question_
-    },
-    question () {
-      return this.question_ || this.$parent
-    },
-    realQuestion () {
-      return this.question.$refs.realQuestion
-    },
+    overridesParent () { return !!this.question_ },
+    question () { return this.question_ || this.$parent },
+    questionContent () { return this.question.$refs.questionContent },
   },
 }

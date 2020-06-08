@@ -1,3 +1,4 @@
+// this file serves as a wrapper around `schema.graphql`.
 if (typeof window === 'undefined') {
   // node
   module.exports = require('fs')

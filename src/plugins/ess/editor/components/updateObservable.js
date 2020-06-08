@@ -1,3 +1,7 @@
+/**
+ * Vue mixin to create a observable compoonent.
+ * @param {function} updateFunction function to call on update
+ */
 export default updateFunction => ({
   data () {
     return {
@@ -21,6 +25,7 @@ export default updateFunction => ({
     },
   },
   methods: {
+    /** Call this funtion to manually update. */
     async update () {
       if (!this.changed) return
       this.changed = false
@@ -37,11 +42,13 @@ export default updateFunction => ({
       if (!this.changed) this.saveState = 'saved'
       this.lastUpdated = Date.now()
     },
+    /** Call this function to mark a change or user input. */
     logChange () {
       this.changed = true
       this.lastChanged = Date.now()
       this.saveState = 'awaitInputStop'
     },
+    /** @private */
     checkUpdate () {
       if (!this.changed) return
       if (this.lastChanged + this.UPDATE_THRESHOLD.NOT_CHANGED < Date.now()) {

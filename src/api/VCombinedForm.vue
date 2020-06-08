@@ -13,6 +13,8 @@
 </template>
 
 <script>
+/// A VCombined implementation for the form context.
+
 import { questionMixin } from './question-mixin'
 
 export default {
@@ -36,9 +38,7 @@ export default {
     window.voteHooks.emit('v-combined:mounted', this)
   },
   methods: {
-    syncValue () {
-      this.value_ = [ ...this.value_ ]
-    },
+    syncValue () { this.value_ = [ ...this.value_ ] },
   },
 }
 </script>

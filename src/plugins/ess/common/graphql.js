@@ -3,8 +3,14 @@ import assert from 'assert'
 import schemaText from './schemaText'
 
 const schema = buildSchema(schemaText)
+/** GraphQL schema. */
 export { schema }
 
+/**
+ * Make a GraphQL query in the browser.
+ * @param {string} query GraphQL query
+ * @param {*} variables query variables
+ */
 export function query (query, variables) {
   variables = variables || {}
   assert(typeof window !== 'undefined', 'graphql.query() shouldn\'t be called out of browser')
