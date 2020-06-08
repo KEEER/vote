@@ -19,7 +19,10 @@
 export default {
   name: 'QTitle',
   props: {
-    title: String,
+    title: {
+      type: String,
+      required: true,
+    },
     required: Boolean,
   },
 }

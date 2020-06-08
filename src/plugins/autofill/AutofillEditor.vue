@@ -1,8 +1,8 @@
 <template>
   <div>
-    <m-select v-if="type" :id="uid" outlined enhanced v-model="type">
-      <m-list-item v-for="k in typeKeys" :key="k" :data-value="k" aria-selected="false">{{ types[k] }}</m-list-item>
-      <m-floating-label :for="uid" slot="label">{{ $t('plugin.autofill.type') }}</m-floating-label>
+    <m-select v-if="type" :id="uid" v-model="type" outlined enhanced>
+      <m-list-item v-for="k in typeKeys" :key="k" :data-value="k" aria-selected="false" v-text="types[k]" />
+      <m-floating-label slot="label" :for="uid" v-text="$t('plugin.autofill.type')" />
     </m-select>
   </div>
 </template>

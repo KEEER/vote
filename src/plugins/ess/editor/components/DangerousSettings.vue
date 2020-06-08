@@ -1,42 +1,44 @@
 <template>
   <div>
     <m-dialog :open="deleteOpen || renameOpen" @closed="deleteOpen = renameOpen = false">
-      <m-typo-headline :level="5" slot="header">{{ $t('plugin.ess.settings.' + (deleteOpen ? 'deleteTitle' : 'renameTitle')) }}</m-typo-headline>
-      <m-typo-body :level="1" slot="body">
+      <m-typo-headline slot="header" :level="5" v-text="$t('plugin.ess.settings.' + (deleteOpen ? 'deleteTitle' : 'renameTitle'))" />
+      <m-typo-body slot="body" :level="1">
         <p>{{ $t('plugin.ess.settings.' + (deleteOpen ? 'deleteInstruction' : 'renameInstruction'), { routeName }) }}</p>
         <m-text-field
-          ref="textField"
           :id="`${uid}-id`"
-          outlined
+          ref="textField"
           v-model="name"
+          outlined
           :maxlength="maxlen"
           pattern="([a-zA-Z0-9]|-|_)*"
         >
-          <m-floating-label :for="`${uid}-id`">{{ $t('plugin.ess.settings.' + (deleteOpen ? 'deleteConfirmName' : 'renameNewName')) }}</m-floating-label>
+          <m-floating-label :for="`${uid}-id`" v-text="$t('plugin.ess.settings.' + (deleteOpen ? 'deleteConfirmName' : 'renameNewName'))" />
         </m-text-field>
       </m-typo-body>
       <m-button
+        slot="cancelButton"
         class="mdc-dialog__button"
         data-mdc-dialog-action="Cancel"
-        slot="cancelButton"
-      >{{ $t('plugin.ess.editor.cancel') }}</m-button>
+        v-text="$t('plugin.ess.editor.cancel')"
+      />
       <m-button
+        slot="acceptButton"
         class="mdc-dialog__button"
         data-mdc-dialog-action="OK"
-        slot="acceptButton"
-        @click="handleClick"
         :disabled="okDisabled"
-      >{{ $t('plugin.ess.editor.ok') }}</m-button>
+        @click="handleClick"
+        v-text="$t('plugin.ess.editor.ok')"
+      />
     </m-dialog>
-    <m-typo-headline class="typo" :level="4">{{ $t('plugin.ess.settings.rename') }}</m-typo-headline>
-    <m-typo-body class="typo" :level="1">{{ $t('plugin.ess.settings.renameSummary') }}</m-typo-body>
+    <m-typo-headline class="typo" :level="4" v-text="$t('plugin.ess.settings.rename')" />
+    <m-typo-body class="typo" :level="1" v-text="$t('plugin.ess.settings.renameSummary')" />
     <m-button @click="name = routeName, renameOpen = true">
       <m-icon slot="icon" icon="edit" />
       {{ $t('plugin.ess.settings.rename') }}
     </m-button>
-    <hr />
-    <m-typo-headline class="typo" :level="4">{{ $t('plugin.ess.settings.delete') }}</m-typo-headline>
-    <m-typo-body class="typo" :level="1">{{ $t('plugin.ess.settings.deleteSummary') }}</m-typo-body>
+    <hr>
+    <m-typo-headline class="typo" :level="4" v-text="$t('plugin.ess.settings.delete')" />
+    <m-typo-body class="typo" :level="1" v-text="$t('plugin.ess.settings.deleteSummary')" />
     <m-button @click="name = '', deleteOpen = true">
       <m-icon slot="icon" icon="delete" />
       {{ $t('plugin.ess.settings.delete') }}

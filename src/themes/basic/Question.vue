@@ -1,15 +1,17 @@
 <template>
   <div :class="{ hidden }">
     <QTitle :title="data.title" :required="data.required" />
-    <div v-html="(data.description || {}).html || ''"></div>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div v-html="(data.description || {}).html || ''" />
     <component
       :is="types[type]"
+      ref="questionContent"
       :data="data"
       :value.sync="value"
-      ref="questionContent">
+    >
       <slot />
     </component>
-    <div class="invalid-tip" v-if="invalidTip">{{ invalidTip }}</div>
+    <div v-if="invalidTip" class="invalid-tip" v-text="invalidTip" />
   </div>
 </template>
 
@@ -26,20 +28,27 @@ import { getConfig } from '@vote/api'
 
 export default {
   name: 'Question',
+  components: { QTitle },
+  props: {
+    type: {
+      type: String,
+      required: true,
+    },
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
   data () {
     return {
       value: this.$attrs.value,
       types,
       invalidTip: '',
     }
-  },
-  components: {
-    QTitle,
-  },
-  props: {
-    type: String,
-    data: Object,
-    id: Number,
   },
   computed: {
     validity () {

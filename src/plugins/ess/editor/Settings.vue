@@ -1,29 +1,29 @@
 <template>
   <main class="settings">
-    <div v-if="exitSaveError">{{ $t('plugin.ess.settings.exitSaveError') }}</div>
-    <div v-else-if="exiting">{{ $t('plugin.ess.settings.exiting') }}</div>
-    <ul class="settings-entries" v-else-if="settingsLoaded">
+    <div v-if="exitSaveError" v-text="$t('plugin.ess.settings.exitSaveError')" />
+    <div v-else-if="exiting" v-text="$t('plugin.ess.settings.exiting')" />
+    <ul v-else-if="settingsLoaded" class="settings-entries">
       <m-tab-bar @activated="activeTab = $event.index">
         <m-tab-scroller>
-          <m-tab :active="activeTab === i" v-for="(entry, i) in entries" :key="i">{{ $t(entry.title) }}</m-tab>
+          <m-tab v-for="(entry, i) in entries" :key="i" :active="activeTab === i" v-text="$t(entry.title)" />
         </m-tab-scroller>
       </m-tab-bar>
       <li
-        class="settings-entry"
         v-for="(entry, i) in entries"
-        :key="i"
         v-show="activeTab === i"
+        :key="i"
+        class="settings-entry"
       >
         <component
-          :ref="`entry-${i}`"
           :is="entry.component"
-          @update:saveState="updateSaveState"
+          :ref="`entry-${i}`"
           :data="settingsData"
+          @update:saveState="updateSaveState"
         />
       </li>
     </ul>
-    <div v-else-if="settingsLoadError">{{ $t('plugin.ess.settings.settingsLoadError') }}</div>
-    <div v-else>{{ $t('plugin.ess.settings.settingsLoading') }}</div>
+    <div v-else-if="settingsLoadError" v-text="$t('plugin.ess.settings.settingsLoadError')" />
+    <div v-else v-text="$t('plugin.ess.settings.settingsLoading')" />
   </main>
 </template>
 
@@ -79,11 +79,6 @@ export default {
       activeTab: 0,
     }
   },
-  methods: {
-    async update () {
-      return await Promise.all(this.entries.map((_, i) => this.$refs[`entry-${i}`][0].update()))
-    },
-  },
   mounted () {
     /**
      * Settings component mounted event.
@@ -92,6 +87,11 @@ export default {
      */
     hooks.emit('editor:settingsMounted', this)
     this.loadSettings()
+  },
+  methods: {
+    async update () {
+      return await Promise.all(this.entries.map((_, i) => this.$refs[`entry-${i}`][0].update()))
+    },
   },
 }
 </script>

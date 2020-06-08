@@ -1,5 +1,5 @@
 <template>
-  <div :class="this.current ? 'page current' : 'page'">
+  <div :class="current ? 'page current' : 'page'">
     <slot />
   </div>
 </template>

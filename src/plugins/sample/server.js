@@ -1,5 +1,5 @@
-import logger from '@vote/core/log'
 import { addValidationMixin, editorRouteMixin } from './common'
+import logger from '@vote/core/log'
 import { on, createServerInjection, addPage } from '@vote/api'
 
 const log = logger.child({ part: 'plugin-sample' })

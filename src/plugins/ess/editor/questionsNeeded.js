@@ -34,8 +34,8 @@ export default {
           }`.trim(), { id })
         if (res.errors) throw res
         this.questions = res.data.form.page.questions
-        for (let i of [ 'value', 'options', 'description', 'config' ]) {
-          for (let question of this.questions) {
+        for (const i of [ 'value', 'options', 'description', 'config' ]) {
+          for (const question of this.questions) {
             question[i] = JSON.parse(question[i])
           }
         }

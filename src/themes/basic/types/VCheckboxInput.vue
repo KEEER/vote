@@ -1,8 +1,8 @@
 <template>
   <span>
-    <input type="checkbox" v-model="value_" :id="uid" :value="option.value" />
-    <label :for="uid">{{ option.label }}</label>
-    <br v-if="multiline" />
+    <input :id="uid" v-model="value_" type="checkbox" :value="option.value">
+    <label :for="uid" v-text="option.label" />
+    <br v-if="multiline">
   </span>
 </template>
 
@@ -12,15 +12,18 @@ import { questionMixin as mixin } from '@vote/api'
 export default {
   name: 'VCheckboxInput',
   mixins: [ mixin ],
+  props: {
+    option: {
+      type: Object,
+      required: true,
+    },
+    value: Boolean,
+    multiline: Boolean,
+  },
   data () {
     return {
       question_: this.$parent.$parent,
     }
-  },
-  props: {
-    option: Object,
-    value: Boolean,
-    multiline: Boolean,
   },
 }
 </script>

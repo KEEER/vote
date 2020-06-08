@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime'
+import UniqueId from 'vue-unique-id'
 import App, { getRouter } from './App'
 import hooks from './hooks'
-import UniqueId from 'vue-unique-id'
 import { locale, messages } from '@vote/locale'
 
 window.onload = () => {

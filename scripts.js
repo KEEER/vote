@@ -18,7 +18,7 @@ const fns = {
 
     try {
       const htmlFiles = fs.readdirSync('dist').filter(f => f.endsWith('.html'))
-      for (let f of htmlFiles) fs.removeSync(`dist/${f}`)
+      for (const f of htmlFiles) fs.removeSync(`dist/${f}`)
       // eslint-disable-next-line no-empty
     } catch (e) {}
   },
@@ -77,7 +77,7 @@ const fns = {
     const $t = m => {
       const slices = m.split('.')
       let message = messages[lang]
-      for (let s of slices) message = message[s] || m
+      for (const s of slices) message = message[s] || m
       return message
     }
     const ejsEntries = [ 'index', 'set-id', '404', '500' ]
@@ -87,14 +87,14 @@ const fns = {
       rmWhitespace: true,
       async: true,
     }
-    for (let entry of ejsEntries) {
+    for (const entry of ejsEntries) {
       for (lang of languages) {
         fs.writeFileSync(`./dist/${lang}-${entry}.html`, await ejs.renderFile(`./ejs/${entry}.ejs`, data, opts))
       }
     }
   },
 
-  async 'build:compat' () {
+  'build:compat' () {
     require('./src/bootstrap')(true)
     const plugins = require('./src/plugin').plugins
     const themes = require('./src/theme').themes
@@ -111,12 +111,12 @@ const fns = {
       const stringBase = stringify(base)
       console.log('[dfs]', stringBase)
       const [ baseTheme, ...basePlugins ] = base
-      for (let object of objectsToDfs) {
+      for (const object of objectsToDfs) {
         form.options.plugins = basePlugins
         form.options.theme = baseTheme.config.code
         if (!table[stringBase]) table[stringBase] = []
-        if (table[stringBase].indexOf(object) > -1) continue
-        const contains = base.indexOf(object) > -1
+        if (table[stringBase].includes(object)) continue
+        const contains = base.includes(object)
         if (!contains && form.isApplicable(object)) {
           table[stringBase].push(object)
           if (object.is === 'theme') {
@@ -132,7 +132,7 @@ const fns = {
       }
     }
     dfs()
-    for (let k in table) table[k] = table[k].map(o => o.is === 'theme' ? `theme:${o.config.code}` : o.config.code).join('/')
+    for (const k in table) table[k] = table[k].map(o => o.is === 'theme' ? `theme:${o.config.code}` : o.config.code).join('/')
     require('fs-extra').ensureDirSync('dist')
     require('fs').writeFileSync('dist/compat.json', JSON.stringify(table))
   },

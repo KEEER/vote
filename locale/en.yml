@@ -195,8 +195,8 @@ plugin:
       loading: Loading data...
       loadError: Data loading failed.
       submissionCount: Submission(s)
-      submissionId: "Submission ID: "
-      submissionTime: "Submission Time: "
+      submissionId: "Submission ID: {id}"
+      submissionTime: "Submission Time: {time}"
       noSubmissions: No submissions.
       searchTags: Search
       searchTagsPlaceholder: Search by tags...

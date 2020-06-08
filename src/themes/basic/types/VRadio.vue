@@ -1,8 +1,8 @@
 <template>
   <div>
     <span v-for="option in data.options" :key="option.value">
-      <input type="radio" v-model="value_" :id="$id(option.value)" :value="option.value" />
-      <label :for="$id(option.value)">{{ option.label }}</label>
+      <input :id="$id(option.value)" v-model="value_" type="radio" :value="option.value">
+      <label :for="$id(option.value)" v-text="option.label" />
     </span>
   </div>
 </template>
@@ -20,8 +20,12 @@ export default {
         const e = x => typeof x !== 'undefined'
         return e(val.title) && e(val.options) && val.options.every(op => e(op.label) && e(op.value))
       },
+      required: true,
     },
-    value: String,
+    value: {
+      type: String,
+      default: '',
+    },
   },
 }
 </script>

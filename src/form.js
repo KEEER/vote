@@ -1,18 +1,18 @@
 /** @module form */
-import Question from './question'
-import plugins from './plugin'
-import themes from './theme'
-import { query, update, useClient } from './db'
-import logger from './log'
 import { readFileSync } from 'fs'
-import { readDistFile } from '@vote/api'
 import path from 'path'
 import EventEmitter from 'emittery'
+import Question from './question'
+import { plugins } from './plugin'
+import { themes } from './theme'
+import { query, update, useClient } from './db'
+import logger from './log'
+import { readDistFile } from '@vote/api'
 
 const log = logger.child({ part: 'form' })
 
 export const templateCache = {}
-for (let theme of themes) {
+for (const theme of themes) {
   templateCache[theme.config.code] = readDistFile(`${theme.config.entryName}.html`)
 }
 const loadPluginScript = readFileSync(path.resolve(__dirname, 'load-plugins.js')).toString()
@@ -172,22 +172,22 @@ export class Form extends EventEmitter {
       objectsToCheck = this.options.plugins || []
       const thisTheme = themes.find(t => t.config.code === this.options.theme)
       if (thisTheme.config.provides) {
-        for (let feature of [ 'hooks', 'types', 'injecctions' ]) {
+        for (const feature of [ 'hooks', 'types', 'injecctions' ]) {
           if (!thisTheme.config.provides[feature]) continue
-          for (let plugin of objectsToCheck) {
+          for (const plugin of objectsToCheck) {
             if (!plugin.config.uses[feature]) continue
             const allExceptThis = [ ...objectsToCheck.filter(o => o !== plugin), obj ]
             const provided = this.provides(feature, allExceptThis)
-            if (plugin.config.uses[feature].some(f => provided.indexOf(f) < 0)) return false
+            if (plugin.config.uses[feature].some(f => !provided.includes(f))) return false
           }
         }
       }
-    } else throw new TypeError()
+    } else throw new TypeError('Not a plugin nor a theme')
     if (!obj.config.uses) return true
-    for (let feature of [ 'hooks', 'types', 'injections' ]) {
+    for (const feature of [ 'hooks', 'types', 'injections' ]) {
       if (obj.config.uses[feature]) {
         const provided = this.provides(feature, objectsToCheck)
-        if (obj.config.uses[feature].some(f => provided.indexOf(f) < 0)) return false
+        if (obj.config.uses[feature].some(f => !provided.includes(f))) return false
       }
     }
     return true
@@ -199,21 +199,21 @@ export class Form extends EventEmitter {
    * @returns {boolean}
    */
   isRequired (obj) {
-    if (!obj.is === 'plugin') throw new TypeError()
+    if (!obj.is === 'plugin') throw new TypeError('Not a plugin')
     if (!obj.config.provides) return false
     if (!this.options.plugins || !this.options.plugins.find(p => p.config.code === obj.config.code)) return false
     const objectsToCheck = this._themeAndPlugins.filter(x => x.is !== 'plugin' || x.config.code !== obj.config.code)
     const questionTypes = this.provides('types', objectsToCheck)
     return objectsToCheck.some(o => {
       if (!o.config.uses) return false
-      for (let feature of [ 'hooks', 'types', 'injections' ]) {
+      for (const feature of [ 'hooks', 'types', 'injections' ]) {
         if (o.config.uses[feature]) {
           const provided = this.provides(feature, objectsToCheck.filter(o1 => o1.config.code !== o.config.code))
-          if (o.config.uses[feature].some(f => provided.indexOf(f) < 0)) return true
+          if (o.config.uses[feature].some(f => !provided.includes(f))) return true
         }
       }
       return false
-    }) || this.questions.some(q => questionTypes.indexOf(q.config.type) < 0)
+    }) || this.questions.some(q => !questionTypes.includes(q.config.type))
   }
 
   /**
@@ -348,7 +348,7 @@ export class Form extends EventEmitter {
    * Get the HTML markup corresponding to the form.
    * @returns {string} HTML
    */
-  async getHtml () {
+  async getHtml () { // eslint-disable-line require-await
     const template = templateCache[this.options.theme]
     return template.replace(/\/?vote-config.js/g, `/${this.path}/_bundle`)
   }
@@ -499,7 +499,7 @@ export class Form extends EventEmitter {
    */
   async getSubmissions () {
     const res = (await query('SELECT * FROM PRE_submissions WHERE form_id = $1;', [ this.id ])).rows
-    for (let submission of res) {
+    for (const submission of res) {
       submission.formId = submission.form_id
       delete submission.form_id
     }
@@ -587,7 +587,7 @@ export class Form extends EventEmitter {
       const tagsToAdd = diffAdd.filter(tag => existingTags.every(etag => tag !== etag.name))
       // make a mapping of tag name => tag ID
       const tagIds = {}
-      for (let { name, id } of existingTags) tagIds[name] = id
+      for (const { name, id } of existingTags) tagIds[name] = id
       // add tags
       if (tagsToAdd.length > 0) {
         const addTagsSql = `INSERT INTO PRE_submission_tags (name, lower_name)

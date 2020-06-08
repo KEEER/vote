@@ -9,15 +9,15 @@
       />
       <Question
         v-for="question in questions"
-        route="stats"
         :key="question.id"
+        route="stats"
         :data="question"
         :stats="stats[question.id]"
       />
     </template>
-    <m-typo-body :level="1" v-else-if="loaded && !stats">{{ $t('plugin.ess.stats.noStats') }}</m-typo-body>
-    <div v-else-if="loadError">{{ $t('plugin.ess.stats.loadError') }}</div>
-    <div v-else>{{ $t('plugin.ess.stats.loading') }}</div>
+    <m-typo-body v-else-if="loaded && !stats" :level="1" v-text="$t('plugin.ess.stats.noStats')" />
+    <div v-else-if="loadError" v-text="$t('plugin.ess.stats.loadError')" />
+    <div v-else v-text="$t('plugin.ess.stats.loading')" />
   </main>
 </template>
 
@@ -47,21 +47,30 @@ hr {
 
 <script>
 import hooks from './hooks'
-import { injectScript, query, waitUntil } from '@vote/api'
 import questionsNeeded from './questionsNeeded'
 import Question from './components/Question.vue'
 import DataNavigator from './components/DataNavigator.vue'
+import { injectScript, query, waitUntil } from '@vote/api'
 
 export default {
   name: 'Stats',
-  mixins: [ questionsNeeded ],
   components: { Question, DataNavigator },
+  mixins: [ questionsNeeded ],
   data () {
     return {
       loaded: false,
       loadError: false,
       stats: null,
     }
+  },
+  mounted () {
+    /**
+     * Fn component mounted event.
+     * @event editor.editor:statsMounted
+     * @type {editor:Stats}
+     */
+    hooks.emit('editor:statsMounted', this)
+    this.init()
   },
   methods: {
     async init () {
@@ -93,15 +102,6 @@ export default {
       if (res.errors) throw res
       this.stats = JSON.parse(res.data.stats)
     },
-  },
-  mounted () {
-    /**
-     * Fn component mounted event.
-     * @event editor.editor:statsMounted
-     * @type {editor:Stats}
-     */
-    hooks.emit('editor:statsMounted', this)
-    this.init()
   },
 }
 </script>

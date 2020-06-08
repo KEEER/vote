@@ -1,21 +1,24 @@
 <template>
   <m-select
     :id="uid"
+    v-model="value_"
     outlined
     enhanced
-    v-model="value_"
     :width="$t('plugin.ess.question.typeSelectorWidth')"
   >
     <m-list-item
-      v-for="(name, i) in this.types"
+      v-for="(name, i) in types"
       :key="i"
       :data-value="name"
       aria-selected="false"
-    >{{ $t(`core.question.types.${name}`) }}</m-list-item>
+    >
+      {{ $t(`core.question.types.${name}`) }}
+    </m-list-item>
     <m-floating-label
-      :for="uid"
       slot="label"
-    >{{ $t('plugin.ess.question.type') }}</m-floating-label>
+      :for="uid"
+      v-text="$t('plugin.ess.question.type')"
+    />
   </m-select>
 </template>
 
@@ -25,14 +28,17 @@ import types from './types'
 
 export default {
   name: 'TypeSelector',
+  props: {
+    value: {
+      type: String,
+      required: true,
+    },
+  },
   data () {
     return {
       value_: this.value,
       types: Object.keys(types).filter(t => this.$te(`core.question.types.${t}`)),
     }
-  },
-  props: {
-    value: String,
   },
   watch: {
     value (val) {

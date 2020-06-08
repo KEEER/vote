@@ -2,58 +2,60 @@
   <div>
     <template v-if="!isStats">
       <ul class="radio-ul">
-        <div class="radio-controls" v-if="isEditor">
-          <m-icon-button @click="add" icon="add" /><!--
+        <div v-if="isEditor" class="radio-controls">
+          <m-icon-button icon="add" @click="add" /><!--
       This is to prevent text (only spaces) being inserted into DOM, causing a divider
-   --><m-icon-button @click="value_ = ''" icon="clear" />
+   --><m-icon-button icon="clear" @click="value_ = ''" />
         </div>
         <draggable
           v-if="isEditor"
           v-model="options_"
-          @start="dragging = true"
-          @end="syncOptions"
           :animation="200"
           handle=".handle"
           ghost-class="ghost"
+          @start="dragging = true"
+          @end="syncOptions"
         >
           <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
-            <li class="radio-li"
-                v-for="(option, i) in options_"
-                :key="option.value"
+            <li
+              v-for="(option, i) in options_"
+              :key="option.value"
+              class="radio-li"
             >
-              <m-icon-button @click="remove(i)" icon="remove" />
+              <m-icon-button icon="remove" @click="remove(i)" />
               <m-radio
-                :name="uid"
                 v-model="value_"
+                :name="uid"
                 :value="option.value"
                 :checked="value_ === option.value"
               />
-              <m-text-field outlined :id="`${uid}-${i}`" v-model="option.label" class="label" @input="syncOptions">
-                <m-floating-label :for="`${uid}-${i}`">{{ $t('plugin.ess.question.labelPlaceholder') }}</m-floating-label>
+              <m-text-field :id="`${uid}-${i}`" v-model="option.label" outlined class="label" @input="syncOptions">
+                <m-floating-label :for="`${uid}-${i}`" v-text="$t('plugin.ess.question.labelPlaceholder')" />
               </m-text-field>
               <m-icon icon="drag_handle" class="handle" />
             </li>
           </transition-group>
         </draggable>
         <div v-else>
-          <li class="radio-li"
-              v-for="option in options_"
-              :key="option.value"
+          <li
+            v-for="option in options_"
+            :key="option.value"
+            class="radio-li"
           >
             <m-radio
+              v-model="value_"
               disabled
               :name="uid"
-              v-model="value_"
               :value="option.value"
               :checked="String(value_) === option.value"
             />
-            <span>{{ option.label }}</span>
+            <span v-text="option.label" />
           </li>
         </div>
       </ul>
     </template>
-    <v-chart class="vote-chart" v-else-if="stats" :options="chartOptions" />
-    <m-typo-body v-else :level="1">{{ $t('core.question.stats.unavailableForQuestion') }}</m-typo-body>
+    <v-chart v-else-if="stats" class="vote-chart" :options="chartOptions" />
+    <m-typo-body v-else :level="1" v-text="$t('core.question.stats.unavailableForQuestion')" />
   </div>
 </template>
 
@@ -86,13 +88,13 @@ import draggable from 'vuedraggable'
 
 export default {
   name: 'VRadio',
+  components: { draggable },
   props: {
     value: {},
     options: {},
     route: String,
     stats: {},
   },
-  components: { draggable },
   data () {
     return {
       value_: this.value || null,
@@ -117,6 +119,11 @@ export default {
       }
     },
   },
+  watch: {
+    value_ (val) { this.$emit('input', val) },
+    value (val) { this.value_ = val },
+    options (val) { this.options_ = val },
+  },
   methods: {
     add () {
       this.options_ = this.options_ || []
@@ -132,11 +139,6 @@ export default {
       this.syncOptions()
     },
     syncOptions () { this.$emit('update:options', [ ...this.options_ ]) },
-  },
-  watch: {
-    value_ (val) { this.$emit('input', val) },
-    value (val) { this.value_ = val },
-    options (val) { this.options_ = val },
   },
 }
 </script>

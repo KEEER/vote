@@ -1,9 +1,9 @@
 // this theme is DEPRECATED, use theme:default!
 
 import 'regenerator-runtime/runtime'
+import UniqueId from 'vue-unique-id'
 import App from './App'
 import hooks from './hooks'
-import UniqueId from 'vue-unique-id'
 import { locale, messages } from '@vote/locale'
 
 const root = document.createElement('div')

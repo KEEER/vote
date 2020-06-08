@@ -1,58 +1,59 @@
 <template>
   <main id="editor">
     <DataNavigator
+      v-if="!exitSaveError && !questionLoadError"
       count-label="plugin.ess.editor.pageCount"
       null-label="plugin.ess.editor.questionLoading"
       :count="pageCount"
       :current.sync="currentPageId"
       :before-update="update"
-      v-if="!exitSaveError && !questionLoadError"
-      allowAdd
+      allow-add
       @add="addPage"
     >
       <m-list slot="menu">
         <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].fold())">
-          <m-icon icon="keyboard_arrow_up" class="menu-icon" slot="graphic" />
-          <template slot="text">{{ $t('plugin.ess.editor.foldAll') }}</template>
+          <m-icon slot="graphic" icon="keyboard_arrow_up" class="menu-icon" />
+          <template slot="text" v-text="$t('plugin.ess.editor.foldAll')" />
         </m-list-item>
         <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].unfold())">
-          <m-icon icon="keyboard_arrow_down" class="menu-icon" slot="graphic" />
-          <template slot="text">{{ $t('plugin.ess.editor.unfoldAll') }}</template>
+          <m-icon slot="graphic" icon="keyboard_arrow_down" class="menu-icon" />
+          <template slot="text" v-text="$t('plugin.ess.editor.unfoldAll')" />
         </m-list-item>
       </m-list>
     </DataNavigator>
-    <div v-if="exitSaveError">{{ $t('plugin.ess.editor.exitSaveError') }}</div>
-    <div v-else-if="exiting">{{ $t('plugin.ess.editor.exiting') }}</div>
-    <div id="questions" v-else-if="questionLoaded">
+    <div v-if="exitSaveError" v-text="$t('plugin.ess.editor.exitSaveError')" />
+    <div v-else-if="exiting" v-text="$t('plugin.ess.editor.exiting')" />
+    <div v-else-if="questionLoaded" id="questions">
       <draggable
         v-model="questions"
-        @start="dragging = true"
-        @end="move"
         :animation="200"
         handle=".handle"
         ghost-class="ghost"
+        @start="dragging = true"
+        @end="move"
       >
         <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
-          <Question v-for="(question, i) in questions"
+          <Question
+            v-for="(question, i) in questions"
             :key="question.id"
+            :ref="`question-${i}`"
             route="editor"
             :data="question"
             @update:data="updateData"
             @remove="remove(i)"
-            :ref="`question-${i}`"
             @update:saveState="updateSaveState"
           />
         </transition-group>
       </draggable>
       <div class="bottom-new">
-        <m-button @click="newQuestion" unelevated>
+        <m-button unelevated @click="newQuestion">
           <m-icon slot="icon" icon="add" />
           {{ $t('plugin.ess.editor.new') }}
         </m-button>
       </div>
     </div>
-    <div v-else-if="questionLoadError">{{ $t('plugin.ess.editor.questionLoadError') }}</div>
-    <div v-else>{{ $t('plugin.ess.editor.questionLoading') }}</div>
+    <div v-else-if="questionLoadError" v-text="$t('plugin.ess.editor.questionLoadError')" />
+    <div v-else v-text="$t('plugin.ess.editor.questionLoading')" />
   </main>
 </template>
 
@@ -77,10 +78,10 @@ main {
 </style>
 
 <script>
+import draggable from 'vuedraggable'
+import { query } from '../common/graphql'
 import Question from './components/Question'
 import hooks from './hooks'
-import { query } from '../common/graphql'
-import draggable from 'vuedraggable'
 import saveStateRelay from './components/saveStateRelay'
 import saveStateDisplay from './components/saveStateDisplay'
 import questionsNeeded from './questionsNeeded'
@@ -88,12 +89,12 @@ import DataNavigator from './components/DataNavigator.vue'
 
 export default {
   name: 'Editor',
-  mixins: [ saveStateRelay, saveStateDisplay, questionsNeeded ],
   components: {
     Question,
     draggable,
     DataNavigator,
   },
+  mixins: [ saveStateRelay, saveStateDisplay, questionsNeeded ],
   data () {
     return {
       newQuestionDialogOpen: false,
@@ -102,6 +103,15 @@ export default {
   },
   watch: {
     currentPageId () { this.processPages() },
+  },
+  mounted () {
+    /**
+     * Editor component mounted event.
+     * @event editor.editor:editorMounted
+     * @type {editor:Editor}
+     */
+    hooks.emit('editor:editorMounted', this)
+    this.loadQuestions()
   },
   methods: {
     async newQuestion () {
@@ -170,15 +180,6 @@ export default {
         }
       })
     },
-  },
-  mounted () {
-    /**
-     * Editor component mounted event.
-     * @event editor.editor:editorMounted
-     * @type {editor:Editor}
-     */
-    hooks.emit('editor:editorMounted', this)
-    this.loadQuestions()
   },
 }
 </script>

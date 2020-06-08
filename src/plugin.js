@@ -17,7 +17,7 @@ class Plugin {
   }
 }
 
-let pluginDirs, plugins
+let pluginDirs, plugins // eslint-disable-line import/no-mutable-exports
 try {
   pluginDirs = fs.readdirSync(path.resolve(__dirname, 'plugins'))
 } catch (e) {
@@ -37,7 +37,7 @@ try {
     plugin.uses = plugin.uses || {}
     plugin.uses.inject = plugin.uses.inject || {}
     plugin.inject = {}
-    for (let k of injectionKeys) {
+    for (const k of injectionKeys) {
       const injections = plugin.uses.inject[k] || {}
       plugin.inject[k] = {}
       if (injections.js) {

@@ -16,7 +16,7 @@ class Theme {
   toJSON () { return this.config }
 }
 
-let themeDirs, themes
+let themeDirs, themes // eslint-disable-line import/no-mutable-exports
 try {
   themeDirs = fs.readdirSync(path.resolve(__dirname, 'themes'))
 } catch (e) {

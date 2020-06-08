@@ -1,32 +1,32 @@
 <template>
   <div>
     <component
+      :is="q.type"
       v-for="(q, i) in subQuestions.filter(x => x.show)"
       :key="i"
-      :is="q.type"
       ref="subQuestions"
       :value.sync="value_[i]"
-      @update:value="syncValue"
       :options="(data.options || [])[i]"
+      @update:value="syncValue"
     />
   </div>
 </template>
 
 <script>
-/// A VCombined implementation for the form context.
+// A VCombined implementation for the form context.
 
 import { questionMixin } from './question-mixin'
 
 export default {
   name: 'VCombined',
   mixins: [ questionMixin ],
+  props: { value: {}, data: {} },
   data () {
     return {
       subQuestions: [],
       isForm: true,
     }
   },
-  props: { value: {}, data: {} },
   mounted () {
     /**
      * VCombined mounted event. Inject sub-questions here.

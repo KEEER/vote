@@ -1,7 +1,7 @@
 import './styles.css'
 import SampleEntry from './SampleEntry.vue'
-import { createFormInjection, addQuestionType } from '@vote/api'
 import { addValidationMixin } from './common'
+import { createFormInjection, addQuestionType } from '@vote/api'
 
 createFormInjection(hooks => {
   addQuestionType('VSample', SampleEntry)

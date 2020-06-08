@@ -2,12 +2,12 @@
   <div :class="current ? 'page current' : 'page'">
     <Question
       v-for="question in page"
-      :key="question.id"
       :id="question.id"
+      :key="question.id"
+      ref="questions"
       :type="question.type"
       :value="question.value"
       :data="question"
-      ref="questions"
     />
   </div>
 </template>
@@ -25,6 +25,13 @@ export default {
   name: 'Page',
   inject: [ 'data' ],
   components: { Question },
+  props: {
+    page: {
+      type: Array,
+      required: true,
+    },
+    current: Boolean,
+  },
   computed: {
     questions () { return this.$refs.questions },
     valid () {
@@ -47,6 +54,5 @@ export default {
       window.scrollBy(0, this.questions.filter(q => !q.valid)[0].$refs.questionContent.$el.getBoundingClientRect().y - 200)
     })
   },
-  props: { page: Array, current: Boolean },
 }
 </script>

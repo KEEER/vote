@@ -1,25 +1,25 @@
 <template>
   <main>
-    <m-typo-headline class="block" :level="5">{{ $t('plugin.ess.fn.plugins') }}</m-typo-headline>
-    <m-typo-body class="block typo-body" :level="1">{{ $t('plugin.ess.fn.pluginIntroduction') }}</m-typo-body>
+    <m-typo-headline class="block" :level="5" v-text="$t('plugin.ess.fn.plugins')" />
+    <m-typo-body class="block typo-body" :level="1" v-text="$t('plugin.ess.fn.pluginIntroduction')" />
     <m-list two-line role="group">
-      <m-list-item role="checkbox" :aria-checked="isSelected(plugin)" v-for="plugin in allPlugins" :key="plugin.code">
-        <template slot="primaryText">{{ $t(`plugin.${plugin.code}.name`) }}</template>
-        <template slot="secondaryText">{{ $t(`plugin.${plugin.code}.description`) }}</template>
-        <m-checkbox slot="meta" :checked="isSelected(plugin)" v-on="{ change: onChange(plugin.code) }" :disabled="plugin.required" />
+      <m-list-item v-for="plugin in allPlugins" :key="plugin.code" role="checkbox" :aria-checked="isSelected(plugin)">
+        <template slot="primaryText" v-text="$t(`plugin.${plugin.code}.name`)" />
+        <template slot="secondaryText" v-text="$t(`plugin.${plugin.code}.description`)" />
+        <m-checkbox slot="meta" :checked="isSelected(plugin)" :disabled="plugin.required" v-on="{ change: onChange(plugin.code) }" />
       </m-list-item>
     </m-list>
-    <hr />
-    <m-typo-headline class="block" :level="5">{{ $t('plugin.ess.fn.theme') }}</m-typo-headline>
-    <m-typo-body class="block typo-body" :level="1">{{ $t('plugin.ess.fn.themeIntroduction') }}</m-typo-body>
-    <m-list two-line role="radiogroup" v-model="themeId">
-      <m-list-item role="radio" v-for="(thisTheme, i) in allThemes" :key="thisTheme.code">
-        <m-radio :checked="themeId === i" name="theme" slot="meta" :value="i" />
-        <template slot="primaryText">{{ $t(`theme.${thisTheme.code}.name`) }}</template>
-        <template slot="secondaryText">{{ $t(`theme.${thisTheme.code}.description`) }}</template>
+    <hr>
+    <m-typo-headline class="block" :level="5" v-text="$t('plugin.ess.fn.theme')" />
+    <m-typo-body class="block typo-body" :level="1" v-text="$t('plugin.ess.fn.themeIntroduction')" />
+    <m-list v-model="themeId" two-line role="radiogroup">
+      <m-list-item v-for="(thisTheme, i) in allThemes" :key="thisTheme.code" role="radio">
+        <m-radio slot="meta" :checked="themeId === i" name="theme" :value="i" />
+        <template slot="primaryText" v-text="$t(`theme.${thisTheme.code}.name`)" />
+        <template slot="secondaryText" v-text="$t(`theme.${thisTheme.code}.description`)" />
       </m-list-item>
     </m-list>
-    <m-button class="submit-button" :disabled="submitting" unelevated @click="submit">{{ $t('plugin.ess.fn.submit') }}</m-button>
+    <m-button class="submit-button" :disabled="submitting" unelevated @click="submit" v-text="$t('plugin.ess.fn.submit')" />
   </main>
 </template>
 
@@ -47,11 +47,17 @@ hr {
 </style>
 
 <script>
-import hooks from './hooks'
 import { query } from '../common/graphql'
+import hooks from './hooks'
 
 export default {
   name: 'Fn',
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  },
   data () {
     return {
       submitting: false,
@@ -60,6 +66,14 @@ export default {
       allThemes: window.KVoteFormData.allThemes,
       themeId: window.KVoteFormData.allThemes.findIndex(t => t.code === window.KVoteFormData.theme),
     }
+  },
+  mounted () {
+    /**
+     * Fn component mounted event.
+     * @event editor.editor:fnMounted
+     * @type {editor:Fn}
+     */
+    hooks.emit('editor:fnMounted', this)
   },
   methods: {
     onChange (code) {
@@ -83,15 +97,6 @@ export default {
       location.reload()
     },
     isSelected (plugin) { return this.selectedPlugins.includes(plugin.code) },
-  },
-  props: { data: Object },
-  mounted () {
-    /**
-     * Fn component mounted event.
-     * @event editor.editor:fnMounted
-     * @type {editor:Fn}
-     */
-    hooks.emit('editor:fnMounted', this)
   },
 }
 </script>

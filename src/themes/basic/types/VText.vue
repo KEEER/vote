@@ -1,5 +1,5 @@
 <template>
-  <input v-model="value_" />
+  <input v-model="value_">
 </template>
 
 <script>
@@ -9,13 +9,10 @@ export default {
   name: 'VText',
   mixins: [ mixin ],
   props: {
-    data: {
-      type: Object,
-      validator (val) {
-        return val.title
-      },
+    value: {
+      type: String,
+      default: '',
     },
-    value: String,
   },
 }
 </script>

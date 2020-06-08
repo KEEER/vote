@@ -1,5 +1,5 @@
 <template>
-  <b>{{ $t('plugin.ess.question.nulltype') }}</b>
+  <b v-text="$t('plugin.ess.question.nulltype')" />
 </template>
 
 <script>

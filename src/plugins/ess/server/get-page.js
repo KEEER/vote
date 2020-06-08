@@ -1,8 +1,8 @@
-import { schema } from '../common/graphql'
 import { graphql } from 'graphql'
-import logger from '@vote/core/log'
+import { schema } from '../common/graphql'
 import query from './query'
 import { exportForm } from './export'
+import logger from '@vote/core/log'
 import { readDistFile } from '@vote/api'
 import { isDev } from '@vote/core/is-dev'
 
@@ -52,7 +52,7 @@ export const handleGetPage = async ({ form, path, ctx, set }) => {
    * @type {AuthorizeEventParam}
    */
   let authorized = user && String(user.id) === String(form.options.userId) || isDev
-  if (form.editorPaths.indexOf(path) > -1) {
+  if (form.editorPaths.includes(path)) {
     if (!await authorize('editor')) return
     return set(editorHtml.replace(/\/?vote-config.js/g, `/${form.path}/_bundle-editor`))
   }

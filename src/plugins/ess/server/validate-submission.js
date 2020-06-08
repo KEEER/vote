@@ -1,7 +1,7 @@
 import { validator } from '../common/validator'
 
 export const handleValidateSubmission = async ({ form, ctx, data, invalidate }) => {
-  for (let question of form.questions) {
+  for (const question of form.questions) {
     let bypass = false
     /**
      * Server-side question validation override event.

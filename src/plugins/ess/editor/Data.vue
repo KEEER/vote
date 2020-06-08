@@ -3,42 +3,42 @@
     <div v-if="showTags" class="search-tags">
       <m-chip-set input class="tags">
         <m-chip v-for="tag in searchTags" :key="tag" @removal="searchTags = searchTags.filter(t => t !== tag)">
-          {{ tag }} <m-icon icon="cancel" slot="trailingIcon" />
+          {{ tag }} <m-icon slot="trailingIcon" icon="cancel" />
         </m-chip>
         <m-text-field
+          v-model="searchTagName"
           full-width
           class="tags__input"
-          v-model="searchTagName"
           :placeholder="$t('plugin.ess.data.searchTagsPlaceholder')"
-          @keydown="handleSearchKeydown"
           maxlen="64"
+          @keydown="handleSearchKeydown"
         >
           <m-line-ripple slot="bottomLine" />
         </m-text-field>
         <m-chip @interaction="loadSubmissionIds">
-          <m-icon icon="search" slot="leadingIcon" />
+          <m-icon slot="leadingIcon" icon="search" />
           {{ $t('plugin.ess.data.searchTags') }}
         </m-chip>
       </m-chip-set>
     </div>
     <DataNavigator
+      v-if="loaded"
       count-label="plugin.ess.data.submissionCount"
       null-label="plugin.ess.data.noSubmissions"
       :count="submissionIds.length"
       :current.sync="currentSubmissionIndex"
-      v-if="loaded"
     >
       <m-list slot="menu">
         <m-list-item @click="exportData">
-          <m-icon icon="get_app" class="menu-icon" slot="graphic" />
-          <template slot="text">{{ $t('plugin.ess.data.export') }}</template>
+          <m-icon slot="graphic" icon="get_app" class="menu-icon" />
+          <template slot="text" v-text="$t('plugin.ess.data.export')" />
         </m-list-item>
       </m-list>
     </DataNavigator>
-    <div id="response" v-if="loaded && currentSubmission && !submissionLoading">
+    <div v-if="loaded && currentSubmission && !submissionLoading" id="response">
       <div class="submission-meta">
-        <p class="submission-id">{{ $t('plugin.ess.data.submissionId') }}{{ currentSubmissionId }}</p>
-        <p class="submission-time">{{ $t('plugin.ess.data.submissionTime') }}{{ currentSubmission.time.toLocaleString() }}</p>
+        <p class="submission-id" v-text="$t('plugin.ess.data.submissionId', { id: currentSubmissionId })" />
+        <p class="submission-time" v-text="$t('plugin.ess.data.submissionTime', { time: currentSubmission.time.toLocaleString() })" />
         <div v-if="showTags" class="submission-tags">
           <m-chip-set input class="tags">
             <m-chip
@@ -47,22 +47,22 @@
               @removal="currentSubmission.tags = currentSubmission.tags.filter(t => t !== tag)"
             >
               {{ tag }}
-              <m-icon v-show="editingTag" icon="cancel" slot="trailingIcon" />
+              <m-icon v-show="editingTag" slot="trailingIcon" icon="cancel" />
             </m-chip>
             <m-text-field
+              v-if="editingTag"
+              ref="tagInput"
+              v-model="tagName"
               full-width
               class="tags__input"
-              ref="tagInput"
-              v-if="editingTag"
-              v-model="tagName"
               :placeholder="$t('plugin.ess.data.editTagPlaceholder')"
-              @keydown="handleKeydown"
               maxlen="64"
+              @keydown="handleKeydown"
             >
               <m-line-ripple slot="bottomLine" />
             </m-text-field>
             <m-chip @interaction="toggleEdit">
-              <m-icon :icon="editingTag ? 'done' : 'edit'" slot="leadingIcon" />
+              <m-icon slot="leadingIcon" :icon="editingTag ? 'done' : 'edit'" />
               {{ $t(editingTag ? 'plugin.ess.data.finishTags' : 'plugin.ess.data.manageTags') }}
             </m-chip>
           </m-chip-set>
@@ -76,13 +76,13 @@
       />
       <Question
         v-for="question in questions"
-        route="data"
         :key="question.id"
+        route="data"
         :data="{ ...question, value: currentSubmission.data[question.id] }"
       />
     </div>
-    <div v-else-if="loadError">{{ $t('plugin.ess.data.loadError') }}</div>
-    <div v-else-if="!loaded || submissionLoading">{{ $t('plugin.ess.data.loading') }}</div>
+    <div v-else-if="loadError" v-text="$t('plugin.ess.data.loadError')" />
+    <div v-else-if="!loaded || submissionLoading" v-text="$t('plugin.ess.data.loading')" />
   </main>
 </template>
 
@@ -121,8 +121,8 @@ import settingsNeeded from './settingsNeeded'
 
 export default {
   name: 'Data',
-  mixins: [ questionsNeeded, settingsNeeded ],
   components: { Question, DataNavigator },
+  mixins: [ questionsNeeded, settingsNeeded ],
   data () {
     return {
       currentSubmission: null,
@@ -138,14 +138,23 @@ export default {
       submissions: [],
     }
   },
-  watch: {
-    currentSubmissionIndex () { this.updateSubmissionStatus() },
-  },
   computed: {
     currentSubmissionId () {
       return (this.submissionIds || [])[this.currentSubmissionIndex] || null
     },
     showTags () { return this.settingsLoaded && this.settingsData['tags.enabled'] },
+  },
+  watch: {
+    currentSubmissionIndex () { this.updateSubmissionStatus() },
+  },
+  mounted () {
+    /**
+     * Data component mounted event.
+     * @event editor.editor:dataMounted
+     * @type {editor:Data}
+     */
+    hooks.emit('editor:dataMounted', this)
+    this.load()
   },
   methods: {
     async updateSubmissionStatus () {
@@ -227,15 +236,6 @@ export default {
       }
     },
     exportData () { window.open('_export', '_blank') },
-  },
-  mounted () {
-    /**
-     * Data component mounted event.
-     * @event editor.editor:dataMounted
-     * @type {editor:Data}
-     */
-    hooks.emit('editor:dataMounted', this)
-    this.load()
   },
 }
 </script>

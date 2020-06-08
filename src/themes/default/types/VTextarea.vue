@@ -1,5 +1,5 @@
 <template>
-  <m-text-field class="v-textarea" textarea v-model="value_" />
+  <m-text-field v-model="value_" class="v-textarea" textarea />
 </template>
 
 <style scoped>
@@ -22,8 +22,12 @@ export default {
     data: {
       type: Object,
       validator: val => !!val.title,
+      required: true,
     },
-    value: String,
+    value: {
+      type: String,
+      default: '',
+    },
   },
 }
 </script>

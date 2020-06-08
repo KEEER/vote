@@ -1,5 +1,5 @@
 <template>
-  <m-text-field class="v-text" full-width v-model="value_">
+  <m-text-field v-model="value_" class="v-text" full-width>
     <m-line-ripple slot="bottomLine" />
   </m-text-field>
 </template>
@@ -17,11 +17,13 @@ export default {
   props: {
     data: {
       type: Object,
-      validator (val) {
-        return val.title
-      },
+      validator: v => !!v.title,
+      required: true,
     },
-    value: String,
+    value: {
+      type: String,
+      default: '',
+    },
   },
 }
 </script>

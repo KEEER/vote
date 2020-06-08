@@ -12,35 +12,36 @@
       :entries="validationEntries"
       :open.sync="validationOpen"
     />
-    <div class="question" :class="{ 'is-data': isData, 'is-stats': isStats }" v-if="!folded">
-      <div class="title-type" v-if="isEditor">
+    <div v-if="!folded" class="question" :class="{ 'is-data': isData, 'is-stats': isStats }">
+      <div v-if="isEditor" class="title-type">
         <m-text-field
+          :id="`${uid}-title`"
+          v-model="title_"
           outlined
           required
-          v-model="title_"
-          :id="`${uid}-title`"
           class="question-title"
         >
-          <m-floating-label :for="`${uid}-title`">{{ $t('plugin.ess.question.title') }}</m-floating-label>
+          <m-floating-label :for="`${uid}-title`" v-text="$t('plugin.ess.question.title')" />
         </m-text-field>
         <TypeSelector v-model="type_" />
       </div>
       <div v-else class="question-title--display question-title--data">
         {{ title_ }}
-        <sup v-if="required_" class="title-required"></sup>
+        <sup v-if="required_" class="title-required" />
       </div>
       <HTMLEditor
-        class="description"
+        v-if="isEditor"
         ref="description"
+        class="description"
         :data="description_"
         @change="logDescriptionChange"
-        v-if="isEditor"
       />
-      <div v-else-if="description_" v-html="description_.html || ''"></div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-else-if="description_" v-html="description_.html || ''" />
       <component
         :is="questionTypes[data.type || 'VNull']"
-        :route="route"
         v-model="value_"
+        :route="route"
         :options.sync="options_"
         :stats="stats"
       />
@@ -49,34 +50,34 @@
       <span slot="actionButtons">
         <m-icon class="handle" icon="drag_handle" />
       </span>
-        <span slot="actionIcons" v-if="!folded && isEditor">
+      <span v-if="!folded && isEditor" slot="actionIcons">
         {{ $t('plugin.ess.question.required') }}
         <m-switch v-model="required_" class="required-switch" />
         <span class="divider" />
         <m-menu-anchor>
-          <m-icon-button @click="menuOpen = true" icon="more_vert" />
+          <m-icon-button icon="more_vert" @click="menuOpen = true" />
           <m-menu v-model="menuOpen">
             <m-list>
               <m-list-item v-for="(item, i) in menuItems" :key="i" @click="menuClick(i)">
-                <m-icon :icon="item.icon" class="question-menu__icon" slot="graphic" />
-                <template slot="text">{{ $t(item.label) }}</template>
+                <m-icon slot="graphic" :icon="item.icon" class="question-menu__icon" />
+                <template slot="text" v-text="$t(item.label)" />
               </m-list-item>
             </m-list>
           </m-menu>
         </m-menu-anchor>
         <m-dialog v-model="removeDialogOpen">
-          <m-typo-headline :level="5" slot="header">{{ $t('plugin.ess.editor.removeQuestionTitle') }}</m-typo-headline>
-          <m-typo-body :level="1" slot="body">{{ $t('plugin.ess.editor.removeQuestionDescription') }}</m-typo-body>
-          <m-button class="mdc-dialog__button" data-mdc-dialog-action="Cancel" slot="cancelButton">{{ $t('plugin.ess.editor.cancel') }}</m-button>
-          <m-button @click="remove" class="mdc-dialog__button" data-mdc-dialog-action="OK" slot="acceptButton">{{ $t('plugin.ess.editor.ok') }}</m-button>
+          <m-typo-headline slot="header" :level="5" v-text="$t('plugin.ess.editor.removeQuestionTitle')" />
+          <m-typo-body slot="body" :level="1" v-text="$t('plugin.ess.editor.removeQuestionDescription')" />
+          <m-button slot="cancelButton" class="mdc-dialog__button" data-mdc-dialog-action="Cancel" v-text="$t('plugin.ess.editor.cancel')" />
+          <m-button slot="acceptButton" class="mdc-dialog__button" data-mdc-dialog-action="OK" @click="remove" v-text="$t('plugin.ess.editor.ok')" />
         </m-dialog>
-        <m-icon-button @click="fold" icon="keyboard_arrow_up" />
+        <m-icon-button icon="keyboard_arrow_up" @click="fold" />
       </span>
     </template>
-    <div class="folded" v-if="folded && isEditor">
+    <div v-if="folded && isEditor" class="folded">
       <m-icon class="handle handle--folded" icon="drag_handle" />
-      <span class="question-title--display">{{ title_ }}</span>
-      <m-icon-button class="fold-button" @click="unfold" v-if="folded" icon="keyboard_arrow_down" />
+      <span class="question-title--display" v-text="title_" />
+      <m-icon-button v-if="folded" class="fold-button" icon="keyboard_arrow_down" @click="unfold" />
     </div>
   </m-card>
 </template>
@@ -156,17 +157,23 @@
 </style>
 
 <script>
-import questionTypes from './types'
 import validationTypes from '../../common/validationTypes'
-import TypeSelector from './TypeSelector.vue'
 import { query } from '../../common/graphql'
+import hooks from '../hooks'
+import questionTypes from './types'
+import TypeSelector from './TypeSelector.vue'
 import updateObservable from './updateObservable'
 import HTMLEditor from './HTMLEditor.vue'
 import QuestionConfigDialog from './QuestionConfigDialog.vue'
-import hooks from '../hooks'
 
 export default {
   name: 'Question',
+  components: {
+    TypeSelector,
+    HTMLEditor,
+    QuestionConfigDialog,
+    ...questionTypes,
+  },
   mixins: [
     updateObservable(async (vm, change) => {
       if (!vm.isEditor) return
@@ -188,7 +195,7 @@ export default {
         type: vm.type_,
         config: { theme: vm.themeConfig_, validation: vm.validationConfig_ },
       })
-      for (let i of [ 'value', 'options' ]) {
+      for (const i of [ 'value', 'options' ]) {
         change[i] = JSON.stringify(change[i])
       }
       if ('themeConfig' in change || 'validationConfig' in change) {
@@ -221,6 +228,12 @@ export default {
       if (res.errors || !res.data.updateQuestion) throw res
     }),
   ],
+  props: {
+    // TODO: check props
+    data: Object,
+    route: String,
+    stats: {},
+  },
   data () {
     return {
       title_: this.data.title,
@@ -243,19 +256,7 @@ export default {
       validationEntries: validationTypes[this.data.type] || [],
     }
   },
-  components: {
-    TypeSelector,
-    HTMLEditor,
-    QuestionConfigDialog,
-    ...questionTypes,
-  },
   provide () { return { Question: this } },
-  props: {
-    // TODO: check props
-    data: Object,
-    route: String,
-    stats: {},
-  },
   computed: {
     themeConfigEntries () {
       if (!this.hasThemeConfigEntries) return []
@@ -304,6 +305,28 @@ export default {
       }
       this.$emit('update:type', val)
     },
+  },
+  mounted () {
+    this.updateMenuItems()
+    const thingsToWatch = [ 'title', 'value', 'options', 'themeConfig', 'validationConfig', 'required' ]
+    for (const i of thingsToWatch) {
+      this.$watch(`${i}_`, val => {
+        this.change[i] = val
+        this.logChange()
+        this.$emit(`update:${i}`, val)
+      })
+    }
+    /**
+     * Editor Question component mounted event
+     * @event editor.editor:questionMounted
+     * @type {editor:Question}
+     */
+    hooks.emit('editor:questionMounted', this)
+    this.$on('reorder', reorder => this.reorder(reorder))
+  },
+  beforeDestroy () {
+    clearInterval(this.intervalId)
+    if (this.changed) this.update()
   },
   methods: {
     async fold () {
@@ -379,28 +402,6 @@ export default {
        */
       this.$emit('update:menuItems')
     },
-  },
-  mounted () {
-    this.updateMenuItems()
-    const thingsToWatch = [ 'title', 'value', 'options', 'themeConfig', 'validationConfig', 'required' ]
-    for (const i of thingsToWatch) {
-      this.$watch(`${i}_`, val => {
-        this.change[i] = val
-        this.logChange()
-        this.$emit(`update:${i}`, val)
-      })
-    }
-    /**
-     * Editor Question component mounted event
-     * @event editor.editor:questionMounted
-     * @type {editor:Question}
-     */
-    hooks.emit('editor:questionMounted', this)
-    this.$on('reorder', reorder => this.reorder(reorder))
-  },
-  beforeDestroy () {
-    clearInterval(this.intervalId)
-    if (this.changed) this.update()
   },
 }
 </script>

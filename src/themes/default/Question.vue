@@ -1,16 +1,17 @@
 <template>
   <div :class="{ hidden }">
     <QTitle class="question-title" :title="data.title" :required="data.required" />
-    <m-typo-body class="description" :level="1" v-html="(data.description || {}).html || ''"></m-typo-body>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <m-typo-body class="description" :level="1" v-html="(data.description || {}).html || ''" />
     <component
       :is="types[type]"
+      ref="questionContent"
       :data="data"
       :value.sync="value"
-      ref="questionContent"
     >
       <slot />
     </component>
-    <m-typo-body :level="1" class="invalid-tip" v-if="invalidTip">{{ invalidTip }}</m-typo-body>
+    <m-typo-body v-if="invalidTip" :level="1" class="invalid-tip" v-text="invalidTip" />
   </div>
 </template>
 
@@ -29,18 +30,27 @@ import { getConfig } from '@vote/api'
 
 export default {
   name: 'Question',
+  components: { QTitle },
+  props: {
+    type: {
+      type: String,
+      required: true,
+    },
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
   data () {
     return {
       value: this.$attrs.value,
       types,
       invalidTip: '',
     }
-  },
-  components: { QTitle },
-  props: {
-    type: String,
-    data: Object,
-    id: Number,
   },
   computed: {
     validity () {

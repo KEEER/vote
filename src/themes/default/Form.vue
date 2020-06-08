@@ -2,36 +2,37 @@
   <m-card
     class="form"
     :class="{ 'form__top': onTop, 'form__bottom': onBottom, 'form__no-transition': noTransition }"
-    :style="`background-color: ${this.colors.bgColor || 'white'}; color: ${this.colors.textColor || 'black'};`"
+    :style="`background-color: ${colors.bgColor || 'white'}; color: ${colors.textColor || 'black'};`"
   >
     <m-typo-headline
       :level="6"
       class="form__title--scroll mdc-elevation--z3"
       :class="{ 'form__title--scroll--show': showScrollTitle }"
-      :style="`background-color: ${this.colors.bgColor || 'white'};`"
-    >{{ this.title }}</m-typo-headline>
+      :style="`background-color: ${colors.bgColor || 'white'};`"
+      v-text="title"
+    />
     <div class="content">
-      <m-typo-headline :level="3" class="form__title">{{ this.title }}</m-typo-headline>
-      <div class="divider"></div>
+      <m-typo-headline :level="3" class="form__title" v-text="title" />
+      <div class="divider" />
       <template v-if="!submitting && !submitted && !submiterror">
-        <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{ $t('theme.common.prevPage') }}</m-button>
-        <Page v-for="(page, i) in data.data" :page="page" :key="i" ref="pages" :current="i === current" />
+        <m-button class="form-prev" :hidden="!prevVisible" @click="prev" v-text="$t('theme.common.prevPage')" />
+        <Page v-for="(page, i) in data.data" :key="i" ref="pages" :page="page" :current="i === current" />
         <div class="form-footer">
           <span class="form-controls">
-            <m-button class="form-prev" :hidden="!prevVisible" @click="prev">{{ $t('theme.common.prevPage') }}</m-button>
-            <span v-if="showPageNumber && data.data.length > 1">{{ $t('theme.common.page', { page: current + 1 }) }}</span>
-            <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next">{{ $t('theme.common.nextPage') }}</m-button>
-            <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit">{{ $t('theme.common.submit') }}</m-button>
+            <m-button class="form-prev" :hidden="!prevVisible" @click="prev" v-text="$t('theme.common.prevPage')" />
+            <span v-if="showPageNumber && data.data.length > 1" v-text="$t('theme.common.page', { page: current + 1 })" />
+            <m-button unelevated class="form-next" :hidden="!nextVisible" @click="next" v-text="$t('theme.common.nextPage')" />
+            <m-button unelevated class="form-submit" :hidden="nextVisible" @click="submit" v-text="$t('theme.common.submit')" />
           </span>
           <a class="footer-link" href="/?utm_source=form&utm_medium=footer">
-            <img class="vote-icon" src="/img/logo.svg" alt="Vote icon" />
+            <img class="vote-icon" src="/img/logo.svg" alt="Vote icon">
             {{ $t('theme.default.footer') }}
           </a>
         </div>
       </template>
-      <m-typo-headline class="status" :level="5" v-if="showSubmitting">{{ $t('theme.common.submitting') }}</m-typo-headline>
-      <m-typo-headline class="status" :level="5" v-if="showSubmitted">{{ $t('theme.common.submitted') }}</m-typo-headline>
-      <m-typo-headline class="status" :level="5" v-if="showSubmiterror">{{ $t('theme.common.submiterror') }}</m-typo-headline>
+      <m-typo-headline v-if="showSubmitting" class="status" :level="5" v-text="$t('theme.common.submitting')" />
+      <m-typo-headline v-if="showSubmitted" class="status" :level="5" v-text="$t('theme.common.submitted')" />
+      <m-typo-headline v-if="showSubmiterror" class="status" :level="5" v-text="$t('theme.common.submiterror')" />
     </div>
   </m-card>
 </template>
@@ -157,7 +158,22 @@ import { getConfig } from '@vote/api'
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 export default {
-  data: function () {
+  components: { Page },
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    action: {
+      type: String,
+      default: '_submit',
+    },
+    method: {
+      type: String,
+      default: 'POST',
+    },
+  },
+  data () {
     return {
       current: 0,
       status: 'filling',
@@ -174,11 +190,47 @@ export default {
     }
   },
   inject: [ 'data', 'colors' ],
-  components: { Page },
-  props: {
-    title: String,
-    action: String,
-    method: String,
+  computed: {
+    currentPage () {
+      let page = this.current + 1
+      /**
+       * Page number calculation event.
+       * @event form.form:pageNo
+       * @type {object}
+       * @property {form:Form} form the form Vue instance
+       * @property {function} set setter for page number
+       */
+      hooks.emit('form:pageNo', { form: this, set: p => page = p })
+      return page
+    },
+    submitted () { return this.status === 'submitted' },
+    submitting () { return this.status === 'submitting' },
+    submiterror () { return this.status === 'submiterror' },
+    formdata () {
+      const data = []
+      this.pages.flatMap(page => page.questions).forEach(q => {
+        data[q.id] = q.value
+      })
+      return data
+    },
+    valid () {
+      let validity = this.pages.every(p => p.valid)
+      /**
+       * Form validation override event.
+       * @event form.form:validate
+       * @property {form:Form} the form Vue instance
+       * @property {function} invalidate call to invalidate form
+       */
+      hooks.emit('form:validate', { form: this, invalidate: () => validity = false })
+      return validity
+    },
+    showPageNumber () { return getConfig(this.data, 'settings', 'showPageNumber', true) },
+    prevVisible () {
+      return this.current !== 0 && getConfig(this.data, 'settings', 'allowBack', true)
+    },
+    nextVisible () {
+      return this.pages && (this.current !== this.pages.length - 1)
+    },
   },
   watch: {
     status (val) {
@@ -193,6 +245,18 @@ export default {
       }
       this.updateLayout()
     },
+  },
+  mounted () {
+    document.title = this.title
+    this.pages = this.$refs.pages
+    this.updateVisibility()
+    /**
+     * Form Vue instance mounted event.
+     * @event form.form:mounted
+     * @type {form:Form}
+     */
+    hooks.emit('form:mounted', this)
+    this.setInterval()
   },
   methods: {
     updateLayout () {
@@ -288,68 +352,12 @@ export default {
       this.intervalId = setInterval(() => {
         if (window.scrollY > 200) {
           if (!this.showScrollTitle) this.showScrollTitle = true
-        } else {
-          if (this.showScrollTitle) this.showScrollTitle = false
-        }
+        } else if (this.showScrollTitle) this.showScrollTitle = false
       }, 40)
     },
     clearInterval () {
       clearInterval(this.intervalId)
       this.intervalId = null
-    },
-  },
-  mounted () {
-    document.title = this.title
-    this.pages = this.$refs.pages
-    this.updateVisibility()
-    /**
-     * Form Vue instance mounted event.
-     * @event form.form:mounted
-     * @type {form:Form}
-     */
-    hooks.emit('form:mounted', this)
-    this.setInterval()
-  },
-  computed: {
-    currentPage () {
-      let page = this.current + 1
-      /**
-       * Page number calculation event.
-       * @event form.form:pageNo
-       * @type {object}
-       * @property {form:Form} form the form Vue instance
-       * @property {function} set setter for page number
-       */
-      hooks.emit('form:pageNo', { form: this, set: p => page = p })
-      return page
-    },
-    submitted () { return this.status === 'submitted' },
-    submitting () { return this.status === 'submitting' },
-    submiterror () { return this.status === 'submiterror' },
-    formdata () {
-      const data = []
-      this.pages.flatMap(page => page.questions).forEach(q => {
-        data[q.id] = q.value
-      })
-      return data
-    },
-    valid () {
-      let validity = this.pages.every(p => p.valid)
-      /**
-       * Form validation override event.
-       * @event form.form:validate
-       * @property {form:Form} the form Vue instance
-       * @property {function} invalidate call to invalidate form
-       */
-      hooks.emit('form:validate', { form: this, invalidate: () => validity = false })
-      return validity
-    },
-    showPageNumber () { return getConfig(this.data, 'settings', 'showPageNumber', true) },
-    prevVisible () {
-      return this.current !== 0 && getConfig(this.data, 'settings', 'allowBack', true)
-    },
-    nextVisible () {
-      return this.pages && (this.current !== this.pages.length - 1)
     },
   },
 }

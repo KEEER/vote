@@ -9,13 +9,10 @@ export default {
   name: 'VTextarea',
   mixins: [ mixin ],
   props: {
-    data: {
-      type: Object,
-      validator (val) {
-        return val.title
-      },
+    value: {
+      type: String,
+      default: '',
     },
-    value: String,
   },
 }
 </script>

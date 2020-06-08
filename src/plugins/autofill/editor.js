@@ -1,5 +1,5 @@
-import { addCombinedQuestionType, createEditorInjection } from '@vote/api'
 import AutofillEditor from './AutofillEditor'
+import { addCombinedQuestionType, createEditorInjection } from '@vote/api'
 
 const QUESTION_TYPE = 'VAutofill', EDITOR_COMPONENT = 'VoteAutofillEditor'
 createEditorInjection(() => {

@@ -1,5 +1,5 @@
-import { addEditorRoute, getConfig, invalidTip, showValidation, useValidation, addValidationType } from '@vote/api'
 import SampleEntry from './SampleEntry.vue'
+import { addEditorRoute, getConfig, invalidTip, showValidation, useValidation, addValidationType } from '@vote/api'
 
 export const editorRouteMixin = () => addEditorRoute({
   name: 'sample',

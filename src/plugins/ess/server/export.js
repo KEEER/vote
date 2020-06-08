@@ -13,6 +13,8 @@ class AddBomTransform extends Transform {
   _transform (chunk, _encoding, callback) { callback(null, chunk) }
 }
 
+// disabling require-await for possible forward-compatibility
+// eslint-disable-next-line require-await
 export async function exportForm (form, ctx) {
   const stringifier = stringify()
   // noinspection ES6MissingAwait

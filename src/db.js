@@ -42,8 +42,9 @@ export const query = wrapQuery(pool.query, pool)
  * @example await update('PRE_forms', {id: 'newid', title: 'newtitle'}, 'id', 'oldid')
  */
 export async function update (table, args, key, cond) {
-  let argarr = [], count = 0, values = []
-  for (let i in args) {
+  let count = 0
+  const argarr = [], values = []
+  for (const i in args) {
     argarr.push(`${i} = $${++count}`)
     values.push(args[i])
   }

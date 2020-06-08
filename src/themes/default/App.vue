@@ -10,8 +10,8 @@
 </style>
 
 <script>
-import Form from './Form'
 import tinycolor from 'tinycolor2'
+import Form from './Form'
 
 export default {
   components: { Form },
@@ -26,7 +26,7 @@ export default {
   },
   mounted () {
     const colors = { themeColor: 'theme-color', secondaryColor: 'secondary-color', bgColor: 'bg-color', textColor: 'text-color' }
-    for (let i in colors) {
+    for (const i in colors) {
       if (window.KVoteFormData.config && window.KVoteFormData.config.settings && window.KVoteFormData.config.settings[`theme-default.${colors[i]}`]) {
         const color = tinycolor(window.KVoteFormData.config.settings[`theme-default.${colors[i]}`])
         if (color.isValid()) this.colors[i] = color
@@ -39,7 +39,7 @@ export default {
       const style = Array.from(document.styleSheets[1].cssRules).map(x => x.cssText).join('')
       const themeRgb = themeColor.toRgb()
       const secondaryRgb = secondaryColor.toRgb()
-      let newStyle = style
+      const newStyle = style
         .replace(/#005c5c/g, '__placeholder1')
         .replace(/0, 92, 92/g, '__placeholder2')
         .replace(/#002d4d/g, '__placeholder3')

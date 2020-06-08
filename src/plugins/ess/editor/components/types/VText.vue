@@ -2,18 +2,18 @@
   <div>
     <m-text-field
       v-if="!isStats"
+      v-model="value_"
       :readonly="isData"
       full-width
-      v-model="value_"
       :placeholder="isData ? $t('plugin.ess.question.noValuePlaceholder') : $t('plugin.ess.question.valuePlaceholder')"
     >
       <m-line-ripple slot="bottomLine" />
     </m-text-field>
     <ul v-else-if="statsData">
-      <li v-for="{ value, count } in statsData" :key="value">{{ count > 1 ? $t('core.question.stats.textCount', { value, count }) : value }}</li>
-      <li class="has-more" v-if="stats.hasMore">{{ $t('core.question.stats.textLimited', { count: stats.data.length }) }}</li>
+      <li v-for="{ value, count } in statsData" :key="value" v-text="count > 1 ? $t('core.question.stats.textCount', { value, count }) : value" />
+      <li v-if="stats.hasMore" class="has-more" v-text="$t('core.question.stats.textLimited', { count: stats.data.length })" />
     </ul>
-    <m-typo-body v-else :level="1">{{ $t('core.question.stats.unavailableForQuestion') }}</m-typo-body>
+    <m-typo-body v-else :level="1" v-text="$t('core.question.stats.unavailableForQuestion')" />
   </div>
 </template>
 
@@ -24,7 +24,12 @@ import { textStatsMixin } from './text-stats'
 export default {
   name: 'VText',
   mixins: [ mixin, textStatsMixin ],
-  props: { value: String },
+  props: {
+    value: {
+      type: String,
+      default: '',
+    },
+  },
 }
 </script>
 

@@ -2,35 +2,35 @@
   <div>
     <template v-if="!isStats">
       <ul class="checkbox-ul">
-        <m-icon-button v-if="isEditor" @click="add" icon="add"/>
+        <m-icon-button v-if="isEditor" icon="add" @click="add" />
         <draggable
           v-if="isEditor"
           v-model="options_"
-          @start="dragging = true"
-          @end="syncOptions"
           :animation="200"
           handle=".handle"
           ghost-class="ghost"
+          @start="dragging = true"
+          @end="syncOptions"
         >
           <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
             <VCheckboxInput
-              :route="route"
               v-for="(option, i) in options_"
               :key="option.value"
+              :route="route"
               :label.sync="option.label"
-              @update:label="syncOptions"
-              @remove="remove(i)"
               :cbvalue="option.value"
               :value.sync="value_[option.value]"
+              @update:label="syncOptions"
+              @remove="remove(i)"
               @update:value="syncValue"
             />
           </transition-group>
         </draggable>
         <div v-else>
           <VCheckboxInput
-            :route="route"
             v-for="option in options_"
             :key="option.value"
+            :route="route"
             :label="option.label"
             :cbvalue="option.value"
             :value="value_[option.value]"
@@ -38,8 +38,8 @@
         </div>
       </ul>
     </template>
-    <v-chart class="vote-chart" v-else-if="stats" :options="chartOptions" />
-    <m-typo-body v-else :level="1">{{ $t('core.question.stats.unavailableForQuestion') }}</m-typo-body>
+    <v-chart v-else-if="stats" class="vote-chart" :options="chartOptions" />
+    <m-typo-body v-else :level="1" v-text="$t('core.question.stats.unavailableForQuestion')" />
   </div>
 </template>
 
@@ -57,20 +57,20 @@
 </style>
 
 <script>
-import VCheckboxInput from './VCheckboxInput'
 import draggable from 'vuedraggable'
+import VCheckboxInput from './VCheckboxInput'
 
 export default {
   name: 'VCheckbox',
+  components: {
+    VCheckboxInput,
+    draggable,
+  },
   props: {
     value: Object,
     options: {},
     route: String,
     stats: {},
-  },
-  components: {
-    VCheckboxInput,
-    draggable,
   },
   data () {
     return {
@@ -95,6 +95,11 @@ export default {
       }
     },
   },
+  watch: {
+    value_ (val) { this.$emit('input', val) },
+    value (val) { this.value_ = val },
+    options (val) { this.options_ = val },
+  },
   methods: {
     add () {
       this.options_ = this.options_ || []
@@ -111,11 +116,6 @@ export default {
     },
     syncOptions () { this.$emit('update:options', [ ...this.options_ ]) },
     syncValue () { this.$emit('input', { ...this.value_ }) },
-  },
-  watch: {
-    value_ (val) { this.$emit('input', val) },
-    value (val) { this.value_ = val },
-    options (val) { this.options_ = val },
   },
 }
 </script>

@@ -1,52 +1,53 @@
 <template>
   <m-dialog v-model="open_" scrollable>
-    <m-typo-headline :level="5" slot="header">{{ $t('plugin.ess.editor.config') }}</m-typo-headline>
-    <m-typo-body v-if="showEntries" :level="1" slot="body">
-      <span class="entry" v-for="(entry, i) in enabledEntries" :key="entry.name">
-        <span class="checkbox-entry" v-if="entry.type === 'checkbox'">
-          <m-checkbox :id="`${uid}-${i}`" v-model="value_[entry.name]" @change="syncValue"></m-checkbox>
-          <label :for="`${uid}-${i}`">{{ $t(entry.label) }}</label>
+    <m-typo-headline slot="header" :level="5" v-text="$t('plugin.ess.editor.config')" />
+    <m-typo-body v-if="showEntries" slot="body" :level="1">
+      <span v-for="(entry, i) in enabledEntries" :key="entry.name" class="entry">
+        <span v-if="entry.type === 'checkbox'" class="checkbox-entry">
+          <m-checkbox :id="`${uid}-${i}`" v-model="value_[entry.name]" @change="syncValue" />
+          <label :for="`${uid}-${i}`" v-text="$t(entry.label)" />
         </span>
-        <span class="switch-entry" v-if="entry.type === 'switch'">
-          <m-switch class="switch" :id="`${uid}-${i}`" v-model="value_[entry.name]" @change="syncValue"></m-switch>
-          <label :for="`${uid}-${i}`">{{ $t(entry.label) }}</label>
+        <span v-if="entry.type === 'switch'" class="switch-entry">
+          <m-switch :id="`${uid}-${i}`" v-model="value_[entry.name]" class="switch" @change="syncValue" />
+          <label :for="`${uid}-${i}`" v-text="$t(entry.label)" />
         </span>
-        <span class="cascade-entry" v-if="entry.type === 'cascade'">
+        <span v-if="entry.type === 'cascade'" class="cascade-entry">
           <m-select
             v-for="(sel, j) in generateCascade(entry.options, value_[entry.name])"
+            :id="`${uid}-${i}-${j}`"
             :key="sel.label"
+            v-model="value_[entry.name][j]"
             outlined
             enhanced
             width="200px"
             :required="!!entry.required"
-            :id="`${uid}-${i}-${j}`"
-            v-model="value_[entry.name][j]"
             @model="syncValue()"
           >
-            <m-list-item v-for="(item, k) in sel.items" :key="k" :data-value="item.value">{{ $t(item.label) }}</m-list-item>
-            <m-floating-label :for="`${uid}-${i}-${j}`" slot="label">{{ $t(sel.label) }}</m-floating-label>
+            <m-list-item v-for="(item, k) in sel.items" :key="k" :data-value="item.value" v-text="$t(item.label)" />
+            <m-floating-label slot="label" :for="`${uid}-${i}-${j}`" v-text="$t(sel.label)" />
           </m-select>
         </span>
-        <span class="text-field-entry" v-if="entry.type === 'text-field'">
+        <span v-if="entry.type === 'text-field'" class="text-field-entry">
           <m-text-field
-            outlined
-            :required="!!entry.required"
-            v-model="value_[entry.name]"
             :id="`${uid}-${i}`"
             :ref="`${uid}-${i}`"
+            v-model="value_[entry.name]"
+            outlined
+            :required="!!entry.required"
             :type="entry.validation === 'number' ? 'number' : 'text'"
             @model="$refs[`${uid}-${i}`][0].mdcTextField.valid ? syncValue() : null"
           >
-            <m-floating-label :for="`${uid}-${i}`">{{ $t(entry.label) }}</m-floating-label>
+            <m-floating-label :for="`${uid}-${i}`" v-text="$t(entry.label)" />
           </m-text-field>
         </span>
       </span>
     </m-typo-body>
     <m-button
+      slot="acceptButton"
       class="mdc-dialog__button"
       data-mdc-dialog-action="OK"
-      slot="acceptButton"
-    >{{ $t('plugin.ess.editor.ok') }}</m-button>
+      v-text="$t('plugin.ess.editor.ok')"
+    />
   </m-dialog>
 </template>
 
@@ -69,18 +70,29 @@ const types = [ 'checkbox', 'switch', 'cascade', 'text-field' ]
 
 export default {
   name: 'QuestionConfigDialog',
+  props: {
+    entries: {
+      type: Array,
+      required: true,
+      validator (val) {
+        if (!Array.isArray(val)) return false
+        for (const entry of val) {
+          if (!('label' in entry)) return false
+          if (!('name' in entry)) return false
+          if (!('type' in entry) || !types.includes(entry.type)) return false
+        }
+        return true
+      },
+    },
+    open: Boolean,
+    value: {},
+  },
   data () {
     return {
       open_: false,
       value_: this.value || {},
       showEntries: false,
     }
-  },
-  watch: {
-    open_ (val) { this.$emit('update:open', val) },
-    open (val) { this.open_ = val },
-    value_ (val) { this.$emit('input', val) },
-    value (val) { this.value_ = val },
   },
   computed: {
     enabledEntries () {
@@ -92,11 +104,28 @@ export default {
       })
     },
   },
+  watch: {
+    open_ (val) { this.$emit('update:open', val) },
+    open (val) { this.open_ = val },
+    value_ (val) { this.$emit('input', val) },
+    value (val) { this.value_ = val },
+  },
+  mounted () {
+    this.$nextTick(() => this.open_ = this.open)
+    this.$nextTick(() => this.$nextTick(() => this.showEntries = true))
+  },
+  created () {
+    for (const entry of this.entries) {
+      if ('default' in entry && !(entry.name in this.value_)) {
+        this.value_[entry.name] = entry.default
+      }
+    }
+  },
   methods: {
     syncValue () {
       this.$emit('input', { ...this.value_ })
     },
-    generateCascade: function* (root, value, offset = 0) {
+    *generateCascade (root, value, offset = 0) {
       yield {
         label: root.nextLabel || root.label,
         items: root.children,
@@ -111,34 +140,6 @@ export default {
       if (option.children) yield* this.generateCascade(option, value, offset + 1)
       else if (value.length > offset + 1) value.splice(offset + 1) // not `value.length = offset + 1`
     },
-  },
-  props: {
-    entries: {
-      type: Array,
-      required: true,
-      validator (val) {
-        if (!Array.isArray(val)) return false
-        for (let entry of val) {
-          if (!('label' in entry)) return false
-          if (!('name' in entry)) return false
-          if (!('type' in entry) || types.indexOf(entry.type) < 0) return false
-        }
-        return true
-      },
-    },
-    open: Boolean,
-    value: {},
-  },
-  mounted () {
-    this.$nextTick(() => this.open_ = this.open)
-    this.$nextTick(() => this.$nextTick(() => this.showEntries = true))
-  },
-  created () {
-    for (let entry of this.entries) {
-      if ('default' in entry && !(entry.name in this.value_)) {
-        this.value_[entry.name] = entry.default
-      }
-    }
   },
 }
 </script>

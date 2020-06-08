@@ -1,9 +1,9 @@
 /** @module user */
 
-import { query, update } from './db'
-import KASClient from 'kas-client-node'
-import logger from './log'
 import { readFileSync } from 'fs'
+import KASClient from 'kas-client-node'
+import { query, update } from './db'
+import logger from './log'
 
 const log = logger.child({ part: 'user' })
 
@@ -80,7 +80,7 @@ export class User {
       this._updated.delete('proExpires')
       args.pro_expires = this.options.proExpires
     }
-    for (let name of this._updated) args[name] = this.options[name]
+    for (const name of this._updated) args[name] = this.options[name]
     this._updated.clear()
     await update('PRE_users', args, 'id', this.id)
   }

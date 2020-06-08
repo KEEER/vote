@@ -87,6 +87,20 @@ export const waitUntil = (predicate, timeout) => new Promise((resolve, reject) =
 })
 
 /**
+ * Shuffles an array.
+ * @param {number[]} arr array to shuffle.
+ */
+export function shuffle (arr) {
+  let i = arr.length
+  while (i !== 0) {
+    const newIndex = Math.floor(Math.random() * i)
+    i--
+    ;[ arr[i], arr[newIndex] ] = [ arr[newIndex], arr[i] ]
+  }
+  return arr
+}
+
+/**
  * Debounce a function.
  * @param {function} func function to debounce
  * @param {number} wait wait time

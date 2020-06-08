@@ -1,8 +1,8 @@
+import assert from 'assert'
+import sanitize from 'sanitize-html'
 import Question from '@vote/core/question'
 import { Page } from '@vote/core/form'
 import logger from '@vote/core/log'
-import assert from 'assert'
-import sanitize from 'sanitize-html'
 import { themes } from '@vote/core/theme'
 import { plugins } from '@vote/core/plugin'
 
@@ -15,7 +15,7 @@ export default {
     form.pages.forEach(p => {
       p.questions = p.questions.map(q => {
         const o = q.toObject()
-        for (let i of [ 'value', 'options', 'description', 'config' ]) {
+        for (const i of [ 'value', 'options', 'description', 'config' ]) {
           o[i] = JSON.stringify(o[i])
         }
         return o
@@ -78,7 +78,7 @@ export default {
         questions.splice(i, 1)
         questions.splice(i + reorder, 0, q)
       }
-      for (let i of [ 'value', 'options', 'description', 'config' ]) {
+      for (const i of [ 'value', 'options', 'description', 'config' ]) {
         if (i in options) {
           options[i] = JSON.parse(options[i])
         }

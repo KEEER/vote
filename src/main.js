@@ -1,20 +1,20 @@
 /** @module main */
 import path from 'path'
-import logger from './log'
-import { Form, Page } from './form'
 import Koa from 'koa'
 import Router from 'koa-router'
 import BodyParser from 'koa-bodyparser'
 import serveStatic from 'koa-static'
-import { User, UserNoIdError } from './user'
 import generateName from 'project-name-generator'
 import acceptLanguageParser from 'accept-language-parser'
 import { HttpError } from 'http-errors'
-import { messages as localeMessages } from '@vote/locale'
+import { User, UserNoIdError } from './user'
+import { Form, Page } from './form'
+import logger from './log'
 import { query } from './db'
 import { plugins } from './plugin'
 import { themes } from './theme'
 import { isDev } from './is-dev'
+import { messages as localeMessages } from '@vote/locale'
 
 const log = logger.child({ part: 'main' })
 
@@ -34,7 +34,7 @@ app.context.$t = function (key) {
   const lang = this.getLanguage()
   const slices = key.split('.')
   let message = localeMessages[lang]
-  for (let s of slices) message = message[s] || key
+  for (const s of slices) message = message[s] || key
   return message
 }
 const distLangServer = async (ctx, next) => {
@@ -87,10 +87,8 @@ if (isDev) {
 
 router.get('/', (ctx, next) => {
   if (ctx.state.user) return next()
-  else {
-    if (ctx.state.userNoId) ctx.requireLogin()
-    else ctx.redirect('/welcome')
-  }
+  else if (ctx.state.userNoId) ctx.requireLogin()
+  else ctx.redirect('/welcome')
 })
 // FIXME: remove this route and add welcome page after alpha stage
 router.get('/welcome', ctx => ctx.redirect('/equableyear/invite-only'))

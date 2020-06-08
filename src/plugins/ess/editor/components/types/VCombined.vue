@@ -1,27 +1,28 @@
 <template>
   <div>
     <component
+      :is="q.type"
       v-for="(q, i) in subQuestions.filter(x => x.show)"
       :key="i"
-      :is="q.type"
       ref="subQuestions"
       v-model="value_[i]"
-      @input="syncValue"
       :route="route"
       :stats="stats"
       :options.sync="options_[i]"
+      @input="syncValue"
       @update:options="$nextTick(() => $emit('update:options', [ ...options ])); options[i] = $event"
     />
   </div>
 </template>
 
 <script>
-import mixin from './mixin'
 import hooks from '../../hooks'
+import mixin from './mixin'
 
 export default {
   name: 'VCombined',
   mixins: [ mixin ],
+  props: { value: {}, config: {}, options: {} },
   data () {
     return {
       subQuestions: [],
@@ -29,7 +30,6 @@ export default {
       options_: this.options || [],
     }
   },
-  props: { value: {}, config: {}, options: {} },
   mounted () {
     /**
      * VCombined mounted event. Inject sub-questions here.

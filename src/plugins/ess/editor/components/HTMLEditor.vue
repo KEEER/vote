@@ -1,5 +1,5 @@
 <template>
-  <div :id="uid"></div>
+  <div :id="uid" />
 </template>
 
 <style>
@@ -17,12 +17,21 @@ injectStyle('https://cdn.jsdelivr.net/npm/medium-editor@5.23.2/dist/css/medium-e
 
 export default {
   name: 'HTMLEditor',
-  data () {
-    return { editor: null }
-  },
   props: {
     data: {},
     readonly: Boolean,
+  },
+  data () {
+    return { editor: null }
+  },
+  mounted () {
+    this.init()
+    if (this.readonly) {
+      this.editor.isReady.then(() => this.freeze())
+    }
+  },
+  beforeDestroy () {
+    this.destroy()
   },
   methods: {
     init () {
@@ -48,15 +57,6 @@ export default {
     },
     save () { return { html: this.editor.getContent() } },
     freeze () { this.destroy() },
-  },
-  mounted () {
-    this.init()
-    if (this.readonly) {
-      this.editor.isReady.then(() => this.freeze())
-    }
-  },
-  beforeDestroy () {
-    this.destroy()
   },
 }
 </script>

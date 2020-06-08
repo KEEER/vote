@@ -2,8 +2,8 @@
   <div>
     <VCheckboxInput
       v-for="option in data.options"
-      :multiline="multiline"
       :key="option.value"
+      :multiline="multiline"
       :option="option"
       :value.sync="value_[option.value]"
       @update:value="syncValue"
@@ -16,11 +16,6 @@ import VCheckboxInput from './VCheckboxInput'
 
 export default {
   name: 'VCheckbox',
-  data () {
-    return {
-      value_: this.value || {},
-    }
-  },
   components: { VCheckboxInput },
   props: {
     data: {
@@ -29,8 +24,17 @@ export default {
         const nonnull = a => a !== null && a !== undefined
         return val.title && val.options && val.options.every(op => nonnull(op.label) && nonnull(op.value))
       },
+      required: true,
     },
-    value: Object,
+    value: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  data () {
+    return {
+      value_: this.value || {},
+    }
   },
   computed: {
     multiline () {

@@ -2,23 +2,21 @@
   <div>
     <m-text-field
       v-if="!isStats"
+      :id="uid"
+      v-model="value_"
       :readonly="isData"
       class="question-textarea"
       textarea
-      v-model="value_"
-      :id="uid"
     >
-      <m-floating-label v-if="isEditor || !value_" :for="uid">
-        {{ $t(isData ? 'plugin.ess.question.noValuePlaceholder' : 'plugin.ess.question.valuePlaceholder') }}
-      </m-floating-label>
+      <m-floating-label v-if="isEditor || !value_" :for="uid" v-text="$t(isData ? 'plugin.ess.question.noValuePlaceholder' : 'plugin.ess.question.valuePlaceholder')" />
     </m-text-field>
     <template v-else-if="statsData">
       <ul>
-        <li v-for="{ value, count } in statsData" :key="value">{{ count > 1 ? $t('core.question.stats.textCount', { value, count }) : value }}</li>
+        <li v-for="{ value, count } in statsData" :key="value" v-text="count > 1 ? $t('core.question.stats.textCount', { value, count }) : value" />
       </ul>
-      <m-typo-body class="has-more" :level="1" v-if="stats.hasMore">{{ $t('core.question.stats.textLimited', { count: stats.data.length }) }}</m-typo-body>
+      <m-typo-body v-if="stats.hasMore" class="has-more" :level="1" v-text="$t('core.question.stats.textLimited', { count: stats.data.length })" />
     </template>
-    <m-typo-body v-else :level="1">{{ $t('core.question.stats.unavailableForQuestion') }}</m-typo-body>
+    <m-typo-body v-else :level="1" v-text="$t('core.question.stats.unavailableForQuestion')" />
   </div>
 </template>
 
@@ -33,7 +31,12 @@ import { textStatsMixin } from './text-stats'
 export default {
   name: 'VTextarea',
   mixins: [ mixin, textStatsMixin ],
-  props: { value: String },
+  props: {
+    value: {
+      type: String,
+      default: '',
+    },
+  },
 }
 </script>
 

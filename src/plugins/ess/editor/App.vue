@@ -2,24 +2,24 @@
   <div>
     <m-drawer
       ref="drawer"
+      :key="modal"
+      v-model="drawerOpen"
       :class="{'drawer-permanent': !modal}"
       :modal="modal"
-      v-model="drawerOpen"
-      :key="modal"
     >
       <m-icon-button icon="arrow_back" href="/?utm_source=editor&utm_medium=drawer_header_icon" class="back-button" />
       <div class="mdc-drawer__header">
         <m-typo-body :level="1" class="username">
-          <a href="/?utm_source=editor&utm_medium=drawer_header" class="username-link">{{ userName }}</a>
+          <a href="/?utm_source=editor&utm_medium=drawer_header" class="username-link" v-text="userName" />
         </m-typo-body>
-        <m-typo-headline :level="5" class="formname">{{ formName }}</m-typo-headline>
+        <m-typo-headline :level="5" class="formname" v-text="formName" />
       </div>
       <m-drawer-content>
         <m-drawer-list>
           <span v-for="route in routes" :key="route.name">
             <router-link class="navlink" :to="{name: route.name}">
               <m-list-item :activated="$route.name === route.name" @click="modal ? drawerOpen = false : null">
-                <m-icon :icon="route.icon" slot="graphic"/>
+                <m-icon slot="graphic" :icon="route.icon" />
                 {{ $t(route.title) }}
               </m-list-item>
             </router-link>
@@ -33,18 +33,16 @@
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <m-icon-button v-if="modal" icon="menu" class="mdc-top-app-bar__navigation-icon" @click="drawerOpen = !drawerOpen" />
           <span class="hgroup mdc-top-app-bar__title">
-            <div class="app-bar-title">{{ appBarTitle }}</div>
-            <div class="mdc-top-app-bar__subtitle" v-if="appBarSubtitle">
-              {{ appBarSubtitle }}
-            </div>
+            <div class="app-bar-title" v-text="appBarTitle" />
+            <div v-if="appBarSubtitle" class="mdc-top-app-bar__subtitle" v-text="appBarSubtitle" />
           </span>
         </section>
-        <section id="idframe" class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"></section>
+        <section id="idframe" class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" />
       </m-top-app-bar>
       <m-top-app-bar-fixed-adjust>
-        <div class="lang-fallback" v-if="$t('isFallback') === 'true'">
+        <div v-if="$t('isFallback') === 'true'" class="lang-fallback">
           {{ $t('languageNotSupported.beforeLink') }}
-          <a :href="$t('languageNotSupported.link')">{{ $t('languageNotSupported.linkLabel') }}</a>
+          <a :href="$t('languageNotSupported.link')" v-text="$t('languageNotSupported.linkLabel')" />
           {{ $t('languageNotSupported.afterLink') }}
         </div>
         <router-view id="main" />
@@ -214,7 +212,7 @@ export function getRouter () {
 }
 
 export default Vue.extend({
-  data: function () {
+  data () {
     return {
       modal: false,
       drawerOpen: false,
@@ -228,18 +226,6 @@ export default Vue.extend({
       routes,
       types,
     }
-  },
-  methods: {
-    updateTitle () {
-      this.appBarTitle = `${this.title} - Vote Editor`
-      document.title = `${this.title} - ${this.documentTitle}`
-      /**
-       * Update title event.
-       * @event editor:App#update:title
-       * @type {string}
-       */
-      this.$emit('update:title', this.title)
-    },
   },
   mounted () {
     const media = window.matchMedia('(max-width: 720px)')
@@ -260,6 +246,18 @@ export default Vue.extend({
         container: '#idframe',
         // TODO: pro etc
       }))
+  },
+  methods: {
+    updateTitle () {
+      this.appBarTitle = `${this.title} - Vote Editor`
+      document.title = `${this.title} - ${this.documentTitle}`
+      /**
+       * Update title event.
+       * @event editor:App#update:title
+       * @type {string}
+       */
+      this.$emit('update:title', this.title)
+    },
   },
 })
 </script>

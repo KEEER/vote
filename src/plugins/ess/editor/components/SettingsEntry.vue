@@ -1,22 +1,22 @@
 <template>
   <span class="settings-entry">
-    <component v-if="component" :is="component" v-model="value_" v-bind="bindings">
+    <component :is="component" v-if="component" v-model="value_" v-bind="bindings">
       <slot />
     </component>
     <template v-else-if="preset">
-      <m-text-field v-if="preset === 'text-field'" v-model="value_" class="settings-fullwidth" :id="uid" outlined :required="'required' in $attrs">
-        <m-floating-label :for="uid">{{ $t($attrs.placeholder) }}</m-floating-label>
+      <m-text-field v-if="preset === 'text-field'" :id="uid" v-model="value_" class="settings-fullwidth" outlined :required="'required' in $attrs">
+        <m-floating-label :for="uid" v-text="$t($attrs.placeholder)" />
       </m-text-field>
       <div v-if="preset === 'checkbox'" class="labelled">
-        <m-checkbox v-model="value_" :id="uid" />
-        <label :for="uid">{{ $t($attrs.label) }}</label>
+        <m-checkbox :id="uid" v-model="value_" />
+        <label :for="uid" v-text="$t($attrs.label)" />
       </div>
       <div v-if="preset === 'switch'" class="labelled">
-        <m-switch class="switch" v-model="value_" :id="uid" />
-        <label :for="uid">{{ $t($attrs.label) }}</label>
+        <m-switch :id="uid" v-model="value_" class="switch" />
+        <label :for="uid" v-text="$t($attrs.label)" />
       </div>
       <div v-if="preset === 'color'">
-        <m-typo-headline :level="6" class="color-label">{{ $t($attrs.label) }}</m-typo-headline>
+        <m-typo-headline :level="6" class="color-label" v-text="$t($attrs.label)" />
         <color-picker v-model="value_" />
       </div>
     </template>
@@ -50,6 +50,13 @@ export default {
   mixins: [
     updateObservable(vm => updateSetting(vm.name, vm.value_)),
   ],
+  props: {
+    name: String,
+    value: {},
+    component: {},
+    preset: {},
+    data: {},
+  },
   data () {
     return {
       value_: typeof this.value === 'undefined' ? this.data[this.name] : this.value,
@@ -57,12 +64,13 @@ export default {
       id: null,
     }
   },
-  props: {
-    name: String,
-    value: {},
-    component: {},
-    preset: {},
-    data: {},
+  computed: {
+    bindings () {
+      const d = { ...this.$attrs }
+      d.id = d.id_
+      d.class = d.class_
+      return d
+    },
   },
   watch: {
     value (val) {
@@ -83,14 +91,6 @@ export default {
       }
       this.$emit('update:value', val)
       this.logChange()
-    },
-  },
-  computed: {
-    bindings () {
-      const d = { ...this.$attrs }
-      d.id = d.id_
-      d.class = d.class_
-      return d
     },
   },
 }

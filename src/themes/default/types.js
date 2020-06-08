@@ -1,8 +1,8 @@
 import VCheckbox from './types/VCheckbox'
-import VCombined from '@vote/api/VCombinedForm'
 import VRadio from './types/VRadio'
 import VText from './types/VText'
 import VTextarea from './types/VTextarea'
+import VCombined from '@vote/api/VCombinedForm'
 
 export const types = {
   VCheckbox,
