@@ -1,6 +1,7 @@
 /** @module theme */
 import fs from 'fs'
 import path from 'path'
+import YAML from 'yaml'
 
 /** Class representing a theme. */
 class Theme {
@@ -16,6 +17,7 @@ class Theme {
   toJSON () { return this.config }
 }
 
+// load themes
 let themeDirs, themes // eslint-disable-line import/no-mutable-exports
 try {
   themeDirs = fs.readdirSync(path.resolve(__dirname, 'themes'))
@@ -25,8 +27,8 @@ try {
 
 try {
   themes = themeDirs.map(dir => {
-    const themeJson = fs.readFileSync(path.resolve(__dirname, 'themes', dir, 'theme.json'))
-    const theme = JSON.parse(themeJson.toString())
+    const themeConfigBuffer = fs.readFileSync(path.resolve(__dirname, 'themes', dir, 'theme.yml'))
+    const theme = YAML.parse(themeConfigBuffer.toString())
     return new Theme(theme)
   })
 } catch (e) {

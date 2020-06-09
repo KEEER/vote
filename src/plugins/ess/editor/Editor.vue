@@ -13,11 +13,11 @@
       <m-list slot="menu">
         <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].fold())">
           <m-icon slot="graphic" icon="keyboard_arrow_up" class="menu-icon" />
-          <template slot="text" v-text="$t('plugin.ess.editor.foldAll')" />
+          <template slot="text">{{ $t('plugin.ess.editor.foldAll') }}</template>
         </m-list-item>
         <m-list-item @click="questions.forEach((_, i) => $refs[`question-${i}`][0].unfold())">
           <m-icon slot="graphic" icon="keyboard_arrow_down" class="menu-icon" />
-          <template slot="text" v-text="$t('plugin.ess.editor.unfoldAll')" />
+          <template slot="text">{{ $t('plugin.ess.editor.unfoldAll') }}</template>
         </m-list-item>
       </m-list>
     </DataNavigator>

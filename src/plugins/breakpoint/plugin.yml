@@ -1,0 +1,14 @@
+code: breakpoint
+version: 0.0.1
+default: false
+required: false
+pro: false
+uses:
+  hooks:
+    - form:mounted
+    - form:submit
+    - form:update
+    - question:update
+  inject:
+    form:
+      js: plugin-breakpoint

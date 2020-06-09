@@ -1,0 +1,37 @@
+code: ess
+version: 0.0.1
+default: true
+required: true
+pro: false
+uses:
+  hooks:
+    - form:submit
+  inject:
+    form:
+      js: plugin-ess-form
+      css: plugin-ess-form
+    server: server/index.js
+provides:
+  hooks:
+    - form:submiterror
+    - form:submitted
+    - form:error
+    - form:authorizeEditor
+    - form:authorizeQuery
+    - form:authorizeRenameOrRemoval
+    - form__updateSettings
+    - form__preprocessSettings
+    - form.validateQuestionOverride
+    - editor:appMounted
+    - editor:settingsMounted
+    - editor:editorMounted
+    - editor:questionMounted
+    - editor:fnMounted
+    - editor:preprocessThemeFormConfigEntries
+    - question__beforeUpdate
+    - question__preprocessThemeConfigEntries
+    - question:validatorOverride
+    - editor:dataMounted
+    - editor:beforeRouterLoad
+  injections:
+    - editor

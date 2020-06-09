@@ -1,6 +1,7 @@
 /** @module plugin */
 import fs from 'fs'
 import path from 'path'
+import YAML from 'yaml'
 import { themes } from './theme'
 import { isDev } from './is-dev'
 
@@ -17,6 +18,7 @@ class Plugin {
   }
 }
 
+// load plugins
 let pluginDirs, plugins // eslint-disable-line import/no-mutable-exports
 try {
   pluginDirs = fs.readdirSync(path.resolve(__dirname, 'plugins'))
@@ -26,14 +28,14 @@ try {
 const { js, css } = require('../dist/build.json')
 
 try {
-  const pluginJsons = pluginDirs.map(dir => {
-    const pluginJson = fs.readFileSync(path.resolve(__dirname, 'plugins', dir, 'plugin.json'))
-    return JSON.parse(pluginJson.toString())
+  const pluginConfigs = pluginDirs.map(dir => {
+    const pluginConfigBuffer = fs.readFileSync(path.resolve(__dirname, 'plugins', dir, 'plugin.yml'))
+    return YAML.parse(pluginConfigBuffer.toString())
   })
   const injectionKeys = [ ...new Set(
-    [ ...themes.map(t => t.config), ...pluginJsons ]
+    [ ...themes.map(t => t.config), ...pluginConfigs ]
       .flatMap(p => (p.provides || {}).injections || [])) ]
-  plugins = pluginJsons.map((plugin, i) => {
+  plugins = pluginConfigs.map((plugin, i) => {
     plugin.uses = plugin.uses || {}
     plugin.uses.inject = plugin.uses.inject || {}
     plugin.inject = {}

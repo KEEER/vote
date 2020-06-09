@@ -1,0 +1,13 @@
+code: autofill
+version: 0.0.1
+default: false
+required: false
+pro: false
+uses:
+  hooks:
+    - TODO
+  inject:
+    form:
+      js: plugin-autofill-form
+    editor:
+      js: plugin-autofill-editor

@@ -24,4 +24,4 @@ This directory contains the source code of Plugin Essentials. This plugin provid
 - `server/` Script to be injected to backend
     - `index.js` Entry point
 - `common/` Common files
-- `plugin.json` Plugin meta file
+- `plugin.yml` Plugin meta file

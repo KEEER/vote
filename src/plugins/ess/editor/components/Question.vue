@@ -37,7 +37,7 @@
         @change="logDescriptionChange"
       />
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-else-if="description_" v-html="description_.html || ''" />
+      <div v-else-if="description_" class="description" v-html="description_.html || ''" />
       <component
         :is="questionTypes[data.type || 'VNull']"
         v-model="value_"
@@ -60,7 +60,7 @@
             <m-list>
               <m-list-item v-for="(item, i) in menuItems" :key="i" @click="menuClick(i)">
                 <m-icon slot="graphic" :icon="item.icon" class="question-menu__icon" />
-                <template slot="text" v-text="$t(item.label)" />
+                <template slot="text">{{ $t(item.label) }}</template>
               </m-list-item>
             </m-list>
           </m-menu>
@@ -90,12 +90,7 @@
 }
 
 .question.is-data, .question.is-stats { padding: 16px; }
-.question-card {
-  margin: 16px;
-  overflow: hidden;
-  hyphens: auto;
-  word-break: break-word;
-}
+.question-card { margin: 16px; }
 .question-card__folded { margin: 8px 16px; }
 .question-title { flex: auto; }
 .question-title--data { margin-bottom: 8px; }
@@ -146,6 +141,12 @@
 .mdc-menu .mdc-list .question-menu__icon {
   color: rgba(0, 0, 0, 0.6);
   margin-right: 12px;
+}
+
+.description {
+  overflow: hidden;
+  hyphens: auto;
+  word-break: break-word;
 }
 </style>
 

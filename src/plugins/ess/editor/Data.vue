@@ -31,7 +31,7 @@
       <m-list slot="menu">
         <m-list-item @click="exportData">
           <m-icon slot="graphic" icon="get_app" class="menu-icon" />
-          <template slot="text" v-text="$t('plugin.ess.data.export')" />
+          <template slot="text">{{ $t('plugin.ess.data.export') }}</template>
         </m-list-item>
       </m-list>
     </DataNavigator>

@@ -4,8 +4,8 @@
     <m-typo-body class="block typo-body" :level="1" v-text="$t('plugin.ess.fn.pluginIntroduction')" />
     <m-list two-line role="group">
       <m-list-item v-for="plugin in allPlugins" :key="plugin.code" role="checkbox" :aria-checked="isSelected(plugin)">
-        <template slot="primaryText" v-text="$t(`plugin.${plugin.code}.name`)" />
-        <template slot="secondaryText" v-text="$t(`plugin.${plugin.code}.description`)" />
+        <template slot="primaryText">{{ $t(`plugin.${plugin.code}.name`) }}</template>
+        <template slot="secondaryText">{{ $t(`plugin.${plugin.code}.description`) }}</template>
         <m-checkbox slot="meta" :checked="isSelected(plugin)" :disabled="plugin.required" v-on="{ change: onChange(plugin.code) }" />
       </m-list-item>
     </m-list>
@@ -15,8 +15,8 @@
     <m-list v-model="themeId" two-line role="radiogroup">
       <m-list-item v-for="(thisTheme, i) in allThemes" :key="thisTheme.code" role="radio">
         <m-radio slot="meta" :checked="themeId === i" name="theme" :value="i" />
-        <template slot="primaryText" v-text="$t(`theme.${thisTheme.code}.name`)" />
-        <template slot="secondaryText" v-text="$t(`theme.${thisTheme.code}.description`)" />
+        <template slot="primaryText">{{ $t(`theme.${thisTheme.code}.name`) }}</template>
+        <template slot="secondaryText">{{ $t(`theme.${thisTheme.code}.description`) }}</template>
       </m-list-item>
     </m-list>
     <m-button class="submit-button" :disabled="submitting" unelevated @click="submit" v-text="$t('plugin.ess.fn.submit')" />
