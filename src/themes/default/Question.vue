@@ -66,7 +66,7 @@ export default {
       return res
     },
     valid () { return this.validity.valid },
-    hidden () { return getConfig(this.data, 'display', 'hidden', false) },
+    hidden () { return this.abstractQuestion.getConfig('display', 'hidden', false) },
   },
   provide () {
     return { Question: this }

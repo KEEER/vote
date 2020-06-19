@@ -176,7 +176,16 @@ for (const key of [ 'type', 'id', 'title', 'value', 'data', 'description', 'opti
 export class AbstractVueQuestion extends AbstractQuestion {
   constructor (options, vueInstance) {
     super(options)
+    if (!options.config) vueInstance.$set(options, 'config', {})
     this.vueInstance = vueInstance
+  }
+  setConfig (type, name, value) {
+    if (!this.config) this.config = {}
+    if (!this.config[type]) this.config[type] = {}
+    this.config[type][name] = value
+    // trigger Vue to recompute computed fields
+    this.config = { ...this.config }
+    return value
   }
 }
 
