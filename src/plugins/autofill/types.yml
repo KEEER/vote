@@ -1,0 +1,39 @@
+name:
+  type: VText
+gender:
+  type: VRadio
+  options:
+    - label: __plugin.autofill.gender.male
+      value: male
+    - label: __plugin.autofill.gender.female
+      value: female
+    - label: __plugin.autofill.gender.other
+      value: other
+mobile:
+  type: VText
+  validation:
+    useValidation: true
+    type:
+      - mobile
+phone:
+  type: VText
+  validation:
+    useValidation: true
+    type:
+      - phone
+email:
+  type: VText
+  validation:
+    useValidation: true
+    type:
+      - email
+address:
+  type: VText
+birthday:
+  type: VText # TODO: add a separate question type for dates
+telegram:
+  type: VText
+wechat:
+  type: VText
+qq:
+  type: VText

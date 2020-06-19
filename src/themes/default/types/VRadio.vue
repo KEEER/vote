@@ -37,7 +37,7 @@ export default {
       type: Object,
       validator (val) {
         const e = x => typeof x !== 'undefined'
-        return e(val.title) && e(val.options) && val.options.every(op => e(op.label) && e(op.value))
+        return e(val.options) && val.options.every(op => e(op.label) && e(op.value))
       },
       required: true,
     },

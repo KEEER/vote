@@ -53,7 +53,7 @@ export default {
   },
   async newQuestion ({ pageId, options }, ctx) {
     try {
-      options.id = ctx.state.form.questions.map(q => q.options.id).reduce((m, n) => Math.max(m, n), -1) + 1
+      options.id = ctx.state.form.questions.map(q => q.id).reduce((m, n) => Math.max(m, n), -1) + 1
       if (!(pageId in ctx.state.form.pages)) ctx.state.form.pages[pageId] = new Page({ id: pageId, questions: [] })
       ctx.state.form.pages[pageId].options.questions.push(new Question(options))
       await ctx.state.form.update()
@@ -65,7 +65,7 @@ export default {
   },
   async updateQuestion ({ options }, ctx) {
     try {
-      const q = ctx.state.form.questions.find(q => q.options.id === options.id)
+      const q = ctx.state.form.questions.find(q => q.id === options.id)
       if (!q) return false
       if (options.reorder) {
         const { reorder } = options
@@ -92,7 +92,7 @@ export default {
           },
         }) }
       }
-      Object.assign(q.options, options)
+      Object.assign(q, options)
       await ctx.state.form.update()
       return true
     } catch (e) {
@@ -102,7 +102,7 @@ export default {
   },
   async removeQuestion ({ id }, ctx) {
     try {
-      const q = ctx.state.form.questions.find(q => q.options.id === id)
+      const q = ctx.state.form.questions.find(q => q.id === id)
       const p = ctx.state.form.pages.find(p => p.options.questions.includes(q))
       p.options.questions.splice(p.options.questions.indexOf(q), 1)
       await ctx.state.form.update()

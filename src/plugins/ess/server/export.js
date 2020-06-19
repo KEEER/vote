@@ -26,18 +26,18 @@ export async function exportForm (form, ctx) {
 
 export function handleExportQuestionData ({ question, answer, set }) {
   if (!answer) return
-  switch (question.options.type) {
+  switch (question.type) {
   case 'VCheckbox':
-    return set(Object.keys(answer).filter(k => answer[k]).map(k => question.options.options.find(x => x.value === k).label).join(', '))
+    return set(Object.keys(answer).filter(k => answer[k]).map(k => question.options.find(x => x.value === k).label).join(', '))
   case 'VRadio':
-    return set(question.options.options.find(x => x.value === answer).label)
+    return set(question.options.find(x => x.value === answer).label)
   }
 }
 
 const writeData = async (form, stringifier, ctx) => {
   const { questions } = form
   const header = await Promise.all(questions.map(async question => {
-    let data = question.options.title
+    let data = question.title
     /**
      * Export question header event.
      * @event Form#exportQuestionHeader

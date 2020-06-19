@@ -1,5 +1,5 @@
 <template>
-  <div :id="uid" />
+  <div :id="uid" spellcheck="false" />
 </template>
 
 <style>

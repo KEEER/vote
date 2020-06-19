@@ -90,10 +90,19 @@ export default {
   name: 'VRadio',
   components: { draggable },
   props: {
-    value: {},
-    options: {},
-    route: String,
-    stats: {},
+    value: {
+      type: String,
+      default: '',
+    },
+    options: {
+      type: Array,
+      default: () => [],
+    },
+    route: {
+      type: String,
+      required: true,
+    },
+    stats: {}, // eslint-disable-line
   },
   data () {
     return {

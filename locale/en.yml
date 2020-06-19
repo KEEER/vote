@@ -267,7 +267,8 @@ plugin:
   autofill:
     name: Autofill
     description: （谁来写一下这个介绍）
-    type: 这里应该写什么
+    type: Type
+    typeSelectorWidth: 220px # 不要翻译
     types:
       name: Name
       gender: Gender
@@ -279,6 +280,10 @@ plugin:
       telegram: Telegram
       wechat: WeChat
       qq: QQ
+    gender:
+      male: Male
+      female: Female
+      other: Other
 
 theme:
   common:

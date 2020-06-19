@@ -22,6 +22,6 @@ export const handleValidateSubmission = async ({ form, ctx, data, invalidate }) 
       finalize: () => bypass = true,
     })
     if (bypass) continue
-    if (validator(question.options, data[question.id]) !== null) return invalidate()
+    if (validator(question, data[question.id]) !== null) return invalidate()
   }
 }

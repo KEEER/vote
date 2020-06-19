@@ -19,7 +19,9 @@ export const createServerInjection = cb => {
   setState('server')
   cb()
   state = null
-  return form => doServerActions(form)
+  const mixinQueue = [ ...serverMixinQueue ]
+  serverMixinQueue.length = 0
+  return form => doServerActions(form, mixinQueue)
 }
 export const createFormInjection = cb => {
   setState('form')
@@ -36,8 +38,8 @@ export const once = (...args) => ee.once(...args)
 export const emit = (...args) => ee.emit(...args)
 
 const serverMixinQueue = []
-const doServerActions = form => {
-  for (const mixin of serverMixinQueue) mixin(form)
+const doServerActions = (form, mixins) => {
+  for (const mixin of mixins) mixin(form)
   /**
    * Form attached event.
    * @event api.attached
@@ -142,6 +144,49 @@ try {
  */
 export const getShortLink = form => process.env.LINK_PREFIX + hashids.encode(form.id)
 
+// abstract classes
+
+export const optionsSymbol = Symbol('options')
+// TODO: docs
+export class AbstractQuestion {
+  constructor (options) {
+    this[optionsSymbol] = options
+  }
+  get is () { return 'question' }
+  getConfig (type, name, defaultValue = undefined) {
+    if (!this.config || !this.config[type] || !(name in this.config[type]) || this.config[type][name] === undefined) return defaultValue
+    return this.config[type][name]
+  }
+  setConfig (type, name, value) {
+    if (!this.config) this.config = {}
+    if (!this.config[type]) this.config[type] = {}
+    return this.config[type][name] = value
+  }
+}
+export const defineOptionGetterSetter = (constructor, name) => {
+  Object.defineProperty(constructor.prototype, name, {
+    get () { return this[optionsSymbol][name] },
+    set (value) { this[optionsSymbol][name] = value },
+  })
+}
+for (const key of [ 'type', 'id', 'title', 'value', 'data', 'description', 'options', 'config', 'required' ]) {
+  defineOptionGetterSetter(AbstractQuestion, key)
+}
+
+export class AbstractVueQuestion extends AbstractQuestion {
+  constructor (options, vueInstance) {
+    super(options)
+    this.vueInstance = vueInstance
+  }
+}
+
+export class AbstractFormQuestion extends AbstractVueQuestion {
+  get validity () { return this.vueInstance.validity }
+  get invalidTip () { return this.vueInstance.invalidTip }
+  set invalidTip (value) { this.vueInstance.invalidTip = value }
+  get valid () { return this.validity.valid }
+}
+
 // editor apis
 
 const stylesInjected = {}
@@ -220,8 +265,8 @@ export const addValidationType = ({ type, validator, entryMixin, tip }) => {
   assertState('form', 'editor', 'server')
   if (state === 'server') serverMixinQueue.push(form => {
     form.on('validateQuestionOverride', ({ question, form, ctx, data, invalidate, finalize }) => {
-      if (question.options.type !== type) return
-      const res = validator(question.options, data[question.id], { type: 'server', form, ctx, question, data })
+      if (question.type !== type) return
+      const res = validator(question, data[question.id], { type: 'server', form, ctx, question, data })
       if (!res && res !== null) invalidate()
       finalize()
     })
@@ -275,12 +320,38 @@ export const addQuestionType = (name, component) => {
 
 /**
  * Adds a combined question type.
- * @param {string} name
- * @param {function(Question=SubQuestion[])} subQuestions
+ * @param {string} name question type name
+ * @param {function(Question=SubQuestion[])} subQuestions TODO: doc
+ * @param {boolean} [autoStats] whether to automatically add statistics
  */
-export const addCombinedQuestionType = (name, subQuestions) => {
-  addQuestionType(name, 'VCombined')
-  browserMixinQueue.push(hooks => hooks.on('v-combined:mounted', vm => vm.subQuestions = subQuestions(vm)))
+export const addCombinedQuestionType = (name, subQuestions, autoStats = true) => {
+  assertState('editor', 'form', 'server')
+  if (state === 'server' && autoStats) {
+    serverMixinQueue.push(form => {
+      form.on('getVCombinedStatsSubQuestions', ({ question, set }) => question.type === name ? set(subQuestions({ question, form })) : null)
+      form.on('getStat', async options => {
+        const { question, answers, set, form } = options
+        if (question.type !== name) return
+        let subQuestions = []
+        // TODO: doc
+        await form.emit('getVCombinedStatsSubQuestions', { ...options, set: s => subQuestions = s })
+        const res = await Promise.all(subQuestions.map(async (question, i) => {
+          let data = null
+          await form.emit('getStat', {
+            ...options,
+            question: new AbstractQuestion(question),
+            answers: answers.filter(answer => Array.isArray(answer)).map(a => a[i]),
+            set: d => data = d,
+          })
+          return data
+        }))
+        return set(res)
+      })
+    })
+  } else {
+    addQuestionType(name, 'VCombined')
+    browserMixinQueue.push(hooks => hooks.on('v-combined:mounted', vm => vm.subQuestions = subQuestions(vm)))
+  }
 }
 
 /**

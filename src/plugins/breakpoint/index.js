@@ -14,9 +14,7 @@ createFormInjection(hooks => {
   // listen on updates:
   // 1. question value updates
   hooks.on('question:update', ({ question }) => {
-    const q = question.question || question.Question
-    if (!q) return
-    storage.data[q.id] = q.value
+    storage.data[question.id] = question.value
     storage.update()
   })
   // 2. flip pages

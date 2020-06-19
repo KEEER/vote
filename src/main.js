@@ -152,7 +152,7 @@ app.use(async (ctx, next) => {
 })
 
 ;(async () => {
-  if (isDev) {
+  if (isDev && !process.env.NOFE) {
     const koaWebpack = require('koa-webpack')
     const config = require('../webpack.config')
     app.use(await koaWebpack({ config, hotClient: { allEntries: true } }))

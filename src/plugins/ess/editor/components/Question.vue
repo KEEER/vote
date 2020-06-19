@@ -166,6 +166,15 @@ import TypeSelector from './TypeSelector.vue'
 import updateObservable from './updateObservable'
 import HTMLEditor from './HTMLEditor.vue'
 import QuestionConfigDialog from './QuestionConfigDialog.vue'
+import { AbstractVueQuestion } from '@vote/api'
+
+export class AbstractEditorQuestion extends AbstractVueQuestion {
+  set description (value) { this.vueInstance.description_ = value }
+  set options (value) { this.vueInstance.options_ = value }
+  set required (value) { this.vueInstance.required_ = value }
+  set title (value) { this.vueInstance.title_ = value }
+  set type (value) { this.vueInstance.type_ = value }
+}
 
 export default {
   name: 'Question',
@@ -231,9 +240,15 @@ export default {
   ],
   props: {
     // TODO: check props
-    data: Object,
-    route: String,
-    stats: {},
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+    route: {
+      type: String,
+      required: true,
+    },
+    stats: {}, // eslint-disable-line
   },
   data () {
     return {
@@ -255,6 +270,7 @@ export default {
       removeDialogOpen: false,
       questionTypes,
       validationEntries: validationTypes[this.data.type] || [],
+      abstractQuestion: null,
     }
   },
   provide () { return { Question: this } },
@@ -317,6 +333,7 @@ export default {
         this.$emit(`update:${i}`, val)
       })
     }
+    this.abstractQuestion = new AbstractEditorQuestion(this.data, this)
     /**
      * Editor Question component mounted event
      * @event editor.editor:questionMounted

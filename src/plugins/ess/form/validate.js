@@ -1,32 +1,32 @@
 import { validator } from '../common/validator'
 
 export function validateMixin (hooks) {
-  hooks.on('question:update', ({ question: q }) => {
-    const question = q.Question
+  hooks.on('question:update', ({ question }) => {
+    const $t = (...args) => question.vueInstance.$t(...args)
     if (!question.valid) {
-      if (question.validity.reason === 'required') return question.invalidTip = q.$t('core.question.validation.invalidTip.required')
-      if (!question.data.config.validation.showValidation) {
-        return question.invalidTip = q.$t('core.question.validation.invalidTip.hidden')
+      if (question.validity.reason === 'required') return question.invalidTip = $t('core.question.validation.invalidTip.required')
+      if (!question.getConfig('validation', 'showValidation', true)) {
+        return question.invalidTip = $t('core.question.validation.invalidTip.hidden')
       }
-      if (question.data.config.validation.invalidTip) {
-        return question.invalidTip = question.data.config.validation.invalidTip
+      if (question.getConfig('validation', 'invalidTip')) {
+        return question.invalidTip = question.config.validation.invalidTip
       }
       let msgKey, data
       switch (question.validity.reason) {
       case 'text-unsatisfied':
-        msgKey = question.data.config.validation.type.join('.')
-        data = { rule: question.data.config.validation[`${question.data.config.validation.type[0]}Content`] }
+        msgKey = question.config.validation.type.join('.')
+        data = { rule: question.getConfig('validation', `${question.getConfig('validation', 'type', [ 'text' ])[0]}Content`) }
         break
       case 'checkbox-under-min':
         msgKey = 'minSelection'
-        data = { rule: question.data.config.validation.minSelection }
+        data = { rule: question.getConfig('validation', 'minSelection') }
         break
       case 'checkbox-over-max':
         msgKey = 'maxSelection'
-        data = { rule: question.data.config.validation.maxSelection }
+        data = { rule: question.getConfig('validation', 'maxSelection') }
         break
       }
-      if (msgKey) return question.invalidTip = q.$t(`core.question.validation.invalidTip.${msgKey}`, data)
+      if (msgKey) return question.invalidTip = $t(`core.question.validation.invalidTip.${msgKey}`, data)
     } else question.invalidTip = ''
   })
   hooks.on('question:validate', ({ question, invalidate }) => {
@@ -35,7 +35,7 @@ export function validateMixin (hooks) {
      * Question validator override event.
      * @event form.question:validatorOverride
      * @type {object}
-     * @property {form:Question} question Vue instance
+     * @property {AbstractQuestion} question the question
      * @property {function} set set result callback
      */
     hooks.emit('question:validatorOverride', { question, set: r => res = r })
@@ -43,7 +43,7 @@ export function validateMixin (hooks) {
       if (res === false || typeof res === 'string') invalidate(res)
       return
     }
-    res = validator(question.data, question.value)
+    res = validator(question, question.value)
     if (res !== null) return invalidate(res)
   })
 }

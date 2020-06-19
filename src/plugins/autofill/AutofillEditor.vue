@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-select v-if="type" :id="uid" v-model="type" outlined enhanced>
+    <m-select v-if="type" :id="uid" v-model="type" outlined enhanced :width="$t('plugin.autofill.typeSelectorWidth')">
       <m-list-item v-for="k in typeKeys" :key="k" :data-value="k" aria-selected="false" v-text="types[k]" />
       <m-floating-label slot="label" :for="uid" v-text="$t('plugin.autofill.type')" />
     </m-select>
@@ -13,8 +13,14 @@ export default {
   name: 'VoteAutofillEditor',
   inject: [ 'Question' ],
   props: {
-    value: {},
-    options: {},
+    value: {
+      type: Array,
+      default: () => [],
+    },
+    options: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data () {
     return {

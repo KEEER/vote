@@ -7,10 +7,10 @@ createFormInjection(hooks => {
   addQuestionType('VSample', SampleEntry)
   addValidationMixin()
   hooks.on('question:update', ({ question, value }) => {
-    if (question.Question.type === 'VText') {
+    if (question.type === 'VText') {
       if (/hello(,)? ?world/i.test(value)) {
-        question.$nextTick(function () {
-          question.value_ = value.replace(/hello(,)? ?world/gi, 'Hello, World')
+        question.vueInstance.$nextTick(function () {
+          question.vueInstance.value_ = value.replace(/hello(,)? ?world/gi, 'Hello, World')
         })
       }
     }

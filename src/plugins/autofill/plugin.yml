@@ -11,3 +11,4 @@ uses:
       js: plugin-autofill-form
     editor:
       js: plugin-autofill-editor
+    server: server.js

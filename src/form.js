@@ -664,6 +664,7 @@ export class Form extends EventEmitter {
     if (!await this.hasStats()) return null
     const submissions = await this.getSubmissions()
     const statsArray = await Promise.all(this.questions.map(async question => {
+      const answers = submissions.map(s => s.data[question.id])
       let data = null
       /**
        * Get statistics hook for a single question.
@@ -674,8 +675,8 @@ export class Form extends EventEmitter {
        * @property {object[]} submissions submission objects
        * @property {function} set setter for stats data
        */
-      await this.emit('getStat', { form: this, question, submissions, set: d => data = d })
-      return { id: question.options.id, data }
+      await this.emit('getStat', { form: this, question, answers, submissions, set: d => data = d })
+      return { id: question.id, data }
     }))
     const stats = {}
     for (const { id, data } of statsArray) stats[id] = data

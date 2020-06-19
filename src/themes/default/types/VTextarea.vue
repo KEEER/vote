@@ -21,7 +21,6 @@ export default {
   props: {
     data: {
       type: Object,
-      validator: val => !!val.title,
       required: true,
     },
     value: {

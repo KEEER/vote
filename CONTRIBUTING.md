@@ -65,6 +65,15 @@ npm start
 
 `npm run wds`
 
+## Dev server
+
+`npm run dev`
+
+Dev server has Webpack hot module replacement (HMR) enabled by default, but that increases the
+first start time as it needs to compile on start. When debugging server-side logic, this could
+be annoying. You can use `NOFE=1 npm run dev` to run the dev server without any front-end
+capabilities.
+
 ## ESLint
 
 `npm run lint`

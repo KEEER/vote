@@ -1,30 +1,32 @@
-export function handleGetStats ({ question, submissions, set }) {
-  const answers = submissions.map(s => s.data[question.id])
-  switch (question.options.type) {
+const getStats = (question, answers) => {
+  switch (question.type) {
   case 'VCheckbox': {
     const count = {}
-    for (const { value } of question.options.options || []) {
+    for (const { value } of question.options || []) {
       count[value] = answers.filter(answer => answer && answer[value]).length
     }
-    return set(count)
+    return count
   }
 
   case 'VRadio': {
     const count = {}
-    for (const { value } of question.options.options || []) {
+    for (const { value } of question.options || []) {
       count[value] = answers.filter(answer => answer === value).length
     }
-    return set(count)
+    return count
   }
 
   case 'VText':
   case 'VTextarea':
-  {
-    const res = {
+    return {
       data: answers.slice(0, 64),
       hasMore: answers.length > 64,
     }
-    return set(res)
   }
-  }
+}
+
+export function handleGetStats (options) {
+  const { question, answers, set } = options
+  const stats = getStats(question, answers, options)
+  if (stats) return set(stats)
 }

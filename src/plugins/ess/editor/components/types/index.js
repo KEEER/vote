@@ -5,7 +5,7 @@ import VRadio from './VRadio.vue'
 import VText from './VText.vue'
 import VTextarea from './VTextarea.vue'
 
-export default {
+const types = {
   VCheckbox,
   VCombined,
   VNull,
@@ -13,3 +13,6 @@ export default {
   VText,
   VTextarea,
 }
+for (const type in types) Vue.component(type, types[type])
+
+export default types

@@ -6,7 +6,7 @@ core:
       VCheckbox: 多选
       VRadio: 单选
       VSample: 插件示例
-      VAutofill: 自动填充问题
+      VAutofill: 自动填充
     validation:
       useValidation: 启用验证
       type: 验证类型
@@ -262,7 +262,8 @@ plugin:
   autofill:
     name: 自动填充
     description: （谁来写一下这个介绍）
-    type: 这里应该写什么
+    type: 信息种类
+    typeSelectorWidth: 180px # 不要翻译
     types:
       name: 姓名
       gender: 性别
@@ -274,6 +275,10 @@ plugin:
       telegram: Telegram
       wechat: 微信
       qq: QQ
+    gender:
+      male: 男
+      female: 女
+      other: 其他
 
 theme:
   common:

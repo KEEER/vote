@@ -8,29 +8,27 @@
       ref="questionContent"
       :data="data"
       :value.sync="value"
+      :abstract-question="abstractQuestion"
     >
       <slot />
     </component>
-    <m-typo-body v-if="invalidTip" :level="1" class="invalid-tip" v-text="invalidTip" />
+    <QInvalidTip v-if="invalidTip" v-text="invalidTip" />
   </div>
 </template>
 
 <style scoped>
 .hidden { display: none; }
 .question-title { margin-top: 16px; }
-.invalid-tip { color: #d93025; display: block; }
 .description { display: block; }
 </style>
 
 <script>
 import { types } from './types'
 import hooks from './hooks'
-import QTitle from './Title.vue'
-import { getConfig } from '@vote/api'
+import { getConfig, AbstractFormQuestion } from '@vote/api'
 
 export default {
   name: 'Question',
-  components: { QTitle },
   props: {
     type: {
       type: String,
@@ -50,6 +48,7 @@ export default {
       value: this.$attrs.value,
       types,
       invalidTip: '',
+      abstractQuestion: new AbstractFormQuestion(this.data, this),
     }
   },
   computed: {
@@ -59,10 +58,10 @@ export default {
        * Question validation event.
        * @event form.question:validate
        * @type {object}
-       * @property {form:Question} question the question Vue instance
+       * @property {AbstractFormQuestion} question the question
        * @property {function} invalidate call to invalidate with reason
        */
-      hooks.emit('question:validate', { question: this, invalidate: r => res = { valid: false, reason: r } })
+      hooks.emit('question:validate', { question: this.abstractQuestion, invalidate: r => res = { valid: false, reason: r } })
       if (typeof res === 'undefined') return { valid: true }
       return res
     },

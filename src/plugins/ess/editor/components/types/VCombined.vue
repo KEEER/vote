@@ -7,7 +7,7 @@
       ref="subQuestions"
       v-model="value_[i]"
       :route="route"
-      :stats="stats"
+      :stats="(stats || [])[i]"
       :options.sync="options_[i]"
       @input="syncValue"
       @update:options="$nextTick(() => $emit('update:options', [ ...options ])); options[i] = $event"
@@ -22,12 +22,25 @@ import mixin from './mixin'
 export default {
   name: 'VCombined',
   mixins: [ mixin ],
-  props: { value: {}, config: {}, options: {} },
+  props: {
+    value: {
+      type: Array,
+      default: () => [],
+    },
+    config: {
+      type: Array,
+      default: () => [],
+    },
+    options: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data () {
     return {
       subQuestions: [],
-      config_: this.config || [],
-      options_: this.options || [],
+      config_: this.config,
+      options_: this.options,
     }
   },
   mounted () {

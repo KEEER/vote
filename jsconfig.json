@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@vote/core/*": [ "./src/*" ],
+      "@vote/api": [ "./src/api" ],
+      "@vote/api/*": [ "./src/api/*" ],
+      "@vote/plugins/*": [ "./src/plugins/*" ],
+      "@vote/themes/*": [ "./src/themes/*" ],
+      "@vote/locale": [ "./locale" ],
+      "@vote/locale/*": [ "./locale/*" ]
+    }
+  }
+}

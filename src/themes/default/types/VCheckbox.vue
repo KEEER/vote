@@ -24,7 +24,7 @@ export default {
       type: Object,
       validator (val) {
         const nonnull = a => a !== null && a !== undefined
-        return val.title && val.options && val.options.every(op => nonnull(op.label) && nonnull(op.value))
+        return val.options && val.options.every(op => nonnull(op.label) && nonnull(op.value))
       },
       required: true,
     },

@@ -47,19 +47,20 @@ const textValidators = {
 
 /**
  * Validates a question's value.
- * @param {object} options question options
+ * @param {object} question question options
  * @param {*} value question response value
  * @returns {string|null} null is valid, string is invalid reason
  */
-export function validator (options, value) {
-  if ([ 'VText', 'VTextarea', 'VRadio' ].includes(options.type) && typeof value !== 'string') value = ''
-  if (options.required) {
-    if (options.type === 'VCheckbox' && Object.values(value || {}).every(v => !v)) return 'required'
+export function validator (question, value) {
+  if ([ 'VText', 'VTextarea', 'VRadio' ].includes(question.type) && typeof value !== 'string') value = ''
+  if (question.required) {
+    if (question.type === 'VCheckbox' && Object.values(value || {}).every(v => !v)) return 'required'
     else if (!value) return 'required'
   }
-  if (options.config && options.config.validation && options.config.validation.useValidation) {
-    const validation = options.config.validation
-    switch (options.type) {
+  if (!question.required && !value) return null
+  if (question.getConfig('validation', 'useValidation')) {
+    const validation = question.config.validation
+    switch (question.type) {
     case 'VText':
     case 'VTextarea': {
       if (!Array.isArray(validation.type) || validation.type.length === 0) break
