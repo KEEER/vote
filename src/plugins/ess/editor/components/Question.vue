@@ -174,6 +174,8 @@ export class AbstractEditorQuestion extends AbstractVueQuestion {
   set required (value) { this.vueInstance.required_ = value }
   set title (value) { this.vueInstance.title_ = value }
   set type (value) { this.vueInstance.type_ = value }
+  get value () { return this.vueInstance.value_ }
+  set value (value) { this.vueInstance.value_ = value }
 }
 
 export default {

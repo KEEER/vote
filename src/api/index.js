@@ -187,6 +187,8 @@ export class AbstractVueQuestion extends AbstractQuestion {
     this.config = { ...this.config }
     return value
   }
+  get value () { return this.vueInstance.value }
+  set value (value) { this.vueInstance.value = value }
 }
 
 export class AbstractFormQuestion extends AbstractVueQuestion {
