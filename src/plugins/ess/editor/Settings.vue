@@ -5,7 +5,9 @@
     <ul v-else-if="settingsLoaded" class="settings-entries">
       <m-tab-bar @activated="activeTab = $event.index">
         <m-tab-scroller>
-          <m-tab v-for="(entry, i) in entries" :key="i" :active="activeTab === i" v-text="$t(entry.title)" />
+          <m-tab v-for="(entry, i) in entries" :key="i" :active="activeTab === i">
+            {{ $t(entry.title) }}
+          </m-tab>
         </m-tab-scroller>
       </m-tab-bar>
       <li
