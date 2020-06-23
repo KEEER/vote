@@ -9,7 +9,7 @@ export const questionMixin = {
   props: {
     abstractQuestion: {
       type: Object,
-      required: true,
+      default: () => ({}),
     },
   },
   methods: {
@@ -35,7 +35,7 @@ export const questionMixin = {
        * @property {any} value new value
        * @property {any} oldValue old value
        */
-      window.voteHooks.emit('question:update', { question: this.abstractQuestion, value: val, oldValue: this.old })
+      window.voteHooks.emit('question:update', { question: this.question.abstractQuestion, value: val, oldValue: this.old })
       this.syncOld()
     },
     value (val) {
