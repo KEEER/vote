@@ -83,6 +83,7 @@
     </div>
     <div v-else-if="loadError" v-text="$t('plugin.ess.data.loadError')" />
     <div v-else-if="!loaded || submissionLoading" v-text="$t('plugin.ess.data.loading')" />
+    <slot />
   </main>
 </template>
 

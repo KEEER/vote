@@ -54,23 +54,17 @@
     </div>
     <div v-else-if="questionLoadError" v-text="$t('plugin.ess.editor.questionLoadError')" />
     <div v-else v-text="$t('plugin.ess.editor.questionLoading')" />
+    <slot />
   </main>
 </template>
 
 <style scoped>
-main {
-  padding: 10px;
-}
-
-.ghost {
-  opacity: 0.5;
-}
-
+main { padding: 10px; }
+.ghost { opacity: 0.5; }
 .bottom-new {
   text-align: center;
   width: 100%;
 }
-
 .mdc-menu .mdc-list .menu-icon {
   color: rgba(0, 0, 0, 0.6);
   margin-right: 12px;

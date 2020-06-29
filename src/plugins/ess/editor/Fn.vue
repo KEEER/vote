@@ -15,11 +15,16 @@
     <m-list v-model="themeId" two-line role="radiogroup">
       <m-list-item v-for="(thisTheme, i) in allThemes" :key="thisTheme.code" role="radio">
         <m-radio slot="meta" :checked="themeId === i" name="theme" :value="i" />
-        <template slot="primaryText">{{ $t(`theme.${thisTheme.code}.name`) }}</template>
-        <template slot="secondaryText">{{ $t(`theme.${thisTheme.code}.description`) }}</template>
+        <template slot="primaryText">
+          {{ $t(`theme.${thisTheme.code}.name`) }}
+        </template>
+        <template slot="secondaryText">
+          {{ $t(`theme.${thisTheme.code}.description`) }}
+        </template>
       </m-list-item>
     </m-list>
     <m-button class="submit-button" :disabled="submitting" unelevated @click="submit" v-text="$t('plugin.ess.fn.submit')" />
+    <slot />
   </main>
 </template>
 

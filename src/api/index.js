@@ -378,7 +378,7 @@ export const addSettingsEntry = decorateEditorApi(entry => hooks => hooks.on('ed
 
 /**
  * @callback questionMenuEntryHandler
- * @param {any} vm Vue model
+ * @param {AbstractVueQuestion} question the question
  */
 
 /**
@@ -390,23 +390,35 @@ export const addSettingsEntry = decorateEditorApi(entry => hooks => hooks.on('ed
 
 /**
  * @callback addQuestionMenuEntryCallback
- * @param {any} vm Vue model
+ * @param {AbstractVueQuestion} question the question
  * @returns {QuestionMenuEntry|undefined}
  */
 
 /**
  * Adds a question menu entry.
  * @function
- * @param {addQuestionMenuEntryCallback|QuestionMenuEntry} makeEntry callback to make an entry from vm, or the menu entry itself
+ * @param {addQuestionMenuEntryCallback|QuestionMenuEntry} makeEntry callback to make an entry from question, or the menu entry itself
  */
 export const addQuestionMenuEntry = decorateEditorApi(makeEntry => hooks => {
   hooks.on('editor:questionMounted', vm => vm.$on('update:menuItems', () => {
-    const entry = typeof makeEntry === 'function' ? makeEntry(vm) : makeEntry
+    const entry = typeof makeEntry === 'function' ? makeEntry(vm.abstractQuestion) : makeEntry
     if (entry) vm.menuItems.push(entry)
   }))
 })
 
-export { default as SettingsEntry } from '../plugins/ess/editor/components/SettingsEntry.vue'
+export let rootComponent = null // eslint-disable-line import/no-mutable-exports
+browserMixinQueue.push(hooks => {
+  hooks.on('editor:appMounted', vm => rootComponent = vm)
+  hooks.on('form:mounted', vm => rootComponent = vm)
+})
+// TODO: docs
+export const injectComponent = async component => {
+  assertState('editor', 'form')
+  await waitUntil(() => !!rootComponent)
+  return rootComponent.getComponentInstance(rootComponent.injectComponent(component))
+}
+
+export { default as SettingsEntry } from '@vote/plugins/ess/editor/components/SettingsEntry.vue'
 
 // server apis
 

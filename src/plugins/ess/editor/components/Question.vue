@@ -260,7 +260,6 @@ export default {
       type_: this.data.type,
       required_: this.data.required,
       description_: this.data.description,
-      // TODO: update when type changes
       themeConfig_: (this.data.config || {}).theme || {},
       validationConfig_: (this.data.config || {}).validation || {},
       menuItems: [],
@@ -396,7 +395,7 @@ export default {
     },
     menuClick (i) {
       const handler = this.menuItems[i].handler
-      if (typeof handler === 'function') handler(this)
+      if (typeof handler === 'function') handler(this.abstractQuestion)
     },
     updateMenuItems () {
       this.menuItems = [

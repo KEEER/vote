@@ -34,6 +34,7 @@
       <m-typo-headline v-if="showSubmitted" class="status" :level="5" v-text="$t('theme.common.submitted')" />
       <m-typo-headline v-if="showSubmiterror" class="status" :level="5" v-text="$t('theme.common.submiterror')" />
     </div>
+    <component :is="c" v-for="(c, i) in extraComponents" :key="i" ref="extraComponents" />
   </m-card>
 </template>
 
@@ -187,6 +188,7 @@ export default {
       showSubmiterror: false,
       inAnimation: false,
       pages: [],
+      extraComponents: [],
     }
   },
   inject: [ 'data', 'colors' ],
@@ -359,6 +361,8 @@ export default {
       clearInterval(this.intervalId)
       this.intervalId = null
     },
+    injectComponent (component) { return this.extraComponents.push(component) },
+    getComponentInstance (i) { return this.$refs.extraComponents[i] },
   },
 }
 </script>

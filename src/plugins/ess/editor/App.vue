@@ -45,7 +45,9 @@
           <a :href="$t('languageNotSupported.link')" v-text="$t('languageNotSupported.linkLabel')" />
           {{ $t('languageNotSupported.afterLink') }}
         </div>
-        <router-view id="main" />
+        <router-view id="main">
+          <component :is="c" v-for="(c, i) in extraComponents" :key="i" ref="extraComponents" />
+        </router-view>
       </m-top-app-bar-fixed-adjust>
     </div>
   </div>
@@ -225,6 +227,7 @@ export default Vue.extend({
       documentTitle: document.title,
       routes,
       types,
+      extraComponents: [],
     }
   },
   mounted () {
@@ -258,6 +261,8 @@ export default Vue.extend({
        */
       this.$emit('update:title', this.title)
     },
+    injectComponent (component) { return this.extraComponents.push(component) },
+    getComponentInstance (i) { return this.$refs.extraComponents[i] },
   },
 })
 </script>

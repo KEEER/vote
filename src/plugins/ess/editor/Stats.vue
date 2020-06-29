@@ -18,6 +18,7 @@
     <m-typo-body v-else-if="loaded && !stats" :level="1" v-text="$t('plugin.ess.stats.noStats')" />
     <div v-else-if="loadError" v-text="$t('plugin.ess.stats.loadError')" />
     <div v-else v-text="$t('plugin.ess.stats.loading')" />
+    <slot />
   </main>
 </template>
 

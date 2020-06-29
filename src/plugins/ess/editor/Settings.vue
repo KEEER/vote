@@ -26,6 +26,7 @@
     </ul>
     <div v-else-if="settingsLoadError" v-text="$t('plugin.ess.settings.settingsLoadError')" />
     <div v-else v-text="$t('plugin.ess.settings.settingsLoading')" />
+    <slot />
   </main>
 </template>
 

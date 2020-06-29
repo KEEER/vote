@@ -50,4 +50,7 @@ export default {
       }
     },
   },
+  provides () {
+    return { questionsInstance: this }
+  },
 }

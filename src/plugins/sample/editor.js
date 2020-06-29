@@ -11,7 +11,7 @@ createEditorInjection(hooks => {
   addQuestionMenuEntry({
     icon: 'signal_wifi_off',
     label: 'plugin.sample.questionMenu.sample',
-    handler: vm => alert(vm.title_),
+    handler: q => alert(q.title),
   })
   editorRouteMixin()
   addValidationMixin()
