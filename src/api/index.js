@@ -415,7 +415,9 @@ browserMixinQueue.push(hooks => {
 export const injectComponent = async component => {
   assertState('editor', 'form')
   await waitUntil(() => !!rootComponent)
-  return rootComponent.getComponentInstance(rootComponent.injectComponent(component))
+  const handle = rootComponent.injectComponent(component)
+  await new Promise(r => rootComponent.$nextTick(r))
+  return rootComponent.getComponentInstance(handle)
 }
 
 export { default as SettingsEntry } from '@vote/plugins/ess/editor/components/SettingsEntry.vue'

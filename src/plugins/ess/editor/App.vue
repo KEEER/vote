@@ -261,7 +261,7 @@ export default Vue.extend({
        */
       this.$emit('update:title', this.title)
     },
-    injectComponent (component) { return this.extraComponents.push(component) },
+    injectComponent (component) { return this.extraComponents.push(component) - 1 },
     getComponentInstance (i) { return this.$refs.extraComponents[i] },
   },
 })
