@@ -290,6 +290,10 @@ plugin:
     name: Phone number verify
     description: Verify phone numbers by sending SMS codes
 
+  branch-question:
+    name: Branched questions
+    description: TODO
+
 theme:
   common:
     page: Page {page}

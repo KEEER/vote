@@ -173,6 +173,7 @@ export class AbstractEditorQuestion extends AbstractVueQuestion {
     super.setConfig(...args)
     // FIXME
     if (args[0] === 'theme') this.vueInstance.change.themeConfig = this.vueInstance.themeConfig_
+    this.vueInstance.change.config = true
     this.vueInstance.logChange()
   }
 }
@@ -211,13 +212,14 @@ export default {
         value: vm.value_,
         options: vm.options_,
         type: vm.type_,
-        config: { theme: vm.themeConfig_, validation: vm.validationConfig_ },
+        config: { ...(vm.abstractQuestion.config || {}), theme: vm.themeConfig_, validation: vm.validationConfig_ },
       })
       for (const i of [ 'value', 'options' ]) {
         change[i] = JSON.stringify(change[i])
       }
-      if ('themeConfig' in change || 'validationConfig' in change) {
+      if ('themeConfig' in change || 'validationConfig' in change || 'config' in change) {
         change.config = JSON.stringify({
+          ...(vm.abstractQuestion.config || {}),
           theme: vm.themeConfig_,
           validation: vm.validationConfig_,
         })
@@ -348,6 +350,7 @@ export default {
      */
     hooks.emit('editor:questionMounted', this)
     this.$on('reorder', reorder => this.reorder(reorder))
+    this.updateMenuItems()
   },
   beforeDestroy () {
     clearInterval(this.intervalId)

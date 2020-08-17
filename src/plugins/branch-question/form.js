@@ -1,22 +1,31 @@
 import { createFormInjection } from '@vote/api'
 
 createFormInjection(hooks => {
-  let form
-  hooks.on('form:mouted', _form => form = _form)
-  hooks.on('question:update', ({ thisq, value }) => {
-    if (thisq.type !== 'VRadio' && thisq.type !== 'VCheckBox') return
-    let selected
-    for (option of thisq.options) {
-      if (option.label === value) {
-        selected = option
-        break
+  let questions
+  let updateLayout = () => {}
+  hooks.on('form:mounted', form => {
+    questions = form.pages.flatMap(p => p.questions).map(q => q.abstractQuestion)
+    form.$nextTick(() => {
+      for (const q of questions) {
+        q.setConfig('display', 'hidden', q.getConfig('branch', 'at-branch', false))
       }
+      if ('updateLayout' in form && typeof form.updateLayout === 'function') updateLayout = () => form.$nextTick(() => form.updateLayout())
+      updateLayout()
+    })
+  })
+  hooks.on('question:update', ({ question, value }) => {
+    if (question.type !== 'VRadio') return
+    const branches = question.getConfig('branch', 'branches')
+    if (!branches) return
+    const branch = branches[value]
+    if (!branch) return
+    for (const q of questions) {
+      const at = q.getConfig('branch', 'at-branch', false)
+      q.setConfig('display', 'hidden', at && at !== branch)
     }
-    const branch = question.getConfig('branch', 'branches')
-    for (q of form.questions) {
-      if (q.getConfig('branch', 'branch') === branch) {
-        question.setConfig('display', 'hidden', true)
-      }
-    }
+    updateLayout()
+  })
+  hooks.on('question:validatorOverride', ({ question, set }) => {
+    if (question.getConfig('display', 'hidden', false)) set(true)
   })
 })

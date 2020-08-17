@@ -1,15 +1,14 @@
-import branchQuestionEditor from './BranchQuestionEditor'
+import BranchQuestionEditor from './BranchQuestionEditor.vue'
 import { addQuestionMenuEntry, createEditorInjection, injectComponent } from '@vote/api'
 
 createEditorInjection(() => {
   let vm
-  injectComponent(branchQuestionEditor).then(c => vm = c)
+  injectComponent(BranchQuestionEditor).then(c => vm = c)
   addQuestionMenuEntry({
-    icon: 'signal_wifi_off',
-    label: 'plugin.branch-question.questionMenu.branch-question',
+    icon: 'account_tree',
+    label: '分支设置',
     handler: q => {
-      vm.deleteOpen = true
-      console.log(q.options)
+      vm.open = true
       vm.questionEditing = q
     },
   })

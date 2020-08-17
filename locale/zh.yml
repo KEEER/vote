@@ -285,6 +285,10 @@ plugin:
     name: 手机号验证
     description: 验证用户输入的手机号
 
+  branch-question:
+    name: 分支问题
+    description: TODO
+
 theme:
   common:
     page: 第 {page} 页
