@@ -5,7 +5,7 @@ import genUrlRegex from 'url-regex'
 const urlRegex = genUrlRegex({ exact: true, strict: false })
 const urlSchemeRegex = /^(http:|https:|ws:|wss:|ftp:|mailto:|tel:|file:|about:|chrome:|chrome-extension:|data:|irc:|magnet:|git:|git\+(ssh|http|https):|bitcoin:|rsync:|ssh:)/i
 
-const textValidators = {
+export const textValidators = {
   text: {
     startsWith: (r, v) => v.startsWith(r.textContent),
     notStartsWith: (r, v) => !v.startsWith(r.textContent),

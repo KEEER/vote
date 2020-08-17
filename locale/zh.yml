@@ -7,6 +7,7 @@ core:
       VRadio: 单选
       VSample: 插件示例
       VAutofill: 自动填充
+      VSmsVerify: 经过验证的手机号码
     validation:
       useValidation: 启用验证
       type: 验证类型
@@ -279,6 +280,10 @@ plugin:
       male: 男
       female: 女
       other: 其他
+
+  sms-verify:
+    name: 手机号验证
+    description: 验证用户输入的手机号
 
 theme:
   common:

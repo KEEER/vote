@@ -1,4 +1,4 @@
-import { validator } from '../common/validator'
+import { validator, textValidators } from '../common/validator'
 
 export function validateMixin (hooks) {
   hooks.on('question:update', ({ question }) => {
@@ -46,4 +46,6 @@ export function validateMixin (hooks) {
     res = validator(question, question.value)
     if (res !== null) return invalidate(res)
   })
+
+  hooks.emit('plugin-ess:validatorLoaded', { validator, textValidators })
 }

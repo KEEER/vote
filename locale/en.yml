@@ -13,7 +13,8 @@ core:
       VCheckbox: Checkbox
       VRadio: Radio buttons
       VSample: Plugin Sample
-      VAutofill: Autofill Question
+      VAutofill: Autofill question
+      VSmsVerify: Verified phone number
     validation:
       useValidation: Use validation
       type: Validation type
@@ -284,6 +285,10 @@ plugin:
       male: Male
       female: Female
       other: Other
+
+  sms-verify:
+    name: Phone number verify
+    description: Verify phone numbers by sending SMS codes
 
 theme:
   common:

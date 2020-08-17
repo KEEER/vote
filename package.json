@@ -38,6 +38,7 @@
     "@babel/register": "^7.8.6",
     "@keeer/libphonenumber": "^1.7.44-keeer1",
     "accept-language-parser": "^1.5.0",
+    "ali-sms": "^1.0.3",
     "array-flat-polyfill": "^1.0.1",
     "csv-stringify": "^5.3.6",
     "dotenv": "^7.0.0",

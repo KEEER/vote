@@ -37,6 +37,8 @@ const config = {
     'plugin-breakpoint': [ './src/plugins/breakpoint/index.js' ],
     'plugin-autofill-form': [ './src/plugins/autofill/form.js' ],
     'plugin-autofill-editor': [ './src/plugins/autofill/editor.js' ],
+    'plugin-sms-verify-form': [ './src/plugins/sms-verify/form.js' ],
+    'plugin-sms-verify-editor': [ './src/plugins/sms-verify/editor.js' ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

@@ -1,0 +1,14 @@
+code: sms-verify
+version: 0.0.1
+default: false
+required: false
+pro: false
+uses:
+  inject:
+    form:
+      css: plugin-sms-verify-form
+      js: plugin-sms-verify-form
+    editor:
+      css: plugin-sms-verify-editor
+      js: plugin-sms-verify-editor
+    server: server.js

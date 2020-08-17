@@ -10,5 +10,6 @@
       "@vote/locale": [ "./locale" ],
       "@vote/locale/*": [ "./locale/*" ]
     }
-  }
+  },
+  "exclude": [ "node_modules", "lib", "dist", ".webpack-cache" ]
 }
