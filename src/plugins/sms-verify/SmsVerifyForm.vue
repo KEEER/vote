@@ -80,10 +80,10 @@ export default {
     }
   },
   watch: {
-    value_ (val) {
+    value_: { immediate: true, handler (val) {
       this.done = !!val
       this.number = val.split(':')[0]
-    },
+    } },
   },
   methods: {
     async validate () {
