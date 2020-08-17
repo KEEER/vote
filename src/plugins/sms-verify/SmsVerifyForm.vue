@@ -39,7 +39,7 @@
           </m-text-field-helper-text>
         </m-text-field-helper-line>
         <div>
-          <m-button @click="showVerificationCode = false">
+          <m-button @click="code = ''; invalidCode = showVerificationCode = false">
             切换手机号
           </m-button>
         </div>

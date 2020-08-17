@@ -47,5 +47,5 @@ export function validateMixin (hooks) {
     if (res !== null) return invalidate(res)
   })
 
-  hooks.emit('plugin-ess:validatorLoaded', { validator, textValidators })
+  setTimeout(() => hooks.emit('plugin-ess:validatorLoaded', { validator, textValidators }), 1)
 }
