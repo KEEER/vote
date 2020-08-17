@@ -24,6 +24,6 @@ module.exports = loadBabel => {
 
   if (loadBabel) {
     require('regenerator-runtime/runtime')
-    require('@babel/register')({ ignore: [ /buffer/ ] })
+    require('@babel/register')({ ignore: [ /buffer/, /watchpack/ ] })
   }
 }
