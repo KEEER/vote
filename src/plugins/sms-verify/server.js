@@ -30,6 +30,7 @@ const checkNumber = phoneNumber => {
   return number.nationalNumber // format: '15000000000'
 }
 const generateCode = async () => String((await randomBytes(8)).readUInt32BE() % 10000).padStart(4, '0')
+const hits = {}
 
 export default form => {
   injectionMixin(form)
@@ -62,8 +63,8 @@ const injectionMixin = createServerInjection(() => {
       [ new Date(Date.now() - SMS_INTERVAL), phoneNumber ],
     )
     if (checkRes.rows.length > 0) {
-      ctx.body = '请稍候再发送'
-      return ctx.status = 429
+      ctx.status = 429
+      return ctx.body = '验证码发送过于频繁，请稍候再试'
     }
     const code = await generateCode()
     log.info(`sms:send About to send verification code to ${phoneNumber}.`)
@@ -87,6 +88,12 @@ const injectionMixin = createServerInjection(() => {
     if (!number || !code) return ctx.status = 400
     const phoneNumber = checkNumber(number)
     if (!phoneNumber) return ctx.status = 400
+    // rate limiting
+    if (!hits[phoneNumber]) hits[phoneNumber] = { expiry: Date.now() + 3600000, hits: 0 }
+    if (hits[phoneNumber].hits++ > 16) {
+      log.info(`sms:rate Phone number ${phoneNumber} has been rate limited`)
+      return ctx.status = 429
+    }
     log.info(`sms:del About to verify verification code from ${phoneNumber} with ${code}.`)
     const res = await query(
       'DELETE FROM PRE_sms_verification_codes WHERE number = $1 AND code = $2 AND time > $3;',
@@ -104,5 +111,7 @@ const injectionMixin = createServerInjection(() => {
 setInterval(async () => {
   try {
     await query('DELETE FROM PRE_sms_verification_codes WHERE time < $1;', [ new Date(Date.now() - SMS_MAXAGE) ])
-  } catch (e) { console.error(e) }
+  } catch (e) { log.error(e) }
+  const now = Date.now()
+  for (const number in hits) if (hits[number].expiry < now) delete hits[number]
 }, parseInt(process.env.SMS_CLEAR_INTERVAL))

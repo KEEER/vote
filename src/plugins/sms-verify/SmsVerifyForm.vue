@@ -99,12 +99,16 @@ export default {
         const { number, code } = this
         const resp = await fetch('_sms-token', { method: 'put', body: JSON.stringify({ number, code }), headers: { 'Content-Type': 'application/json' } })
         if (resp.status === 200) {
+          this.invalidCode = false
           // store token
           const token = tokenStorage.data[this.number] = await resp.text()
           tokenStorage.update()
           this.value_ = `${this.number}:${token}`
           this.networking = false
           return
+        } else if (resp.status === 429) { // 429 Too Many Requests
+          this.invalidCode = this.networking = false
+          alert('尝试过于频繁，请稍候再试')
         } else {
           this.invalidCode = true
           this.networking = false
