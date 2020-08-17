@@ -169,13 +169,19 @@ import QuestionConfigDialog from './QuestionConfigDialog.vue'
 import { AbstractVueQuestion } from '@vote/api'
 
 export class AbstractEditorQuestion extends AbstractVueQuestion {
-  set description (value) { this.vueInstance.description_ = value }
-  set options (value) { this.vueInstance.options_ = value }
-  set required (value) { this.vueInstance.required_ = value }
-  set title (value) { this.vueInstance.title_ = value }
-  set type (value) { this.vueInstance.type_ = value }
-  get value () { return this.vueInstance.value_ }
-  set value (value) { this.vueInstance.value_ = value }
+  setConfig (...args) {
+    super.setConfig(...args)
+    // FIXME
+    if (args[0] === 'theme') this.vueInstance.change.themeConfig = this.vueInstance.themeConfig_
+    this.vueInstance.logChange()
+  }
+}
+for (const k of [ 'description', 'options', 'required', 'title', 'type', 'value' ]) {
+  const k_ = k + '_'
+  Object.defineProperty(AbstractEditorQuestion.prototype, k, {
+    get () { return this.vueInstance[k_] },
+    set (val) { this.vueInstance[k_] = val },
+  })
 }
 
 export default {
