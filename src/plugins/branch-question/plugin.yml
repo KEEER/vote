@@ -1,0 +1,14 @@
+code: branch-question
+version: 0.0.1
+default: false
+required: false
+pro: false
+uses:
+  inject:
+    form:
+      css: plugin-branch-question-form
+      js: plugin-branch-question-form
+    editor:
+      css: plugin-branch-question-editor
+      js: plugin-branch-question-editor
+    server: server.js

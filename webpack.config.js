@@ -39,6 +39,8 @@ const config = {
     'plugin-autofill-editor': [ './src/plugins/autofill/editor.js' ],
     'plugin-sms-verify-form': [ './src/plugins/sms-verify/form.js' ],
     'plugin-sms-verify-editor': [ './src/plugins/sms-verify/editor.js' ],
+    'plugin-branch-question-form': [ './src/plugins/branch-question/form.js' ],
+    'plugin-branch-question-editor': [ './src/plugins/branch-question/editor.js' ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
