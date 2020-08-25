@@ -30,7 +30,7 @@
           </a>
         </div>
       </template>
-      <m-typo-headline v-if="showSubmitting" class="status" :level="5" v-text="$t('theme.common.submitting')" />
+      <m-typo-headline v-if="showSubmitting" class="status" :level="5" v-text="response || $t('theme.common.submitting')" />
       <m-typo-headline v-if="showSubmitted" class="status" :level="5" v-text="$t('theme.common.submitted')" />
       <m-typo-headline v-if="showSubmiterror" class="status" :level="5" v-text="$t('theme.common.submiterror')" />
     </div>
@@ -176,6 +176,7 @@ export default {
   },
   data () {
     return {
+      response: '',
       current: 0,
       status: 'filling',
       showScrollTitle: false,

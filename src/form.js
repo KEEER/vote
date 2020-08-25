@@ -490,6 +490,11 @@ export class Form extends EventEmitter {
     if (cancel) return 400
 
     await query('INSERT INTO PRE_submissions (form_id, data) VALUES ($1, $2);', [ this.id, data ])
+
+    let response = ''
+    await this.emit('respondSubmission', { form: this, ctx, data, set: r => response = r })
+    ctx.body = { response }
+
     return 200
   }
 
