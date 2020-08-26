@@ -289,6 +289,13 @@ plugin:
     name: 分支问题
     description: TODO
 
+  '121':
+    name: One to one 临时插件
+    description: 仅供 One to one 使用
+    noData: 尚未开放查询
+    noMe: 您没有报名
+    noYou: 您没有被匹配，抱歉！
+
 theme:
   common:
     page: 第 {page} 页

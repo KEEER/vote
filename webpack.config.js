@@ -41,6 +41,7 @@ const config = {
     'plugin-sms-verify-editor': [ './src/plugins/sms-verify/editor.js' ],
     'plugin-branch-question-form': [ './src/plugins/branch-question/form.js' ],
     'plugin-branch-question-editor': [ './src/plugins/branch-question/editor.js' ],
+    'plugin-121': [ './src/plugins/121/editor.js' ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

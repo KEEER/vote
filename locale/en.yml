@@ -294,6 +294,13 @@ plugin:
     name: Branched questions
     description: TODO
 
+  '121':
+    name: One to one temporary plugin
+    description: only for one to one
+    noData: Not open to queries yet.
+    noMe: You did not sign up to One to One
+    noYou: No one is paired for you. Sorry!
+
 theme:
   common:
     page: Page {page}

@@ -30,8 +30,9 @@
           </a>
         </div>
       </template>
-      <m-typo-headline v-if="showSubmitting" class="status" :level="5" v-text="response || $t('theme.common.submitting')" />
-      <m-typo-headline v-if="showSubmitted" class="status" :level="5" v-text="$t('theme.common.submitted')" />
+      <m-typo-headline v-if="showSubmitting" class="status" :level="5" v-text="$t('theme.common.submitting')" />
+      <m-typo-headline v-if="showSubmitted && !response" class="status" :level="5" v-text="$t('theme.common.submitted')" />
+      <m-typo-body v-if="showSubmitted && response" class="status" :level="1" v-html="response" /> <!-- eslint-disable-line vue/no-v-html -->
       <m-typo-headline v-if="showSubmiterror" class="status" :level="5" v-text="$t('theme.common.submiterror')" />
     </div>
     <component :is="c" v-for="(c, i) in extraComponents" :key="i" ref="extraComponents" />
@@ -246,7 +247,7 @@ export default {
         if (this.inAnimation) next()
         else this.flipPage(val === 'submitted' ? 'up' : 'down', next)
       }
-      this.updateLayout()
+      this.updateVisibility()
     },
   },
   mounted () {

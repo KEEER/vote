@@ -1,0 +1,10 @@
+code: '121'
+version: 0.0.1
+default: false
+required: false
+pro: false
+uses:
+  inject:
+    server: server.js
+    editor:
+      js: plugin-121

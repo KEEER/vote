@@ -18,9 +18,7 @@ export default hooks => {
         hooks.emit('form:submiterror', { form, xhr })
       } else {
         form.status = 'submitted'
-              
-        const { response } = JSON.parse(xhr.responseText)
-        form.response = response
+        form.response = xhr.responseText
         /**
          * Form submitted event.
          * @type {form:Form}
