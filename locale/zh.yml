@@ -294,7 +294,7 @@ plugin:
     description: 仅供 One to one 使用
     noData: 尚未开放查询
     noMe: 您没有报名
-    noYou: 您没有被匹配，抱歉！
+    noYou: 匹配结果还未公布，敬请期待！
 
 theme:
   common:

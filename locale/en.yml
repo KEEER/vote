@@ -299,7 +299,7 @@ plugin:
     description: only for one to one
     noData: Not open to queries yet.
     noMe: You did not sign up to One to One
-    noYou: No one is paired for you. Sorry!
+    noYou: 匹配结果还未公布，敬请期待！ # TODO
 
 theme:
   common:

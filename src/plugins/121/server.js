@@ -32,25 +32,22 @@ export default form => {
       <p>${me.name}，你好！</p>
       <p>
         你匹配到的${you.type === 'senior' ? '大朋友' : '小朋友'}是：<strong>${you.name}</strong>。恭喜你！
-        __pronoun的微信号是 <strong>${you.微信号}</strong>，名称为「<span dir="ltr">${you.微信名}</span>」，你可以添加__pronoun的微信来和__pronoun联系。
+        __pronoun的手机号是 <strong>${you.number}</strong>，微信号是 <strong>${you.微信号}</strong>，名称为「<span dir="ltr">${you.微信名}</span>」，你可以添加__pronoun的微信来和__pronoun联系。
       </p>
     `)
-    if (you.年级 === '高一') html.push(escaper`
+    if (you.年级 === 'ICC') html.push(escaper`
       <p>
         ${you.name}初中${you.人本 ? '在' : '不在'}人本就读，
         ${you.住宿生}住宿生，
-        ${you.竞赛 && you.竞赛.length > 0 ? `曾参加过${you.竞赛.map(strong).join('、')}` : '未曾参加过竞赛'}。
-        __pronoun平时${you.游戏 ? `最喜欢玩<strong>${you.游戏}</strong>` : '不玩游戏'}，
-        最常用的软件有 ${you.软件.map(strong).join('、')}，
-        在校园活动中对<strong>${you.活动}</strong>最感兴趣，
-        在学生组织中对<strong>${you.组织}</strong>最感兴趣。
-        __pronoun喜欢${[ ...you.领域, ...(you.其他领域 ? [ you.其他领域 ] : []) ].map(strong).join('、')}。
+        最常用的软件有 ${you.软件.map(strong).join('、')}。
       </p>
     `)
     else html.push('<p>TODO</p>')
 
-    if (you.介绍) html.push(escaper`<p>__pronoun的补充介绍：</p><p>${you.介绍}</p>`)
-    if (you.要求) html.push(escaper`<p>__pronoun希望你是：</p><p>${you.要求}</p>`)
+    html.push(escaper`
+      <p>祝你们的交流顺利、愉快！</p>
+      <p>人大附中志愿团</p>
+    `)
 
     return set(html.join('\n').replace(/\n\s*|\n\s*\n/g, '\n').replace(/__pronoun/g, pronoun))
   })
