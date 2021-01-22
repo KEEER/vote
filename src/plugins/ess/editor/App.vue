@@ -144,7 +144,7 @@ import types from './components/types'
 import { injectScript, waitUntil } from '@vote/api'
 
 window.idFrame = { mdc: { style: true } }
-injectScript('https://idframe.keeer.net/js/appbar.js')
+injectScript('https://account.keeer.net/api/idframe')
 
 /**
  * @typedef {object} Route
