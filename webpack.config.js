@@ -169,7 +169,7 @@ const config = {
     }),
     new HtmlWebpackTagsPlugin({
       links: [
-        { path: 'https://fonts.loli.net/icon?family=Material+Icons', publicPath: false },
+        { path: 'https://cdn.jsdelivr.net/npm/material-icons@0.5.2/iconfont/material-icons.css', publicPath: false },
       ],
       scripts: [
         { path: 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.runtime.js', publicPath: false },
